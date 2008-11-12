@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="libnice Reference Manual" link="index.html" author="" name="libnice">
+  <chapters>
+    <sub name="libnice's public API" link="ch01.html">
+      <sub name="NiceAgent" link="libnice-NiceAgent.html"/>
+      <sub name="NiceAddress" link="libnice-NiceAddress.html"/>
+      <sub name="Debug messages" link="libnice-Debug-messages.html"/>
+      <sub name="NiceCandidate" link="libnice-NiceCandidate.html"/>
+    </sub>
+  </chapters>
+  <functions>
+    <function name="NICE_AGENT_MAX_REMOTE_CANDIDATES" link="libnice-NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS"/>
+    <function name="enum NiceComponentState" link="libnice-NiceAgent.html#NiceComponentState"/>
+    <function name="enum NiceComponentType" link="libnice-NiceAgent.html#NiceComponentType"/>
+    <function name="enum NiceCompatibility" link="libnice-NiceAgent.html#NiceCompatibility"/>
+    <function name="NiceAgentRecvFunc ()" link="libnice-NiceAgent.html#NiceAgentRecvFunc"/>
+    <function name="NiceAgent" link="libnice-NiceAgent.html#NiceAgent"/>
+    <function name="nice_agent_new ()" link="libnice-NiceAgent.html#nice-agent-new"/>
+    <function name="nice_agent_add_local_address ()" link="libnice-NiceAgent.html#nice-agent-add-local-address"/>
+    <function name="nice_agent_add_stream ()" link="libnice-NiceAgent.html#nice-agent-add-stream"/>
+    <function name="nice_agent_remove_stream ()" link="libnice-NiceAgent.html#nice-agent-remove-stream"/>
+    <function name="nice_agent_set_relay_info ()" link="libnice-NiceAgent.html#nice-agent-set-relay-info"/>
+    <function name="nice_agent_gather_candidates ()" link="libnice-NiceAgent.html#nice-agent-gather-candidates"/>
+    <function name="nice_agent_set_remote_credentials ()" link="libnice-NiceAgent.html#nice-agent-set-remote-credentials"/>
+    <function name="nice_agent_get_local_credentials ()" link="libnice-NiceAgent.html#nice-agent-get-local-credentials"/>
+    <function name="nice_agent_set_remote_candidates ()" link="libnice-NiceAgent.html#nice-agent-set-remote-candidates"/>
+    <function name="nice_agent_send ()" link="libnice-NiceAgent.html#nice-agent-send"/>
+    <function name="nice_agent_get_local_candidates ()" link="libnice-NiceAgent.html#nice-agent-get-local-candidates"/>
+    <function name="nice_agent_get_remote_candidates ()" link="libnice-NiceAgent.html#nice-agent-get-remote-candidates"/>
+    <function name="nice_agent_restart ()" link="libnice-NiceAgent.html#nice-agent-restart"/>
+    <function name="nice_agent_attach_recv ()" link="libnice-NiceAgent.html#nice-agent-attach-recv"/>
+    <function name="nice_agent_set_selected_pair ()" link="libnice-NiceAgent.html#nice-agent-set-selected-pair"/>
+    <function name="nice_agent_set_selected_remote_candidate ()" link="libnice-NiceAgent.html#nice-agent-set-selected-remote-candidate"/>
+    <function name="The &quot;compatibility&quot; property" link="libnice-NiceAgent.html#NiceAgent--compatibility"/>
+    <function name="The &quot;controlling-mode&quot; property" link="libnice-NiceAgent.html#NiceAgent--controlling-mode"/>
+    <function name="The &quot;full-mode&quot; property" link="libnice-NiceAgent.html#NiceAgent--full-mode"/>
+    <function name="The &quot;main-context&quot; property" link="libnice-NiceAgent.html#NiceAgent--main-context"/>
+    <function name="The &quot;max-connectivity-checks&quot; property" link="libnice-NiceAgent.html#NiceAgent--max-connectivity-checks"/>
+    <function name="The &quot;stun-pacing-timer&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-pacing-timer"/>
+    <function name="The &quot;stun-server&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-server"/>
+    <function name="The &quot;stun-server-port&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-server-port"/>
+    <function name="The &quot;candidate-gathering-done&quot; signal" link="libnice-NiceAgent.html#NiceAgent-candidate-gathering-done"/>
+    <function name="The &quot;component-state-changed&quot; signal" link="libnice-NiceAgent.html#NiceAgent-component-state-changed"/>
+    <function name="The &quot;initial-binding-request-received&quot; signal" link="libnice-NiceAgent.html#NiceAgent-initial-binding-request-received"/>
+    <function name="The &quot;new-candidate&quot; signal" link="libnice-NiceAgent.html#NiceAgent-new-candidate"/>
+    <function name="The &quot;new-remote-candidate&quot; signal" link="libnice-NiceAgent.html#NiceAgent-new-remote-candidate"/>
+    <function name="The &quot;new-selected-pair&quot; signal" link="libnice-NiceAgent.html#NiceAgent-new-selected-pair"/>
+    <function name="NICE_ADDRESS_STRING_LEN" link="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN:CAPS"/>
+    <function name="NiceAddress" link="libnice-NiceAddress.html#NiceAddress"/>
+    <function name="nice_address_init ()" link="libnice-NiceAddress.html#nice-address-init"/>
+    <function name="nice_address_new ()" link="libnice-NiceAddress.html#nice-address-new"/>
+    <function name="nice_address_free ()" link="libnice-NiceAddress.html#nice-address-free"/>
+    <function name="nice_address_dup ()" link="libnice-NiceAddress.html#nice-address-dup"/>
+    <function name="nice_address_set_ipv4 ()" link="libnice-NiceAddress.html#nice-address-set-ipv4"/>
+    <function name="nice_address_set_ipv6 ()" link="libnice-NiceAddress.html#nice-address-set-ipv6"/>
+    <function name="nice_address_set_port ()" link="libnice-NiceAddress.html#nice-address-set-port"/>
+    <function name="nice_address_get_port ()" link="libnice-NiceAddress.html#nice-address-get-port"/>
+    <function name="nice_address_set_from_string ()" link="libnice-NiceAddress.html#nice-address-set-from-string"/>
+    <function name="nice_address_set_from_sockaddr ()" link="libnice-NiceAddress.html#nice-address-set-from-sockaddr"/>
+    <function name="nice_address_copy_to_sockaddr ()" link="libnice-NiceAddress.html#nice-address-copy-to-sockaddr"/>
+    <function name="nice_address_equal ()" link="libnice-NiceAddress.html#nice-address-equal"/>
+    <function name="nice_address_to_string ()" link="libnice-NiceAddress.html#nice-address-to-string"/>
+    <function name="nice_address_is_private ()" link="libnice-NiceAddress.html#nice-address-is-private"/>
+    <function name="nice_address_is_valid ()" link="libnice-NiceAddress.html#nice-address-is-valid"/>
+    <function name="nice_debug_enable ()" link="libnice-Debug-messages.html#nice-debug-enable"/>
+    <function name="nice_debug_disable ()" link="libnice-Debug-messages.html#nice-debug-disable"/>
+    <function name="NICE_CANDIDATE_MAX_FOUNDATION" link="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS"/>
+    <function name="enum NiceCandidateType" link="libnice-NiceCandidate.html#NiceCandidateType"/>
+    <function name="enum NiceCandidateTransport" link="libnice-NiceCandidate.html#NiceCandidateTransport"/>
+    <function name="enum NiceRelayType" link="libnice-NiceCandidate.html#NiceRelayType"/>
+    <function name="NiceCandidate" link="libnice-NiceCandidate.html#NiceCandidate"/>
+    <function name="TurnServer" link="libnice-NiceCandidate.html#TurnServer"/>
+    <function name="nice_candidate_new ()" link="libnice-NiceCandidate.html#nice-candidate-new"/>
+    <function name="nice_candidate_free ()" link="libnice-NiceCandidate.html#nice-candidate-free"/>
+    <function name="nice_candidate_copy ()" link="libnice-NiceCandidate.html#nice-candidate-copy"/>
+  </functions>
+</book>

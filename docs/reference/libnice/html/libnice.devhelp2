@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="libnice Reference Manual" link="index.html" author="" name="libnice" version="2">
+  <chapters>
+    <sub name="libnice's public API" link="ch01.html">
+      <sub name="NiceAgent" link="libnice-NiceAgent.html"/>
+      <sub name="NiceAddress" link="libnice-NiceAddress.html"/>
+      <sub name="Debug messages" link="libnice-Debug-messages.html"/>
+      <sub name="NiceCandidate" link="libnice-NiceCandidate.html"/>
+    </sub>
+  </chapters>
+  <functions>
+    <keyword type="macro" name="NICE_AGENT_MAX_REMOTE_CANDIDATES" link="libnice-NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS"/>
+    <keyword type="enum" name="enum NiceComponentState" link="libnice-NiceAgent.html#NiceComponentState"/>
+    <keyword type="enum" name="enum NiceComponentType" link="libnice-NiceAgent.html#NiceComponentType"/>
+    <keyword type="enum" name="enum NiceCompatibility" link="libnice-NiceAgent.html#NiceCompatibility"/>
+    <keyword type="function" name="NiceAgentRecvFunc ()" link="libnice-NiceAgent.html#NiceAgentRecvFunc"/>
+    <keyword type="struct" name="NiceAgent" link="libnice-NiceAgent.html#NiceAgent"/>
+    <keyword type="function" name="nice_agent_new ()" link="libnice-NiceAgent.html#nice-agent-new"/>
+    <keyword type="function" name="nice_agent_add_local_address ()" link="libnice-NiceAgent.html#nice-agent-add-local-address"/>
+    <keyword type="function" name="nice_agent_add_stream ()" link="libnice-NiceAgent.html#nice-agent-add-stream"/>
+    <keyword type="function" name="nice_agent_remove_stream ()" link="libnice-NiceAgent.html#nice-agent-remove-stream"/>
+    <keyword type="function" name="nice_agent_set_relay_info ()" link="libnice-NiceAgent.html#nice-agent-set-relay-info"/>
+    <keyword type="function" name="nice_agent_gather_candidates ()" link="libnice-NiceAgent.html#nice-agent-gather-candidates"/>
+    <keyword type="function" name="nice_agent_set_remote_credentials ()" link="libnice-NiceAgent.html#nice-agent-set-remote-credentials"/>
+    <keyword type="function" name="nice_agent_get_local_credentials ()" link="libnice-NiceAgent.html#nice-agent-get-local-credentials"/>
+    <keyword type="function" name="nice_agent_set_remote_candidates ()" link="libnice-NiceAgent.html#nice-agent-set-remote-candidates"/>
+    <keyword type="function" name="nice_agent_send ()" link="libnice-NiceAgent.html#nice-agent-send"/>
+    <keyword type="function" name="nice_agent_get_local_candidates ()" link="libnice-NiceAgent.html#nice-agent-get-local-candidates"/>
+    <keyword type="function" name="nice_agent_get_remote_candidates ()" link="libnice-NiceAgent.html#nice-agent-get-remote-candidates"/>
+    <keyword type="function" name="nice_agent_restart ()" link="libnice-NiceAgent.html#nice-agent-restart"/>
+    <keyword type="function" name="nice_agent_attach_recv ()" link="libnice-NiceAgent.html#nice-agent-attach-recv"/>
+    <keyword type="function" name="nice_agent_set_selected_pair ()" link="libnice-NiceAgent.html#nice-agent-set-selected-pair"/>
+    <keyword type="function" name="nice_agent_set_selected_remote_candidate ()" link="libnice-NiceAgent.html#nice-agent-set-selected-remote-candidate"/>
+    <keyword type="" name="The &quot;compatibility&quot; property" link="libnice-NiceAgent.html#NiceAgent--compatibility"/>
+    <keyword type="" name="The &quot;controlling-mode&quot; property" link="libnice-NiceAgent.html#NiceAgent--controlling-mode"/>
+    <keyword type="" name="The &quot;full-mode&quot; property" link="libnice-NiceAgent.html#NiceAgent--full-mode"/>
+    <keyword type="" name="The &quot;main-context&quot; property" link="libnice-NiceAgent.html#NiceAgent--main-context"/>
+    <keyword type="" name="The &quot;max-connectivity-checks&quot; property" link="libnice-NiceAgent.html#NiceAgent--max-connectivity-checks"/>
+    <keyword type="" name="The &quot;stun-pacing-timer&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-pacing-timer"/>
+    <keyword type="" name="The &quot;stun-server&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-server"/>
+    <keyword type="" name="The &quot;stun-server-port&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-server-port"/>
+    <keyword type="" name="The &quot;candidate-gathering-done&quot; signal" link="libnice-NiceAgent.html#NiceAgent-candidate-gathering-done"/>
+    <keyword type="" name="The &quot;component-state-changed&quot; signal" link="libnice-NiceAgent.html#NiceAgent-component-state-changed"/>
+    <keyword type="" name="The &quot;initial-binding-request-received&quot; signal" link="libnice-NiceAgent.html#NiceAgent-initial-binding-request-received"/>
+    <keyword type="" name="The &quot;new-candidate&quot; signal" link="libnice-NiceAgent.html#NiceAgent-new-candidate"/>
+    <keyword type="" name="The &quot;new-remote-candidate&quot; signal" link="libnice-NiceAgent.html#NiceAgent-new-remote-candidate"/>
+    <keyword type="" name="The &quot;new-selected-pair&quot; signal" link="libnice-NiceAgent.html#NiceAgent-new-selected-pair"/>
+    <keyword type="macro" name="NICE_ADDRESS_STRING_LEN" link="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN:CAPS"/>
+    <keyword type="struct" name="NiceAddress" link="libnice-NiceAddress.html#NiceAddress"/>
+    <keyword type="function" name="nice_address_init ()" link="libnice-NiceAddress.html#nice-address-init"/>
+    <keyword type="function" name="nice_address_new ()" link="libnice-NiceAddress.html#nice-address-new"/>
+    <keyword type="function" name="nice_address_free ()" link="libnice-NiceAddress.html#nice-address-free"/>
+    <keyword type="function" name="nice_address_dup ()" link="libnice-NiceAddress.html#nice-address-dup"/>
+    <keyword type="function" name="nice_address_set_ipv4 ()" link="libnice-NiceAddress.html#nice-address-set-ipv4"/>
+    <keyword type="function" name="nice_address_set_ipv6 ()" link="libnice-NiceAddress.html#nice-address-set-ipv6"/>
+    <keyword type="function" name="nice_address_set_port ()" link="libnice-NiceAddress.html#nice-address-set-port"/>
+    <keyword type="function" name="nice_address_get_port ()" link="libnice-NiceAddress.html#nice-address-get-port"/>
+    <keyword type="function" name="nice_address_set_from_string ()" link="libnice-NiceAddress.html#nice-address-set-from-string"/>
+    <keyword type="function" name="nice_address_set_from_sockaddr ()" link="libnice-NiceAddress.html#nice-address-set-from-sockaddr"/>
+    <keyword type="function" name="nice_address_copy_to_sockaddr ()" link="libnice-NiceAddress.html#nice-address-copy-to-sockaddr"/>
+    <keyword type="function" name="nice_address_equal ()" link="libnice-NiceAddress.html#nice-address-equal"/>
+    <keyword type="function" name="nice_address_to_string ()" link="libnice-NiceAddress.html#nice-address-to-string"/>
+    <keyword type="function" name="nice_address_is_private ()" link="libnice-NiceAddress.html#nice-address-is-private"/>
+    <keyword type="function" name="nice_address_is_valid ()" link="libnice-NiceAddress.html#nice-address-is-valid"/>
+    <keyword type="function" name="nice_debug_enable ()" link="libnice-Debug-messages.html#nice-debug-enable"/>
+    <keyword type="function" name="nice_debug_disable ()" link="libnice-Debug-messages.html#nice-debug-disable"/>
+    <keyword type="macro" name="NICE_CANDIDATE_MAX_FOUNDATION" link="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS"/>
+    <keyword type="enum" name="enum NiceCandidateType" link="libnice-NiceCandidate.html#NiceCandidateType"/>
+    <keyword type="enum" name="enum NiceCandidateTransport" link="libnice-NiceCandidate.html#NiceCandidateTransport"/>
+    <keyword type="enum" name="enum NiceRelayType" link="libnice-NiceCandidate.html#NiceRelayType"/>
+    <keyword type="struct" name="NiceCandidate" link="libnice-NiceCandidate.html#NiceCandidate"/>
+    <keyword type="struct" name="TurnServer" link="libnice-NiceCandidate.html#TurnServer"/>
+    <keyword type="function" name="nice_candidate_new ()" link="libnice-NiceCandidate.html#nice-candidate-new"/>
+    <keyword type="function" name="nice_candidate_free ()" link="libnice-NiceCandidate.html#nice-candidate-free"/>
+    <keyword type="function" name="nice_candidate_copy ()" link="libnice-NiceCandidate.html#nice-candidate-copy"/>
+  </functions>
+</book>

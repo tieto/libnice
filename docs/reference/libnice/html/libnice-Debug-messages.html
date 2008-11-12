@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Debug messages</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="index.html" title="libnice Reference Manual">
+<link rel="up" href="ch01.html" title="libnice's public API">
+<link rel="prev" href="libnice-NiceAddress.html" title="NiceAddress">
+<link rel="next" href="libnice-NiceCandidate.html" title="NiceCandidate">
+<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="libnice's public API">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="libnice-NiceAddress.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libnice Reference Manual</th>
+<td><a accesskey="n" href="libnice-NiceCandidate.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#libnice-Debug-messages.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libnice-Debug-messages.description" class="shortcut">Description</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="libnice-Debug-messages"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libnice-Debug-messages.top_of_page"></a>Debug messages</span></h2>
+<p>Debug messages — Debug messages utility functions</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1" lang="en">
+<a name="libnice-Debug-messages.stability-level"></a><h2>Stability Level</h2>
+More flags are to come and a better API to
+enable/disable each flag should be added. Unstable, unless otherwise indicated
+</div>
+<div class="refsynopsisdiv">
+<a name="libnice-Debug-messages.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+void                <a class="link" href="libnice-Debug-messages.html#nice-debug-enable" title="nice_debug_enable ()">nice_debug_enable</a>                   (gboolean with_stun);
+void                <a class="link" href="libnice-Debug-messages.html#nice-debug-disable" title="nice_debug_disable ()">nice_debug_disable</a>                  (gboolean with_stun);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-Debug-messages.description"></a><h2>Description</h2>
+<p>
+Libnice can output a lot of information when debug messages are enabled.
+This can significantly help track down problems and/or understand what
+it's doing.
+You can enable/disable the debug messages by calling <a class="link" href="libnice-Debug-messages.html#nice-debug-enable" title="nice_debug_enable ()"><code class="function">nice_debug_enable()</code></a>
+or <a class="link" href="libnice-Debug-messages.html#nice-debug-disable" title="nice_debug_disable ()"><code class="function">nice_debug_disable()</code></a> and choosing whether you want only ICE debug messages
+or also stun debug messages.
+By default, the debug messages are disabled, unless the environment variable
+NICE_DEBUG is set, in which case, it must contain a comma separated list of
+flags specifying which debug to enable. The flags can be "nice", "stun",
+or "all" to enable all debug messages.</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-Debug-messages.details"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="nice-debug-enable"></a><h3>nice_debug_enable ()</h3>
+<pre class="programlisting">void                nice_debug_enable                   (gboolean with_stun);</pre>
+<p>
+Enables libnice debug output to the terminal</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>with_stun</code></em> :</span></p></td>
+<td> Also enable stun debugging messages
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-debug-disable"></a><h3>nice_debug_disable ()</h3>
+<pre class="programlisting">void                nice_debug_disable                  (gboolean with_stun);</pre>
+<p>
+Disables libnice debug output to the terminal</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>with_stun</code></em> :</span></p></td>
+<td> Also disable stun debugging messages
+</td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.10</div>
+</body>
+</html>

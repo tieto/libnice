@@ -1,0 +1,390 @@
+<!-- ##### STRUCT CandidatePair ##### -->
+<para>
+
+</para>
+
+@local: 
+@remote: 
+@priority: 
+
+<!-- ##### STRUCT Component ##### -->
+<para>
+
+</para>
+
+@type: 
+@id: 
+@state: 
+@local_candidates: 
+@remote_candidates: 
+@sockets: 
+@gsources: 
+@incoming_checks: 
+@turn_servers: 
+@selected_pair: 
+@media_after_tick: 
+@restart_candidate: 
+@g_source_io_cb: 
+@data: 
+@ctx: 
+
+<!-- ##### STRUCT IncomingCheck ##### -->
+<para>
+
+</para>
+
+@from: 
+@local_socket: 
+@priority: 
+@use_candidate: 
+
+<!-- ##### MACRO MAX_STUN_DATAGRAM_PAYLOAD ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO NICE_AGENT_MAX_CONNECTIVITY_CHECKS_DEFAULT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO NICE_AGENT_TIMER_TA_DEFAULT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO NICE_AGENT_TIMER_TR_DEFAULT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO NICE_AGENT_TIMER_TR_MIN ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO NICE_CANDIDATE_TYPE_PREF_HOST ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO NICE_CANDIDATE_TYPE_PREF_PEER_REFLEXIVE ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO NICE_CANDIDATE_TYPE_PREF_RELAYED ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO NICE_CANDIDATE_TYPE_PREF_SERVER_REFLEXIVE ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION agent_candidate_pair_priority ##### -->
+<para>
+
+</para>
+
+@agent: 
+@local: 
+@remote: 
+@Returns: 
+
+<!-- ##### FUNCTION agent_find_component ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@stream: 
+@component: 
+@Returns: 
+
+<!-- ##### FUNCTION agent_find_stream ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@Returns: 
+
+<!-- ##### FUNCTION agent_gathering_done ##### -->
+<para>
+
+</para>
+
+@agent: 
+
+<!-- ##### MACRO agent_marshal_VOID__UINT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION agent_marshal_VOID__UINT_UINT_STRING ##### -->
+<para>
+
+</para>
+
+@closure: 
+@return_value: 
+@n_param_values: 
+@param_values: 
+@invocation_hint: 
+@marshal_data: 
+
+<!-- ##### FUNCTION agent_marshal_VOID__UINT_UINT_STRING_STRING ##### -->
+<para>
+
+</para>
+
+@closure: 
+@return_value: 
+@n_param_values: 
+@param_values: 
+@invocation_hint: 
+@marshal_data: 
+
+<!-- ##### FUNCTION agent_marshal_VOID__UINT_UINT_UINT ##### -->
+<para>
+
+</para>
+
+@closure: 
+@return_value: 
+@n_param_values: 
+@param_values: 
+@invocation_hint: 
+@marshal_data: 
+
+<!-- ##### FUNCTION agent_signal_component_state_change ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@state: 
+
+<!-- ##### FUNCTION agent_signal_gathering_done ##### -->
+<para>
+
+</para>
+
+@agent: 
+
+<!-- ##### FUNCTION agent_signal_initial_binding_request_received ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream: 
+
+<!-- ##### FUNCTION agent_signal_new_candidate ##### -->
+<para>
+
+</para>
+
+@agent: 
+@candidate: 
+
+<!-- ##### FUNCTION agent_signal_new_remote_candidate ##### -->
+<para>
+
+</para>
+
+@agent: 
+@candidate: 
+
+<!-- ##### FUNCTION agent_signal_new_selected_pair ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@local_foundation: 
+@remote_foundation: 
+
+<!-- ##### FUNCTION agent_timeout_add_with_context ##### -->
+<para>
+
+</para>
+
+@agent: 
+@interval: 
+@function: 
+@data: 
+@Returns: 
+
+<!-- ##### FUNCTION component_find_pair ##### -->
+<para>
+
+</para>
+
+@cmp: 
+@agent: 
+@lfoundation: 
+@rfoundation: 
+@pair: 
+@Returns: 
+
+<!-- ##### FUNCTION component_find_remote_candidate ##### -->
+<para>
+
+</para>
+
+@component: 
+@addr: 
+@transport: 
+@Returns: 
+
+<!-- ##### FUNCTION component_find_socket_by_fd ##### -->
+<para>
+
+</para>
+
+@component: 
+@fd: 
+@Returns: 
+
+<!-- ##### FUNCTION component_free ##### -->
+<para>
+
+</para>
+
+@cmp: 
+
+<!-- ##### FUNCTION component_new ##### -->
+<para>
+
+</para>
+
+@component_id: 
+@Returns: 
+
+<!-- ##### FUNCTION component_restart ##### -->
+<para>
+
+</para>
+
+@cmp: 
+@Returns: 
+
+<!-- ##### FUNCTION component_set_selected_remote_candidate ##### -->
+<para>
+
+</para>
+
+@agent: 
+@component: 
+@candidate: 
+@Returns: 
+
+<!-- ##### FUNCTION component_update_selected_pair ##### -->
+<para>
+
+</para>
+
+@component: 
+@pair: 
+
+<!-- ##### FUNCTION nice_agent_add_remote_candidate ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@type: 
+@addr: 
+@username: 
+@password: 
+@Returns: 
+
+<!-- ##### FUNCTION nice_candidate_ice_priority ##### -->
+<para>
+
+</para>
+
+@candidate: 
+@Returns: 
+
+<!-- ##### FUNCTION nice_candidate_ice_priority_full ##### -->
+<para>
+
+</para>
+
+@type_pref: 
+@local_pref: 
+@component_id: 
+@Returns: 
+
+<!-- ##### FUNCTION nice_candidate_jingle_priority ##### -->
+<para>
+
+</para>
+
+@candidate: 
+@Returns: 
+
+<!-- ##### FUNCTION nice_candidate_msn_priority ##### -->
+<para>
+
+</para>
+
+@candidate: 
+@Returns: 
+
+<!-- ##### FUNCTION nice_candidate_pair_priority ##### -->
+<para>
+
+</para>
+
+@o_prio: 
+@a_prio: 
+@Returns: 
+
+<!-- ##### FUNCTION nice_debug ##### -->
+<para>
+
+</para>
+
+@fmt: 
+@Varargs: 
+
+<!-- ##### FUNCTION nice_debug_init ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION priv_attach_stream_component_socket ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream: 
+@component: 
+@socket: 
+
