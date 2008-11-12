@@ -1,0 +1,1498 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>NiceAgent</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="index.html" title="libnice Reference Manual">
+<link rel="up" href="ch01.html" title="libnice's public API">
+<link rel="prev" href="ch01.html" title="libnice's public API">
+<link rel="next" href="libnice-NiceAddress.html" title="NiceAddress">
+<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="libnice's public API">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="ch01.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libnice Reference Manual</th>
+<td><a accesskey="n" href="libnice-NiceAddress.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#libnice-NiceAgent.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libnice-NiceAgent.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#libnice-NiceAgent.properties" class="shortcut">Properties</a>
+                   | 
+                  <a href="#libnice-NiceAgent.signals" class="shortcut">Signals</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="libnice-NiceAgent"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libnice-NiceAgent.top_of_page"></a>NiceAgent</span></h2>
+<p>NiceAgent — ICE agent API implementation</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1" lang="en">
+<a name="libnice-NiceAgent.stability-level"></a><h2>Stability Level</h2>
+Stable, unless otherwise indicated
+</div>
+<div class="refsynopsisdiv">
+<a name="libnice-NiceAgent.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+
+#include &lt;agent.h&gt;
+
+#define             <a class="link" href="libnice-NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS" title="NICE_AGENT_MAX_REMOTE_CANDIDATES">NICE_AGENT_MAX_REMOTE_CANDIDATES</a>
+enum                <a class="link" href="libnice-NiceAgent.html#NiceComponentState" title="enum NiceComponentState">NiceComponentState</a>;
+enum                <a class="link" href="libnice-NiceAgent.html#NiceComponentType" title="enum NiceComponentType">NiceComponentType</a>;
+enum                <a class="link" href="libnice-NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility">NiceCompatibility</a>;
+void                (<a class="link" href="libnice-NiceAgent.html#NiceAgentRecvFunc" title="NiceAgentRecvFunc ()">*NiceAgentRecvFunc</a>)                (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         guint len,
+                                                         gchar *buf,
+                                                         gpointer user_data);
+                    <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a>;
+<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a>*          <a class="link" href="libnice-NiceAgent.html#nice-agent-new" title="nice_agent_new ()">nice_agent_new</a>                      (GMainContext *ctx,
+                                                         <a class="link" href="libnice-NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility">NiceCompatibility</a> compat);
+gboolean            <a class="link" href="libnice-NiceAgent.html#nice-agent-add-local-address" title="nice_agent_add_local_address ()">nice_agent_add_local_address</a>        (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
+guint               <a class="link" href="libnice-NiceAgent.html#nice-agent-add-stream" title="nice_agent_add_stream ()">nice_agent_add_stream</a>               (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint n_components);
+void                <a class="link" href="libnice-NiceAgent.html#nice-agent-remove-stream" title="nice_agent_remove_stream ()">nice_agent_remove_stream</a>            (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id);
+gboolean            <a class="link" href="libnice-NiceAgent.html#nice-agent-set-relay-info" title="nice_agent_set_relay_info ()">nice_agent_set_relay_info</a>           (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         const gchar *server_ip,
+                                                         guint server_port,
+                                                         const gchar *username,
+                                                         const gchar *password,
+                                                         <a class="link" href="libnice-NiceCandidate.html#NiceRelayType" title="enum NiceRelayType">NiceRelayType</a> type);
+void                <a class="link" href="libnice-NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()">nice_agent_gather_candidates</a>        (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id);
+gboolean            <a class="link" href="libnice-NiceAgent.html#nice-agent-set-remote-credentials" title="nice_agent_set_remote_credentials ()">nice_agent_set_remote_credentials</a>   (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         const gchar *ufrag,
+                                                         const gchar *pwd);
+gboolean            <a class="link" href="libnice-NiceAgent.html#nice-agent-get-local-credentials" title="nice_agent_get_local_credentials ()">nice_agent_get_local_credentials</a>    (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         const gchar **ufrag,
+                                                         const gchar **pwd);
+int                 <a class="link" href="libnice-NiceAgent.html#nice-agent-set-remote-candidates" title="nice_agent_set_remote_candidates ()">nice_agent_set_remote_candidates</a>    (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         const GSList *candidates);
+gint                <a class="link" href="libnice-NiceAgent.html#nice-agent-send" title="nice_agent_send ()">nice_agent_send</a>                     (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         guint len,
+                                                         const gchar *buf);
+GSList*             <a class="link" href="libnice-NiceAgent.html#nice-agent-get-local-candidates" title="nice_agent_get_local_candidates ()">nice_agent_get_local_candidates</a>     (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id);
+GSList*             <a class="link" href="libnice-NiceAgent.html#nice-agent-get-remote-candidates" title="nice_agent_get_remote_candidates ()">nice_agent_get_remote_candidates</a>    (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id);
+gboolean            <a class="link" href="libnice-NiceAgent.html#nice-agent-restart" title="nice_agent_restart ()">nice_agent_restart</a>                  (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent);
+gboolean            <a class="link" href="libnice-NiceAgent.html#nice-agent-attach-recv" title="nice_agent_attach_recv ()">nice_agent_attach_recv</a>              (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         GMainContext *ctx,
+                                                         <a class="link" href="libnice-NiceAgent.html#NiceAgentRecvFunc" title="NiceAgentRecvFunc ()">NiceAgentRecvFunc</a> func,
+                                                         gpointer data);
+gboolean            <a class="link" href="libnice-NiceAgent.html#nice-agent-set-selected-pair" title="nice_agent_set_selected_pair ()">nice_agent_set_selected_pair</a>        (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         const gchar *lfoundation,
+                                                         const gchar *rfoundation);
+gboolean            <a class="link" href="libnice-NiceAgent.html#nice-agent-set-selected-remote-candidate" title="nice_agent_set_selected_remote_candidate ()">nice_agent_set_selected_remote_candidate</a>
+                                                        (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-NiceAgent.properties"></a><h2>Properties</h2>
+<pre class="synopsis">
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent--compatibility" title='The "compatibility" property'>compatibility</a>"            guint                 : Read / Write / Construct Only
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent--controlling-mode" title='The "controlling-mode" property'>controlling-mode</a>"         gboolean              : Read / Write
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent--full-mode" title='The "full-mode" property'>full-mode</a>"                gboolean              : Read / Write / Construct Only
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent--main-context" title='The "main-context" property'>main-context</a>"             gpointer              : Read / Write / Construct Only
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent--max-connectivity-checks" title='The "max-connectivity-checks" property'>max-connectivity-checks</a>"  guint                 : Read / Write
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent--stun-pacing-timer" title='The "stun-pacing-timer" property'>stun-pacing-timer</a>"        guint                 : Read / Write / Construct Only
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent--stun-server" title='The "stun-server" property'>stun-server</a>"              gchar*                : Read / Write
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent--stun-server-port" title='The "stun-server-port" property'>stun-server-port</a>"         guint                 : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-NiceAgent.signals"></a><h2>Signals</h2>
+<pre class="synopsis">
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent-candidate-gathering-done" title='The "candidate-gathering-done" signal'>candidate-gathering-done</a>"                       : Run Last
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent-component-state-changed" title='The "component-state-changed" signal'>component-state-changed</a>"                        : Run Last
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent-initial-binding-request-received" title='The "initial-binding-request-received" signal'>initial-binding-request-received</a>"               : Run Last
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent-new-candidate" title='The "new-candidate" signal'>new-candidate</a>"                                  : Run Last
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent-new-remote-candidate" title='The "new-remote-candidate" signal'>new-remote-candidate</a>"                           : Run Last
+  "<a class="link" href="libnice-NiceAgent.html#NiceAgent-new-selected-pair" title='The "new-selected-pair" signal'>new-selected-pair</a>"                              : Run Last
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-NiceAgent.description"></a><h2>Description</h2>
+<p>
+The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> is your main object when using libnice.
+It is the agent that will take care of everything relating to ICE.
+It will take care of discovering your local candidates and do
+ connectivity checks to create a stream of data between you and your peer.
+</p>
+<p>
+ </p>
+<div class="example">
+<a name="id2563756"></a><p class="title"><b>Example 1. Simple example on how to use libnice</b></p>
+<div class="example-contents"><pre class="programlisting">
+   NiceAddress base_addr;
+   guint stream_id;
+   gchar buffer[] = "hello world!";
+   GSList *lcands = NULL;
+
+   // Create a nice agent
+   NiceAgent *agent = nice_agent_new (NULL, NICE_COMPATIBILITY_DRAFT19);
+
+   // Specify which local interface to use
+   nice_address_set_from_string (&amp;base_addr, "127.0.0.1");
+   nice_agent_add_local_address (agent, &amp;base_addr);
+
+   // Connect the signals
+   g_signal_connect (G_OBJECT (agent), "candidate-gathering-done",
+                     G_CALLBACK (cb_candidate_gathering_done), NULL);
+   g_signal_connect (G_OBJECT (lagent), "component-state-changed",
+                     G_CALLBACK (cb_component_state_changed), NULL);
+   g_signal_connect (G_OBJECT (lagent), "new-selected-pair",
+                     G_CALLBACK (cb_new_selected_pair), NULL);
+
+   // Create a new stream with one component and start gathering candidates
+   stream_id = nice_agent_add_stream (agent, 1);
+   nice_agent_gather_candidates (agent, stream_id);
+
+   // Attach to the component to receive the data
+   nice_agent_attach_recv (agent, stream_id, 1, NULL,
+                          cb_nice_recv, NULL);
+
+   // ... Wait until the signal candidate-gathering-done is fired ...
+   lcands = nice_agent_get_local_candidates(agent, stream_id, 1);
+
+   // ... Send local candidates to the peer and set the peer's remote candidates
+   nice_agent_set_remote_candidates (agent, stream_id, 1, rcands);
+
+   // ... Wait until the signal new-selected-pair is fired ...
+   // Send our message!
+   nice_agent_send (lagent, ls_id, 1, sizeof(buffer), buffer);
+
+   // Anything received will be received through the cb_nice_recv callback
+
+   // Destroy the object
+   g_object_unref(agent);
+
+   </pre></div>
+</div>
+<p><br class="example-break"></p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-NiceAgent.details"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS"></a><h3>NICE_AGENT_MAX_REMOTE_CANDIDATES</h3>
+<pre class="programlisting">#define NICE_AGENT_MAX_REMOTE_CANDIDATES    25
+</pre>
+<p>
+A hard limit for number for remote candidates. This
+limit is enforced to protect against malevolent remote
+clients.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceComponentState"></a><h3>enum NiceComponentState</h3>
+<pre class="programlisting">typedef enum
+{
+  NICE_COMPONENT_STATE_DISCONNECTED,
+  NICE_COMPONENT_STATE_GATHERING,
+  NICE_COMPONENT_STATE_CONNECTING,
+  NICE_COMPONENT_STATE_CONNECTED,
+  NICE_COMPONENT_STATE_READY,
+  NICE_COMPONENT_STATE_FAILED,
+  NICE_COMPONENT_STATE_LAST
+} NiceComponentState;
+</pre>
+<p>
+An enum representing the state of a component.
+See <a class="link" href="libnice-NiceAgent.html#NiceAgent-component-state-changed" title='The "component-state-changed" signal'><span class="type">"component-state-changed"</span></a></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="NICE-COMPONENT-STATE-DISCONNECTED:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_DISCONNECTED</code></span></p></td>
+<td> No activity scheduled
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPONENT-STATE-GATHERING:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_GATHERING</code></span></p></td>
+<td> Gathering local candidates
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPONENT-STATE-CONNECTING:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_CONNECTING</code></span></p></td>
+<td> Establishing connectivity
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPONENT-STATE-CONNECTED:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_CONNECTED</code></span></p></td>
+<td> At least one working candidate pair
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPONENT-STATE-READY:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_READY</code></span></p></td>
+<td> ICE concluded, candidate pair selection
+is now final
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPONENT-STATE-FAILED:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_FAILED</code></span></p></td>
+<td> Connectivity checks have been completed,
+but connectivity was not established
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPONENT-STATE-LAST:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_LAST</code></span></p></td>
+<td> Dummy state
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceComponentType"></a><h3>enum NiceComponentType</h3>
+<pre class="programlisting">typedef enum
+{
+  NICE_COMPONENT_TYPE_RTP = 1,
+  NICE_COMPONENT_TYPE_RTCP = 2
+} NiceComponentType;
+</pre>
+<p>
+Convenience enum representing the type of a component for use as the
+component_id for RTP/RTCP usages.
+ </p>
+<div class="example">
+<a name="id2564084"></a><p class="title"><b>Example 2. Example of use.</b></p>
+<div class="example-contents"><pre class="programlisting">
+   nice_agent_send (agent, stream_id, NICE_COMPONENT_TYPE_RTP, len, buf);
+   </pre></div>
+</div>
+<p><br class="example-break"></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="NICE-COMPONENT-TYPE-RTP:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_TYPE_RTP</code></span></p></td>
+<td> RTP Component type
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPONENT-TYPE-RTCP:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_TYPE_RTCP</code></span></p></td>
+<td> RTCP Component type
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceCompatibility"></a><h3>enum NiceCompatibility</h3>
+<pre class="programlisting">typedef enum
+{
+  NICE_COMPATIBILITY_DRAFT19 = 0,
+  NICE_COMPATIBILITY_GOOGLE,
+  NICE_COMPATIBILITY_MSN,
+  NICE_COMPATIBILITY_LAST = NICE_COMPATIBILITY_MSN
+} NiceCompatibility;
+</pre>
+<p>
+An enum to specify which compatible specifications the <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> should use.
+Use with <a class="link" href="libnice-NiceAgent.html#nice-agent-new" title="nice_agent_new ()"><code class="function">nice_agent_new()</code></a></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="NICE-COMPATIBILITY-DRAFT19:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_DRAFT19</code></span></p></td>
+<td> Use compatibility for ICE Draft 19 specs
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPATIBILITY-GOOGLE:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_GOOGLE</code></span></p></td>
+<td> Use compatibility for Google Talk specs
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPATIBILITY-MSN:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_MSN</code></span></p></td>
+<td> Use compatibility for MSN Messenger specs
+</td>
+</tr>
+<tr>
+<td><p><a name="NICE-COMPATIBILITY-LAST:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_LAST</code></span></p></td>
+<td> Dummy last compatibility mode
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgentRecvFunc"></a><h3>NiceAgentRecvFunc ()</h3>
+<pre class="programlisting">void                (*NiceAgentRecvFunc)                (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         guint len,
+                                                         gchar *buf,
+                                                         gpointer user_data);</pre>
+<p>
+Callback function when data is received on a component</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The id of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The id of the component of the stream
+       which received the data
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>len</code></em> :</span></p></td>
+<td> The length of the data
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>buf</code></em> :</span></p></td>
+<td> The buffer containing the data received
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td> The user data set in <a class="link" href="libnice-NiceAgent.html#nice-agent-attach-recv" title="nice_agent_attach_recv ()"><code class="function">nice_agent_attach_recv()</code></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent"></a><h3>NiceAgent</h3>
+<pre class="programlisting">typedef struct {
+  GObject parent;                 /**&lt; gobject pointer */
+
+  gboolean full_mode;             /**&lt; property: full-mode */
+  GTimeVal next_check_tv;         /**&lt; property: next conncheck timestamp */
+  gchar *stun_server_ip;          /**&lt; property: STUN server IP */
+  guint stun_server_port;         /**&lt; property: STUN server port */
+  gboolean controlling_mode;      /**&lt; property: controlling-mode */
+  guint timer_ta;                 /**&lt; property: timer Ta */
+  guint max_conn_checks;          /**&lt; property: max connectivity checks */
+
+  GSList *local_addresses;        /**&lt; list of NiceAddresses for local
+				     interfaces */
+  GSList *streams;                /**&lt; list of Stream objects */
+  GMainContext *main_context;     /**&lt; main context pointer */
+  guint next_candidate_id;        /**&lt; id of next created candidate */
+  guint next_stream_id;           /**&lt; id of next created candidate */
+  NiceRNG *rng;                   /**&lt; random number generator */
+  GSList *discovery_list;         /**&lt; list of CandidateDiscovery items */
+  guint discovery_unsched_items;  /**&lt; number of discovery items unscheduled */
+  GSource *discovery_timer_source; /**&lt; source of discovery timer */
+  GSource *conncheck_timer_source; /**&lt; source of conncheck timer */
+  GSource *keepalive_timer_source; /**&lt; source of keepalive timer */
+  GSList *refresh_list;         /**&lt; list of CandidateRefresh items */
+  guint64 tie_breaker;            /**&lt; tie breaker (ICE sect 5.2
+				     "Determining Role" ID-19) */
+  GStaticRecMutex mutex;                 /* Mutex used for thread-safe lib */
+  NiceCompatibility compatibility; /* property: Compatibility mode */
+  StunAgent stun_agent;            /* STUN agent */
+  /* XXX: add pointer to internal data struct for ABI-safe extensions */
+} NiceAgent;
+</pre>
+<p>
+The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> is the main GObject of the libnice library and represents
+the ICE agent.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-new"></a><h3>nice_agent_new ()</h3>
+<pre class="programlisting"><a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a>*          nice_agent_new                      (GMainContext *ctx,
+                                                         <a class="link" href="libnice-NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility">NiceCompatibility</a> compat);</pre>
+<p>
+Create a new <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a>.
+The returned object must be freed with <code class="function">g_object_unref()</code></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td> The Glib Mainloop Context to use for timers
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>compat</code></em> :</span></p></td>
+<td> The compatibility mode of the agent
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> The new agent GObject
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-add-local-address"></a><h3>nice_agent_add_local_address ()</h3>
+<pre class="programlisting">gboolean            nice_agent_add_local_address        (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);</pre>
+<p>
+Add a local address from which to derive local host candidates</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>addr</code></em> :</span></p></td>
+<td> The address to listen to
+If the port is 0, then a random port will be chosen by the system
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> on success, <code class="literal">FALSE</code> on fatal (memory allocation) errors
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-add-stream"></a><h3>nice_agent_add_stream ()</h3>
+<pre class="programlisting">guint               nice_agent_add_stream               (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint n_components);</pre>
+<p>
+Adds a data stream to <em class="parameter"><code>agent</code></em> containing <em class="parameter"><code>n_components</code></em> components.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>n_components</code></em> :</span></p></td>
+<td> The number of components to add to the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> The ID of the new stream, 0 on failure
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-remove-stream"></a><h3>nice_agent_remove_stream ()</h3>
+<pre class="programlisting">void                nice_agent_remove_stream            (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id);</pre>
+<p>
+Remove and free a previously created data stream from <em class="parameter"><code>agent</code></em></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream to remove
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-set-relay-info"></a><h3>nice_agent_set_relay_info ()</h3>
+<pre class="programlisting">gboolean            nice_agent_set_relay_info           (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         const gchar *server_ip,
+                                                         guint server_port,
+                                                         const gchar *username,
+                                                         const gchar *password,
+                                                         <a class="link" href="libnice-NiceCandidate.html#NiceRelayType" title="enum NiceRelayType">NiceRelayType</a> type);</pre>
+<p>
+Sets the settings for using a relay server during the candidate discovery.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>server_ip</code></em> :</span></p></td>
+<td> The IP address of the TURN server
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>server_port</code></em> :</span></p></td>
+<td> The port of the TURN server
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>username</code></em> :</span></p></td>
+<td> The TURN username to use for the allocate
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>password</code></em> :</span></p></td>
+<td> The TURN password to use for the allocate
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
+<td> The type of relay to use
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> if the TURN settings were accepted.
+<code class="literal">FALSE</code> if the address was invalid.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-gather-candidates"></a><h3>nice_agent_gather_candidates ()</h3>
+<pre class="programlisting">void                nice_agent_gather_candidates        (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id);</pre>
+<p>
+Start the candidate gathering process.
+Once done, <a class="link" href="libnice-NiceAgent.html#NiceAgent-candidate-gathering-done" title='The "candidate-gathering-done" signal'><span class="type">"candidate-gathering-done"</span></a> is called for the stream
+</p>
+<p>
+ </p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    Local addresses must be previously set with <a class="link" href="libnice-NiceAgent.html#nice-agent-add-local-address" title="nice_agent_add_local_address ()"><code class="function">nice_agent_add_local_address()</code></a>
+   </p>
+</div>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The id of the stream to start
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-set-remote-credentials"></a><h3>nice_agent_set_remote_credentials ()</h3>
+<pre class="programlisting">gboolean            nice_agent_set_remote_credentials   (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         const gchar *ufrag,
+                                                         const gchar *pwd);</pre>
+<p>
+Sets the remote credentials for stream <em class="parameter"><code>stream_id</code></em>.
+</p>
+<p>
+ </p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+     Stream credentials do not override per-candidate credentials if set
+   </p>
+</div>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ufrag</code></em> :</span></p></td>
+<td> NULL-terminated string containing an ICE username fragment
+   (length must be between 22 and 256 chars)
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pwd</code></em> :</span></p></td>
+<td> NULL-terminated string containing an ICE password
+   (length must be between 4 and 256 chars)
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> on success, <code class="literal">FALSE</code> on error.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-get-local-credentials"></a><h3>nice_agent_get_local_credentials ()</h3>
+<pre class="programlisting">gboolean            nice_agent_get_local_credentials    (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         const gchar **ufrag,
+                                                         const gchar **pwd);</pre>
+<p>
+Gets the local credentials for stream <em class="parameter"><code>stream_id</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ufrag</code></em> :</span></p></td>
+<td> a pointer to a NULL-terminated string containing
+an ICE username fragment [OUT].
+This string must be freed with <code class="function">g_free()</code>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>pwd</code></em> :</span></p></td>
+<td> a pointer to a NULL-terminated string containing an ICE
+password [OUT]
+This string must be freed with <code class="function">g_free()</code>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> on success, <code class="literal">FALSE</code> on error.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-set-remote-candidates"></a><h3>nice_agent_set_remote_candidates ()</h3>
+<pre class="programlisting">int                 nice_agent_set_remote_candidates    (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         const GSList *candidates);</pre>
+<p>
+Sets, adds or updates the remote candidates for a component of a stream.
+</p>
+<p>
+ </p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+    NICE_AGENT_MAX_REMOTE_CANDIDATES is the absolute maximum limit
+    for remote candidates.
+   </p>
+<p>
+   You must first call <a class="link" href="libnice-NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()"><code class="function">nice_agent_gather_candidates()</code></a> before
+   calling <a class="link" href="libnice-NiceAgent.html#nice-agent-set-remote-candidates" title="nice_agent_set_remote_candidates ()"><code class="function">nice_agent_set_remote_candidates()</code></a>
+   </p>
+</div>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream the candidates are for
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component the candidates are for
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>candidates</code></em> :</span></p></td>
+<td> a <span class="type">GList</span> of <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> items describing each candidate to add
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> The number of candidates added, negative on errors (memory allocation
+or if the local candidates are not done gathering yet)
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-send"></a><h3>nice_agent_send ()</h3>
+<pre class="programlisting">gint                nice_agent_send                     (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         guint len,
+                                                         const gchar *buf);</pre>
+<p>
+Sends a data payload over a stream's component.
+</p>
+<p>
+ </p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+     Component state MUST be NICE_COMPONENT_STATE_READY, or as a special case,
+     in any state if component was in READY state before and was then restarted
+   </p>
+</div>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream to send to
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component to send to
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>len</code></em> :</span></p></td>
+<td> The length of the buffer to send
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>buf</code></em> :</span></p></td>
+<td> The buffer of data to send
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> The number of bytes sent, or negative error code
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-get-local-candidates"></a><h3>nice_agent_get_local_candidates ()</h3>
+<pre class="programlisting">GSList*             nice_agent_get_local_candidates     (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id);</pre>
+<p>
+Retreive from the agent the list of all local candidates
+for a stream's component
+</p>
+<p>
+ </p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+     The caller owns the returned GSList as well as the candidates contained
+     within it.
+     To get full results, the client should wait for the
+     <span class="type">"candidates-gathering-done"</span> signal.
+   </p>
+</div>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> a <span class="type">GSList</span> of <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> objects representing
+the local candidates of <em class="parameter"><code>agent</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-get-remote-candidates"></a><h3>nice_agent_get_remote_candidates ()</h3>
+<pre class="programlisting">GSList*             nice_agent_get_remote_candidates    (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id);</pre>
+<p>
+Get a list of the remote candidates set on a stream's component
+</p>
+<p>
+ </p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+     The caller owns the returned GSList but not the candidates
+     contained within it.
+   </p>
+<p>
+     The list of remote candidates can change during processing.
+     The client should register for the <a class="link" href="libnice-NiceAgent.html#NiceAgent-new-remote-candidate" title='The "new-remote-candidate" signal'><span class="type">"new-remote-candidate"</span></a> signal
+     to get notified of new remote candidates.
+   </p>
+</div>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> a <span class="type">GSList</span> of <span class="type">NiceCandidates</span> objects representing
+the remote candidates set on the <em class="parameter"><code>agent</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-restart"></a><h3>nice_agent_restart ()</h3>
+<pre class="programlisting">gboolean            nice_agent_restart                  (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent);</pre>
+<p>
+Restarts the session as defined in ICE draft 19. This function
+needs to be called both when initiating (ICE spec section 9.1.1.1.
+"ICE Restarts"), as well as when reacting (spec section 9.2.1.1.
+"Detecting ICE Restart") to a restart.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> on success <code class="literal">FALSE</code> on error
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-attach-recv"></a><h3>nice_agent_attach_recv ()</h3>
+<pre class="programlisting">gboolean            nice_agent_attach_recv              (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         GMainContext *ctx,
+                                                         <a class="link" href="libnice-NiceAgent.html#NiceAgentRecvFunc" title="NiceAgentRecvFunc ()">NiceAgentRecvFunc</a> func,
+                                                         gpointer data);</pre>
+<p>
+Attaches the stream's component's sockets to the Glib Mainloop Context in
+order to be notified whenever data becomes available for a component.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
+<td> The Glib Mainloop Context to use for listening on the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>func</code></em> :</span></p></td>
+<td> The callback function to be called when data is received on
+the stream's component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>data</code></em> :</span></p></td>
+<td> user data associated with the callback
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> on success, <code class="literal">FALSE</code> if the stream or component IDs are invalid.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-set-selected-pair"></a><h3>nice_agent_set_selected_pair ()</h3>
+<pre class="programlisting">gboolean            nice_agent_set_selected_pair        (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         const gchar *lfoundation,
+                                                         const gchar *rfoundation);</pre>
+<p>
+Sets the selected candidate pair for media transmission
+for a given stream's component. Calling this function will
+disable all further ICE processing (connection check,
+state machine updates, etc). Note that keepalives will
+continue to be sent.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>lfoundation</code></em> :</span></p></td>
+<td> The local foundation of the candidate to use
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>rfoundation</code></em> :</span></p></td>
+<td> The remote foundation of the candidate to use
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> on success, <code class="literal">FALSE</code> if the candidate pair cannot be found
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="nice-agent-set-selected-remote-candidate"></a><h3>nice_agent_set_selected_remote_candidate ()</h3>
+<pre class="programlisting">gboolean            nice_agent_set_selected_remote_candidate
+                                                        (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *agent,
+                                                         guint stream_id,
+                                                         guint component_id,
+                                                         <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);</pre>
+<p>
+Sets the selected remote candidate for media transmission
+for a given stream's component. This is used to force the selection of
+a specific remote candidate even when connectivity checks are failing
+(e.g. non-ICE compatible candidates).
+Calling this function will disable all further ICE processing
+(connection check, state machine updates, etc). Note that keepalives will
+continue to be sent.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>candidate</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> to select
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <code class="literal">TRUE</code> on success, <code class="literal">FALSE</code> on failure
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-NiceAgent.property-details"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="NiceAgent--compatibility"></a><h3>The <code class="literal">"compatibility"</code> property</h3>
+<pre class="programlisting">  "compatibility"            guint                 : Read / Write / Construct Only</pre>
+<p>
+The Nice agent can work in various compatibility modes depending on
+what the application/peer needs.
+</p>
+<p> See also: <a class="link" href="libnice-NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility"><span class="type">NiceCompatibility</span></a></p>
+<p>
+
+</p>
+<p>Allowed values: &lt;= 2</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent--controlling-mode"></a><h3>The <code class="literal">"controlling-mode"</code> property</h3>
+<pre class="programlisting">  "controlling-mode"         gboolean              : Read / Write</pre>
+<p>Whether the agent is in controlling mode.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent--full-mode"></a><h3>The <code class="literal">"full-mode"</code> property</h3>
+<pre class="programlisting">  "full-mode"                gboolean              : Read / Write / Construct Only</pre>
+<p>Whether agent runs in ICE full mode.</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent--main-context"></a><h3>The <code class="literal">"main-context"</code> property</h3>
+<pre class="programlisting">  "main-context"             gpointer              : Read / Write / Construct Only</pre>
+<p>
+A GLib main context is needed for all timeouts used by libnice.
+This is a property being set by the <a class="link" href="libnice-NiceAgent.html#nice-agent-new" title="nice_agent_new ()"><code class="function">nice_agent_new()</code></a> call.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent--max-connectivity-checks"></a><h3>The <code class="literal">"max-connectivity-checks"</code> property</h3>
+<pre class="programlisting">  "max-connectivity-checks"  guint                 : Read / Write</pre>
+<p>Upper limit for the total number of connectivity checks performed.</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent--stun-pacing-timer"></a><h3>The <code class="literal">"stun-pacing-timer"</code> property</h3>
+<pre class="programlisting">  "stun-pacing-timer"        guint                 : Read / Write / Construct Only</pre>
+<p>Timer 'Ta' (msecs) used in the IETF ICE specification for pacing candidate gathering and sending of connectivity checks.</p>
+<p>Allowed values: &gt;= 1</p>
+<p>Default value: 20</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent--stun-server"></a><h3>The <code class="literal">"stun-server"</code> property</h3>
+<pre class="programlisting">  "stun-server"              gchar*                : Read / Write</pre>
+<p>The STUN server used to obtain server-reflexive candidates.</p>
+<p>Default value: NULL</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent--stun-server-port"></a><h3>The <code class="literal">"stun-server-port"</code> property</h3>
+<pre class="programlisting">  "stun-server-port"         guint                 : Read / Write</pre>
+<p>The STUN server used to obtain server-reflexive candidates.</p>
+<p>Allowed values: [1,65536]</p>
+<p>Default value: 1</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-NiceAgent.signal-details"></a><h2>Signal Details</h2>
+<div class="refsect2" lang="en">
+<a name="NiceAgent-candidate-gathering-done"></a><h3>The <code class="literal">"candidate-gathering-done"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *stream_id,
+                                                        guint      arg1,
+                                                        gpointer   user_data)      : Run Last</pre>
+<p>
+This signal is fired whenever a stream has finished gathering its
+candidates after a call to <a class="link" href="libnice-NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()"><code class="function">nice_agent_gather_candidates()</code></a></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent-component-state-changed"></a><h3>The <code class="literal">"component-state-changed"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *stream_id,
+                                                        guint      component_id,
+                                                        guint      state,
+                                                        guint      arg3,
+                                                        gpointer   user_data)         : Run Last</pre>
+<p>
+This signal is fired whenever a component's state changes</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>state</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-NiceAgent.html#NiceComponentState" title="enum NiceComponentState"><span class="type">NiceComponentState</span></a> of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent-initial-binding-request-received"></a><h3>The <code class="literal">"initial-binding-request-received"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *stream_id,
+                                                        guint      arg1,
+                                                        gpointer   user_data)      : Run Last</pre>
+<p>
+This signal is fired when we received our first binding request from
+the peer.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent-new-candidate"></a><h3>The <code class="literal">"new-candidate"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *stream_id,
+                                                        guint      component_id,
+                                                        guint      foundation,
+                                                        gchar     *arg3,
+                                                        gpointer   user_data)         : Run Last</pre>
+<p>
+This signal is fired when the agent discovers a new candidate
+</p>
+<p> See also: <span class="type">"candidates-gathering-done"</span> </p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>foundation</code></em> :</span></p></td>
+<td> The foundation of the new candidate
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent-new-remote-candidate"></a><h3>The <code class="literal">"new-remote-candidate"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *stream_id,
+                                                        guint      component_id,
+                                                        guint      foundation,
+                                                        gchar     *arg3,
+                                                        gpointer   user_data)         : Run Last</pre>
+<p>
+This signal is fired when the agent discovers a new remote candidate.
+This can happen with peer reflexive candidates.
+</p>
+<p> See also: <span class="type">"candidates-gathering-done"</span> </p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>foundation</code></em> :</span></p></td>
+<td> The foundation of the new candidate
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="NiceAgent-new-selected-pair"></a><h3>The <code class="literal">"new-selected-pair"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="libnice-NiceAgent.html#NiceAgent" title="NiceAgent">NiceAgent</a> *stream_id,
+                                                        guint      component_id,
+                                                        guint      lfoundation,
+                                                        gchar     *rfoundation,
+                                                        gchar     *arg4,
+                                                        gpointer   user_data)         : Run Last</pre>
+<p>
+This signal is fired once a candidate pair is selected for data transfer for
+a stream's component</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
+<td> The ID of the stream
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
+<td> The ID of the component
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>lfoundation</code></em> :</span></p></td>
+<td> The local foundation of the selected candidate pair
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>rfoundation</code></em> :</span></p></td>
+<td> The remote foundation of the selected candidate pair
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="libnice-NiceAgent.see-also"></a><h2>See Also</h2>
+<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.10</div>
+</body>
+</html>
