@@ -1,0 +1,41 @@
+This package was debianized by Sjoerd Simons <sjoerd@debian.org> on
+Wed, 12 Nov 2008 11:30:54 +0000.
+
+It was downloaded from http://nice.freedesktop.org/releases/
+
+Upstream Author(s):
+
+  Dafydd Harries <dafydd.harries@collabora.co.uk>
+  Rémi Denis-Courmont <remi.denis-courmont@nokia.com>
+  Kai Vehmanen <kai.vehmanen@nokia.com>
+  Youness Alaoui <youness.alaoui@collabora.co.uk>
+
+Copyright:
+
+    Copyright (C) 1986 Gary S. Brown
+    Copyright (C) 2006-2008 Collabora Ltd.
+    Copyright (C) 2006-2008 Nokia Corporation.
+
+License:
+  The Nice Glib ICE library is licensed under both the Mozilla Public License
+  version 1.1 and the GNU Lesser General Public License version 2.1:
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  For a full text of the LGPL 2.1 see `/usr/share/common-licenses/LGPL-2.1'
+
+  For a full text of the MPL see COPYING.MPL in the same directory as this file.
+
+The Debian packaging is copyright 2008, Sjoerd Simons <sjoerd@debian.org> and
+is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
+
+# Please also look if there are files or directories which have a
+# different copyright/license attached and list them here.

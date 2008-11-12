@@ -1,0 +1,4 @@
+debian/tmp/usr/lib/libnice.so
+debian/tmp/usr/lib/libnice.a
+debian/tmp//usr/lib/pkgconfig/nice.pc
+debian/tmp/usr/include/nice

@@ -1,0 +1,79 @@
+Source: nice
+Section: libs
+Priority: optional
+Maintainer: Debian Telepathy maintainers <pkg-telepathy-maintainers@lists.alioth
+Uploaders: Dafydd Harries <daf@debian.org>,
+           Simon McVittie <smcv@debian.org>,
+           Sjoerd Simons <sjoerd@debian.org>,
+           Laurent Bigonville <bigon@bigon.be>
+Build-Depends: cdbs, debhelper (>= 7)
+Standards-Version: 3.8.0
+Homepage: http://nice.freedesktop.org/
+
+Package: libnice0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: ICE library
+ Nice is an implementation of the IETF's draft Interactive Connectivity
+ Establishment standard (ICE).  ICE is useful for applications that want to
+ establish peer-to-peer UDP data streams. It automates the process of
+ traversing NATs and provides security against some attacks.
+ .
+ Existing standards that use ICE include the Session Initiation Protocol (SIP)
+ and the Jingle XMPP extension for audio/video calls.
+ .
+ Nice includes integration with GStreamer.
+ .
+ This package provides the nice library.
+
+Package: libnice-dev
+Section: libdevel
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnice0 (= ${binary:Version})
+Description: ICE library
+ Nice is an implementation of the IETF's draft Interactive Connectivity
+ Establishment standard (ICE).  ICE is useful for applications that want to
+ establish peer-to-peer UDP data streams. It automates the process of
+ traversing NATs and provides security against some attacks.
+ .
+ Existing standards that use ICE include the Session Initiation Protocol (SIP)
+ and the Jingle XMPP extension for audio/video calls.
+ .
+ Nice includes integration with GStreamer.
+ .
+ This package provides development files for nice.
+
+Package: gstreamer0.10-nice
+Section: net
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: ICE library
+ Nice is an implementation of the IETF's draft Interactive Connectivity
+ Establishment standard (ICE).  ICE is useful for applications that want to
+ establish peer-to-peer UDP data streams. It automates the process of
+ traversing NATs and provides security against some attacks.
+ .
+ Existing standards that use ICE include the Session Initiation Protocol (SIP)
+ and the Jingle XMPP extension for audio/video calls.
+ .
+ Nice includes integration with GStreamer.
+ .
+ This package provides a gstreamer plugin for nice.
+
+Package: libnice-doc
+Section: doc
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: ICE library
+ Nice is an implementation of the IETF's draft Interactive Connectivity
+ Establishment standard (ICE).  ICE is useful for applications that want to
+ establish peer-to-peer UDP data streams. It automates the process of
+ traversing NATs and provides security against some attacks.
+ .
+ Existing standards that use ICE include the Session Initiation Protocol (SIP)
+ and the Jingle XMPP extension for audio/video calls.
+ .
+ Nice includes integration with GStreamer.
+ .
+ This package contains documentation for for nice.
