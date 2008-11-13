@@ -46,7 +46,27 @@
 
 #define USE_TURN 0
 #define USE_LOOPBACK 1
+#define TEST_GOOGLE 0
 
+#if TEST_GOOGLE
+#define NICE_COMPATIBILITY NICE_COMPATIBILITY_GOOGLE
+
+#if USE_TURN
+#undef USE_LOOPBACK
+#define USE_LOOPBACK 0
+
+#define TURN_IP "209.85.163.126"
+#define TURN_PORT 19295
+#define TURN_USER "ih9ppiM0P6vN34DB"
+#define TURN_PASS ""
+#define TURN_USER2 TURN_USER
+#define TURN_PASS2 TURN_PASS
+#define TURN_TYPE NICE_RELAY_TYPE_TURN_UDP
+
+#endif
+
+#else
+#define NICE_COMPATIBILITY NICE_COMPATIBILITY_DRAFT19
 #if USE_LOOPBACK
 #define USE_TURN_SERVER_ORG 1
 #else
@@ -69,13 +89,19 @@
 #define TURN_PORT TSORG_PORT
 #define TURN_USER TSORG_USER
 #define TURN_PASS TSORG_PASS
-#define TURN_TYPE NICE_RELAY_TYPE_UDP
+#define TURN_USER2 TSORG_USER
+#define TURN_PASS2 TSORG_PASS
+#define TURN_TYPE NICE_RELAY_TYPE_TURN_UDP
 #else
 #define TURN_IP NUMB_IP
 #define TURN_PORT NUMB_PORT
 #define TURN_USER NUMB_USER
 #define TURN_PASS NUMB_PASS
-#define TURN_TYPE NICE_RELAY_TYPE_UDP
+#define TURN_USER2 NUMB_USER
+#define TURN_PASS2 NUMB_PASS
+#define TURN_TYPE NICE_RELAY_TYPE_TURN_UDP
+#endif
+
 #endif
 
 
@@ -237,7 +263,30 @@ static void priv_get_local_addr (NiceAgent *agent, guint stream_id, guint compon
       *dstaddr = cand->addr;
     }
   }
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
   g_slist_free (cands);
+}
+
+
+static GSList *priv_get_local_candidate (NiceAgent *agent, guint stream_id, guint component_id)
+{
+  GSList *cands, *i;
+  GSList *result = NULL;
+  NiceCandidate *out_cand = NULL;
+  cands = nice_agent_get_local_candidates(agent, stream_id, component_id);
+  for (i = cands; i; i = i->next) {
+    NiceCandidate *cand = i->data;
+    if (cand) {
+      out_cand = cand;
+    }
+  }
+  result = g_slist_append (result, nice_candidate_copy (out_cand));
+
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
+  g_slist_free (cands);
+  return result;
 }
 
 
@@ -254,9 +303,9 @@ static void init_candidate (NiceCandidate *cand)
 
 static int run_full_test (NiceAgent *lagent, NiceAgent *ragent, NiceAddress *baseaddr, guint ready, guint failed)
 {
-  NiceAddress laddr, raddr, laddr_rtcp, raddr_rtcp;   
+  //  NiceAddress laddr, raddr, laddr_rtcp, raddr_rtcp;   
   NiceCandidate cdes;
-  GSList *cands;
+  GSList *cands, *i;
   guint ls_id, rs_id;
 
   init_candidate (&cdes);
@@ -291,9 +340,9 @@ static int run_full_test (NiceAgent *lagent, NiceAgent *ragent, NiceAddress *bas
   nice_agent_set_relay_info(lagent, ls_id, 2,
       TURN_IP, TURN_PORT, TURN_USER, TURN_PASS, TURN_TYPE);
   nice_agent_set_relay_info(ragent, rs_id, 1,
-      TURN_IP, TURN_PORT, TURN_USER, TURN_PASS, TURN_TYPE);
+      TURN_IP, TURN_PORT, TURN_USER2, TURN_PASS2, TURN_TYPE);
   nice_agent_set_relay_info(ragent, rs_id, 2,
-      TURN_IP, TURN_PORT, TURN_USER, TURN_PASS, TURN_TYPE);
+      TURN_IP, TURN_PORT, TURN_USER2, TURN_PASS2, TURN_TYPE);
 #endif
 
 
@@ -322,7 +371,7 @@ static int run_full_test (NiceAgent *lagent, NiceAgent *ragent, NiceAddress *bas
 
   /* step: find out the local candidates of each agent */
 
-  priv_get_local_addr (ragent, rs_id, NICE_COMPONENT_TYPE_RTP, &raddr);
+  /* priv_get_local_addr (ragent, rs_id, NICE_COMPONENT_TYPE_RTP, &raddr);
   g_debug ("test-fullmode: local RTP port R %u",
            nice_address_get_port (&raddr));
 
@@ -336,20 +385,24 @@ static int run_full_test (NiceAgent *lagent, NiceAgent *ragent, NiceAddress *bas
 
   priv_get_local_addr (lagent, ls_id, NICE_COMPONENT_TYPE_RTCP, &laddr_rtcp);
   g_debug ("test-fullmode: local RTCP port L %u",
-           nice_address_get_port (&laddr_rtcp));
+  nice_address_get_port (&laddr_rtcp));*/
 
   /* step: pass the remote candidates to agents  */
-  cands = g_slist_append (NULL, &cdes);
+  //cands = g_slist_append (NULL, &cdes);
   {
-      const gchar *ufrag = NULL, *password = NULL;
+      gchar *ufrag = NULL, *password = NULL;
       nice_agent_get_local_credentials(lagent, ls_id, &ufrag, &password);
       nice_agent_set_remote_credentials (ragent,
 					 rs_id, ufrag, password);
+      g_free (ufrag);
+      g_free (password);
       nice_agent_get_local_credentials(ragent, rs_id, &ufrag, &password);
       nice_agent_set_remote_credentials (lagent,
 					 ls_id, ufrag, password);
+      g_free (ufrag);
+      g_free (password);
   }
-  cdes.component_id = NICE_COMPONENT_TYPE_RTP;
+  /*  cdes.component_id = NICE_COMPONENT_TYPE_RTP;
   cdes.addr = raddr;
   nice_agent_set_remote_candidates (lagent, ls_id, NICE_COMPONENT_TYPE_RTP, cands);
   cdes.addr = laddr;
@@ -360,6 +413,26 @@ static int run_full_test (NiceAgent *lagent, NiceAgent *ragent, NiceAddress *bas
   cdes.addr = laddr_rtcp;
   nice_agent_set_remote_candidates (ragent, rs_id, NICE_COMPONENT_TYPE_RTCP, cands);
 
+  g_slist_free (cands);*/
+  cands = priv_get_local_candidate (ragent, rs_id, NICE_COMPONENT_TYPE_RTP);
+  nice_agent_set_remote_candidates (lagent, ls_id, NICE_COMPONENT_TYPE_RTP, cands);
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
+  g_slist_free (cands);
+  cands = priv_get_local_candidate (ragent, rs_id, NICE_COMPONENT_TYPE_RTCP);
+  nice_agent_set_remote_candidates (lagent, ls_id, NICE_COMPONENT_TYPE_RTCP, cands);
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
+  g_slist_free (cands);
+  cands = priv_get_local_candidate (lagent, ls_id, NICE_COMPONENT_TYPE_RTP);
+  nice_agent_set_remote_candidates (ragent, rs_id, NICE_COMPONENT_TYPE_RTP, cands);
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
+  g_slist_free (cands);
+  cands = priv_get_local_candidate (lagent, ls_id, NICE_COMPONENT_TYPE_RTCP);
+  nice_agent_set_remote_candidates (ragent, rs_id, NICE_COMPONENT_TYPE_RTCP, cands);
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
   g_slist_free (cands);
 
   g_debug ("test-fullmode: Set properties, next running mainloop until connectivity checks succeed...");
@@ -427,17 +500,10 @@ static int run_full_test_delayed_answer (NiceAgent *lagent, NiceAgent *ragent, N
   rs_id = nice_agent_add_stream (ragent, 2);
   g_assert (ls_id > 0);
   g_assert (rs_id > 0);
-#if USE_TURN
-  nice_agent_set_relay_info(lagent, ls_id, 1,
-      TURN_IP, TURN_PORT, TURN_USER, TURN_PASS, TURN_TYPE);
-  nice_agent_set_relay_info(lagent, ls_id, 2,
-      TURN_IP, TURN_PORT, TURN_USER, TURN_PASS, TURN_TYPE);
-  nice_agent_set_relay_info(ragent, rs_id, 1,
-      TURN_IP, TURN_PORT, TURN_USER, TURN_PASS, TURN_TYPE);
-  nice_agent_set_relay_info(ragent, rs_id, 2,
-      TURN_IP, TURN_PORT, TURN_USER, TURN_PASS, TURN_TYPE);
-#endif
 
+  /* We don't try this with TURN because as long as both agents don't
+     have the remote candidates, they won't be able to create the
+     permission on the TURN server, so the connchecks will never go through */
 
   nice_agent_gather_candidates (lagent, ls_id);
   nice_agent_gather_candidates (ragent, rs_id);
@@ -482,13 +548,17 @@ static int run_full_test_delayed_answer (NiceAgent *lagent, NiceAgent *ragent, N
 
   /* step: pass the remote candidates to agent R (answering party)  */
   {
-      const gchar *ufrag = NULL, *password = NULL;
+      gchar *ufrag = NULL, *password = NULL;
       nice_agent_get_local_credentials(lagent, ls_id, &ufrag, &password);
       nice_agent_set_remote_credentials (ragent,
 					 rs_id, ufrag, password);
+      g_free (ufrag);
+      g_free (password);
       nice_agent_get_local_credentials(ragent, rs_id, &ufrag, &password);
       nice_agent_set_remote_credentials (lagent,
 					 ls_id, ufrag, password);
+      g_free (ufrag);
+      g_free (password);
   }
   /* step: set remote candidates for agent R (answering party) */
   cands = g_slist_append (NULL, &cdes);
@@ -512,13 +582,17 @@ static int run_full_test_delayed_answer (NiceAgent *lagent, NiceAgent *ragent, N
 
   /* step: pass the remote candidates to agent L (offering party)  */
   {
-      const gchar *ufrag = NULL, *password = NULL;
+      gchar *ufrag = NULL, *password = NULL;
       nice_agent_get_local_credentials(ragent, rs_id, &ufrag, &password);
       nice_agent_set_remote_credentials (lagent,
 					 ls_id, ufrag, password);
+      g_free (ufrag);
+      g_free (password);
       nice_agent_get_local_credentials(ragent, rs_id, &ufrag, &password);
       nice_agent_set_remote_credentials (lagent,
 					 ls_id, ufrag, password);
+      g_free (ufrag);
+      g_free (password);
   }
 
   /* step: pass remove candidates to agent L (offering party) */
@@ -623,6 +697,8 @@ static int run_full_test_wrong_password (NiceAgent *lagent, NiceAgent *ragent, N
       laddr = cand->addr;
     }
   }
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
   g_slist_free (cands);
 
   cands = nice_agent_get_local_candidates(ragent, rs_id, NICE_COMPONENT_TYPE_RTP);
@@ -634,19 +710,25 @@ static int run_full_test_wrong_password (NiceAgent *lagent, NiceAgent *ragent, N
       raddr = cand->addr;
     }
   }
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
   g_slist_free (cands);
   g_debug ("test-fullmode: Got local candidates...");
 
   /* step: pass the remote candidates to agents  */
   cands = g_slist_append (NULL, &cdes);
   {
-      const gchar *ufrag = NULL, *password = NULL;
+      gchar *ufrag = NULL, *password = NULL;
       nice_agent_get_local_credentials(lagent, ls_id, &ufrag, &password);
       nice_agent_set_remote_credentials (ragent,
 					 rs_id, "wrong", password);
+      g_free (ufrag);
+      g_free (password);
       nice_agent_get_local_credentials(ragent, rs_id, &ufrag, &password);
       nice_agent_set_remote_credentials (lagent,
 					 ls_id, ufrag, "wrong2");
+      g_free (ufrag);
+      g_free (password);
   }
   cdes.addr = raddr;
   nice_agent_set_remote_candidates (lagent, ls_id, NICE_COMPONENT_TYPE_RTP, cands);
@@ -742,6 +824,8 @@ static int run_full_test_control_conflict (NiceAgent *lagent, NiceAgent *ragent,
       laddr = cand->addr;
     }
   }
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
   g_slist_free (cands);
 
   cands = nice_agent_get_local_candidates(ragent, rs_id, NICE_COMPONENT_TYPE_RTP);
@@ -753,19 +837,25 @@ static int run_full_test_control_conflict (NiceAgent *lagent, NiceAgent *ragent,
       raddr = cand->addr;
     }
   }
+  for (i = cands; i; i = i->next)
+    nice_candidate_free ((NiceCandidate *) i->data);
   g_slist_free (cands);
   g_debug ("test-fullmode: Got local candidates...");
  
   /* step: pass the remote candidates to agents  */
   cands = g_slist_append (NULL, &cdes);
   {
-      const gchar *ufrag = NULL, *password = NULL;
+      gchar *ufrag = NULL, *password = NULL;
       nice_agent_get_local_credentials(lagent, ls_id, &ufrag, &password);
       nice_agent_set_remote_credentials (ragent,
 					 rs_id, ufrag, password);
+      g_free (ufrag);
+      g_free (password);
       nice_agent_get_local_credentials(ragent, rs_id, &ufrag, &password);
       nice_agent_set_remote_credentials (lagent,
 					 ls_id, ufrag, password);
+      g_free (ufrag);
+      g_free (password);
   }
   cdes.addr = raddr;
   nice_agent_set_remote_candidates (lagent, ls_id, NICE_COMPONENT_TYPE_RTP, cands);
@@ -811,8 +901,8 @@ int main (void)
    */
 
   /* step: create the agents L and R */
-  lagent = nice_agent_new (g_main_loop_get_context (global_mainloop), NICE_COMPATIBILITY_DRAFT19);
-  ragent = nice_agent_new (g_main_loop_get_context (global_mainloop), NICE_COMPATIBILITY_DRAFT19);
+  lagent = nice_agent_new (g_main_loop_get_context (global_mainloop), NICE_COMPATIBILITY);
+  ragent = nice_agent_new (g_main_loop_get_context (global_mainloop), NICE_COMPATIBILITY);
 
   /* step: add a timer to catch state changes triggered by signals */
 #if USE_TURN
@@ -921,6 +1011,7 @@ int main (void)
   /* note: verify that correct number of local candidates were reported */
   g_assert (global_lagent_cands == 2);
   g_assert (global_ragent_cands == 2);
+
 
   /* run test with incorrect credentials (make sure process fails) */
   g_debug ("test-fullmode: TEST STARTS / incorrect credentials");

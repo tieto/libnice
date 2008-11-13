@@ -1,5 +1,0 @@
-Improve the list-local-interfaces stuff
-How about a 'both' rfc compatibility for stun.. or at least, check for the cookie for stun_sha1...
-unset the timer's source if they return FALSE
-channel bind have a 10 minutes expiration :@
-infinite loop of connchecks with triggered checks -> some candidates are not even checked

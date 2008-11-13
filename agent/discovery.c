@@ -186,7 +186,7 @@ void refresh_free_item (gpointer data, gpointer user_data)
     password = g_base64_decode ((gchar *)password, &password_len);
   }
 
-  buffer_len = stun_usage_turn_create_refresh (&cand->turn_agent,
+  buffer_len = stun_usage_turn_create_refresh (&cand->stun_agent,
       &cand->stun_message,  cand->stun_buffer, sizeof(cand->stun_buffer),
       cand->stun_resp_msg.buffer == NULL ? NULL : &cand->stun_resp_msg, 0,
       username, username_len,
@@ -571,6 +571,11 @@ discovery_add_relay_candidate (
 
       result = priv_add_local_candidate_pruned (component, candidate);
       if (result) {
+        GSList *modified_list = g_slist_append (component->sockets, relay_socket);
+        if (modified_list) {
+          /* success: store a pointer to the sockaddr */
+          component->sockets = modified_list;
+        }
         agent_signal_new_candidate (agent, candidate);
       } else {
         /* error: memory allocation, or duplicate candidate */
@@ -761,7 +766,13 @@ NiceCandidate *discovery_learn_remote_peer_reflexive_candidate (
       g_free(decoded_remote);
 
       candidate->password = g_strdup(remote->password);
+    } else if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
+      g_free (candidate->username);
+      g_free (candidate->password);
+      candidate->username = g_strdup(remote->username);
+      candidate->password = g_strdup(remote->password);
     }
+
 
     candidate->sockptr = NULL; /* not stored for remote candidates */
     /* note: candidate username and password are left NULL as stream 
@@ -829,7 +840,7 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
 					     NICE_COMPONENT_STATE_GATHERING);
 
         if (cand->type == NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE) {
-          buffer_len = stun_usage_bind_create (&agent->stun_agent,
+          buffer_len = stun_usage_bind_create (&cand->stun_agent,
               &cand->stun_message, cand->stun_buffer, sizeof(cand->stun_buffer));
         } else if (cand->type == NICE_CANDIDATE_TYPE_RELAYED) {
           uint8_t *username = (uint8_t *)cand->turn->username;
@@ -842,7 +853,7 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
             password = g_base64_decode ((gchar *)password, &password_len);
           }
 
-          buffer_len = stun_usage_turn_create (&cand->turn_agent,
+          buffer_len = stun_usage_turn_create (&cand->stun_agent,
               &cand->stun_message,  cand->stun_buffer, sizeof(cand->stun_buffer),
               cand->stun_resp_msg.buffer == NULL ? NULL : &cand->stun_resp_msg,
               STUN_USAGE_TURN_REQUEST_PORT_NORMAL,

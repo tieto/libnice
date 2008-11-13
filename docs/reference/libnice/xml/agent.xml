@@ -60,8 +60,8 @@ enum                <link linkend="NiceCompatibility">NiceCompatibility</link>;
                                                          const <link linkend="gchar">gchar</link> *pwd);
 <link linkend="gboolean">gboolean</link>            <link linkend="nice-agent-get-local-credentials">nice_agent_get_local_credentials</link>    (<link linkend="NiceAgent">NiceAgent</link> *agent,
                                                          <link linkend="guint">guint</link> stream_id,
-                                                         const <link linkend="gchar">gchar</link> **ufrag,
-                                                         const <link linkend="gchar">gchar</link> **pwd);
+                                                         <link linkend="gchar">gchar</link> **ufrag,
+                                                         <link linkend="gchar">gchar</link> **pwd);
 <link linkend="int">int</link>                 <link linkend="nice-agent-set-remote-candidates">nice_agent_set_remote_candidates</link>    (<link linkend="NiceAgent">NiceAgent</link> *agent,
                                                          <link linkend="guint">guint</link> stream_id,
                                                          <link linkend="guint">guint</link> component_id,
@@ -580,8 +580,8 @@ Sets the remote credentials for stream <parameter>stream_id</parameter>.
 <title>nice_agent_get_local_credentials ()</title>
 <indexterm zone="nice-agent-get-local-credentials"><primary>nice_agent_get_local_credentials</primary></indexterm><programlisting><link linkend="gboolean">gboolean</link>            nice_agent_get_local_credentials    (<link linkend="NiceAgent">NiceAgent</link> *agent,
                                                          <link linkend="guint">guint</link> stream_id,
-                                                         const <link linkend="gchar">gchar</link> **ufrag,
-                                                         const <link linkend="gchar">gchar</link> **pwd);</programlisting>
+                                                         <link linkend="gchar">gchar</link> **ufrag,
+                                                         <link linkend="gchar">gchar</link> **pwd);</programlisting>
 <para>
 Gets the local credentials for stream <parameter>stream_id</parameter>.</para>
 <para>
