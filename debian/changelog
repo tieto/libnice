@@ -1,3 +1,9 @@
+nice (0.0.2-1) UNRELEASED; urgency=low
+
+  * New Upstream Version
+
+ -- Sjoerd Simons <sjoerd@debian.org>  Thu, 13 Nov 2008 22:18:57 +0000
+
 nice (0.0.1-1) unstable; urgency=low
 
   * Initial release
