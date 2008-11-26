@@ -368,9 +368,12 @@ socket_close (NiceSocket *sock)
 #endif
   g_queue_foreach (&priv->send_queue, (GFunc) free_to_be_sent, NULL);
   g_queue_clear (&priv->send_queue);
-  g_io_channel_unref (priv->io_channel);
-  g_source_destroy (priv->io_source);
-  g_source_unref (priv->io_source);
+  if (priv->io_channel)
+	g_io_channel_unref (priv->io_channel);
+  if (priv->io_source) {
+    g_source_destroy (priv->io_source);
+    g_source_unref (priv->io_source);
+  }
   g_slice_free(TurnTcpPriv, sock->priv);
 }
 
@@ -424,7 +427,8 @@ nice_tcp_turn_socket_new (
   fcntl (sockfd, F_SETFL, fcntl (sockfd, F_GETFL) | O_NONBLOCK);
 #endif
 
-
+  name_len = name.ss_family == AF_INET? sizeof (struct sockaddr_in) :
+      sizeof(struct sockaddr_in6);
   ret = connect (sockfd, (const struct sockaddr *)&name, name_len);
 
 #ifdef G_OS_WIN32
@@ -437,6 +441,20 @@ nice_tcp_turn_socket_new (
     g_slice_free (NiceSocket, sock);
     return NULL;
   }
+
+  name_len = name.ss_family == AF_INET? sizeof (struct sockaddr_in) :
+      sizeof(struct sockaddr_in6);
+  if (getsockname (sockfd, (struct sockaddr *) &name, &name_len) < 0) {
+    g_slice_free (NiceSocket, sock);
+#ifdef G_OS_WIN32
+    closesocket(sockfd);
+#else
+    close (sockfd);
+#endif
+    return NULL;
+  }
+
+  nice_address_set_from_sockaddr (&sock->addr, (struct sockaddr *)&name);
 
   sock->priv = priv = g_slice_new0 (TurnTcpPriv);
 

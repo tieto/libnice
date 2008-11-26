@@ -3,7 +3,7 @@ AC_PREREQ(2.59c)
 
 dnl releases only do -Wall, cvs and prerelease does -Werror too
 dnl use a three digit version number for releases, and four for cvs/prerelease
-AC_INIT(nice, 0.0.2)
+AC_INIT(nice, 0.0.3)
 NICE_RELEASE="yes"
 
 AC_CONFIG_SRCDIR([agent/agent.c])
@@ -65,7 +65,6 @@ AC_CHECK_LIB(rt, clock_gettime, [LIBRT="-lrt"], [LIBRT=""])
 AC_CHECK_FUNCS([poll])
 AC_SUBST(LIBRT)
 
-PKG_CHECK_MODULES(OPENSSL, [openssl])
 
 PKG_CHECK_MODULES(GLIB, [dnl
 	glib-2.0 >= 2.10 dnl

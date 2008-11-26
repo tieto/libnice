@@ -52,10 +52,10 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-libstun_la_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+libstun_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_libstun_la_OBJECTS = stunagent.lo stunmessage.lo stun5389.lo \
-	stuncrc32.lo stunhmac.lo utils.lo ice.lo bind.lo turn.lo \
-	timer.lo trans.lo
+	stuncrc32.lo sha1.lo md5.lo rand.lo stunhmac.lo utils.lo \
+	ice.lo bind.lo turn.lo timer.lo trans.lo
 libstun_la_OBJECTS = $(am_libstun_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -136,8 +136,6 @@ NICE_LT_LDFLAGS = @NICE_LT_LDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJEXT = @OBJEXT@
-OPENSSL_CFLAGS = @OPENSSL_CFLAGS@
-OPENSSL_LIBS = @OPENSSL_LIBS@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
@@ -223,7 +221,7 @@ ERROR_CFLAGS = \
 
 # -Wold-style-definition -Winline -Wunreachable-code
 CLEANFILES = *.gcno *.gcda
-AM_CFLAGS = -std=gnu99 $(ERROR_CFLAGS) $(OPENSSL_CFLAGS)
+AM_CFLAGS = -std=gnu99 $(ERROR_CFLAGS)
 AM_CPPFLAGS = -I$(top_srcdir)
 noinst_LTLIBRARIES = libstun.la
 libstun_la_SOURCES = constants.h \
@@ -231,6 +229,9 @@ libstun_la_SOURCES = constants.h \
 	stunmessage.c stunmessage.h \
 	stun5389.c stun5389.h \
 	stuncrc32.c stuncrc32.h \
+	sha1.c sha1.h \
+	md5.c md5.h \
+	rand.c rand.h \
 	stunhmac.c stunhmac.h \
 	utils.c  utils.h \
 	usages/ice.c usages/ice.h \
@@ -239,7 +240,7 @@ libstun_la_SOURCES = constants.h \
 	usages/timer.c usages/timer.h \
 	usages/trans.c usages/trans.h
 
-libstun_la_LIBADD = $(OPENSSL_LIBS) $(LIBRT)
+libstun_la_LIBADD = $(LIBRT)
 EXTRA_DIST = win32_common.h
 all: all-recursive
 
@@ -294,6 +295,9 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bind.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ice.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/md5.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sha1.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stun5389.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stunagent.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stuncrc32.Plo@am__quote@
