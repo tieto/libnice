@@ -34,8 +34,25 @@ License:
 
   For a full text of the MPL see COPYING.MPL in the same directory as this file.
 
+The files stun/sha1.* and stun/md5* are:
+  Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2 as
+  published by the Free Software Foundation.
+
+  Alternatively, this software may be distributed under the terms of BSD
+  license.
+
+  For a full text of the LGPL 2 see `/usr/share/common-licenses/LGPL-2'
+  For a full text of the BSD license see `/usr/share/common-licenses/BSD'
+
+Parts of stun/rand.c are:
+   Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura
+
+   Licensed under the terms of the BSD license
+
+   For a full text of the BSD license see `/usr/share/common-licenses/BSD'
+
 The Debian packaging is copyright 2008, Sjoerd Simons <sjoerd@debian.org> and
 is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
-
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.
