@@ -1,5 +1,10 @@
 libnice (0.0.3-1) UNRELEASED; urgency=low
 
   * Initial release (Closes: #506962)
+  * patches/0001-Revert-Save-the-to-from-addresses-and-put-them-in-n.patch
+    patches/0002-Revert-Create-a-netbuffer-directly-instead-of-using.patch:
+    - Added. Revert usage over netbuffers to prevent triggering of collision
+      detection in gstreamer, which can't happen when ICE is used anyway.
+      (From git://git.collabora.co.uk/git/user/tester/nice.git revert-netbuffer)
 
- -- Sjoerd Simons <sjoerd@debian.org>  Wed, 26 Nov 2008 12:21:35 +0100
+ -- Sjoerd Simons <sjoerd@debian.org>  Wed, 26 Nov 2008 15:01:55 +0100
