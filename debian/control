@@ -76,4 +76,4 @@ Description: ICE library
  .
  Nice includes integration with GStreamer.
  .
- This package contains documentation for for nice.
+ This package contains documentation for libnice.
