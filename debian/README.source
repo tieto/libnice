@@ -54,3 +54,5 @@ repository:
       git+ssh://git.collabora.co.uk/git/nice.git
     git checkout debian-patches
     git cherry-pick xxxxxxxxxxxxxx
+    git checkout debian
+    fakeroot debian/rules update-patches
