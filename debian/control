@@ -1,4 +1,4 @@
-Source: nice
+Source: libnice
 Section: libs
 Priority: optional
 Maintainer: Debian Telepathy maintainers <pkg-telepathy-maintainers@lists.alioth
