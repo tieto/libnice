@@ -2143,7 +2143,7 @@ static bool conncheck_stun_validater (StunAgent *agent,
     stun_debug ("' (%d) with '", username_len);
     stun_debug_bytes (uname, uname_len);
     stun_debug ("' (%d) : %d\n",
-        uname, memcmp (username, uname, uname_len));
+        uname_len, memcmp (username, uname, uname_len));
     if (uname_len > 0 && username_len >= uname_len &&
         memcmp (username, uname, uname_len) == 0) {
       gchar *pass = NULL;
@@ -2340,9 +2340,18 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
           inbound = FALSE;
         }
       }
+
       uname_len = priv_create_username (agent, stream,
           component->id,  rcand, lcand,
           uname, sizeof (uname), inbound);
+
+      stun_debug ("Comparing username '");
+      stun_debug_bytes (username, username? username_len : 0);
+      stun_debug ("' (%d) with '", username_len);
+      stun_debug_bytes (uname, uname_len);
+      stun_debug ("' (%d) : %d\n",
+          uname_len, username && uname_len == username_len &&
+          memcmp (username, uname, uname_len) == 0);
 
       if (username &&
           uname_len == username_len &&
@@ -2358,14 +2367,11 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
       local_candidate == NULL &&
       discovery_msg == FALSE) {
     /* if we couldn't match the username and the stun agent has
-       IGNORE_CREDENTIALS then we have an integrity check failing */
+       IGNORE_CREDENTIALS then we have an integrity check failing.
+       This could happen with the race condition of receiving connchecks
+       before the remote candidates are added. Just drop the message, and let
+       the retransmissions make it work. */
     nice_debug ("Agent %p : Username check failed.", agent);
-    if (stun_agent_init_error (&agent->stun_agent, &msg, rbuf, rbuf_len,
-			       &req, STUN_ERROR_UNAUTHORIZED)) {
-      rbuf_len = stun_agent_finish_message (&agent->stun_agent, &msg, NULL, 0);
-      if (rbuf_len > 0&& agent->compatibility != NICE_COMPATIBILITY_MSN)
-	nice_socket_send (socket, from, rbuf_len, (const gchar*)rbuf);
-    }
     return TRUE;
   }
 

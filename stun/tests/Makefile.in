@@ -41,7 +41,8 @@ host_triplet = @host@
 DIST_COMMON = $(dist_check_SCRIPTS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/common.mk
 check_PROGRAMS = test-parse$(EXEEXT) test-format$(EXEEXT) \
-	test-bind$(EXEEXT) test-turn$(EXEEXT) test-conncheck$(EXEEXT)
+	test-bind$(EXEEXT) test-turn$(EXEEXT) test-conncheck$(EXEEXT) \
+	test-hmac$(EXEEXT)
 subdir = stun/tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -62,6 +63,10 @@ test_format_SOURCES = test-format.c
 test_format_OBJECTS = test-format.$(OBJEXT)
 test_format_LDADD = $(LDADD)
 test_format_DEPENDENCIES = ../libstun.la
+test_hmac_SOURCES = test-hmac.c
+test_hmac_OBJECTS = test-hmac.$(OBJEXT)
+test_hmac_LDADD = $(LDADD)
+test_hmac_DEPENDENCIES = ../libstun.la
 test_parse_SOURCES = test-parse.c
 test_parse_OBJECTS = test-parse.$(OBJEXT)
 test_parse_LDADD = $(LDADD)
@@ -82,10 +87,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = test-bind.c test-conncheck.c test-format.c test-parse.c \
-	test-turn.c
-DIST_SOURCES = test-bind.c test-conncheck.c test-format.c test-parse.c \
-	test-turn.c
+SOURCES = test-bind.c test-conncheck.c test-format.c test-hmac.c \
+	test-parse.c test-turn.c
+DIST_SOURCES = test-bind.c test-conncheck.c test-format.c test-hmac.c \
+	test-parse.c test-turn.c
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -141,8 +146,6 @@ NICE_LT_LDFLAGS = @NICE_LT_LDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJEXT = @OBJEXT@
-OPENSSL_CFLAGS = @OPENSSL_CFLAGS@
-OPENSSL_LIBS = @OPENSSL_LIBS@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
@@ -281,6 +284,9 @@ test-conncheck$(EXEEXT): $(test_conncheck_OBJECTS) $(test_conncheck_DEPENDENCIES
 test-format$(EXEEXT): $(test_format_OBJECTS) $(test_format_DEPENDENCIES) 
 	@rm -f test-format$(EXEEXT)
 	$(LINK) $(test_format_OBJECTS) $(test_format_LDADD) $(LIBS)
+test-hmac$(EXEEXT): $(test_hmac_OBJECTS) $(test_hmac_DEPENDENCIES) 
+	@rm -f test-hmac$(EXEEXT)
+	$(LINK) $(test_hmac_OBJECTS) $(test_hmac_LDADD) $(LIBS)
 test-parse$(EXEEXT): $(test_parse_OBJECTS) $(test_parse_DEPENDENCIES) 
 	@rm -f test-parse$(EXEEXT)
 	$(LINK) $(test_parse_OBJECTS) $(test_parse_LDADD) $(LIBS)
@@ -297,6 +303,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-bind.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-conncheck.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-format.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-hmac.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-parse.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-turn.Po@am__quote@
 

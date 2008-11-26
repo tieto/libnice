@@ -278,7 +278,7 @@ It will take care of discovering your local candidates and do
 <p>
  </p>
 <div class="example">
-<a name="id2565641"></a><p class="title"><b>Example 1. Simple example on how to use libnice</b></p>
+<a name="id2565644"></a><p class="title"><b>Example 1. Simple example on how to use libnice</b></p>
 <div class="example-contents"><pre class="programlisting">
    NiceAddress base_addr;
    guint stream_id;
@@ -421,7 +421,7 @@ Convenience enum representing the type of a component for use as the
 component_id for RTP/RTCP usages.
  </p>
 <div class="example">
-<a name="id2565970"></a><p class="title"><b>Example 2. Example of use.</b></p>
+<a name="id2565973"></a><p class="title"><b>Example 2. Example of use.</b></p>
 <div class="example-contents"><pre class="programlisting">
    nice_agent_send (agent, stream_id, NICE_COMPONENT_TYPE_RTP, len, buf);
    </pre></div>
@@ -1007,7 +1007,8 @@ Sets, adds or updates the remote candidates for a component of a stream.
     for remote candidates.
    </p>
 <p>
-   You must first call <a class="link" href="libnice-NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()"><code class="function">nice_agent_gather_candidates()</code></a> before
+   You must first call <a class="link" href="libnice-NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()"><code class="function">nice_agent_gather_candidates()</code></a> and wait for the
+   <a class="link" href="libnice-NiceAgent.html#NiceAgent-candidate-gathering-done" title='The "candidate-gathering-done" signal'><span class="type">"candidate-gathering-done"</span></a> signale before
    calling <a class="link" href="libnice-NiceAgent.html#nice-agent-set-remote-candidates" title="nice_agent_set_remote_candidates ()"><code class="function">nice_agent_set_remote_candidates()</code></a>
    </p>
 </div>

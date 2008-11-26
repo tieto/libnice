@@ -622,7 +622,8 @@ Sets, adds or updates the remote candidates for a component of a stream.
     for remote candidates.
    </para>
    <para>
-   You must first call <link linkend="nice-agent-gather-candidates"><function>nice_agent_gather_candidates()</function></link> before
+   You must first call <link linkend="nice-agent-gather-candidates"><function>nice_agent_gather_candidates()</function></link> and wait for the
+   <link linkend="NiceAgent-candidate-gathering-done"><type>"candidate-gathering-done"</type></link> signale before
    calling <link linkend="nice-agent-set-remote-candidates"><function>nice_agent_set_remote_candidates()</function></link>
    </para>
  </note></para>

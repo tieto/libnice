@@ -601,7 +601,15 @@ void agent_gathering_done (NiceAgent *agent)
 
       for (k = component->local_candidates; k; k = k->next) {
         NiceCandidate *local_candidate = k->data;
-
+	{
+	  gchar tmpbuf[INET6_ADDRSTRLEN];
+	  nice_address_to_string (&local_candidate->addr, tmpbuf);
+          nice_debug ("Agent %p: gathered local candidate : [%s]:%u"
+              " for s%d/c%d. U/P '%s'/'%s'", agent,
+              tmpbuf, nice_address_get_port (&local_candidate->addr),
+              local_candidate->stream_id, local_candidate->component_id,
+              local_candidate->username, local_candidate->password);
+	}
         for (l = component->remote_candidates; l; l = l->next) {
           NiceCandidate *remote_candidate = l->data;
 
@@ -629,8 +637,8 @@ void agent_signal_gathering_done (NiceAgent *agent)
   for (i = agent->streams; i; i = i->next) {
     Stream *stream = i->data;
     if (stream->gathering) {
-      g_signal_emit (agent, signals[SIGNAL_CANDIDATE_GATHERING_DONE], 0, stream->id);
       stream->gathering = FALSE;
+      g_signal_emit (agent, signals[SIGNAL_CANDIDATE_GATHERING_DONE], 0, stream->id);
     }
   }
 }
@@ -753,6 +761,7 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
 {
   CandidateDiscovery *cdisco;
   GSList *modified_list;
+  GSList *socket_modified_list;
 
   /* note: no need to check for redundant candidates, as this is
    *       done later on in the process */
@@ -769,7 +778,6 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
 
       if (turn->type ==  NICE_RELAY_TYPE_TURN_UDP) {
         if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
-          GSList *modified_list;
           NiceAddress addr = socket->addr;
           NiceSocket *new_socket;
           nice_address_set_port (&addr, 0);
@@ -778,10 +786,10 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
           if (new_socket) {
             agent_attach_stream_component_socket (agent, stream,
                 component, new_socket);
-            modified_list = g_slist_append (component->sockets, new_socket);
-            if (modified_list) {
+            socket_modified_list = g_slist_append (component->sockets, new_socket);
+            if (socket_modified_list) {
               /* success: store a pointer to the sockaddr */
-              component->sockets = modified_list;
+              component->sockets = socket_modified_list;
               socket = new_socket;
             } else {
               nice_socket_free (new_socket);
@@ -802,6 +810,11 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
 
         agent_attach_stream_component_socket (agent, stream,
             component, cdisco->nicesock);
+        socket_modified_list = g_slist_append (component->sockets, cdisco->nicesock);
+        if (socket_modified_list) {
+          /* success: store a pointer to the sockaddr */
+          component->sockets = socket_modified_list;
+        }
       }
       cdisco->turn = turn;
       cdisco->server = turn->server;
@@ -900,6 +913,9 @@ nice_agent_set_relay_info(NiceAgent *agent,
     turn->password = g_strdup (password);
     turn->type = type;
 
+    nice_debug ("Agent %p: added relay server [%s]:%d of type %d", agent,
+        server_ip, server_port, type);
+
     component->turn_servers = g_list_append (component->turn_servers, turn);
   }
 
@@ -991,6 +1007,8 @@ nice_agent_gather_candidates (
 
   /* note: no async discoveries pending, signal that we are ready */
   if (agent->discovery_unsched_items == 0) {
+    nice_debug ("Agent %p: Candidate gathering FINISHED, no scheduled items.",
+        agent);
     agent_gathering_done (agent);
   } else {
     g_assert (agent->discovery_list);
@@ -1087,7 +1105,6 @@ static gboolean priv_add_remote_candidate (
 {
   Component *component;
   NiceCandidate *candidate;
-  gchar *username_dup = NULL, *password_dup = NULL;
   gboolean error_flag = FALSE;
 
   if (!agent_find_component (agent, stream_id, component_id, NULL, &component))
@@ -1111,10 +1128,6 @@ static gboolean priv_add_remote_candidate (
   }
   else {
     /* case 2: add a new candidate */
-    if (username)
-      username_dup = g_strdup (username);
-    if (password) 
-      password_dup = g_strdup (password);
 
     candidate = nice_candidate_new (type);
     if (candidate) {
@@ -1131,8 +1144,10 @@ static gboolean priv_add_remote_candidate (
 	{
 	  gchar tmpbuf[INET6_ADDRSTRLEN];
 	  nice_address_to_string (addr, tmpbuf);
-	  nice_debug ("Agent %p : Adding remote candidate with addr [%s]:%u.", agent, tmpbuf,
-		   nice_address_get_port (addr));
+	  nice_debug ("Agent %p : Adding remote candidate with addr [%s]:%u"
+              " for s%d/c%d. U/P '%s'/'%s'", agent, tmpbuf,
+              nice_address_get_port (addr), stream_id, component_id,
+              username, password);
 	}
 	
 	if (base_addr)
@@ -1140,8 +1155,8 @@ static gboolean priv_add_remote_candidate (
 	
 	candidate->transport = transport;
 	candidate->priority = priority;
-	candidate->username = username_dup;
-	candidate->password = password_dup;
+	candidate->username = g_strdup (username);
+	candidate->password = g_strdup (password);
 	
 	if (foundation)
 	  g_strlcpy (candidate->foundation, foundation, NICE_CANDIDATE_MAX_FOUNDATION);
@@ -1159,8 +1174,6 @@ static gboolean priv_add_remote_candidate (
   if (error_flag) {
     if (candidate) 
       nice_candidate_free (candidate);
-    g_free (username_dup);
-    g_free (password_dup);
     return FALSE;
   }
 
@@ -1230,12 +1243,23 @@ nice_agent_set_remote_candidates (NiceAgent *agent, guint stream_id, guint compo
 {
   const GSList *i; 
   int added = 0;
+  Stream *stream;
+
+  nice_debug ("Agent %p: set_remote_candidates %d %d", agent, stream_id, component_id);
 
   g_static_rec_mutex_lock (&agent->mutex);
 
-  if (agent->discovery_unsched_items > 0) {
-    g_static_rec_mutex_unlock (&agent->mutex);
-    return -1;
+  stream = agent_find_stream (agent, stream_id);
+  if (stream == NULL) {
+    added = -1;
+    goto done;
+  }
+
+  if (agent->discovery_unsched_items > 0 || stream->gathering) {
+    nice_debug ("Agent %p: Remote candidates refused for stream %d because "
+        "we are still gathering our own candidates", agent, stream_id);
+    added = -1;
+    goto done;
   }
 
  for (i = candidates; i && added >= 0; i = i->next) {
@@ -1266,6 +1290,7 @@ nice_agent_set_remote_candidates (NiceAgent *agent, guint stream_id, guint compo
      nice_debug ("Agent %p : Warning: unable to schedule any conn checks!", agent);
  }
 
+ done:
  g_static_rec_mutex_unlock (&agent->mutex);
  return added;
 }

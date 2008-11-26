@@ -10,7 +10,7 @@ SUBDIRS = . tools tests
 
 include $(top_srcdir)/common.mk
 
-AM_CFLAGS = -std=gnu99 $(ERROR_CFLAGS) $(OPENSSL_CFLAGS)
+AM_CFLAGS = -std=gnu99 $(ERROR_CFLAGS)
 AM_CPPFLAGS = -I$(top_srcdir)
 
 noinst_LTLIBRARIES = libstun.la
@@ -20,6 +20,9 @@ libstun_la_SOURCES = constants.h \
 	stunmessage.c stunmessage.h \
 	stun5389.c stun5389.h \
 	stuncrc32.c stuncrc32.h \
+	sha1.c sha1.h \
+	md5.c md5.h \
+	rand.c rand.h \
 	stunhmac.c stunhmac.h \
 	utils.c  utils.h \
 	usages/ice.c usages/ice.h \
@@ -28,6 +31,6 @@ libstun_la_SOURCES = constants.h \
 	usages/timer.c usages/timer.h \
 	usages/trans.c usages/trans.h
 
-libstun_la_LIBADD = $(OPENSSL_LIBS) $(LIBRT)
+libstun_la_LIBADD = $(LIBRT)
 
 EXTRA_DIST = win32_common.h
