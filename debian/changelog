@@ -1,17 +1,5 @@
 libnice (0.0.3-1) UNRELEASED; urgency=low
 
-  * New Upstream Version
-
- -- Sjoerd Simons <sjoerd@debian.org>  Wed, 26 Nov 2008 12:21:35 +0100
-
-nice (0.0.2-1) UNRELEASED; urgency=low
-
-  * New Upstream Version
-
- -- Sjoerd Simons <sjoerd@debian.org>  Thu, 13 Nov 2008 22:18:57 +0000
-
-nice (0.0.1-1) unstable; urgency=low
-
   * Initial release
 
- -- Sjoerd Simons <sjoerd@debian.org>  Wed, 12 Nov 2008 11:30:54 +0000
+ -- Sjoerd Simons <sjoerd@debian.org>  Wed, 26 Nov 2008 12:21:35 +0100
