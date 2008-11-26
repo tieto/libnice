@@ -1,5 +1,5 @@
 libnice (0.0.3-1) UNRELEASED; urgency=low
 
-  * Initial release
+  * Initial release (Closes: #506962)
 
  -- Sjoerd Simons <sjoerd@debian.org>  Wed, 26 Nov 2008 12:21:35 +0100
