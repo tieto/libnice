@@ -2,6 +2,8 @@ libnice (0.0.3-2) UNRELEASED; urgency=low
 
   * debian/rules: Split update-patches target into a separate file for ease
     of copying between pkg-telepathy packages
+  * debian/README.source: some mostly-cosmetic changes while synching with
+    Gabble
 
  -- Simon McVittie <smcv@debian.org>  Tue, 09 Dec 2008 17:31:27 +0000
 

@@ -9,8 +9,7 @@ To get the fully patched source: make -f debian/rules patch
 
 To revert to what's in git: make -f debian/rules unpatch
 
-To add a patch: obtain a diff (preferably, use git format-patch after
-adding changes to the debian-patches git branch) and put it in debian/patches
+To add a patch: obtain a diff and put it in debian/patches, or see below
 
 To remove an existing patch: delete it from debian/patches
 
@@ -24,25 +23,26 @@ branch contains versions targeted for lenny, etc.
 
 Here's how to build it:
 
-git clone git://git.debian.org/git/pkg-telepathy/libnice
-cd libnice
-git checkout debian
-git-buildpackage -us -uc
+    git clone git://git.debian.org/git/pkg-telepathy/libnice
+    cd libnice
+    git checkout debian
+    git-buildpackage -us -uc
 
 or for testing/stable branches like debian-lenny:
 
-git clone git://git.debian.org/git/pkg-telepathy/libnice
-cd libnice
-git checkout debian-lenny
-git-buildpackage -us -uc --git-debian-branch=debian-lenny
+    git clone git://git.debian.org/git/pkg-telepathy/libnice
+    cd libnice
+    git checkout debian-lenny
+    git-buildpackage -us -uc --git-debian-branch=debian-lenny
 
 The branch 'upstream' is a copy of the contents of upstream tarballs. To import
 upstream tarballs use:
 
+    git checkout debian
     git-import-orig ~/nice-0.0.x.tar.gz
 
 The branch 'debian-patches' is 'upstream' plus any patches needed for Debian.
-It should be rebased on upstream after each upstream release.
+It should be rebased on upstream after each upstream release:
 
     git checkout debian-patches
     git rebase upstream
@@ -51,7 +51,8 @@ The preferred way of adding patches is to cherry pick from an upstream
 repository:
 
     git remote add collabora \
-      git+ssh://git.collabora.co.uk/git/nice.git
+        git+ssh://git.collabora.co.uk/git/nice.git
+    git fetch
     git checkout debian-patches
     git cherry-pick xxxxxxxxxxxxxx
     git checkout debian
