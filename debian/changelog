@@ -1,4 +1,4 @@
-libnice (0.0.3-1) UNRELEASED; urgency=low
+libnice (0.0.3-1) unstable; urgency=low
 
   * Initial release (Closes: #506962)
   * patches/0001-Revert-Save-the-to-from-addresses-and-put-them-in-n.patch
