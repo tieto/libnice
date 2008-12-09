@@ -1,3 +1,10 @@
+libnice (0.0.3-2) UNRELEASED; urgency=low
+
+  * debian/rules: Split update-patches target into a separate file for ease
+    of copying between pkg-telepathy packages
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 09 Dec 2008 17:31:27 +0000
+
 libnice (0.0.3-1) unstable; urgency=low
 
   * Initial release (Closes: #506962)
