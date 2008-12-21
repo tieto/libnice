@@ -1,10 +1,9 @@
 /*
  * This file is part of the Nice GLib ICE library.
  *
- * (C) 2006, 2007 Collabora Ltd.
- *  Contact: Dafydd Harries
- * (C) 2006, 2007 Nokia Corporation. All rights reserved.
- *  Contact: Kai Vehmanen
+ * (C) 2008 Collabora Ltd.
+ *  Contact: Youness Alaoui
+ * (C) 2008 Nokia Corporation. All rights reserved.
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -22,7 +21,7 @@
  * Corporation. All Rights Reserved.
  *
  * Contributors:
- *   Dafydd Harries, Collabora Ltd.
+ *   Youness Alaoui, Collabora Ltd.
  *
  * Alternatively, the contents of this file may be used under the terms of the
  * the GNU Lesser General Public License Version 2.1 (the "LGPL"), in which
@@ -34,41 +33,22 @@
  * not delete the provisions above, a recipient may use your version of this
  * file under either the MPL or the LGPL.
  */
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
-
-#include <glib.h>
+#ifndef _SOCKS5_H
+#define _SOCKS5_H
 
 #include "socket.h"
+#include "agent.h"
+
+G_BEGIN_DECLS
 
 
-gint
-nice_socket_recv (NiceSocket *sock, NiceAddress *from, guint len, gchar *buf)
-{
-  return sock->recv (sock, from, len, buf);
-}
+NiceSocket *
+nice_socks5_socket_new (NiceSocket *base_socket,
+    NiceAddress *addr, gchar *username, gchar *password);
 
-gboolean
-nice_socket_send (NiceSocket *sock, const NiceAddress *to,
-    guint len, const gchar *buf)
-{
-  return sock->send (sock, to, len, buf);
-}
 
-gboolean
-nice_socket_is_reliable (NiceSocket *sock)
-{
-  return sock->is_reliable (sock);
-}
+G_END_DECLS
 
-void
-nice_socket_free (NiceSocket *sock)
-{
-  if (sock) {
-    sock->close (sock);
-    g_slice_free (NiceSocket,sock);
-  }
-}
+#endif /* _SOCKS5_H */
 

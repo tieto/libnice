@@ -48,6 +48,13 @@
 #define USE_LOOPBACK 1
 #define TEST_GOOGLE 0
 
+#define PROXY_IP "127.0.0.1"
+#define PROXY_PORT 1080
+#define PROXY_TYPE NICE_PROXY_TYPE_SOCKS5
+#define PROXY_USERNAME NULL
+#define PROXY_PASSWORD NULL
+
+
 #if TEST_GOOGLE
 #define NICE_COMPATIBILITY NICE_COMPATIBILITY_GOOGLE
 
@@ -56,12 +63,12 @@
 #define USE_LOOPBACK 0
 
 #define TURN_IP "209.85.163.126"
-#define TURN_PORT 19295
+#define TURN_PORT 443
 #define TURN_USER "ih9ppiM0P6vN34DB"
 #define TURN_PASS ""
 #define TURN_USER2 TURN_USER
 #define TURN_PASS2 TURN_PASS
-#define TURN_TYPE NICE_RELAY_TYPE_TURN_UDP
+#define TURN_TYPE NICE_RELAY_TYPE_TURN_TLS
 
 #endif
 
@@ -91,7 +98,7 @@
 #define TURN_PASS TSORG_PASS
 #define TURN_USER2 TSORG_USER
 #define TURN_PASS2 TSORG_PASS
-#define TURN_TYPE NICE_RELAY_TYPE_TURN_UDP
+#define TURN_TYPE NICE_RELAY_TYPE_TURN_TCP
 #else
 #define TURN_IP NUMB_IP
 #define TURN_PORT NUMB_PORT
@@ -154,7 +161,7 @@ static void cb_nice_recv (NiceAgent *agent, guint stream_id, guint component_id,
   if (strncmp ("12345678", buf, 8))
     return;
 
-  if ((int)user_data == 2) {
+  if (GPOINTER_TO_UINT (user_data) == 2) {
     global_ragent_read = len;
     g_main_loop_quit (global_mainloop);
   }
@@ -164,9 +171,9 @@ static void cb_candidate_gathering_done(NiceAgent *agent, guint stream_id, gpoin
 {
   g_debug ("test-fullmode:%s: %p", G_STRFUNC, data);
 
-  if ((int)data == 1)
+  if (GPOINTER_TO_UINT (data) == 1)
     global_lagent_gathering_done = TRUE;
-  else if ((int)data == 2)
+  else if (GPOINTER_TO_UINT (data) == 2)
     global_ragent_gathering_done = TRUE;
 
   if (global_lagent_gathering_done &&
@@ -181,9 +188,9 @@ static void cb_component_state_changed (NiceAgent *agent, guint stream_id, guint
 {
   g_debug ("test-fullmode:%s: %p", __func__, data);
 
-  if ((int)data == 1)
+  if (GPOINTER_TO_UINT (data) == 1)
     global_lagent_state[component_id - 1] = state;
-  else if ((int)data == 2)
+  else if (GPOINTER_TO_UINT (data) == 2)
     global_ragent_state[component_id - 1] = state;
   
   if (state == NICE_COMPONENT_STATE_READY)
@@ -218,9 +225,9 @@ static void cb_new_selected_pair(NiceAgent *agent, guint stream_id, guint compon
 {
   g_debug ("test-fullmode:%s: %p", __func__, data);
 
-  if ((int)data == 1)
+  if (GPOINTER_TO_UINT (data) == 1)
     ++global_lagent_cands;
-  else if ((int)data == 2)
+  else if (GPOINTER_TO_UINT (data) == 2)
     ++global_ragent_cands;
 
   /* XXX: dear compiler, these are for you: */
@@ -240,9 +247,9 @@ static void cb_initial_binding_request_received(NiceAgent *agent, guint stream_i
 {
   g_debug ("test-fullmode:%s: %p", __func__, data);
 
-  if ((int)data == 1)
+  if (GPOINTER_TO_UINT (data) == 1)
     global_lagent_ibr_received = TRUE;
-  else if ((int)data == 2)
+  else if (GPOINTER_TO_UINT (data) == 2)
     global_ragent_ibr_received = TRUE;
 
   if (global_exit_when_ibr_received)
@@ -351,13 +358,17 @@ static int run_full_test (NiceAgent *lagent, NiceAgent *ragent, NiceAddress *bas
 
   /* step: attach to mainloop (needed to register the fds) */
   nice_agent_attach_recv (lagent, ls_id, NICE_COMPONENT_TYPE_RTP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)1);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (1));
   nice_agent_attach_recv (lagent, ls_id, NICE_COMPONENT_TYPE_RTCP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)1);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (1));
   nice_agent_attach_recv (ragent, rs_id, NICE_COMPONENT_TYPE_RTP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)2);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (2));
   nice_agent_attach_recv (ragent, rs_id, NICE_COMPONENT_TYPE_RTCP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)2);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (2));
 
   /* step: run mainloop until local candidates are ready
    *       (see timer_cb() above) */
@@ -510,13 +521,17 @@ static int run_full_test_delayed_answer (NiceAgent *lagent, NiceAgent *ragent, N
 
   /* step: attach to mainloop (needed to register the fds) */
   nice_agent_attach_recv (lagent, ls_id, NICE_COMPONENT_TYPE_RTP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)1);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (1));
   nice_agent_attach_recv (lagent, ls_id, NICE_COMPONENT_TYPE_RTCP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)1);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (1));
   nice_agent_attach_recv (ragent, rs_id, NICE_COMPONENT_TYPE_RTP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)2);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (2));
   nice_agent_attach_recv (ragent, rs_id, NICE_COMPONENT_TYPE_RTCP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)2);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (2));
 
   /* step: run mainloop until local candidates are ready 
    *       (see timer_cb() above) */
@@ -672,9 +687,11 @@ static int run_full_test_wrong_password (NiceAgent *lagent, NiceAgent *ragent, N
 
   /* step: attach to mainloop (needed to register the fds) */
   nice_agent_attach_recv (lagent, ls_id, NICE_COMPONENT_TYPE_RTP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)1);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (1));
   nice_agent_attach_recv (ragent, rs_id, NICE_COMPONENT_TYPE_RTP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)2);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (2));
 
   /* step: run mainloop until local candidates are ready 
    *       (see timer_cb() above) */
@@ -800,9 +817,11 @@ static int run_full_test_control_conflict (NiceAgent *lagent, NiceAgent *ragent,
 
   /* step: attach to mainloop (needed to register the fds) */
   nice_agent_attach_recv (lagent, ls_id, NICE_COMPONENT_TYPE_RTP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)1);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (1));
   nice_agent_attach_recv (ragent, rs_id, NICE_COMPONENT_TYPE_RTP,
-      g_main_loop_get_context (global_mainloop), cb_nice_recv, (gpointer)2);
+      g_main_loop_get_context (global_mainloop), cb_nice_recv,
+      GUINT_TO_POINTER (2));
 
   /* step: run mainloop until local candidates are ready 
    *       (see timer_cb() above) */
@@ -924,26 +943,28 @@ int main (void)
   nice_agent_add_local_address (ragent, &baseaddr);
 #endif
 
-  g_signal_connect (G_OBJECT (lagent), "candidate-gathering-done", 
-		    G_CALLBACK (cb_candidate_gathering_done), (gpointer)1);
-  g_signal_connect (G_OBJECT (ragent), "candidate-gathering-done", 
-		    G_CALLBACK (cb_candidate_gathering_done), (gpointer)2);
-  g_signal_connect (G_OBJECT (lagent), "component-state-changed", 
-		    G_CALLBACK (cb_component_state_changed), (gpointer)1);
-  g_signal_connect (G_OBJECT (ragent), "component-state-changed", 
-		    G_CALLBACK (cb_component_state_changed), (gpointer)2);
-  g_signal_connect (G_OBJECT (lagent), "new-selected-pair", 
-		    G_CALLBACK (cb_new_selected_pair), (gpointer)1);
-  g_signal_connect (G_OBJECT (ragent), "new-selected-pair", 
-		    G_CALLBACK (cb_new_selected_pair), (gpointer)2);
-  g_signal_connect (G_OBJECT (lagent), "new-candidate", 
-		    G_CALLBACK (cb_new_candidate), (gpointer)1);
-  g_signal_connect (G_OBJECT (ragent), "new-candidate", 
-		    G_CALLBACK (cb_new_candidate), (gpointer)2);
-  g_signal_connect (G_OBJECT (lagent), "initial-binding-request-received", 
-		    G_CALLBACK (cb_initial_binding_request_received), (gpointer)1);
-  g_signal_connect (G_OBJECT (ragent), "initial-binding-request-received", 
-		    G_CALLBACK (cb_initial_binding_request_received), (gpointer)2);
+  g_signal_connect (G_OBJECT (lagent), "candidate-gathering-done",
+      G_CALLBACK (cb_candidate_gathering_done), GUINT_TO_POINTER(1));
+  g_signal_connect (G_OBJECT (ragent), "candidate-gathering-done",
+      G_CALLBACK (cb_candidate_gathering_done), GUINT_TO_POINTER (2));
+  g_signal_connect (G_OBJECT (lagent), "component-state-changed",
+      G_CALLBACK (cb_component_state_changed), GUINT_TO_POINTER (1));
+  g_signal_connect (G_OBJECT (ragent), "component-state-changed",
+      G_CALLBACK (cb_component_state_changed), GUINT_TO_POINTER (2));
+  g_signal_connect (G_OBJECT (lagent), "new-selected-pair",
+      G_CALLBACK (cb_new_selected_pair), GUINT_TO_POINTER(1));
+  g_signal_connect (G_OBJECT (ragent), "new-selected-pair",
+      G_CALLBACK (cb_new_selected_pair), GUINT_TO_POINTER (2));
+  g_signal_connect (G_OBJECT (lagent), "new-candidate",
+      G_CALLBACK (cb_new_candidate), GUINT_TO_POINTER (1));
+  g_signal_connect (G_OBJECT (ragent), "new-candidate",
+      G_CALLBACK (cb_new_candidate), GUINT_TO_POINTER (2));
+  g_signal_connect (G_OBJECT (lagent), "initial-binding-request-received",
+      G_CALLBACK (cb_initial_binding_request_received),
+      GUINT_TO_POINTER (1));
+  g_signal_connect (G_OBJECT (ragent), "initial-binding-request-received",
+      G_CALLBACK (cb_initial_binding_request_received),
+      GUINT_TO_POINTER (2));
 
   stun_server = getenv ("NICE_STUN_SERVER");
   stun_server_port = getenv ("NICE_STUN_SERVER_PORT");
@@ -953,6 +974,17 @@ int main (void)
     g_object_set (G_OBJECT (ragent), "stun-server", stun_server,  NULL);
     g_object_set (G_OBJECT (ragent), "stun-server-port", atoi (stun_server_port),  NULL);
   }
+
+  g_object_set (G_OBJECT (lagent), "proxy-ip", PROXY_IP,  NULL);
+  g_object_set (G_OBJECT (lagent), "proxy-port", PROXY_PORT, NULL);
+  g_object_set (G_OBJECT (lagent), "proxy-type", PROXY_TYPE, NULL);
+  g_object_set (G_OBJECT (lagent), "proxy-username", PROXY_USERNAME, NULL);
+  g_object_set (G_OBJECT (lagent), "proxy-password", PROXY_PASSWORD, NULL);
+  g_object_set (G_OBJECT (ragent), "proxy-ip", PROXY_IP,  NULL);
+  g_object_set (G_OBJECT (ragent), "proxy-port", PROXY_PORT, NULL);
+  g_object_set (G_OBJECT (ragent), "proxy-type", PROXY_TYPE, NULL);
+  g_object_set (G_OBJECT (ragent), "proxy-username", PROXY_USERNAME, NULL);
+  g_object_set (G_OBJECT (ragent), "proxy-password", PROXY_PASSWORD, NULL);
 
   /* step: test setter/getter functions for properties */
   {
@@ -965,6 +997,11 @@ int main (void)
     g_free (string);
     g_object_get (G_OBJECT (lagent), "stun-server-port", &port, NULL);
     g_assert (stun_server_port == NULL || port == (guint)atoi (stun_server_port));
+    g_object_get (G_OBJECT (lagent), "proxy-ip", &string, NULL);
+    g_assert (strcmp (string, PROXY_IP) == 0);
+    g_free (string);
+    g_object_get (G_OBJECT (lagent), "proxy-port", &port, NULL);
+    g_assert (port == PROXY_PORT);
     g_object_get (G_OBJECT (lagent), "controlling-mode", &mode, NULL);
     g_assert (mode == TRUE);
     g_object_set (G_OBJECT (lagent), "max-connectivity-checks", 300, NULL);
@@ -999,7 +1036,7 @@ int main (void)
   g_assert (global_lagent_cands == 2);
   g_assert (global_ragent_cands == 2);
 
-#ifdef TEST_GOOGLE
+#if TEST_GOOGLE
   return result;
 #endif
 

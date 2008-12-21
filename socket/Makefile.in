@@ -54,7 +54,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libsocket_la_LIBADD =
-am_libsocket_la_OBJECTS = socket.lo udp-bsd.lo udp-turn.lo tcp-turn.lo
+am_libsocket_la_OBJECTS = socket.lo udp-bsd.lo tcp-bsd.lo pseudossl.lo \
+	socks5.lo turn.lo tcp-turn.lo
 libsocket_la_OBJECTS = $(am_libsocket_la_OBJECTS)
 test_bsd_SOURCES = test-bsd.c
 test_bsd_OBJECTS = test-bsd.$(OBJEXT)
@@ -139,6 +140,7 @@ NICE_CFLAGS = @NICE_CFLAGS@
 NICE_LT_LDFLAGS = @NICE_LT_LDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
+OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
@@ -238,14 +240,20 @@ libsocket_la_SOURCES = \
 	socket.c \
 	udp-bsd.h \
 	udp-bsd.c \
-	udp-turn.h \
-	udp-turn.c \
+	tcp-bsd.h \
+	tcp-bsd.c \
+	pseudossl.h \
+	pseudossl.c \
+	socks5.h \
+	socks5.c \
+	turn.h \
+	turn.c \
 	tcp-turn.h \
 	tcp-turn.c
 
 test_bsd_LDADD = $(COMMON_LDADD)
 TESTS = $(check_PROGRAMS)
-pkginclude_HEADERS = socket.h udp-bsd.h udp-turn.h tcp-turn.h
+pkginclude_HEADERS = socket.h udp-bsd.h tcp-bsd.h pseudossl.h turn.h tcp-turn.h socks5.h
 all: all-am
 
 .SUFFIXES:
@@ -307,11 +315,14 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pseudossl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/socket.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/socks5.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcp-bsd.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcp-turn.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-bsd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/turn.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/udp-bsd.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/udp-turn.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

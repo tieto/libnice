@@ -34,6 +34,11 @@
 <ANCHOR id="NiceAgent--full-mode" href="libnice/libnice-NiceAgent.html#NiceAgent--full-mode">
 <ANCHOR id="NiceAgent--main-context" href="libnice/libnice-NiceAgent.html#NiceAgent--main-context">
 <ANCHOR id="NiceAgent--max-connectivity-checks" href="libnice/libnice-NiceAgent.html#NiceAgent--max-connectivity-checks">
+<ANCHOR id="NiceAgent--proxy-ip" href="libnice/libnice-NiceAgent.html#NiceAgent--proxy-ip">
+<ANCHOR id="NiceAgent--proxy-password" href="libnice/libnice-NiceAgent.html#NiceAgent--proxy-password">
+<ANCHOR id="NiceAgent--proxy-port" href="libnice/libnice-NiceAgent.html#NiceAgent--proxy-port">
+<ANCHOR id="NiceAgent--proxy-type" href="libnice/libnice-NiceAgent.html#NiceAgent--proxy-type">
+<ANCHOR id="NiceAgent--proxy-username" href="libnice/libnice-NiceAgent.html#NiceAgent--proxy-username">
 <ANCHOR id="NiceAgent--stun-pacing-timer" href="libnice/libnice-NiceAgent.html#NiceAgent--stun-pacing-timer">
 <ANCHOR id="NiceAgent--stun-server" href="libnice/libnice-NiceAgent.html#NiceAgent--stun-server">
 <ANCHOR id="NiceAgent--stun-server-port" href="libnice/libnice-NiceAgent.html#NiceAgent--stun-server-port">

@@ -88,7 +88,12 @@ enum
   PROP_CONTROLLING_MODE,
   PROP_FULL_MODE,
   PROP_STUN_PACING_TIMER,
-  PROP_MAX_CONNECTIVITY_CHECKS
+  PROP_MAX_CONNECTIVITY_CHECKS,
+  PROP_PROXY_TYPE,
+  PROP_PROXY_IP,
+  PROP_PROXY_PORT,
+  PROP_PROXY_USERNAME,
+  PROP_PROXY_PASSWORD
 };
 
 
@@ -110,14 +115,39 @@ static gboolean priv_attach_stream_component (NiceAgent *agent,
     Component *component);
 static void priv_detach_stream_component (Stream *stream, Component *component);
 
-static StunUsageTurnCompatibility
-priv_agent_to_turn_compatibility (NiceAgent *agent) {
+StunUsageIceCompatibility
+agent_to_ice_compatibility (NiceAgent *agent)
+{
+  return agent->compatibility == NICE_COMPATIBILITY_DRAFT19 ?
+      STUN_USAGE_ICE_COMPATIBILITY_DRAFT19 :
+      agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
+      STUN_USAGE_ICE_COMPATIBILITY_GOOGLE :
+      agent->compatibility == NICE_COMPATIBILITY_MSN ?
+      STUN_USAGE_ICE_COMPATIBILITY_MSN : STUN_USAGE_ICE_COMPATIBILITY_DRAFT19;
+}
+
+
+StunUsageTurnCompatibility
+agent_to_turn_compatibility (NiceAgent *agent)
+{
   return agent->compatibility == NICE_COMPATIBILITY_DRAFT19 ?
       STUN_USAGE_TURN_COMPATIBILITY_DRAFT9 :
       agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
       STUN_USAGE_TURN_COMPATIBILITY_GOOGLE :
       agent->compatibility == NICE_COMPATIBILITY_MSN ?
       STUN_USAGE_TURN_COMPATIBILITY_MSN : STUN_USAGE_TURN_COMPATIBILITY_DRAFT9;
+}
+
+NiceTurnSocketCompatibility
+agent_to_turn_socket_compatibility (NiceAgent *agent)
+{
+  return agent->compatibility == NICE_COMPATIBILITY_DRAFT19 ?
+      NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 :
+      agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
+      NICE_TURN_SOCKET_COMPATIBILITY_GOOGLE :
+      agent->compatibility == NICE_COMPATIBILITY_MSN ?
+      NICE_TURN_SOCKET_COMPATIBILITY_MSN :
+      NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9;
 }
 
 Stream *agent_find_stream (NiceAgent *agent, guint stream_id)
@@ -274,6 +304,48 @@ nice_agent_class_init (NiceAgentClass *klass)
         "Upper limit for the total number of connectivity checks performed",
         0, 0xffffffff, 
 	0, /* default set in init */
+        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class, PROP_PROXY_IP,
+      g_param_spec_string (
+        "proxy-ip",
+        "Proxy server IP",
+        "The proxy server used to bypass a proxy firewall",
+        NULL,
+        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class, PROP_PROXY_PORT,
+      g_param_spec_uint (
+        "proxy-port",
+        "Proxy server port",
+        "The Proxy server used to bypass a proxy firewall",
+        1, 65536,
+	1,
+        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class, PROP_PROXY_TYPE,
+      g_param_spec_uint (
+         "proxy-type",
+         "Type of proxy to use",
+         "The type of proxy set in the proxy-ip property",
+         NICE_PROXY_TYPE_NONE, NICE_PROXY_TYPE_LAST,
+         NICE_PROXY_TYPE_NONE,
+         G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class, PROP_PROXY_USERNAME,
+      g_param_spec_string (
+        "proxy-username",
+        "Proxy server username",
+        "The username used to authenticate with the proxy",
+        NULL,
+        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class, PROP_PROXY_PASSWORD,
+      g_param_spec_string (
+        "proxy-password",
+        "Proxy server password",
+        "The password used to authenticate with the proxy",
+        NULL,
         G_PARAM_READWRITE));
 
   /* install signals */
@@ -511,6 +583,26 @@ nice_agent_get_property (
       /* XXX: should we prune the list of already existing checks? */
       break;
 
+    case PROP_PROXY_IP:
+      g_value_set_string (value, agent->proxy_ip);
+      break;
+
+    case PROP_PROXY_PORT:
+      g_value_set_uint (value, agent->proxy_port);
+      break;
+
+    case PROP_PROXY_TYPE:
+      g_value_set_uint (value, agent->proxy_type);
+      break;
+
+    case PROP_PROXY_USERNAME:
+      g_value_set_string (value, agent->proxy_username);
+      break;
+
+    case PROP_PROXY_PASSWORD:
+      g_value_set_string (value, agent->proxy_password);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -579,6 +671,26 @@ nice_agent_set_property (
 
     case PROP_MAX_CONNECTIVITY_CHECKS:
       agent->max_conn_checks = g_value_get_uint (value);
+      break;
+
+    case PROP_PROXY_IP:
+      agent->proxy_ip = g_value_dup_string (value);
+      break;
+
+    case PROP_PROXY_PORT:
+      agent->proxy_port = g_value_get_uint (value);
+      break;
+
+    case PROP_PROXY_TYPE:
+      agent->proxy_type = g_value_get_uint (value);
+      break;
+
+    case PROP_PROXY_USERNAME:
+      agent->proxy_username = g_value_dup_string (value);
+      break;
+
+    case PROP_PROXY_PASSWORD:
+      agent->proxy_password = g_value_dup_string (value);
       break;
 
     default:
@@ -664,7 +776,7 @@ void agent_signal_new_selected_pair (NiceAgent *agent, guint stream_id, guint co
   rf_copy = g_strdup (remote_foundation);
 
   if (component->selected_pair.local->type == NICE_CANDIDATE_TYPE_RELAYED) {
-    nice_udp_turn_socket_set_peer (component->selected_pair.local->sockptr,
+    nice_turn_socket_set_peer (component->selected_pair.local->sockptr,
                                    &component->selected_pair.remote->addr);
   }
 
@@ -769,7 +881,6 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
   cdisco = g_slice_new0 (CandidateDiscovery);
   if (cdisco) {
     modified_list = g_slist_append (agent->discovery_list, cdisco);
-    priv_agent_to_turn_compatibility (agent);
 
     if (modified_list) {
       Component *component = stream_find_component_by_id (stream, component_id);
@@ -798,10 +909,36 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
         }
         cdisco->nicesock = socket;
       } else {
-        cdisco->nicesock = nice_tcp_turn_socket_new (agent,
-            component->ctx,
-            &turn->server,
-            priv_agent_to_turn_compatibility (agent));
+        NiceAddress proxy_server;
+        socket = NULL;
+
+        if (agent->proxy_type != NICE_PROXY_TYPE_NONE &&
+            agent->proxy_ip != NULL &&
+            nice_address_set_from_string (&proxy_server, agent->proxy_ip)) {
+          nice_address_set_port (&proxy_server, agent->proxy_port);
+          socket = nice_tcp_bsd_socket_new (agent, component->ctx, &proxy_server);
+
+          if (socket &&
+              agent->proxy_type == NICE_PROXY_TYPE_SOCKS5) {
+            socket = nice_socks5_socket_new (socket, &turn->server,
+                agent->proxy_username, agent->proxy_password);
+          } else {
+            /* TODO add HTTP support */
+            nice_socket_free (socket);
+            socket = NULL;
+          }
+
+        }
+        if (socket == NULL) {
+          socket = nice_tcp_bsd_socket_new (agent, component->ctx, &turn->server);
+        }
+        if (turn->type ==  NICE_RELAY_TYPE_TURN_TLS &&
+            agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
+          socket = nice_pseudossl_socket_new (agent, socket);
+        }
+        cdisco->nicesock = nice_tcp_turn_socket_new (agent, socket,
+            agent_to_turn_socket_compatibility (agent));
+
         if (!cdisco->nicesock) {
           agent->discovery_list = g_slist_remove (modified_list, cdisco);
           g_slice_free (CandidateDiscovery, cdisco);
@@ -1311,8 +1448,11 @@ _nice_agent_recv (
 
   len = nice_socket_recv (socket, &from,  buf_len, buf);
 
+  if (len <= 0)
+    return len;
+
 #ifndef NDEBUG
-  if (len >= 0) {
+  if (len > 0) {
     gchar tmpbuf[INET6_ADDRSTRLEN];
     nice_address_to_string (&from, tmpbuf);
     nice_debug ("Agent %p : Packet received on local socket %u from [%s]:%u (%u octets).", agent,
@@ -1320,8 +1460,6 @@ _nice_agent_recv (
   }
 #endif
 
-  if (len == 0)
-    return 0;
 
   if ((guint)len > buf_len)
     {
@@ -1343,7 +1481,7 @@ _nice_agent_recv (
         if (cand->type == NICE_CANDIDATE_TYPE_RELAYED &&
             cand->stream_id == stream->id &&
             cand->component_id == component->id) {
-          len = nice_udp_turn_socket_parse_recv (cand->sockptr, &socket,
+          len = nice_turn_socket_parse_recv (cand->sockptr, &socket,
               &from, len, buf, &from, buf, len);
         }
       }
@@ -1544,6 +1682,7 @@ typedef struct _IOCtx IOCtx;
 struct _IOCtx
 {
   GIOChannel *channel;
+  GSource *source;
   NiceAgent *agent;
   Stream *stream;
   Component *component;
@@ -1557,7 +1696,8 @@ io_ctx_new (
   Stream *stream,
   Component *component,
   NiceSocket *socket,
-  GIOChannel *channel)
+  GIOChannel *channel,
+  GSource *source)
 {
   IOCtx *ctx;
 
@@ -1568,6 +1708,7 @@ io_ctx_new (
     ctx->component = component;
     ctx->socket = socket;
     ctx->channel = channel;
+    ctx->source = source;
   }
   return ctx;
 }
@@ -1582,7 +1723,7 @@ io_ctx_free (IOCtx *ctx)
 
 static gboolean
 nice_agent_g_source_cb (
-  GIOChannel *source,
+  GIOChannel *io,
   G_GNUC_UNUSED
   GIOCondition condition,
   gpointer data)
@@ -1594,19 +1735,29 @@ nice_agent_g_source_cb (
   Stream *stream = ctx->stream;
   Component *component = ctx->component;
   gchar buf[MAX_BUFFER_SIZE];
-  guint len;
+  gint len;
 
   g_static_rec_mutex_lock (&agent->mutex);
 
   /* note: dear compiler, these are for you: */
-  (void)source;
+  (void)io;
 
   len = _nice_agent_recv (agent, stream, component, ctx->socket,
 			  MAX_BUFFER_SIZE, buf);
 
-  if (len > 0 && component->g_source_io_cb)
+  if (len > 0 && component->g_source_io_cb) {
     component->g_source_io_cb (agent, stream->id, component->id,
         len, buf, component->data);
+  } else if (len < 0) {
+    GSource *source = ctx->source;
+    component->gsources = g_slist_remove (component->gsources, source);
+    g_source_destroy (source);
+    g_source_unref (source);
+    /* We don't close the socket because it would be way too complicated to
+     * take care of every path where the socket might still be used.. */
+    nice_debug ("Agent %p: unable to recv from socket %p. Detaching", agent,
+        ctx->socket);
+  }
 
   g_static_rec_mutex_unlock (&agent->mutex);
   return TRUE;
@@ -1633,7 +1784,7 @@ agent_attach_stream_component_socket (NiceAgent *agent,
   /* note: without G_IO_ERR the glib mainloop goes into
    *       busyloop if errors are encountered */
   source = g_io_create_watch (io, G_IO_IN | G_IO_ERR);
-  ctx = io_ctx_new (agent, stream, component, socket, io);
+  ctx = io_ctx_new (agent, stream, component, socket, io, source);
   g_source_set_callback (source, (GSourceFunc) nice_agent_g_source_cb,
       ctx, (GDestroyNotify) io_ctx_free);
   nice_debug ("Agent %p : Attach source %p (stream %u).", agent, source, stream->id);
