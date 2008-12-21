@@ -9,7 +9,7 @@ libnice (0.0.4-1) UNRELEASED; urgency=low
   [ Sjoerd Simons ]
   * New Upstream Version
   * copyright: Include the full text of the MPL in the copyright file
-    instead of having it as a seperate file, as requested by the ftp-masters
+    instead of having it as a separate file, as requested by the ftp-masters
   * patches/0001-Revert-Save-the-to-from-addresses-and-put-them-in-n.patch:
     - Dropped, merged upstream
   * patches/0002-Revert-Create-a-netbuffer-directly-instead-of-using.patch
