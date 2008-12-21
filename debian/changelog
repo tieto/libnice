@@ -1,4 +1,4 @@
-libnice (0.0.4-1) UNRELEASED; urgency=low
+libnice (0.0.4-1) unstable; urgency=low
 
   [ Simon McVittie ]
   * debian/rules: Split update-patches target into a separate file for ease
@@ -15,7 +15,7 @@ libnice (0.0.4-1) UNRELEASED; urgency=low
   * patches/0002-Revert-Create-a-netbuffer-directly-instead-of-using.patch
     - Dropped, merged upstream
 
- -- Sjoerd Simons <sjoerd@debian.org>  Sun, 21 Dec 2008 13:14:44 +0000
+ -- Sjoerd Simons <sjoerd@debian.org>  Sun, 21 Dec 2008 13:29:00 +0000
 
 libnice (0.0.3-1) unstable; urgency=low
 
