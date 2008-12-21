@@ -66,27 +66,6 @@ static inline int priv_timer_expired (GTimeVal *timer, GTimeVal *now)
     now->tv_sec >= timer->tv_sec;
 }
 
-static StunUsageTurnCompatibility
-priv_agent_to_turn_compatibility (NiceAgent *agent) {
-  return agent->compatibility == NICE_COMPATIBILITY_DRAFT19 ?
-      STUN_USAGE_TURN_COMPATIBILITY_DRAFT9 :
-      agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
-      STUN_USAGE_TURN_COMPATIBILITY_GOOGLE :
-      agent->compatibility == NICE_COMPATIBILITY_MSN ?
-      STUN_USAGE_TURN_COMPATIBILITY_MSN : STUN_USAGE_TURN_COMPATIBILITY_DRAFT9;
-}
-
-static NiceUdpTurnSocketCompatibility
-priv_agent_to_udp_turn_compatibility (NiceAgent *agent) {
-  return agent->compatibility == NICE_COMPATIBILITY_DRAFT19 ?
-      NICE_UDP_TURN_SOCKET_COMPATIBILITY_DRAFT9 :
-      agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
-      NICE_UDP_TURN_SOCKET_COMPATIBILITY_GOOGLE :
-      agent->compatibility == NICE_COMPATIBILITY_MSN ?
-      NICE_UDP_TURN_SOCKET_COMPATIBILITY_MSN :
-      NICE_UDP_TURN_SOCKET_COMPATIBILITY_DRAFT9;
-}
-
 /**
  * Frees the CandidateDiscovery structure pointed to
  * by 'user data'. Compatible with g_slist_foreach().
@@ -191,7 +170,7 @@ void refresh_free_item (gpointer data, gpointer user_data)
       cand->stun_resp_msg.buffer == NULL ? NULL : &cand->stun_resp_msg, 0,
       username, username_len,
       password, password_len,
-      priv_agent_to_turn_compatibility (agent));
+      agent_to_turn_compatibility (agent));
 
   if (buffer_len > 0) {
     /* send the refresh twice since we won't do retransmissions */
@@ -310,6 +289,7 @@ static void priv_assign_foundation (NiceAgent *agent, NiceCandidate *candidate)
                nice_address_get_port (&candidate->base_addr));
 	
 	if (candidate->type == n->type &&
+            candidate->stream_id == n->stream_id &&
 	    nice_address_equal (&candidate->base_addr, &temp)) {
 	  /* note: currently only one STUN/TURN server per stream at a
 	   *       time is supported, so there is no need to check
@@ -551,10 +531,10 @@ discovery_add_relay_candidate (
     candidate->turn = turn;
 
     /* step: link to the base candidate+socket */
-    relay_socket = nice_udp_turn_socket_new (agent, address,
+    relay_socket = nice_turn_socket_new (agent, address,
         base_socket, &turn->server,
         turn->username, turn->password,
-        priv_agent_to_udp_turn_compatibility (agent));
+        agent_to_turn_socket_compatibility (agent));
     if (relay_socket) {
       candidate->sockptr = relay_socket;
       candidate->base_addr = base_socket->addr;
@@ -860,7 +840,7 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
               -1, -1,
               username, username_len,
               password, password_len,
-              priv_agent_to_turn_compatibility (agent));
+              agent_to_turn_compatibility (agent));
 
           if (agent->compatibility == NICE_COMPATIBILITY_MSN) {
             g_free (cand->msn_turn_username);

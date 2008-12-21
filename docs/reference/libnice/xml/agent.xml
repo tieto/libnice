@@ -110,6 +110,11 @@ enum                <link linkend="NiceCompatibility">NiceCompatibility</link>;
   &quot;<link linkend="NiceAgent--full-mode">full-mode</link>&quot;                <link linkend="gboolean">gboolean</link>              : Read / Write / Construct Only
   &quot;<link linkend="NiceAgent--main-context">main-context</link>&quot;             <link linkend="gpointer">gpointer</link>              : Read / Write / Construct Only
   &quot;<link linkend="NiceAgent--max-connectivity-checks">max-connectivity-checks</link>&quot;  <link linkend="guint">guint</link>                 : Read / Write
+  &quot;<link linkend="NiceAgent--proxy-ip">proxy-ip</link>&quot;                 <link linkend="gchar">gchar</link>*                : Read / Write
+  &quot;<link linkend="NiceAgent--proxy-password">proxy-password</link>&quot;           <link linkend="gchar">gchar</link>*                : Read / Write
+  &quot;<link linkend="NiceAgent--proxy-port">proxy-port</link>&quot;               <link linkend="guint">guint</link>                 : Read / Write
+  &quot;<link linkend="NiceAgent--proxy-type">proxy-type</link>&quot;               <link linkend="guint">guint</link>                 : Read / Write
+  &quot;<link linkend="NiceAgent--proxy-username">proxy-username</link>&quot;           <link linkend="gchar">gchar</link>*                : Read / Write
   &quot;<link linkend="NiceAgent--stun-pacing-timer">stun-pacing-timer</link>&quot;        <link linkend="guint">guint</link>                 : Read / Write / Construct Only
   &quot;<link linkend="NiceAgent--stun-server">stun-server</link>&quot;              <link linkend="gchar">gchar</link>*                : Read / Write
   &quot;<link linkend="NiceAgent--stun-server-port">stun-server-port</link>&quot;         <link linkend="guint">guint</link>                 : Read / Write
@@ -371,6 +376,11 @@ Callback function when data is received on a component</para>
   GTimeVal next_check_tv;         /**&lt; property: next conncheck timestamp */
   gchar *stun_server_ip;          /**&lt; property: STUN server IP */
   guint stun_server_port;         /**&lt; property: STUN server port */
+  gchar *proxy_ip;                /**&lt; property: Proxy server IP */
+  guint proxy_port;               /**&lt; property: Proxy server port */
+  NiceProxyType proxy_type;       /**&lt; property: Proxy type */
+  gchar *proxy_username;          /**&lt; property: Proxy username */
+  gchar *proxy_password;          /**&lt; property: Proxy password */
   gboolean controlling_mode;      /**&lt; property: controlling-mode */
   guint timer_ta;                 /**&lt; property: timer Ta */
   guint max_conn_checks;          /**&lt; property: max connectivity checks */
@@ -908,6 +918,28 @@ This is a property being set by the <link linkend="nice-agent-new"><function>nic
 <refsect2 id="NiceAgent--max-connectivity-checks"><title>The <literal>&quot;max-connectivity-checks&quot;</literal> property</title>
 <indexterm zone="NiceAgent--max-connectivity-checks"><primary>NiceAgent:max-connectivity-checks</primary></indexterm><programlisting>  &quot;max-connectivity-checks&quot;  <link linkend="guint">guint</link>                 : Read / Write</programlisting>
 <para>Upper limit for the total number of connectivity checks performed.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2 id="NiceAgent--proxy-ip"><title>The <literal>&quot;proxy-ip&quot;</literal> property</title>
+<indexterm zone="NiceAgent--proxy-ip"><primary>NiceAgent:proxy-ip</primary></indexterm><programlisting>  &quot;proxy-ip&quot;                 <link linkend="gchar">gchar</link>*                : Read / Write</programlisting>
+<para>The proxy server used to bypass a proxy firewall.</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2 id="NiceAgent--proxy-password"><title>The <literal>&quot;proxy-password&quot;</literal> property</title>
+<indexterm zone="NiceAgent--proxy-password"><primary>NiceAgent:proxy-password</primary></indexterm><programlisting>  &quot;proxy-password&quot;           <link linkend="gchar">gchar</link>*                : Read / Write</programlisting>
+<para>The password used to authenticate with the proxy.</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2 id="NiceAgent--proxy-port"><title>The <literal>&quot;proxy-port&quot;</literal> property</title>
+<indexterm zone="NiceAgent--proxy-port"><primary>NiceAgent:proxy-port</primary></indexterm><programlisting>  &quot;proxy-port&quot;               <link linkend="guint">guint</link>                 : Read / Write</programlisting>
+<para>The Proxy server used to bypass a proxy firewall.</para><para>Allowed values: [1,65536]</para>
+<para>Default value: 1</para>
+</refsect2>
+<refsect2 id="NiceAgent--proxy-type"><title>The <literal>&quot;proxy-type&quot;</literal> property</title>
+<indexterm zone="NiceAgent--proxy-type"><primary>NiceAgent:proxy-type</primary></indexterm><programlisting>  &quot;proxy-type&quot;               <link linkend="guint">guint</link>                 : Read / Write</programlisting>
+<para>The type of proxy set in the proxy-ip property.</para><para>Allowed values: &lt;= 2</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2 id="NiceAgent--proxy-username"><title>The <literal>&quot;proxy-username&quot;</literal> property</title>
+<indexterm zone="NiceAgent--proxy-username"><primary>NiceAgent:proxy-username</primary></indexterm><programlisting>  &quot;proxy-username&quot;           <link linkend="gchar">gchar</link>*                : Read / Write</programlisting>
+<para>The username used to authenticate with the proxy.</para><para>Default value: NULL</para>
 </refsect2>
 <refsect2 id="NiceAgent--stun-pacing-timer"><title>The <literal>&quot;stun-pacing-timer&quot;</literal> property</title>
 <indexterm zone="NiceAgent--stun-pacing-timer"><primary>NiceAgent:stun-pacing-timer</primary></indexterm><programlisting>  &quot;stun-pacing-timer&quot;        <link linkend="guint">guint</link>                 : Read / Write / Construct Only</programlisting>

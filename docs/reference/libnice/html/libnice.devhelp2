@@ -37,6 +37,11 @@
     <keyword type="" name="The &quot;full-mode&quot; property" link="libnice-NiceAgent.html#NiceAgent--full-mode"/>
     <keyword type="" name="The &quot;main-context&quot; property" link="libnice-NiceAgent.html#NiceAgent--main-context"/>
     <keyword type="" name="The &quot;max-connectivity-checks&quot; property" link="libnice-NiceAgent.html#NiceAgent--max-connectivity-checks"/>
+    <keyword type="" name="The &quot;proxy-ip&quot; property" link="libnice-NiceAgent.html#NiceAgent--proxy-ip"/>
+    <keyword type="" name="The &quot;proxy-password&quot; property" link="libnice-NiceAgent.html#NiceAgent--proxy-password"/>
+    <keyword type="" name="The &quot;proxy-port&quot; property" link="libnice-NiceAgent.html#NiceAgent--proxy-port"/>
+    <keyword type="" name="The &quot;proxy-type&quot; property" link="libnice-NiceAgent.html#NiceAgent--proxy-type"/>
+    <keyword type="" name="The &quot;proxy-username&quot; property" link="libnice-NiceAgent.html#NiceAgent--proxy-username"/>
     <keyword type="" name="The &quot;stun-pacing-timer&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-pacing-timer"/>
     <keyword type="" name="The &quot;stun-server&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-server"/>
     <keyword type="" name="The &quot;stun-server-port&quot; property" link="libnice-NiceAgent.html#NiceAgent--stun-server-port"/>

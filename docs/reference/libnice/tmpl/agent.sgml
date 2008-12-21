@@ -156,6 +156,31 @@ NiceAgent
 
 </para>
 
+<!-- ##### ARG NiceAgent:proxy-ip ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-password ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-port ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-username ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG NiceAgent:stun-pacing-timer ##### -->
 <para>
 
