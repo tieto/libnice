@@ -513,7 +513,7 @@ The files stun/sha1.* and stun/md5* are:
   Alternatively, this software may be distributed under the terms of BSD
   license.
 
-  For a full text of the LGPL 2 see `/usr/share/common-licenses/LGPL-2'
+  For a full text of the GPL 2 see `/usr/share/common-licenses/GPL-2'
   For a full text of the BSD license see `/usr/share/common-licenses/BSD'
 
 Parts of stun/rand.c are:
