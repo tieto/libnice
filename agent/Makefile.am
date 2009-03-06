@@ -53,52 +53,17 @@ libagent_la_SOURCES = \
 	conncheck.h \
 	discovery.c \
 	discovery.h \
+	interfaces.c \
+	interfaces.h \
 	$(BUILT_SOURCES)
 
 libagent_la_LIBADD = \
-	../random/librandom.la \
-	../socket/libsocket.la \
-	../stun/libstun.la
+	$(top_builddir)/random/librandom.la \
+	$(top_builddir)/socket/libsocket.la \
+	$(top_builddir)/stun/libstun.la
 libagent_la_DEPENDENCIES = \
-	../random/librandom.la \
-	../socket/libsocket.la \
-	../stun/libstun.la
+	$(top_builddir)/random/librandom.la \
+	$(top_builddir)/socket/libsocket.la \
+	$(top_builddir)/stun/libstun.la
 
-check_PROGRAMS = \
-	test \
-	test-address \
-	test-add-remove-stream \
-	test-priority \
-	test-mainloop \
-	test-fullmode \
-	test-restart \
-	test-fallback \
-	test-thread
-
-dist_check_SCRIPTS = \
-	check-test-fullmode-with-stun.sh
-
-TESTS = $(check_PROGRAMS) $(dist_check_SCRIPTS)
-
-test_LDADD = $(COMMON_LDADD)
-
-test_address_LDADD = $(COMMON_LDADD)
-
-test_add_remove_stream_LDADD = $(COMMON_LDADD)
-
-test_priority_LDADD = $(COMMON_LDADD)
-
-test_mainloop_LDADD = $(COMMON_LDADD)
-
-test_fullmode_LDADD = $(COMMON_LDADD)
-
-test_restart_LDADD = $(COMMON_LDADD)
-
-test_fallback_LDADD = $(COMMON_LDADD)
-
-test_thread_LDADD = $(COMMON_LDADD)
-
-pkginclude_HEADERS = agent.h candidate.h debug.h address.h
-
-all-local:
-	chmod a+x $(srcdir)/check-test-fullmode-with-stun.sh
+pkginclude_HEADERS = agent.h candidate.h debug.h address.h interfaces.h

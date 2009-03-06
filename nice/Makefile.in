@@ -27,7 +27,6 @@
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -88,6 +87,7 @@ HEADERS = $(pkginclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+pkgincludedir = $(includedir)/nice
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AR = @AR@
@@ -126,6 +126,8 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBNICE_CFLAGS = @LIBNICE_CFLAGS@
+LIBNICE_LT_LDFLAGS = @LIBNICE_LT_LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBRT = @LIBRT@
 LIBS = @LIBS@
@@ -135,8 +137,6 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
-NICE_CFLAGS = @NICE_CFLAGS@
-NICE_LT_LDFLAGS = @NICE_LT_LDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -210,7 +210,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ERROR_CFLAGS = \
-	$(NICE_CFLAGS) \
+	$(LIBNICE_CFLAGS) \
 	-Wextra \
 	-Wundef \
 	-Wnested-externs \
@@ -228,16 +228,16 @@ CLEANFILES = *.gcno *.gcda libnice.symbols
 lib_LTLIBRARIES = libnice.la
 libnice_la_SOURCES = 
 libnice_la_DEPENDENCIES = \
-	../agent/libagent.la \
+	$(top_builddir)/agent/libagent.la \
 	libnice.sym
 
 libnice_la_LIBADD = \
 	$(GLIB_LIBS) \
-	../agent/libagent.la
+	$(top_builddir)/agent/libagent.la
 
 libnice_la_LDFLAGS = \
 	-export-symbols $(srcdir)/libnice.sym \
-	$(NICE_LT_LDFLAGS)
+	$(LIBNICE_LT_LDFLAGS)
 
 AM_CFLAGS = \
 	$(ERROR_CFLAGS) \

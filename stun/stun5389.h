@@ -48,8 +48,8 @@
 #endif
 # include <sys/types.h>
 
-
-/**
+#include "stunmessage.h"
+/*
  * Computes the FINGERPRINT checksum of a STUN message.
  * @param msg pointer to the STUN message
  * @param len size of the message from header (inclusive) and up to
@@ -57,11 +57,10 @@
  *
  * @return fingerprint value in <b>host</b> byte order.
  */
-uint32_t stun_fingerprint (const uint8_t *msg, size_t len);
+uint32_t stun_fingerprint (const uint8_t *msg, size_t len,
+    bool wlm2009_stupid_crc32_typo);
 
-bool stun_has_cookie (const StunMessage *msg);
-
-int stun_message_append_software (StunMessage *msg);
+StunMessageReturn stun_message_append_software (StunMessage *msg);
 
 
 #endif /* _STUN_5389_H */

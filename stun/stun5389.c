@@ -49,10 +49,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "stun5389.h"
 #include "stuncrc32.h"
 #include "stunmessage.h"
 
-uint32_t stun_fingerprint (const uint8_t *msg, size_t len)
+uint32_t stun_fingerprint (const uint8_t *msg, size_t len,
+    bool wlm2009_stupid_crc32_typo)
 {
   crc_data data[3];
   uint16_t fakelen = htons (len - 20u);
@@ -67,19 +69,19 @@ uint32_t stun_fingerprint (const uint8_t *msg, size_t len)
   /* first 4 bytes done, last 8 bytes not summed */
   data[2].len = len - 12u;
 
-  return htonl (crc32 (data, 3) ^ 0x5354554e);
+  return htonl (crc32 (data, 3, wlm2009_stupid_crc32_typo) ^ 0x5354554e);
 }
 
-bool stun_has_cookie (const StunMessage *msg)
+bool stun_message_has_cookie (const StunMessage *msg)
 {
-  stun_transid_t id;
+  StunTransactionId id;
   uint32_t cookie = htonl (STUN_MAGIC_COOKIE);
   stun_message_id (msg, id);
   return memcmp (id, &cookie, sizeof (cookie)) == 0;
 }
 
 
-int stun_message_append_software (StunMessage *msg)
+StunMessageReturn stun_message_append_software (StunMessage *msg)
 {
   static const char software[] = PACKAGE_STRING;
   // assert (strlen (software) < 128);

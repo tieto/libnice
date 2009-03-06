@@ -49,15 +49,6 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#define ENOENT -1
-#define EINVAL -2
-#define ENOBUFS -3
-#define EAFNOSUPPORT -4
-#define EPROTO -5
-#define EACCES -6
-#define EINPROGRESS -7
-#define EAGAIN -8
-#define ENOSYS -9
 
 #define MSG_DONTWAIT 0
 #define MSG_NOSIGNAL 0
@@ -69,7 +60,6 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <errno.h>
 #endif
 
 #undef NDEBUG /* ensure assertions are built-in */
@@ -197,7 +187,6 @@ static void bad_responses (void)
   uint16_t known_attributes[] = {
     STUN_ATTRIBUTE_MAPPED_ADDRESS,
     STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
-    STUN_ATTRIBUTE_XOR_INTERNAL_ADDRESS,
     STUN_ATTRIBUTE_PRIORITY,
     STUN_ATTRIBUTE_USERNAME,
     STUN_ATTRIBUTE_MESSAGE_INTEGRITY,
@@ -241,7 +230,7 @@ static void bad_responses (void)
 
   val = stun_usage_bind_process (&msg,
       (struct sockaddr *)&addr, &addrlen, (struct sockaddr *)&addr, &addrlen);
-  assert (val == STUN_USAGE_BIND_RETURN_RETRY);
+  assert (val == STUN_USAGE_BIND_RETURN_INVALID);
 
   /* Send response with wrong request type */
   buf[0] |= 0x03;
@@ -251,7 +240,7 @@ static void bad_responses (void)
   buf[1] |= 0x10;
   val = stun_usage_bind_process (&msg,
       (struct sockaddr *)&addr, &addrlen, (struct sockaddr *)&addr, &addrlen);
-  assert (val == STUN_USAGE_BIND_RETURN_RETRY);
+  assert (val == STUN_USAGE_BIND_RETURN_INVALID);
 
   close (fd);
   close (servfd);
@@ -275,7 +264,6 @@ static void responses (void)
   uint16_t known_attributes[] = {
     STUN_ATTRIBUTE_MAPPED_ADDRESS,
     STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
-    STUN_ATTRIBUTE_XOR_INTERNAL_ADDRESS,
     STUN_ATTRIBUTE_PRIORITY,
     STUN_ATTRIBUTE_USERNAME,
     STUN_ATTRIBUTE_MESSAGE_INTEGRITY,
@@ -370,9 +358,8 @@ static void responses (void)
       == STUN_VALIDATION_SUCCESS);
 
   stun_agent_init_response (&agent, &msg, buf, sizeof (buf), &msg);
-  val = stun_message_append_addr (&msg, STUN_ATTRIBUTE_MAPPED_ADDRESS,
-                          (struct sockaddr *)&addr, addrlen);
-  assert (val == 0);
+  assert (stun_message_append_addr (&msg, STUN_ATTRIBUTE_MAPPED_ADDRESS,
+          (struct sockaddr *)&addr, addrlen) == STUN_MESSAGE_RETURN_SUCCESS);
   len = stun_agent_finish_message (&agent, &msg, NULL, 0);
   assert (len > 0);
 
@@ -407,7 +394,6 @@ static void keepalive (void)
   uint16_t known_attributes[] = {
     STUN_ATTRIBUTE_MAPPED_ADDRESS,
     STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
-    STUN_ATTRIBUTE_XOR_INTERNAL_ADDRESS,
     STUN_ATTRIBUTE_PRIORITY,
     STUN_ATTRIBUTE_USERNAME,
     STUN_ATTRIBUTE_MESSAGE_INTEGRITY,

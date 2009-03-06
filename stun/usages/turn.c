@@ -68,7 +68,7 @@
 size_t stun_usage_turn_create (StunAgent *agent, StunMessage *msg,
     uint8_t *buffer, size_t buffer_len,
     StunMessage *previous_response,
-    uint32_t request_props,
+    StunUsageTurnRequestPorts request_props,
     int32_t bandwidth, int32_t lifetime,
     uint8_t *username, size_t username_len,
     uint8_t *password, size_t password_len,
@@ -78,20 +78,22 @@ size_t stun_usage_turn_create (StunAgent *agent, StunMessage *msg,
 
   if (compatibility == STUN_USAGE_TURN_COMPATIBILITY_DRAFT9) {
     if (stun_message_append32 (msg, STUN_ATTRIBUTE_REQUESTED_TRANSPORT,
-            TURN_REQUESTED_TRANSPORT_UDP) != 0)
+            TURN_REQUESTED_TRANSPORT_UDP) != STUN_MESSAGE_RETURN_SUCCESS)
       return 0;
     if (bandwidth >= 0) {
-      if (stun_message_append32 (msg, STUN_ATTRIBUTE_BANDWIDTH, bandwidth) != 0)
+      if (stun_message_append32 (msg, STUN_ATTRIBUTE_BANDWIDTH, bandwidth) !=
+          STUN_MESSAGE_RETURN_SUCCESS)
         return 0;
     }
   } else {
     if (stun_message_append32 (msg, STUN_ATTRIBUTE_MAGIC_COOKIE,
-            TURN_MAGIC_COOKIE) != 0)
+            TURN_MAGIC_COOKIE) != STUN_MESSAGE_RETURN_SUCCESS)
       return 0;
   }
 
   if (lifetime >= 0) {
-    if (stun_message_append32 (msg, STUN_ATTRIBUTE_LIFETIME, lifetime) != 0)
+    if (stun_message_append32 (msg, STUN_ATTRIBUTE_LIFETIME, lifetime) !=
+        STUN_MESSAGE_RETURN_SUCCESS)
       return 0;
   }
 
@@ -106,12 +108,9 @@ size_t stun_usage_turn_create (StunAgent *agent, StunMessage *msg,
     } else if (request_props & STUN_USAGE_TURN_REQUEST_PORT_EVEN) {
       req |= REQUESTED_PROPS_E;
     }
-    if (request_props & STUN_USAGE_TURN_REQUEST_PORT_PRESERVING) {
-      req |= REQUESTED_PROPS_P;
-    }
 
     if (stun_message_append32 (msg, STUN_ATTRIBUTE_REQUESTED_PORT_PROPS,
-            req) != 0)
+            req) != STUN_MESSAGE_RETURN_SUCCESS)
       return 0;
   }
 
@@ -124,26 +123,28 @@ size_t stun_usage_turn_create (StunAgent *agent, StunMessage *msg,
     realm = (uint8_t *) stun_message_find (previous_response,
         STUN_ATTRIBUTE_REALM, &len);
     if (realm != NULL) {
-      if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_REALM, realm, len) != 0)
+      if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_REALM, realm, len) !=
+          STUN_MESSAGE_RETURN_SUCCESS)
         return 0;
     }
     nonce = (uint8_t *) stun_message_find (previous_response,
         STUN_ATTRIBUTE_NONCE, &len);
     if (nonce != NULL) {
-      if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_NONCE, nonce, len) != 0)
+      if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_NONCE, nonce, len) !=
+          STUN_MESSAGE_RETURN_SUCCESS)
         return 0;
     }
     if (stun_message_find64 (previous_response, STUN_ATTRIBUTE_RESERVATION_TOKEN,
-            &reservation) == 0) {
+            &reservation) == STUN_MESSAGE_RETURN_SUCCESS) {
       if (stun_message_append64 (msg, STUN_ATTRIBUTE_RESERVATION_TOKEN,
-              reservation) != 0)
+              reservation) != STUN_MESSAGE_RETURN_SUCCESS)
         return 0;
     }
   }
 
   if (username != NULL && username_len > 0) {
     if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_USERNAME,
-            username, username_len) != 0)
+            username, username_len) != STUN_MESSAGE_RETURN_SUCCESS)
       return 0;
   }
 
@@ -166,7 +167,8 @@ size_t stun_usage_turn_create_refresh (StunAgent *agent, StunMessage *msg,
 
   stun_agent_init_request (agent, msg, buffer, buffer_len, STUN_REFRESH);
   if (lifetime >= 0) {
-    if (stun_message_append32 (msg, STUN_ATTRIBUTE_LIFETIME, lifetime) != 0)
+    if (stun_message_append32 (msg, STUN_ATTRIBUTE_LIFETIME, lifetime) !=
+        STUN_MESSAGE_RETURN_SUCCESS)
       return 0;
   }
 
@@ -178,13 +180,15 @@ size_t stun_usage_turn_create_refresh (StunAgent *agent, StunMessage *msg,
     realm = (uint8_t *) stun_message_find (previous_response,
         STUN_ATTRIBUTE_REALM, &len);
     if (realm != NULL) {
-      if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_REALM, realm, len) != 0)
+      if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_REALM, realm, len) !=
+          STUN_MESSAGE_RETURN_SUCCESS)
         return 0;
     }
     nonce = (uint8_t *) stun_message_find (previous_response,
         STUN_ATTRIBUTE_NONCE, &len);
     if (nonce != NULL) {
-      if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_NONCE, nonce, len) != 0)
+      if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_NONCE, nonce, len) !=
+          STUN_MESSAGE_RETURN_SUCCESS)
         return 0;
     }
   }
@@ -192,7 +196,7 @@ size_t stun_usage_turn_create_refresh (StunAgent *agent, StunMessage *msg,
 
   if (username != NULL && username_len > 0) {
     if (stun_message_append_bytes (msg, STUN_ATTRIBUTE_USERNAME,
-            username, username_len) != 0)
+            username, username_len) != STUN_MESSAGE_RETURN_SUCCESS)
       return 0;
   }
 
@@ -211,21 +215,21 @@ StunUsageTurnReturn stun_usage_turn_process (StunMessage *msg,
   StunUsageTurnReturn ret = STUN_USAGE_TURN_RETURN_RELAY_SUCCESS;
 
   if (stun_message_get_method (msg) != STUN_ALLOCATE)
-    return STUN_USAGE_TURN_RETURN_RETRY;
+    return STUN_USAGE_TURN_RETURN_INVALID;
 
   switch (stun_message_get_class (msg))
   {
     case STUN_REQUEST:
     case STUN_INDICATION:
-      return STUN_USAGE_TURN_RETURN_RETRY;
+      return STUN_USAGE_TURN_RETURN_INVALID;
 
     case STUN_RESPONSE:
       break;
 
     case STUN_ERROR:
-      if (stun_message_find_error (msg, &code) != 0) {
+      if (stun_message_find_error (msg, &code) != STUN_MESSAGE_RETURN_SUCCESS) {
         /* missing ERROR-CODE: ignore message */
-        return STUN_USAGE_TURN_RETURN_RETRY;
+        return STUN_USAGE_TURN_RETURN_INVALID;
       }
 
       /* NOTE: currently we ignore unauthenticated messages if the context
@@ -236,12 +240,14 @@ StunUsageTurnReturn stun_usage_turn_process (StunMessage *msg,
       if ((code / 100) == 3) {
         if (alternate_server && alternate_server_len) {
           if (stun_message_find_addr (msg, STUN_ATTRIBUTE_ALTERNATE_SERVER,
-                  alternate_server, alternate_server_len)) {
+                  alternate_server, alternate_server_len) !=
+              STUN_MESSAGE_RETURN_SUCCESS) {
             stun_debug (" Unexpectedly missing ALTERNATE-SERVER attribute\n");
             return STUN_USAGE_TURN_RETURN_ERROR;
           }
         } else {
-          if (!stun_message_has_attribute (msg, STUN_ATTRIBUTE_ALTERNATE_SERVER)) {
+          if (!stun_message_has_attribute (msg,
+                  STUN_ATTRIBUTE_ALTERNATE_SERVER)) {
             stun_debug (" Unexpectedly missing ALTERNATE-SERVER attribute\n");
             return STUN_USAGE_TURN_RETURN_ERROR;
           }
@@ -260,32 +266,32 @@ StunUsageTurnReturn stun_usage_turn_process (StunMessage *msg,
     val = stun_message_find_xor_addr (msg,
         STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS, addr, addrlen);
 
-    if (val == 0)
+    if (val == STUN_MESSAGE_RETURN_SUCCESS)
       ret = STUN_USAGE_TURN_RETURN_MAPPED_SUCCESS;
     val = stun_message_find_xor_addr (msg,
         STUN_ATTRIBUTE_RELAY_ADDRESS, relay_addr, relay_addrlen);
-    if (val) {
-      stun_debug (" No RELAYED-ADDRESS: %s\n", strerror (val));
+    if (val != STUN_MESSAGE_RETURN_SUCCESS) {
+      stun_debug (" No RELAYED-ADDRESS: %d\n", val);
       return STUN_USAGE_TURN_RETURN_ERROR;
     }
   } else if (compatibility == STUN_USAGE_TURN_COMPATIBILITY_GOOGLE) {
     val = stun_message_find_addr (msg,
         STUN_ATTRIBUTE_MAPPED_ADDRESS, relay_addr, relay_addrlen);
-    if (val) {
-      stun_debug (" No MAPPED-ADDRESS: %s\n", strerror (val));
+    if (val != STUN_MESSAGE_RETURN_SUCCESS) {
+      stun_debug (" No MAPPED-ADDRESS: %d\n", val);
       return STUN_USAGE_TURN_RETURN_ERROR;
     }
   } else if (compatibility == STUN_USAGE_TURN_COMPATIBILITY_MSN) {
     val = stun_message_find_addr (msg,
         STUN_ATTRIBUTE_MSN_MAPPED_ADDRESS, addr, addrlen);
 
-    if (val == 0)
+    if (val == STUN_MESSAGE_RETURN_SUCCESS)
       ret = STUN_USAGE_TURN_RETURN_MAPPED_SUCCESS;
 
     val = stun_message_find_addr (msg,
         STUN_ATTRIBUTE_MAPPED_ADDRESS, relay_addr, relay_addrlen);
-    if (val) {
-      stun_debug (" No MAPPED-ADDRESS: %s\n", strerror (val));
+    if (val != STUN_MESSAGE_RETURN_SUCCESS) {
+      stun_debug (" No MAPPED-ADDRESS: %d\n", val);
       return STUN_USAGE_TURN_RETURN_ERROR;
     }
   }
@@ -308,25 +314,25 @@ StunUsageTurnReturn stun_usage_turn_refresh_process (StunMessage *msg,
 
   if (compatibility == STUN_USAGE_TURN_COMPATIBILITY_DRAFT9) {
     if (stun_message_get_method (msg) != STUN_REFRESH)
-      return STUN_USAGE_TURN_RETURN_RETRY;
+      return STUN_USAGE_TURN_RETURN_INVALID;
   } else {
     if (stun_message_get_method (msg) != STUN_ALLOCATE)
-      return STUN_USAGE_TURN_RETURN_RETRY;
+      return STUN_USAGE_TURN_RETURN_INVALID;
   }
 
   switch (stun_message_get_class (msg))
   {
     case STUN_REQUEST:
     case STUN_INDICATION:
-      return STUN_USAGE_TURN_RETURN_RETRY;
+      return STUN_USAGE_TURN_RETURN_INVALID;
 
     case STUN_RESPONSE:
       break;
 
     case STUN_ERROR:
-      if (stun_message_find_error (msg, &code) != 0) {
+      if (stun_message_find_error (msg, &code) != STUN_MESSAGE_RETURN_SUCCESS) {
         /* missing ERROR-CODE: ignore message */
-        return STUN_USAGE_TURN_RETURN_RETRY;
+        return STUN_USAGE_TURN_RETURN_INVALID;
       }
 
       return STUN_USAGE_TURN_RETURN_ERROR;

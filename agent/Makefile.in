@@ -27,7 +27,6 @@
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -42,14 +41,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = $(dist_check_SCRIPTS) $(dist_noinst_DATA) \
-	$(pkginclude_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(top_srcdir)/common.mk
-check_PROGRAMS = test$(EXEEXT) test-address$(EXEEXT) \
-	test-add-remove-stream$(EXEEXT) test-priority$(EXEEXT) \
-	test-mainloop$(EXEEXT) test-fullmode$(EXEEXT) \
-	test-restart$(EXEEXT) test-fallback$(EXEEXT) \
-	test-thread$(EXEEXT)
+DIST_COMMON = $(dist_noinst_DATA) $(pkginclude_HEADERS) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(top_srcdir)/common.mk
 subdir = agent
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -61,37 +55,9 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 am__objects_1 = agent-signals-marshal.lo
 am_libagent_la_OBJECTS = address.lo debug.lo candidate.lo component.lo \
-	agent.lo stream.lo conncheck.lo discovery.lo $(am__objects_1)
+	agent.lo stream.lo conncheck.lo discovery.lo interfaces.lo \
+	$(am__objects_1)
 libagent_la_OBJECTS = $(am_libagent_la_OBJECTS)
-test_SOURCES = test.c
-test_OBJECTS = test.$(OBJEXT)
-am__DEPENDENCIES_1 =
-am__DEPENDENCIES_2 = libagent.la $(am__DEPENDENCIES_1)
-test_DEPENDENCIES = $(am__DEPENDENCIES_2)
-test_add_remove_stream_SOURCES = test-add-remove-stream.c
-test_add_remove_stream_OBJECTS = test-add-remove-stream.$(OBJEXT)
-test_add_remove_stream_DEPENDENCIES = $(am__DEPENDENCIES_2)
-test_address_SOURCES = test-address.c
-test_address_OBJECTS = test-address.$(OBJEXT)
-test_address_DEPENDENCIES = $(am__DEPENDENCIES_2)
-test_fallback_SOURCES = test-fallback.c
-test_fallback_OBJECTS = test-fallback.$(OBJEXT)
-test_fallback_DEPENDENCIES = $(am__DEPENDENCIES_2)
-test_fullmode_SOURCES = test-fullmode.c
-test_fullmode_OBJECTS = test-fullmode.$(OBJEXT)
-test_fullmode_DEPENDENCIES = $(am__DEPENDENCIES_2)
-test_mainloop_SOURCES = test-mainloop.c
-test_mainloop_OBJECTS = test-mainloop.$(OBJEXT)
-test_mainloop_DEPENDENCIES = $(am__DEPENDENCIES_2)
-test_priority_SOURCES = test-priority.c
-test_priority_OBJECTS = test-priority.$(OBJEXT)
-test_priority_DEPENDENCIES = $(am__DEPENDENCIES_2)
-test_restart_SOURCES = test-restart.c
-test_restart_OBJECTS = test-restart.$(OBJEXT)
-test_restart_DEPENDENCIES = $(am__DEPENDENCIES_2)
-test_thread_SOURCES = test-thread.c
-test_thread_OBJECTS = test-thread.$(OBJEXT)
-test_thread_DEPENDENCIES = $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -104,12 +70,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libagent_la_SOURCES) test.c test-add-remove-stream.c \
-	test-address.c test-fallback.c test-fullmode.c test-mainloop.c \
-	test-priority.c test-restart.c test-thread.c
-DIST_SOURCES = $(libagent_la_SOURCES) test.c test-add-remove-stream.c \
-	test-address.c test-fallback.c test-fullmode.c test-mainloop.c \
-	test-priority.c test-restart.c test-thread.c
+SOURCES = $(libagent_la_SOURCES)
+DIST_SOURCES = $(libagent_la_SOURCES)
 DATA = $(dist_noinst_DATA)
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -123,6 +85,7 @@ HEADERS = $(pkginclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+pkgincludedir = $(includedir)/nice
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AR = @AR@
@@ -161,6 +124,8 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBNICE_CFLAGS = @LIBNICE_CFLAGS@
+LIBNICE_LT_LDFLAGS = @LIBNICE_LT_LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBRT = @LIBRT@
 LIBS = @LIBS@
@@ -170,8 +135,6 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
-NICE_CFLAGS = @NICE_CFLAGS@
-NICE_LT_LDFLAGS = @NICE_LT_LDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -245,7 +208,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ERROR_CFLAGS = \
-	$(NICE_CFLAGS) \
+	$(LIBNICE_CFLAGS) \
 	-Wextra \
 	-Wundef \
 	-Wnested-externs \
@@ -293,32 +256,21 @@ libagent_la_SOURCES = \
 	conncheck.h \
 	discovery.c \
 	discovery.h \
+	interfaces.c \
+	interfaces.h \
 	$(BUILT_SOURCES)
 
 libagent_la_LIBADD = \
-	../random/librandom.la \
-	../socket/libsocket.la \
-	../stun/libstun.la
+	$(top_builddir)/random/librandom.la \
+	$(top_builddir)/socket/libsocket.la \
+	$(top_builddir)/stun/libstun.la
 
 libagent_la_DEPENDENCIES = \
-	../random/librandom.la \
-	../socket/libsocket.la \
-	../stun/libstun.la
+	$(top_builddir)/random/librandom.la \
+	$(top_builddir)/socket/libsocket.la \
+	$(top_builddir)/stun/libstun.la
 
-dist_check_SCRIPTS = \
-	check-test-fullmode-with-stun.sh
-
-TESTS = $(check_PROGRAMS) $(dist_check_SCRIPTS)
-test_LDADD = $(COMMON_LDADD)
-test_address_LDADD = $(COMMON_LDADD)
-test_add_remove_stream_LDADD = $(COMMON_LDADD)
-test_priority_LDADD = $(COMMON_LDADD)
-test_mainloop_LDADD = $(COMMON_LDADD)
-test_fullmode_LDADD = $(COMMON_LDADD)
-test_restart_LDADD = $(COMMON_LDADD)
-test_fallback_LDADD = $(COMMON_LDADD)
-test_thread_LDADD = $(COMMON_LDADD)
-pkginclude_HEADERS = agent.h candidate.h debug.h address.h
+pkginclude_HEADERS = agent.h candidate.h debug.h address.h interfaces.h
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -365,40 +317,6 @@ clean-noinstLTLIBRARIES:
 libagent.la: $(libagent_la_OBJECTS) $(libagent_la_DEPENDENCIES) 
 	$(LINK)  $(libagent_la_OBJECTS) $(libagent_la_LIBADD) $(LIBS)
 
-clean-checkPROGRAMS:
-	@list='$(check_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-test$(EXEEXT): $(test_OBJECTS) $(test_DEPENDENCIES) 
-	@rm -f test$(EXEEXT)
-	$(LINK) $(test_OBJECTS) $(test_LDADD) $(LIBS)
-test-add-remove-stream$(EXEEXT): $(test_add_remove_stream_OBJECTS) $(test_add_remove_stream_DEPENDENCIES) 
-	@rm -f test-add-remove-stream$(EXEEXT)
-	$(LINK) $(test_add_remove_stream_OBJECTS) $(test_add_remove_stream_LDADD) $(LIBS)
-test-address$(EXEEXT): $(test_address_OBJECTS) $(test_address_DEPENDENCIES) 
-	@rm -f test-address$(EXEEXT)
-	$(LINK) $(test_address_OBJECTS) $(test_address_LDADD) $(LIBS)
-test-fallback$(EXEEXT): $(test_fallback_OBJECTS) $(test_fallback_DEPENDENCIES) 
-	@rm -f test-fallback$(EXEEXT)
-	$(LINK) $(test_fallback_OBJECTS) $(test_fallback_LDADD) $(LIBS)
-test-fullmode$(EXEEXT): $(test_fullmode_OBJECTS) $(test_fullmode_DEPENDENCIES) 
-	@rm -f test-fullmode$(EXEEXT)
-	$(LINK) $(test_fullmode_OBJECTS) $(test_fullmode_LDADD) $(LIBS)
-test-mainloop$(EXEEXT): $(test_mainloop_OBJECTS) $(test_mainloop_DEPENDENCIES) 
-	@rm -f test-mainloop$(EXEEXT)
-	$(LINK) $(test_mainloop_OBJECTS) $(test_mainloop_LDADD) $(LIBS)
-test-priority$(EXEEXT): $(test_priority_OBJECTS) $(test_priority_DEPENDENCIES) 
-	@rm -f test-priority$(EXEEXT)
-	$(LINK) $(test_priority_OBJECTS) $(test_priority_LDADD) $(LIBS)
-test-restart$(EXEEXT): $(test_restart_OBJECTS) $(test_restart_DEPENDENCIES) 
-	@rm -f test-restart$(EXEEXT)
-	$(LINK) $(test_restart_OBJECTS) $(test_restart_LDADD) $(LIBS)
-test-thread$(EXEEXT): $(test_thread_OBJECTS) $(test_thread_DEPENDENCIES) 
-	@rm -f test-thread$(EXEEXT)
-	$(LINK) $(test_thread_OBJECTS) $(test_thread_LDADD) $(LIBS)
-
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -413,16 +331,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/conncheck.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/discovery.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/interfaces.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stream.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-add-remove-stream.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-address.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-fallback.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-fullmode.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-mainloop.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-priority.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-restart.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-thread.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -515,79 +425,6 @@ GTAGS:
 distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
-check-TESTS: $(TESTS)
-	@failed=0; all=0; xfail=0; xpass=0; skip=0; ws='[	 ]'; \
-	srcdir=$(srcdir); export srcdir; \
-	list=' $(TESTS) '; \
-	if test -n "$$list"; then \
-	  for tst in $$list; do \
-	    if test -f ./$$tst; then dir=./; \
-	    elif test -f $$tst; then dir=; \
-	    else dir="$(srcdir)/"; fi; \
-	    if $(TESTS_ENVIRONMENT) $${dir}$$tst; then \
-	      all=`expr $$all + 1`; \
-	      case " $(XFAIL_TESTS) " in \
-	      *$$ws$$tst$$ws*) \
-		xpass=`expr $$xpass + 1`; \
-		failed=`expr $$failed + 1`; \
-		echo "XPASS: $$tst"; \
-	      ;; \
-	      *) \
-		echo "PASS: $$tst"; \
-	      ;; \
-	      esac; \
-	    elif test $$? -ne 77; then \
-	      all=`expr $$all + 1`; \
-	      case " $(XFAIL_TESTS) " in \
-	      *$$ws$$tst$$ws*) \
-		xfail=`expr $$xfail + 1`; \
-		echo "XFAIL: $$tst"; \
-	      ;; \
-	      *) \
-		failed=`expr $$failed + 1`; \
-		echo "FAIL: $$tst"; \
-	      ;; \
-	      esac; \
-	    else \
-	      skip=`expr $$skip + 1`; \
-	      echo "SKIP: $$tst"; \
-	    fi; \
-	  done; \
-	  if test "$$failed" -eq 0; then \
-	    if test "$$xfail" -eq 0; then \
-	      banner="All $$all tests passed"; \
-	    else \
-	      banner="All $$all tests behaved as expected ($$xfail expected failures)"; \
-	    fi; \
-	  else \
-	    if test "$$xpass" -eq 0; then \
-	      banner="$$failed of $$all tests failed"; \
-	    else \
-	      banner="$$failed of $$all tests did not behave as expected ($$xpass unexpected passes)"; \
-	    fi; \
-	  fi; \
-	  dashes="$$banner"; \
-	  skipped=""; \
-	  if test "$$skip" -ne 0; then \
-	    skipped="($$skip tests were not run)"; \
-	    test `echo "$$skipped" | wc -c` -le `echo "$$banner" | wc -c` || \
-	      dashes="$$skipped"; \
-	  fi; \
-	  report=""; \
-	  if test "$$failed" -ne 0 && test -n "$(PACKAGE_BUGREPORT)"; then \
-	    report="Please report to $(PACKAGE_BUGREPORT)"; \
-	    test `echo "$$report" | wc -c` -le `echo "$$banner" | wc -c` || \
-	      dashes="$$report"; \
-	  fi; \
-	  dashes=`echo "$$dashes" | sed s/./=/g`; \
-	  echo "$$dashes"; \
-	  echo "$$banner"; \
-	  test -z "$$skipped" || echo "$$skipped"; \
-	  test -z "$$report" || echo "$$report"; \
-	  echo "$$dashes"; \
-	  test "$$failed" -eq 0; \
-	else :; fi
-
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
@@ -615,12 +452,9 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS) \
-	  $(dist_check_SCRIPTS)
-	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) check-am
-all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS) all-local
+all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
 	for dir in "$(DESTDIR)$(pkgincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
@@ -654,8 +488,8 @@ maintainer-clean-generic:
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
-clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
-	clean-noinstLTLIBRARIES mostlyclean-am
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -713,20 +547,19 @@ uninstall-am: uninstall-pkgincludeHEADERS
 
 .MAKE: install-am install-strip
 
-.PHONY: CTAGS GTAGS all all-am all-local check check-TESTS check-am \
-	clean clean-checkPROGRAMS clean-generic clean-libtool \
-	clean-noinstLTLIBRARIES ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pkgincludeHEADERS install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-pkgincludeHEADERS
+.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
+	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-pkgincludeHEADERS \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-pkgincludeHEADERS
 
 
 check-valgrind:
@@ -741,9 +574,6 @@ agent-signals-marshal.c: agent-signals-marshal.list Makefile.am
 	glib-genmarshal --body --prefix=agent_marshal $< > $@
 	sed -i "1i#include \"agent-signals-marshal.h\"" $@
 	sed -i -e 's/^}$$/(void)return_value;(void)invocation_hint;}/' $@
-
-all-local:
-	chmod a+x $(srcdir)/check-test-fullmode-with-stun.sh
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

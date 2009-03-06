@@ -23,7 +23,6 @@
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -54,27 +53,27 @@ CONFIG_CLEAN_FILES =
 test_bind_SOURCES = test-bind.c
 test_bind_OBJECTS = test-bind.$(OBJEXT)
 test_bind_LDADD = $(LDADD)
-test_bind_DEPENDENCIES = ../libstun.la
+test_bind_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 test_conncheck_SOURCES = test-conncheck.c
 test_conncheck_OBJECTS = test-conncheck.$(OBJEXT)
 test_conncheck_LDADD = $(LDADD)
-test_conncheck_DEPENDENCIES = ../libstun.la
+test_conncheck_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 test_format_SOURCES = test-format.c
 test_format_OBJECTS = test-format.$(OBJEXT)
 test_format_LDADD = $(LDADD)
-test_format_DEPENDENCIES = ../libstun.la
+test_format_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 test_hmac_SOURCES = test-hmac.c
 test_hmac_OBJECTS = test-hmac.$(OBJEXT)
 test_hmac_LDADD = $(LDADD)
-test_hmac_DEPENDENCIES = ../libstun.la
+test_hmac_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 test_parse_SOURCES = test-parse.c
 test_parse_OBJECTS = test-parse.$(OBJEXT)
 test_parse_LDADD = $(LDADD)
-test_parse_DEPENDENCIES = ../libstun.la
+test_parse_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 test_turn_SOURCES = test-turn.c
 test_turn_OBJECTS = test-turn.$(OBJEXT)
 test_turn_LDADD = $(LDADD)
-test_turn_DEPENDENCIES = ../libstun.la
+test_turn_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -94,6 +93,7 @@ DIST_SOURCES = test-bind.c test-conncheck.c test-format.c test-hmac.c \
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+pkgincludedir = $(includedir)/nice
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AR = @AR@
@@ -132,6 +132,8 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBNICE_CFLAGS = @LIBNICE_CFLAGS@
+LIBNICE_LT_LDFLAGS = @LIBNICE_LT_LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBRT = @LIBRT@
 LIBS = @LIBS@
@@ -141,8 +143,6 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
-NICE_CFLAGS = @NICE_CFLAGS@
-NICE_LT_LDFLAGS = @NICE_LT_LDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -216,7 +216,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ERROR_CFLAGS = \
-	$(NICE_CFLAGS) \
+	$(LIBNICE_CFLAGS) \
 	-Wextra \
 	-Wundef \
 	-Wnested-externs \
@@ -233,7 +233,7 @@ ERROR_CFLAGS = \
 CLEANFILES = *.gcno *.gcda
 AM_CPPFLAGS = -I$(top_srcdir)
 AM_CFLAGS = -std=gnu99
-LDADD = ../libstun.la
+LDADD = $(top_builddir)/stun/libstun.la
 dist_check_SCRIPTS = check-bind.sh
 TESTS = $(check_PROGRAMS)
 all: all-am

@@ -69,6 +69,7 @@
 #include "agent-signals-marshal.h"
 
 #include "stream.h"
+#include "interfaces.h"
 
 /* This is the max size of a UDP packet
  * will it work tcp relaying??
@@ -118,34 +119,33 @@ static void priv_detach_stream_component (Stream *stream, Component *component);
 StunUsageIceCompatibility
 agent_to_ice_compatibility (NiceAgent *agent)
 {
-  return agent->compatibility == NICE_COMPATIBILITY_DRAFT19 ?
-      STUN_USAGE_ICE_COMPATIBILITY_DRAFT19 :
-      agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
+  return agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
       STUN_USAGE_ICE_COMPATIBILITY_GOOGLE :
       agent->compatibility == NICE_COMPATIBILITY_MSN ?
-      STUN_USAGE_ICE_COMPATIBILITY_MSN : STUN_USAGE_ICE_COMPATIBILITY_DRAFT19;
+      STUN_USAGE_ICE_COMPATIBILITY_MSN :
+      STUN_USAGE_ICE_COMPATIBILITY_DRAFT19;
 }
 
 
 StunUsageTurnCompatibility
 agent_to_turn_compatibility (NiceAgent *agent)
 {
-  return agent->compatibility == NICE_COMPATIBILITY_DRAFT19 ?
-      STUN_USAGE_TURN_COMPATIBILITY_DRAFT9 :
-      agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
+  return agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
       STUN_USAGE_TURN_COMPATIBILITY_GOOGLE :
       agent->compatibility == NICE_COMPATIBILITY_MSN ?
+      STUN_USAGE_TURN_COMPATIBILITY_MSN :
+      agent->compatibility == NICE_COMPATIBILITY_WLM2009 ?
       STUN_USAGE_TURN_COMPATIBILITY_MSN : STUN_USAGE_TURN_COMPATIBILITY_DRAFT9;
 }
 
 NiceTurnSocketCompatibility
 agent_to_turn_socket_compatibility (NiceAgent *agent)
 {
-  return agent->compatibility == NICE_COMPATIBILITY_DRAFT19 ?
-      NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 :
-      agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
+  return agent->compatibility == NICE_COMPATIBILITY_GOOGLE ?
       NICE_TURN_SOCKET_COMPATIBILITY_GOOGLE :
       agent->compatibility == NICE_COMPATIBILITY_MSN ?
+      NICE_TURN_SOCKET_COMPATIBILITY_MSN :
+      agent->compatibility == NICE_COMPATIBILITY_WLM2009 ?
       NICE_TURN_SOCKET_COMPATIBILITY_MSN :
       NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9;
 }
@@ -630,12 +630,7 @@ nice_agent_set_property (
 
     case PROP_COMPATIBILITY:
       agent->compatibility = g_value_get_uint (value);
-      if (agent->compatibility == NICE_COMPATIBILITY_DRAFT19) {
-        stun_agent_init (&agent->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
-            STUN_COMPATIBILITY_RFC5389,
-            STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
-            STUN_AGENT_USAGE_USE_FINGERPRINT);
-      } else if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
+      if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
         stun_agent_init (&agent->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
             STUN_COMPATIBILITY_RFC3489,
             STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
@@ -645,6 +640,16 @@ nice_agent_set_property (
             STUN_COMPATIBILITY_RFC3489,
             STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
             STUN_AGENT_USAGE_FORCE_VALIDATER);
+      } else if (agent->compatibility == NICE_COMPATIBILITY_WLM2009) {
+        stun_agent_init (&agent->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
+            STUN_COMPATIBILITY_WLM2009,
+            STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
+            STUN_AGENT_USAGE_USE_FINGERPRINT);
+      } else {
+        stun_agent_init (&agent->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
+            STUN_COMPATIBILITY_RFC5389,
+            STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
+            STUN_AGENT_USAGE_USE_FINGERPRINT);
       }
 
       break;
@@ -918,14 +923,18 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
           nice_address_set_port (&proxy_server, agent->proxy_port);
           socket = nice_tcp_bsd_socket_new (agent, component->ctx, &proxy_server);
 
-          if (socket &&
-              agent->proxy_type == NICE_PROXY_TYPE_SOCKS5) {
-            socket = nice_socks5_socket_new (socket, &turn->server,
-                agent->proxy_username, agent->proxy_password);
-          } else {
-            /* TODO add HTTP support */
-            nice_socket_free (socket);
-            socket = NULL;
+          if (socket) {
+            if (agent->proxy_type == NICE_PROXY_TYPE_SOCKS5) {
+              socket = nice_socks5_socket_new (socket, &turn->server,
+                  agent->proxy_username, agent->proxy_password);
+            } else if (agent->proxy_type == NICE_PROXY_TYPE_HTTP){
+              socket = nice_http_socket_new (socket, &turn->server,
+                  agent->proxy_username, agent->proxy_password);
+            } else {
+              /* TODO add HTTP support */
+              nice_socket_free (socket);
+              socket = NULL;
+            }
           }
 
         }
@@ -960,20 +969,21 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
       cdisco->component = stream_find_component_by_id (stream, component_id);
       cdisco->agent = agent;
 
-      if (agent->compatibility == NICE_COMPATIBILITY_DRAFT19) {
-        stun_agent_init (&cdisco->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
-            STUN_COMPATIBILITY_RFC5389,
-            STUN_AGENT_USAGE_ADD_SOFTWARE |
-            STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS);
-      } else if (agent->compatibility == NICE_COMPATIBILITY_MSN) {
-        stun_agent_init (&cdisco->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
-            STUN_COMPATIBILITY_RFC3489,
-            STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS);
-      } else if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
+      if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
         stun_agent_init (&cdisco->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
             STUN_COMPATIBILITY_RFC3489,
             STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
             STUN_AGENT_USAGE_IGNORE_CREDENTIALS);
+      } else if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
+                 agent->compatibility == NICE_COMPATIBILITY_WLM2009) {
+        stun_agent_init (&cdisco->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
+            STUN_COMPATIBILITY_RFC3489,
+            STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS);
+      } else {
+        stun_agent_init (&cdisco->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
+            STUN_COMPATIBILITY_RFC5389,
+            STUN_AGENT_USAGE_ADD_SOFTWARE |
+            STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS);
       }
 
       nice_debug ("Agent %p : Adding new relay-rflx candidate discovery %p\n",
@@ -1080,8 +1090,25 @@ nice_agent_gather_candidates (
   nice_debug ("Agent %p : In %s mode, starting candidate gathering.", agent,
       agent->full_mode ? "ICE-FULL" : "ICE-LITE");
 
-  /* generate a local host candidate for each local address */
+  /* if no local addresses added, generate them ourselves */
+  if (agent->local_addresses == NULL) {
+    GList *addresses = nice_interfaces_get_local_ips (FALSE);
+    GList *item;
 
+    for (item = addresses; item; item = g_list_next (item)) {
+      NiceAddress *addr = nice_address_new ();
+
+      if (nice_address_set_from_string (addr, item->data)) {
+        nice_agent_add_local_address (agent, addr);
+      }
+      nice_address_free (addr);
+    }
+
+    g_list_foreach (addresses, (GFunc) g_free, NULL);
+    g_list_free (addresses);
+  }
+
+  /* generate a local host candidate for each local address */
   for (i = agent->local_addresses; i; i = i->next){
     NiceAddress *addr = i->data;
     NiceCandidate *host_candidate;
@@ -1793,7 +1820,7 @@ agent_attach_stream_component_socket (NiceAgent *agent,
 }
 
 
-/**
+/*
  * Attaches socket handles of 'stream' to the main eventloop
  * context.
  *
@@ -1811,7 +1838,7 @@ priv_attach_stream_component (NiceAgent *agent,
   return TRUE;
 }
 
-/**
+/*
  * Detaches socket handles of 'stream' from the main eventloop
  * context.
  *

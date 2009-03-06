@@ -37,8 +37,65 @@
 # define STUN_TIMER_H 1
 
 /**
- * @file timer.h
- * @brief STUN retransmission timer
+ * SECTION:timer
+ * @short_description: STUN timer Usage
+ * @include: stun/usages/timer.h
+ * @stability: Stable
+ *
+ * The STUN timer usage is a set of helpful utility functions that allows you
+ * to easily track when a STUN message should be retransmitted or considered
+ * as timed out.
+ *
+ *
+ <example>
+   <title>Simple example on how to use the timer usage</title>
+   <programlisting>
+   StunTimer timer;
+   unsigned remainder;
+   StunUsageTimerReturn ret;
+
+   // Build the message, etc..
+   ...
+
+   // Send the message and start the timer
+   send(socket, request, sizeof(request));
+   stun_timer_start(&timer);
+
+   // Loop until we get the response
+   for (;;) {
+     remainder = stun_timer_remainder(&timer);
+
+     // Poll the socket until data is received or the timer expires
+     if (poll (&pollfd, 1, delay) <= 0) {
+       // Time out and no response was received
+       ret = stun_timer_refresh (&timer);
+       if (ret == STUN_USAGE_TIMER_RETURN_TIMEOUT) {
+         // Transaction timed out
+         break;
+       } else if (ret == STUN_USAGE_TIMER_RETURN_RETRANSMIT) {
+         // A retransmission is necessary
+         send(socket, request, sizeof(request));
+         continue;
+       } else if (ret == STUN_USAGE_TIMER_RETURN_SUCCESS) {
+         // The refresh succeeded and nothing has to be done, continue polling
+         continue;
+       }
+     } else {
+       // We received a response, read it
+       recv(socket, response, sizeof(response));
+       break;
+     }
+   }
+
+   // Check if the transaction timed out or not
+   if (ret == STUN_USAGE_TIMER_RETURN_TIMEOUT) {
+     // do whatever needs to be done in that case
+   } else {
+     // Parse the response
+   }
+
+   </programlisting>
+ </example>
  */
 
 #ifdef _WIN32
@@ -48,33 +105,78 @@
 # include <time.h>
 #endif
 
-typedef struct stun_timer_s
-{
+/**
+ * StunTimer:
+ *
+ * An opaque structure representing a STUN transaction retransmission timer
+ */
+typedef struct stun_timer_s StunTimer;
+
+struct stun_timer_s {
   struct timeval deadline;
   unsigned delay;
-} stun_timer_t;
+};
 
+
+/**
+ * StunUsageTimerReturn:
+ * @STUN_USAGE_TIMER_RETURN_SUCCESS: The timer was refreshed successfully
+ * and there is nothing to be done
+ * @STUN_USAGE_TIMER_RETURN_RETRANSMIT: The timer expired and the message
+ * should be retransmitted now.
+ * @STUN_USAGE_TIMER_RETURN_TIMEOUT: The timer expired as well as all the
+ * retransmissions, the transaction timed out
+ *
+ * Return value of stun_usage_timer_refresh() which provides you with status
+ * information on the timer.
+ */
+typedef enum {
+  STUN_USAGE_TIMER_RETURN_SUCCESS,
+  STUN_USAGE_TIMER_RETURN_RETRANSMIT,
+  STUN_USAGE_TIMER_RETURN_TIMEOUT
+} StunUsageTimerReturn;
 
 # ifdef __cplusplus
 extern "C" {
 # endif
 
 /**
+ * stun_timer_start:
+ * @timer: The #StunTimer to start
+ *
  * Starts a STUN transaction retransmission timer.
- * @param timer structure for internal timer state
+ * This should be called as soon as you send the message for the first time on
+ * a UDP socket
  */
-void stun_timer_start (stun_timer_t *timer);
-void stun_timer_start_reliable (stun_timer_t *timer);
+void stun_timer_start (StunTimer *timer);
 
 /**
- * Updates a STUN transaction retransmission timer.
- * @param timer internal timer state
- * @return -1 if the transaction timed out,
- * 0 if the transaction should be retransmitted,
- * otherwise milliseconds left until next time out or retransmit.
+ * stun_timer_start_reliable:
+ * @timer: The #StunTimer to start
+ *
+ * Starts a STUN transaction retransmission timer for a reliable transport.
+ * This should be called as soon as you send the message for the first time on
+ * a TCP socket
  */
-int stun_timer_refresh (stun_timer_t *timer);
-unsigned stun_timer_remainder (const stun_timer_t *timer);
+void stun_timer_start_reliable (StunTimer *timer);
+
+/**
+ * stun_timer_refresh:
+ * @timer: The #StunTimer to refresh
+ *
+ * Updates a STUN transaction retransmission timer.
+ * Returns: A #StunUsageTimerReturn telling you what to do next
+ */
+StunUsageTimerReturn stun_timer_refresh (StunTimer *timer);
+
+/**
+ * stun_timer_remainder:
+ * @timer: The #StunTimer to query
+ *
+ * Query the timer on the time left before the next refresh should be done
+ * Returns: The time remaining for the timer to expire in milliseconds
+ */
+unsigned stun_timer_remainder (const StunTimer *timer);
 
 # ifdef __cplusplus
 }

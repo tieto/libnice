@@ -63,10 +63,6 @@
    // Create a nice agent
    NiceAgent *agent = nice_agent_new (NULL, NICE_COMPATIBILITY_DRAFT19);
 
-   // Specify which local interface to use
-   nice_address_set_from_string (&base_addr, "127.0.0.1");
-   nice_agent_add_local_address (agent, &base_addr);
-
    // Connect the signals
    g_signal_connect (G_OBJECT (agent), "candidate-gathering-done",
                      G_CALLBACK (cb_candidate_gathering_done), NULL);
@@ -156,7 +152,7 @@ GType nice_agent_get_type (void);
 /**
  * NICE_AGENT_MAX_REMOTE_CANDIDATES:
  *
- * A hard limit for number for remote candidates. This
+ * A hard limit for the number of remote candidates. This
  * limit is enforced to protect against malevolent remote
  * clients.
  */
@@ -175,7 +171,7 @@ GType nice_agent_get_type (void);
  * @NICE_COMPONENT_STATE_LAST: Dummy state
  *
  * An enum representing the state of a component.
- * See #NiceAgent::component-state-changed
+ * <para> See also: #NiceAgent::component-state-changed </para>
  */
 typedef enum
 {
@@ -215,6 +211,8 @@ typedef enum
  * @NICE_COMPATIBILITY_DRAFT19: Use compatibility for ICE Draft 19 specs
  * @NICE_COMPATIBILITY_GOOGLE: Use compatibility for Google Talk specs
  * @NICE_COMPATIBILITY_MSN: Use compatibility for MSN Messenger specs
+ * @NICE_COMPATIBILITY_WLM2009: Use compatibility with Windows Live Messenger
+ * 2009
  * @NICE_COMPATIBILITY_LAST: Dummy last compatibility mode
  *
  * An enum to specify which compatible specifications the #NiceAgent should use.
@@ -225,7 +223,8 @@ typedef enum
   NICE_COMPATIBILITY_DRAFT19 = 0,
   NICE_COMPATIBILITY_GOOGLE,
   NICE_COMPATIBILITY_MSN,
-  NICE_COMPATIBILITY_LAST = NICE_COMPATIBILITY_MSN
+  NICE_COMPATIBILITY_WLM2009,
+  NICE_COMPATIBILITY_LAST = NICE_COMPATIBILITY_WLM2009
 } NiceCompatibility;
 
 /**
@@ -237,7 +236,7 @@ typedef enum
  *
  * An enum to specify which proxy type to use for relaying.
  * Note that the proxies will only be used with TCP TURN relaying.
- * See #NiceAgent:proxy-type
+ * <para> See also: #NiceAgent:proxy-type </para>
  */
 typedef enum
 {
@@ -356,7 +355,11 @@ gboolean nice_agent_set_relay_info(
  *
  <note>
    <para>
-    Local addresses must be previously set with nice_agent_add_local_address()
+    Local addresses can be previously set with nice_agent_add_local_address()
+  </para>
+  <para>
+    If no local address was previously added, then the nice agent will
+    automatically detect the local address using nice_interfaces_get_local_ips()
    </para>
  </note>
  */
