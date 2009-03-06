@@ -15,8 +15,6 @@ AM_CFLAGS = \
 	-I $(top_srcdir)/agent \
 	-I $(top_srcdir)/
 
-COMMON_LDADD = libsocket.la $(top_builddir)/agent/libagent.la $(GLIB_LIBS) $(top_builddir)/stun/libstun.la
-
 noinst_LTLIBRARIES = libsocket.la
 
 libsocket_la_SOURCES = \
@@ -30,17 +28,13 @@ libsocket_la_SOURCES = \
 	pseudossl.c \
 	socks5.h \
 	socks5.c \
+	http.h \
+	http.c \
 	turn.h \
 	turn.c \
 	tcp-turn.h \
 	tcp-turn.c
 
-check_PROGRAMS = test-bsd
 
-test_bsd_LDADD = $(COMMON_LDADD)
-
-
-TESTS = $(check_PROGRAMS)
-
-pkginclude_HEADERS = socket.h udp-bsd.h tcp-bsd.h pseudossl.h turn.h tcp-turn.h socks5.h
+pkginclude_HEADERS = socket.h udp-bsd.h tcp-bsd.h pseudossl.h http.h socks5.h turn.h tcp-turn.h
 

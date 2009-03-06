@@ -45,20 +45,10 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
-#define ENOENT -1
-#define EINVAL -2
-#define ENOBUFS -3
-#define EAFNOSUPPORT -4
-#define EPROTO -5
-#define EACCES -6
-#define EINPROGRESS -7
-#define EAGAIN -8
-#define ENOSYS -9
 #else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <errno.h>
 #endif
 
 
@@ -164,11 +154,95 @@ static void test_message (void)
        0x00, 0x00, 0x00, 0x00,
        0x00, 0x06, 0x00, 0x04,
        0x41, 0x42, 0x43, 0x44};
-  StunAgent agent;
-  StunMessage msg;
-  uint16_t known_attributes[] = {STUN_ATTRIBUTE_USERNAME, 0};
 
-  if (stun_message_validate_buffer_length (NULL, 0) != STUN_MESSAGE_BUFFER_INVALID)
+  static unsigned char req[] =
+      {0x00, 0x01, 0x00, 0x00,
+       0x8b, 0x45, 0x9b, 0xc3,
+       0xe7, 0x7a, 0x05, 0xb3,
+       0xe4, 0xfe, 0x01, 0xf0,
+       0xaf, 0x83, 0xe1, 0x9e};
+
+  static uint8_t binding_error_resp[] =
+      {0x01, 0x11, 0x00, 0x84,
+       0x8b, 0x45, 0x9b, 0xc3,
+       0xe7, 0x7a, 0x05, 0xb3,
+       0xe4, 0xfe, 0x01, 0xf0,
+       0xaf, 0x83, 0xe1, 0x9e,
+
+       0x00, 0x06, 0x00, 0x48, // USERNAME
+       0x92, 0x6b, 0x2b, 0x3e,
+       0x6a, 0xa5, 0x43, 0x58,
+       0xa8, 0x51, 0x25, 0xa6,
+       0xf7, 0x9c, 0x0a, 0xe7,
+       0xd8, 0x86, 0xf7, 0x76,
+       0xf9, 0xcd, 0x8a, 0x2e,
+       0x45, 0xd7, 0xcb, 0xbb,
+       0xae, 0xe5, 0x03, 0xc3,
+       0x3a, 0x32, 0x3a, 0xa9,
+       0x9e, 0xb7, 0x7b, 0x32,
+       0xe3, 0xf3, 0xa6, 0xc0,
+       0xe8, 0x54, 0x4b, 0xef,
+       0x52, 0xd2, 0xe2, 0xc0,
+       0x43, 0xc2, 0x4c, 0xbc,
+       0xaf, 0xd9, 0xf2, 0xfa,
+       0x48, 0x8b, 0x8c, 0xe6,
+       0x62, 0x14, 0x64, 0x3a,
+       0x32, 0x00, 0x00, 0x00,
+
+       0x00, 0x09, 0x00, 0x1c, // ERROR-CODE
+       0x00, 0x00, 0x04, 0x1f,
+       0x49, 0x6e, 0x74, 0x65,
+       0x67, 0x72, 0x69, 0x74,
+       0x79, 0x20, 0x43, 0x68,
+       0x65, 0x63, 0x6b, 0x20,
+       0x46, 0x61, 0x69, 0x6c,
+       0x75, 0x72, 0x65, 0x2e,
+
+       0x00, 0x08, 0x00, 0x14, // MESSAGE-INTEGRITY
+       0xf7, 0x46, 0x81, 0xc4,
+       0x6f, 0x4c, 0x21, 0x5c,
+       0xf6, 0x8e, 0xc0, 0x81,
+       0x0e, 0x20, 0x3f, 0xb1,
+       0xb1, 0xad, 0xa4, 0x8a};
+
+  StunAgent agent;
+  StunAgent agent2;
+  StunMessage msg;
+  uint16_t known_attributes[] = {STUN_ATTRIBUTE_USERNAME,
+                                 STUN_ATTRIBUTE_ERROR_CODE,
+                                 STUN_ATTRIBUTE_MESSAGE_INTEGRITY};
+
+  uint8_t username_v[] = {0x92, 0x6b, 0x2b, 0x3e, 0x6a, 0xa5, 0x43, 0x58,
+                          0xa8, 0x51, 0x25, 0xa6, 0xf7, 0x9c, 0x0a, 0xe7,
+                          0xd8, 0x86, 0xf7, 0x76, 0xf9, 0xcd, 0x8a, 0x2e,
+                          0x45, 0xd7, 0xcb, 0xbb, 0xae, 0xe5, 0x03, 0xc3,
+                          0x3a, 0x32, 0x3a, 0xa9, 0x9e, 0xb7, 0x7b, 0x32,
+                          0xe3, 0xf3, 0xa6, 0xc0, 0xe8, 0x54, 0x4b, 0xef,
+                          0x52, 0xd2, 0xe2, 0xc0, 0x43, 0xc2, 0x4c, 0xbc,
+                          0xaf, 0xd9, 0xf2, 0xfa, 0x48, 0x8b, 0x8c, 0xe6,
+                          0x62, 0x14, 0x64, 0x3a, 0x32, 0x00, 0x00, 0x00};
+  uint8_t password_v[]  = {0x77, 0xd9, 0x7a, 0xe9, 0xcf, 0xe0, 0x3e, 0xa2,
+                           0x28, 0xa0, 0x5d, 0xec, 0xcf, 0x36, 0xe8, 0x49};
+
+  StunDefaultValidaterData v = {username_v, 72, password_v, 16};
+
+  stun_agent_init (&agent, known_attributes,
+      STUN_COMPATIBILITY_RFC5389, STUN_AGENT_USAGE_USE_FINGERPRINT);
+  stun_agent_init (&agent2, known_attributes,
+      STUN_COMPATIBILITY_RFC3489, STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS);
+
+
+  stun_agent_validate (&agent2, &msg, req, sizeof(req),  NULL, NULL);
+  stun_agent_finish_message (&agent2, &msg, NULL, 0);
+
+  if (stun_agent_validate (&agent2, &msg, binding_error_resp,
+          sizeof(binding_error_resp),
+          stun_agent_default_validater, &v) != STUN_VALIDATION_SUCCESS)
+    fatal ("Binding Error Response failed");
+
+
+  if (stun_message_validate_buffer_length (NULL, 0) !=
+      STUN_MESSAGE_BUFFER_INVALID)
     fatal ("0 bytes test failed");
   if (stun_message_validate_buffer_length ((uint8_t *)"\xf0", 1) >= 0)
     fatal ("1 byte test failed");
@@ -181,9 +255,6 @@ static void test_message (void)
   validate (simple_resp, 20);
   validate (old_ind, 20);
   validate (fpr_resp, 36);
-
-  stun_agent_init (&agent, known_attributes,
-      STUN_COMPATIBILITY_RFC5389, STUN_AGENT_USAGE_USE_FINGERPRINT);
 
   if (stun_agent_validate (&agent, &msg, extra_garbage, sizeof(extra_garbage),
           NULL, NULL) != STUN_VALIDATION_NOT_STUN)
@@ -200,7 +271,6 @@ static void test_message (void)
   if (stun_agent_validate (&agent, &msg, bad_crc_offset, sizeof(bad_crc_offset),
           NULL, NULL) != STUN_VALIDATION_BAD_REQUEST)
     fatal ("Bad CRC offset test failed");
-
   if (stun_agent_validate (&agent, &msg, fpr_resp, sizeof(fpr_resp),
           NULL, NULL) != STUN_VALIDATION_UNMATCHED_RESPONSE)
     fatal ("Good CRC test failed");
@@ -317,51 +387,61 @@ static void test_attribute (void)
   if (!stun_message_has_attribute (&msg, 0xff01))
     fatal ("Present attribute test failed");
 
-  if (stun_message_find_flag (&msg, 0xff00) != ENOENT)
+  if (stun_message_find_flag (&msg, 0xff00) != STUN_MESSAGE_RETURN_NOT_FOUND)
     fatal ("Absent flag test failed");
-  if (stun_message_find_flag (&msg, 0xff01) != 0)
+  if (stun_message_find_flag (&msg, 0xff01) != STUN_MESSAGE_RETURN_SUCCESS)
     fatal ("Flag test failed");
-  if (stun_message_find_flag (&msg, 0xff02) != EINVAL)
+  if (stun_message_find_flag (&msg, 0xff02) != STUN_MESSAGE_RETURN_INVALID)
     fatal ("Too big flag test failed");
 
-  if (stun_message_find32 (&msg, 0xff00, &dword) != ENOENT)
+  if (stun_message_find32 (&msg, 0xff00, &dword) !=
+      STUN_MESSAGE_RETURN_NOT_FOUND)
     fatal ("Absent dword test failed");
-  if (stun_message_find32 (&msg, 0xff01, &dword) != EINVAL)
+  if (stun_message_find32 (&msg, 0xff01, &dword) != STUN_MESSAGE_RETURN_INVALID)
     fatal ("Bad dword test failed");
-  if (stun_message_find32 (&msg, 0xff02, &dword) != 0)
+  if (stun_message_find32 (&msg, 0xff02, &dword) != STUN_MESSAGE_RETURN_SUCCESS)
     fatal ("Double-word test failed");
 
-  if (stun_message_find64 (&msg, 0xff00, &qword) != ENOENT)
+  if (stun_message_find64 (&msg, 0xff00, &qword) !=
+      STUN_MESSAGE_RETURN_NOT_FOUND)
     fatal ("Absent qword test failed");
-  if (stun_message_find64 (&msg, 0xff01, &qword) != EINVAL)
+  if (stun_message_find64 (&msg, 0xff01, &qword) != STUN_MESSAGE_RETURN_INVALID)
     fatal ("Bad qword test failed");
-  if (stun_message_find64 (&msg, 0xff04, &qword) !=0)
+  if (stun_message_find64 (&msg, 0xff04, &qword) != STUN_MESSAGE_RETURN_SUCCESS)
     fatal ("Quad-word test failed");
 
-  if (stun_message_find_string (&msg, 0xff00, str, STUN_MAX_CP) != ENOENT)
+  if (stun_message_find_string (&msg, 0xff00, str, STUN_MAX_CP) !=
+      STUN_MESSAGE_RETURN_NOT_FOUND)
     fatal ("Absent string test failed");
-  if ((stun_message_find_string (&msg, 0xff02, str, STUN_MAX_CP) != 0)
+  if ((stun_message_find_string (&msg, 0xff02, str, STUN_MAX_CP) !=
+          STUN_MESSAGE_RETURN_SUCCESS)
    || strcmp (str, "ABCD"))
     fatal ("String test failed");
 
   addrlen = sizeof (addr);
-  if (stun_message_find_addr (&msg, 0xff01, &addr.sa, &addrlen) != EINVAL)
+  if (stun_message_find_addr (&msg, 0xff01, &addr.sa, &addrlen) !=
+      STUN_MESSAGE_RETURN_INVALID)
     fatal ("Too short addres test failed");
   addrlen = sizeof (addr);
-  if (stun_message_find_addr (&msg, 0xff02, &addr.sa, &addrlen) != EAFNOSUPPORT)
+  if (stun_message_find_addr (&msg, 0xff02, &addr.sa, &addrlen) !=
+      STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS)
     fatal ("Unknown address family test failed");
   addrlen = sizeof (addr);
-  if (stun_message_find_addr (&msg, 0xff03, &addr.sa, &addrlen) != EINVAL)
+  if (stun_message_find_addr (&msg, 0xff03, &addr.sa, &addrlen) !=
+      STUN_MESSAGE_RETURN_INVALID)
     fatal ("Too short IPv6 address test failed");
   addrlen = sizeof (addr);
-  if (stun_message_find_addr (&msg, 0xff04, &addr.sa, &addrlen) != 0)
+  if (stun_message_find_addr (&msg, 0xff04, &addr.sa, &addrlen) !=
+      STUN_MESSAGE_RETURN_SUCCESS)
     fatal ("IPv4 address test failed");
   addrlen = sizeof (addr);
-  if (stun_message_find_addr (&msg, 0xff05, &addr.sa, &addrlen) != EINVAL)
+  if (stun_message_find_addr (&msg, 0xff05, &addr.sa, &addrlen) !=
+      STUN_MESSAGE_RETURN_INVALID)
     fatal ("Too big IPv4 address test failed");
   addrlen = sizeof (addr);
-  if (stun_message_find_xor_addr (&msg, 0xff06, &addr.sa, &addrlen)
-   || memcmp (&addr.s6.sin6_addr, "\x20\x01\x0d\xb8""\xde\xad\xbe\xef"
+  if (stun_message_find_xor_addr (&msg, 0xff06, &addr.sa, &addrlen) !=
+      STUN_MESSAGE_RETURN_SUCCESS ||
+      memcmp (&addr.s6.sin6_addr, "\x20\x01\x0d\xb8""\xde\xad\xbe\xef"
                                   "\xde\xfa\xce\xd0""\xfa\xce\xde\xed", 16))
     fatal ("IPv6 address test failed");
 
@@ -568,7 +648,7 @@ static void test_vectors (void)
 
   addrlen = sizeof (ip4);
   if (stun_message_find_xor_addr (&msg, STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
-                          (struct sockaddr *)&ip4, &addrlen) != 0)
+          (struct sockaddr *)&ip4, &addrlen) != STUN_MESSAGE_RETURN_SUCCESS)
     fatal ("Response test vector IPv4 extraction failed");
   if (ip4.sin_family != AF_INET)
     fatal ("Response test vector IPv4 family failed");
@@ -601,7 +681,7 @@ static void test_vectors (void)
 
   addrlen = sizeof (ip6);
   if (stun_message_find_xor_addr (&msg, STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
-                          (struct sockaddr *)&ip6, &addrlen) != 0)
+          (struct sockaddr *)&ip6, &addrlen) != STUN_MESSAGE_RETURN_SUCCESS)
     fatal ("Response test vector IPv6 extraction failed");
   if (ip6.sin6_family != AF_INET6)
     fatal ("Response test vector IPv6 family failed");

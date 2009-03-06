@@ -26,7 +26,6 @@
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -58,10 +57,10 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_stunbdc_OBJECTS = stunbdc.$(OBJEXT)
 stunbdc_OBJECTS = $(am_stunbdc_OBJECTS)
-stunbdc_DEPENDENCIES = ../libstun.la
+stunbdc_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 am_stund_OBJECTS = stund.$(OBJEXT)
 stund_OBJECTS = $(am_stund_OBJECTS)
-stund_DEPENDENCIES = ../libstun.la
+stund_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -79,6 +78,7 @@ DIST_SOURCES = $(stunbdc_SOURCES) $(stund_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+pkgincludedir = $(includedir)/nice
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AR = @AR@
@@ -117,6 +117,8 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBNICE_CFLAGS = @LIBNICE_CFLAGS@
+LIBNICE_LT_LDFLAGS = @LIBNICE_LT_LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBRT = @LIBRT@
 LIBS = @LIBS@
@@ -126,8 +128,6 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
-NICE_CFLAGS = @NICE_CFLAGS@
-NICE_LT_LDFLAGS = @NICE_LT_LDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -201,7 +201,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ERROR_CFLAGS = \
-	$(NICE_CFLAGS) \
+	$(LIBNICE_CFLAGS) \
 	-Wextra \
 	-Wundef \
 	-Wnested-externs \
@@ -219,9 +219,9 @@ CLEANFILES = *.gcno *.gcda
 AM_CFLAGS = -std=gnu99 $(ERROR_CFLAGS)
 AM_CPPFLAGS = -I$(top_srcdir) 
 stund_SOURCES = stund.c stund.h
-stund_LDADD = ../libstun.la
+stund_LDADD = $(top_builddir)/stun/libstun.la
 stunbdc_SOURCES = stunbdc.c 
-stunbdc_LDADD = ../libstun.la
+stunbdc_LDADD = $(top_builddir)/stun/libstun.la
 all: all-am
 
 .SUFFIXES:

@@ -53,7 +53,7 @@
 #include <sys/types.h>
 
 
-/**
+/*
  * Initial STUN timeout (milliseconds). The spec says it should be 100ms,
  * but that's way too short for most types of wireless Internet access.
  */
@@ -69,7 +69,7 @@
 #endif
 
 
-/**
+/*
  * Clock used throughout the STUN code.
  * STUN requires a monotonic 1kHz clock to operate properly.
  */
@@ -118,14 +118,14 @@ static void add_delay (struct timeval *ts, unsigned delay)
 }
 
 
-void stun_timer_start (stun_timer_t *timer)
+void stun_timer_start (StunTimer *timer)
 {
   stun_gettime (&timer->deadline);
   add_delay (&timer->deadline, timer->delay = STUN_INIT_TIMEOUT);
 }
 
 
-void stun_timer_start_reliable (stun_timer_t *timer)
+void stun_timer_start_reliable (StunTimer *timer)
 {
   stun_gettime (&timer->deadline);
   add_delay (&timer->deadline, timer->delay = STUN_RELIABLE_TIMEOUT);
@@ -133,7 +133,7 @@ void stun_timer_start_reliable (stun_timer_t *timer)
 
 
 
-unsigned stun_timer_remainder (const stun_timer_t *timer)
+unsigned stun_timer_remainder (const StunTimer *timer)
 {
   unsigned delay;
   struct timeval now;
@@ -152,16 +152,17 @@ unsigned stun_timer_remainder (const stun_timer_t *timer)
 }
 
 
-int stun_timer_refresh (stun_timer_t *timer)
+StunUsageTimerReturn stun_timer_refresh (StunTimer *timer)
 {
   unsigned delay = stun_timer_remainder (timer);
   if (delay == 0)
   {
     if (timer->delay >= STUN_END_TIMEOUT)
-      return -1;
+      return STUN_USAGE_TIMER_RETURN_TIMEOUT;
 
     add_delay (&timer->deadline, timer->delay *= 2);
+    return STUN_USAGE_TIMER_RETURN_RETRANSMIT;
   }
 
-  return delay;
+  return STUN_USAGE_TIMER_RETURN_SUCCESS;
 }

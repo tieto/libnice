@@ -9,12 +9,20 @@ NiceAddress
 
 </para>
 
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
 
+
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT NiceAddress ##### -->
+<para>
+
+</para>
 
 
 <!-- ##### MACRO NICE_ADDRESS_STRING_LEN ##### -->
@@ -22,12 +30,6 @@ NiceAddress
 
 </para>
 
-
-
-<!-- ##### STRUCT NiceAddress ##### -->
-<para>
-
-</para>
 
 
 <!-- ##### FUNCTION nice_address_init ##### -->

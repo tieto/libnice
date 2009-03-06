@@ -1,6 +1,6 @@
 
 ERROR_CFLAGS = \
-	$(NICE_CFLAGS) \
+	$(LIBNICE_CFLAGS) \
 	-Wextra \
 	-Wundef \
 	-Wnested-externs \
@@ -15,6 +15,9 @@ ERROR_CFLAGS = \
 # -Wold-style-definition -Winline -Wunreachable-code
 
 CLEANFILES = *.gcno *.gcda
+
+pkgincludedir = $(includedir)/nice
+
 
 check-valgrind:
 	$(MAKE) TESTS_ENVIRONMENT="sh $$(cd "$(top_srcdir)" && pwd)/scripts/valgrind.sh" check

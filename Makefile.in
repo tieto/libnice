@@ -24,7 +24,6 @@
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
-pkgincludedir = $(includedir)/@PACKAGE@
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -79,6 +78,7 @@ DIST_ARCHIVES = $(distdir).tar.gz
 GZIP_ENV = --best
 distuninstallcheck_listfiles = find . -type f -print
 distcleancheck_listfiles = find . -type f -print
+pkgincludedir = $(includedir)/nice
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AR = @AR@
@@ -117,6 +117,8 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBNICE_CFLAGS = @LIBNICE_CFLAGS@
+LIBNICE_LT_LDFLAGS = @LIBNICE_LT_LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBRT = @LIBRT@
 LIBS = @LIBS@
@@ -126,8 +128,6 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
-NICE_CFLAGS = @NICE_CFLAGS@
-NICE_LT_LDFLAGS = @NICE_LT_LDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -201,7 +201,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ERROR_CFLAGS = \
-	$(NICE_CFLAGS) \
+	$(LIBNICE_CFLAGS) \
 	-Wextra \
 	-Wundef \
 	-Wnested-externs \
@@ -222,7 +222,8 @@ ALWAYS_SUBDIRS = \
 	random \
 	agent \
 	nice \
-	docs
+	docs \
+	tests
 
 SUBDIRS = $(ALWAYS_SUBDIRS) $(am__append_1)
 DIST_SUBDIRS = $(ALWAYS_SUBDIRS) gst

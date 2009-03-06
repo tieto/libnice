@@ -86,6 +86,7 @@ nice_socket_free (NiceSocket *sock);
 #include "tcp-bsd.h"
 #include "pseudossl.h"
 #include "socks5.h"
+#include "http.h"
 #include "turn.h"
 #include "tcp-turn.h"
 

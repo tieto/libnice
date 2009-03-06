@@ -36,7 +36,7 @@
 #ifndef STUN_UTILS_H
 # define STUN_UTILS_H 1
 
-/**
+/*
  * @file utils.h
  * @brief STUN client generic utility functions
  */
@@ -55,39 +55,23 @@
 extern "C" {
 # endif
 
-
-int sockaddrcmp (const struct sockaddr *a, const struct sockaddr *b);
-
-bool stun_optional (uint16_t t);
-
 size_t stun_padding (size_t l);
 
 size_t stun_align (size_t l);
 
 uint16_t stun_getw (const uint8_t *ptr);
 
-void stun_debug_enable (void);
-void stun_debug_disable (void);
-void stun_debug (const char *fmt, ...);
-void stun_debug_bytes (const void *data, size_t len);
+void *stun_setw (uint8_t *ptr, uint16_t value);
 
-int stun_xor_address (const StunMessage *msg,
+void stun_set_type (uint8_t *h, StunClass c, StunMethod m);
+
+StunMessageReturn stun_xor_address (const StunMessage *msg,
     struct sockaddr *addr, socklen_t addrlen,
     uint32_t magic_cookie);
 
-int stun_memcmp (const StunMessage *msg, stun_attr_type_t type,
-    const void *data, size_t len);
-
-int stun_strcmp (const StunMessage *msg, stun_attr_type_t type, const char *str);
-
-void *stun_setw (uint8_t *ptr, uint16_t value);
-
-void stun_set_type (uint8_t *h, stun_class_t c, stun_method_t m);
-
-const char *stun_strerror (stun_error_t code);
 
 # ifdef __cplusplus
 }
 # endif
 
-#endif /* !STUN_UTILS_H */
+#endif /* STUN_UTILS_H */

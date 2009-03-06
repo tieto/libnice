@@ -25,12 +25,18 @@ libstun_la_SOURCES = constants.h \
 	rand.c rand.h \
 	stunhmac.c stunhmac.h \
 	utils.c  utils.h \
+	debug.c  debug.h \
 	usages/ice.c usages/ice.h \
 	usages/bind.c usages/bind.h \
 	usages/turn.c usages/turn.h \
-	usages/timer.c usages/timer.h \
-	usages/trans.c usages/trans.h
+	usages/timer.c usages/timer.h
 
 libstun_la_LIBADD = $(LIBRT)
 
 EXTRA_DIST = win32_common.h
+
+libstun_la_includedir=$(includedir)/stun
+libstun_la_include_HEADERS = stunagent.h stunmessage.h win32_common.h debug.h constants.h
+
+libstun_usage_includedir=$(includedir)/stun/usages
+libstun_usage_include_HEADERS = usages/bind.h usages/ice.h usages/turn.h usages/timer.h

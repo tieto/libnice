@@ -22,8 +22,8 @@ Stable, unless otherwise indicated
 <title role="synopsis.title">Synopsis</title>
 
 <synopsis>
-#define             <link linkend="NICE-ADDRESS-STRING-LEN:CAPS">NICE_ADDRESS_STRING_LEN</link>
                     <link linkend="NiceAddress">NiceAddress</link>;
+#define             <link linkend="NICE-ADDRESS-STRING-LEN:CAPS">NICE_ADDRESS_STRING_LEN</link>
 <link linkend="void">void</link>                <link linkend="nice-address-init">nice_address_init</link>                   (<link linkend="NiceAddress">NiceAddress</link> *addr);
 <link linkend="NiceAddress">NiceAddress</link>*        <link linkend="nice-address-new">nice_address_new</link>                    (void);
 <link linkend="void">void</link>                <link linkend="nice-address-free">nice_address_free</link>                   (<link linkend="NiceAddress">NiceAddress</link> *addr);
@@ -70,17 +70,6 @@ or IPv6 address in order to communicate with the <link linkend="NiceAgent"><type
 
 <refsect1 id="libnice-NiceAddress.details" role="details">
 <title role="details.title">Details</title>
-<refsect2 id="NICE-ADDRESS-STRING-LEN:CAPS" role="macro">
-<title>NICE_ADDRESS_STRING_LEN</title>
-<indexterm zone="NICE-ADDRESS-STRING-LEN:CAPS"><primary>NICE_ADDRESS_STRING_LEN</primary></indexterm><programlisting>#define NICE_ADDRESS_STRING_LEN INET6_ADDRSTRLEN
-</programlisting>
-<para>
-The maximum string length representation of an address.
-When using <link linkend="nice-address-to-string"><function>nice_address_to_string()</function></link> make sure the string has a size of
-at least <link linkend="NICE-ADDRESS-STRING-LEN:CAPS"><literal>NICE_ADDRESS_STRING_LEN</literal></link></para>
-<para>
-
-</para></refsect2>
 <refsect2 id="NiceAddress" role="struct">
 <title>NiceAddress</title>
 <indexterm zone="NiceAddress"><primary>NiceAddress</primary></indexterm><programlisting>typedef struct {
@@ -98,6 +87,16 @@ The <link linkend="NiceAddress"><type>NiceAddress</type></link> structure that r
 
 </para><variablelist role="struct">
 </variablelist></refsect2>
+<refsect2 id="NICE-ADDRESS-STRING-LEN:CAPS" role="macro">
+<title>NICE_ADDRESS_STRING_LEN</title>
+<indexterm zone="NICE-ADDRESS-STRING-LEN:CAPS"><primary>NICE_ADDRESS_STRING_LEN</primary></indexterm><programlisting>#define             NICE_ADDRESS_STRING_LEN</programlisting>
+<para>
+The maximum string length representation of an address.
+When using <link linkend="nice-address-to-string"><function>nice_address_to_string()</function></link> make sure the string has a size of
+at least <link linkend="NICE-ADDRESS-STRING-LEN:CAPS"><literal>NICE_ADDRESS_STRING_LEN</literal></link></para>
+<para>
+
+</para></refsect2>
 <refsect2 id="nice-address-init" role="function">
 <title>nice_address_init ()</title>
 <indexterm zone="nice-address-init"><primary>nice_address_init</primary></indexterm><programlisting><link linkend="void">void</link>                nice_address_init                   (<link linkend="NiceAddress">NiceAddress</link> *addr);</programlisting>

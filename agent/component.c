@@ -36,7 +36,7 @@
  * file under either the MPL or the LGPL.
  */
 
-/**
+/*
  * @file component.c
  * @brief ICE component functions
  */
@@ -120,7 +120,7 @@ component_free (Component *cmp)
   g_slice_free (Component, cmp);
 }
 
-/**
+/*
  * Finds a candidate pair that has matching foundation ids.
  *
  * @return TRUE if pair found, pointer to pair stored at 'pair'
@@ -129,7 +129,9 @@ gboolean
 component_find_pair (Component *cmp, NiceAgent *agent, const gchar *lfoundation, const gchar *rfoundation, CandidatePair *pair)
 {
   GSList *i;
-  CandidatePair result = { NULL, NULL, 0 };
+  CandidatePair result;
+
+  memset (&result, 0, sizeof(result));
 
   for (i = cmp->local_candidates; i; i = i->next) {
     NiceCandidate *candidate = i->data;
@@ -157,7 +159,7 @@ component_find_pair (Component *cmp, NiceAgent *agent, const gchar *lfoundation,
   return FALSE;
 }
 
-/**
+/*
  * Resets the component state to that of a ICE restarted
  * session.
  */
@@ -193,7 +195,7 @@ component_restart (Component *cmp)
   return TRUE;
 }
 
-/**
+/*
  * Changes the selected pair for the component to 'pair'. Does not
  * emit the "selected-pair-changed" signal.
  */ 
@@ -203,12 +205,23 @@ void component_update_selected_pair (Component *component, const CandidatePair *
   g_assert (pair);
   nice_debug ("setting SELECTED PAIR for component %u: %s:%s (prio:%lu).", 
 	   component->id, pair->local->foundation, pair->remote->foundation, (long unsigned)pair->priority);
+
+  if (component->selected_pair.keepalive.tick_source != NULL) {
+    g_source_destroy (component->selected_pair.keepalive.tick_source);
+    g_source_unref (component->selected_pair.keepalive.tick_source);
+    component->selected_pair.keepalive.tick_source = NULL;
+  }
+
+  memset (&component->selected_pair, 0, sizeof(CandidatePair));
+
   component->selected_pair.local = pair->local;
   component->selected_pair.remote = pair->remote;
   component->selected_pair.priority = pair->priority;
+
+
 }
 
-/**
+/*
  * Finds a remote candidate with matching address and 
  * transport.
  *
@@ -287,6 +300,13 @@ component_set_selected_remote_candidate (NiceAgent *agent, Component *component,
     }
   }
 
+  if (component->selected_pair.keepalive.tick_source != NULL) {
+    g_source_destroy (component->selected_pair.keepalive.tick_source);
+    g_source_unref (component->selected_pair.keepalive.tick_source);
+    component->selected_pair.keepalive.tick_source = NULL;
+  }
+
+  memset (&component->selected_pair, 0, sizeof(CandidatePair));
   component->selected_pair.local = local;
   component->selected_pair.remote = remote;
   component->selected_pair.priority = priority;

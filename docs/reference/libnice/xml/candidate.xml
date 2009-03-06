@@ -22,12 +22,12 @@ Stable, unless otherwise indicated
 <title role="synopsis.title">Synopsis</title>
 
 <synopsis>
-#define             <link linkend="NICE-CANDIDATE-MAX-FOUNDATION:CAPS">NICE_CANDIDATE_MAX_FOUNDATION</link>
+                    <link linkend="NiceCandidate">NiceCandidate</link>;
 enum                <link linkend="NiceCandidateType">NiceCandidateType</link>;
 enum                <link linkend="NiceCandidateTransport">NiceCandidateTransport</link>;
-enum                <link linkend="NiceRelayType">NiceRelayType</link>;
-                    <link linkend="NiceCandidate">NiceCandidate</link>;
                     <link linkend="TurnServer">TurnServer</link>;
+enum                <link linkend="NiceRelayType">NiceRelayType</link>;
+#define             <link linkend="NICE-CANDIDATE-MAX-FOUNDATION:CAPS">NICE_CANDIDATE_MAX_FOUNDATION</link>
 <link linkend="NiceCandidate">NiceCandidate</link>*      <link linkend="nice-candidate-new">nice_candidate_new</link>                  (<link linkend="NiceCandidateType">NiceCandidateType</link> type);
 <link linkend="void">void</link>                <link linkend="nice-candidate-free">nice_candidate_free</link>                 (<link linkend="NiceCandidate">NiceCandidate</link> *candidate);
 <link linkend="NiceCandidate">NiceCandidate</link>*      <link linkend="nice-candidate-copy">nice_candidate_copy</link>                 (const <link linkend="NiceCandidate">NiceCandidate</link> *candidate);
@@ -57,98 +57,6 @@ understand correctly the concept of ICE candidates.
 
 <refsect1 id="libnice-NiceCandidate.details" role="details">
 <title role="details.title">Details</title>
-<refsect2 id="NICE-CANDIDATE-MAX-FOUNDATION:CAPS" role="macro">
-<title>NICE_CANDIDATE_MAX_FOUNDATION</title>
-<indexterm zone="NICE-CANDIDATE-MAX-FOUNDATION:CAPS"><primary>NICE_CANDIDATE_MAX_FOUNDATION</primary></indexterm><programlisting>#define NICE_CANDIDATE_MAX_FOUNDATION                32+1
-</programlisting>
-<para>
-The maximum size a candidate foundation can have.</para>
-<para>
-
-</para></refsect2>
-<refsect2 id="NiceCandidateType" role="enum">
-<title>enum NiceCandidateType</title>
-<indexterm zone="NiceCandidateType"><primary>NiceCandidateType</primary></indexterm><programlisting>typedef enum
-{
-  NICE_CANDIDATE_TYPE_HOST,
-  NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE,
-  NICE_CANDIDATE_TYPE_PEER_REFLEXIVE,
-  NICE_CANDIDATE_TYPE_RELAYED,
-} NiceCandidateType;
-</programlisting>
-<para>
-An enum represneting the type of a candidate</para>
-<para>
-
-</para><variablelist role="enum">
-<varlistentry id="NICE-CANDIDATE-TYPE-HOST:CAPS" role="constant">
-<term><literal>NICE_CANDIDATE_TYPE_HOST</literal></term>
-<listitem><simpara> A host candidate
-</simpara></listitem>
-</varlistentry>
-<varlistentry id="NICE-CANDIDATE-TYPE-SERVER-REFLEXIVE:CAPS" role="constant">
-<term><literal>NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE</literal></term>
-<listitem><simpara> A server reflexive candidate
-</simpara></listitem>
-</varlistentry>
-<varlistentry id="NICE-CANDIDATE-TYPE-PEER-REFLEXIVE:CAPS" role="constant">
-<term><literal>NICE_CANDIDATE_TYPE_PEER_REFLEXIVE</literal></term>
-<listitem><simpara> A peer reflexive candidate
-</simpara></listitem>
-</varlistentry>
-<varlistentry id="NICE-CANDIDATE-TYPE-RELAYED:CAPS" role="constant">
-<term><literal>NICE_CANDIDATE_TYPE_RELAYED</literal></term>
-<listitem><simpara> A relay candidate
-</simpara></listitem>
-</varlistentry>
-</variablelist></refsect2>
-<refsect2 id="NiceCandidateTransport" role="enum">
-<title>enum NiceCandidateTransport</title>
-<indexterm zone="NiceCandidateTransport"><primary>NiceCandidateTransport</primary></indexterm><programlisting>typedef enum
-{
-  NICE_CANDIDATE_TRANSPORT_UDP,
-} NiceCandidateTransport;
-</programlisting>
-<para>
-An enum representing the type of transport to use</para>
-<para>
-
-</para><variablelist role="enum">
-<varlistentry id="NICE-CANDIDATE-TRANSPORT-UDP:CAPS" role="constant">
-<term><literal>NICE_CANDIDATE_TRANSPORT_UDP</literal></term>
-<listitem><simpara> UDP transport
-</simpara></listitem>
-</varlistentry>
-</variablelist></refsect2>
-<refsect2 id="NiceRelayType" role="enum">
-<title>enum NiceRelayType</title>
-<indexterm zone="NiceRelayType"><primary>NiceRelayType</primary></indexterm><programlisting>typedef enum {
-  NICE_RELAY_TYPE_TURN_UDP,
-  NICE_RELAY_TYPE_TURN_TCP,
-  NICE_RELAY_TYPE_TURN_TLS
-} NiceRelayType;
-</programlisting>
-<para>
-An enum representing the type of relay to use</para>
-<para>
-
-</para><variablelist role="enum">
-<varlistentry id="NICE-RELAY-TYPE-TURN-UDP:CAPS" role="constant">
-<term><literal>NICE_RELAY_TYPE_TURN_UDP</literal></term>
-<listitem><simpara> A TURN relay using UDP
-</simpara></listitem>
-</varlistentry>
-<varlistentry id="NICE-RELAY-TYPE-TURN-TCP:CAPS" role="constant">
-<term><literal>NICE_RELAY_TYPE_TURN_TCP</literal></term>
-<listitem><simpara> A TURN relay using TCP
-</simpara></listitem>
-</varlistentry>
-<varlistentry id="NICE-RELAY-TYPE-TURN-TLS:CAPS" role="constant">
-<term><literal>NICE_RELAY_TYPE_TURN_TLS</literal></term>
-<listitem><simpara> A TURN relay using TLS over TCP
-</simpara></listitem>
-</varlistentry>
-</variablelist></refsect2>
 <refsect2 id="NiceCandidate" role="struct">
 <title>NiceCandidate</title>
 <indexterm zone="NiceCandidate"><primary>NiceCandidate</primary></indexterm><programlisting>typedef struct {
@@ -243,6 +151,60 @@ of type <link linkend="NICE-CANDIDATE-TYPE-RELAYED:CAPS"><literal>NICE_CANDIDATE
 </simpara></listitem>
 </varlistentry>
 </variablelist></refsect2>
+<refsect2 id="NiceCandidateType" role="enum">
+<title>enum NiceCandidateType</title>
+<indexterm zone="NiceCandidateType"><primary>NiceCandidateType</primary></indexterm><programlisting>typedef enum
+{
+  NICE_CANDIDATE_TYPE_HOST,
+  NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE,
+  NICE_CANDIDATE_TYPE_PEER_REFLEXIVE,
+  NICE_CANDIDATE_TYPE_RELAYED,
+} NiceCandidateType;
+</programlisting>
+<para>
+An enum represneting the type of a candidate</para>
+<para>
+
+</para><variablelist role="enum">
+<varlistentry id="NICE-CANDIDATE-TYPE-HOST:CAPS" role="constant">
+<term><literal>NICE_CANDIDATE_TYPE_HOST</literal></term>
+<listitem><simpara> A host candidate
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="NICE-CANDIDATE-TYPE-SERVER-REFLEXIVE:CAPS" role="constant">
+<term><literal>NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE</literal></term>
+<listitem><simpara> A server reflexive candidate
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="NICE-CANDIDATE-TYPE-PEER-REFLEXIVE:CAPS" role="constant">
+<term><literal>NICE_CANDIDATE_TYPE_PEER_REFLEXIVE</literal></term>
+<listitem><simpara> A peer reflexive candidate
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="NICE-CANDIDATE-TYPE-RELAYED:CAPS" role="constant">
+<term><literal>NICE_CANDIDATE_TYPE_RELAYED</literal></term>
+<listitem><simpara> A relay candidate
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2 id="NiceCandidateTransport" role="enum">
+<title>enum NiceCandidateTransport</title>
+<indexterm zone="NiceCandidateTransport"><primary>NiceCandidateTransport</primary></indexterm><programlisting>typedef enum
+{
+  NICE_CANDIDATE_TRANSPORT_UDP,
+} NiceCandidateTransport;
+</programlisting>
+<para>
+An enum representing the type of transport to use</para>
+<para>
+
+</para><variablelist role="enum">
+<varlistentry id="NICE-CANDIDATE-TRANSPORT-UDP:CAPS" role="constant">
+<term><literal>NICE_CANDIDATE_TRANSPORT_UDP</literal></term>
+<listitem><simpara> UDP transport
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
 <refsect2 id="TurnServer" role="struct">
 <title>TurnServer</title>
 <indexterm zone="TurnServer"><primary>TurnServer</primary></indexterm><programlisting>typedef struct {
@@ -278,6 +240,43 @@ A structure to store the TURN relay settings</para>
 </simpara></listitem>
 </varlistentry>
 </variablelist></refsect2>
+<refsect2 id="NiceRelayType" role="enum">
+<title>enum NiceRelayType</title>
+<indexterm zone="NiceRelayType"><primary>NiceRelayType</primary></indexterm><programlisting>typedef enum {
+  NICE_RELAY_TYPE_TURN_UDP,
+  NICE_RELAY_TYPE_TURN_TCP,
+  NICE_RELAY_TYPE_TURN_TLS
+} NiceRelayType;
+</programlisting>
+<para>
+An enum representing the type of relay to use</para>
+<para>
+
+</para><variablelist role="enum">
+<varlistentry id="NICE-RELAY-TYPE-TURN-UDP:CAPS" role="constant">
+<term><literal>NICE_RELAY_TYPE_TURN_UDP</literal></term>
+<listitem><simpara> A TURN relay using UDP
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="NICE-RELAY-TYPE-TURN-TCP:CAPS" role="constant">
+<term><literal>NICE_RELAY_TYPE_TURN_TCP</literal></term>
+<listitem><simpara> A TURN relay using TCP
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="NICE-RELAY-TYPE-TURN-TLS:CAPS" role="constant">
+<term><literal>NICE_RELAY_TYPE_TURN_TLS</literal></term>
+<listitem><simpara> A TURN relay using TLS over TCP
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2 id="NICE-CANDIDATE-MAX-FOUNDATION:CAPS" role="macro">
+<title>NICE_CANDIDATE_MAX_FOUNDATION</title>
+<indexterm zone="NICE-CANDIDATE-MAX-FOUNDATION:CAPS"><primary>NICE_CANDIDATE_MAX_FOUNDATION</primary></indexterm><programlisting>#define             NICE_CANDIDATE_MAX_FOUNDATION</programlisting>
+<para>
+The maximum size a candidate foundation can have.</para>
+<para>
+
+</para></refsect2>
 <refsect2 id="nice-candidate-new" role="function">
 <title>nice_candidate_new ()</title>
 <indexterm zone="nice-candidate-new"><primary>nice_candidate_new</primary></indexterm><programlisting><link linkend="NiceCandidate">NiceCandidate</link>*      nice_candidate_new                  (<link linkend="NiceCandidateType">NiceCandidateType</link> type);</programlisting>
