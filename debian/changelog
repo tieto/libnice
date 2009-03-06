@@ -5,8 +5,9 @@ libnice (0.0.5-1) UNRELEASED; urgency=low
 
   [ Sjoerd Simons ]
   * New Upstream Version
+  * Updates symbol and ship the stun header files
 
- -- Sjoerd Simons <sjoerd@debian.org>  Fri, 06 Mar 2009 16:27:20 +0000
+ -- Sjoerd Simons <sjoerd@debian.org>  Fri, 06 Mar 2009 16:32:27 +0000
 
 libnice (0.0.4-1) unstable; urgency=low
 
