@@ -1,4 +1,4 @@
-libnice (0.0.5-1) UNRELEASED; urgency=low
+libnice (0.0.5-1) unstable; urgency=low
 
   [ Laurent Bigonville ]
   * debian/watch: Fix URL
@@ -7,7 +7,7 @@ libnice (0.0.5-1) UNRELEASED; urgency=low
   * New Upstream Version
   * Updates symbol and ship the stun header files
 
- -- Sjoerd Simons <sjoerd@debian.org>  Fri, 06 Mar 2009 16:32:27 +0000
+ -- Sjoerd Simons <sjoerd@debian.org>  Fri, 06 Mar 2009 16:34:10 +0000
 
 libnice (0.0.4-1) unstable; urgency=low
 
