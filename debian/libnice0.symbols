@@ -41,6 +41,7 @@ libnice.so.0 libnice0 #MINVER#
   stun_agent_build_unknown_attributes_error@Base 0.0.5
   stun_agent_default_validater@Base 0.0.5
   stun_agent_finish_message@Base 0.0.5
+  stun_agent_forget_transaction@Base 0.0.6
   stun_agent_init@Base 0.0.5
   stun_agent_init_error@Base 0.0.5
   stun_agent_init_indication@Base 0.0.5
