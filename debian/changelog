@@ -1,4 +1,4 @@
-libnice (0.0.6-1) UNRELEASED; urgency=low
+libnice (0.0.6-1) unstable; urgency=low
 
   [ Laurent Bigonville ]
   * debian/watch: Fix URL regex (again)
@@ -15,7 +15,7 @@ libnice (0.0.6-1) UNRELEASED; urgency=low
   * debian/dirs: Removed as completely unnecessary.
   * debian/libnice0.symbols: Updated with new upstream release.
 
- -- Jonny Lamb <jonny@debian.org>  Wed, 08 Apr 2009 02:11:01 +0100
+ -- Jonny Lamb <jonny@debian.org>  Wed, 08 Apr 2009 02:11:30 +0100
 
 libnice (0.0.5-1) unstable; urgency=low
 
