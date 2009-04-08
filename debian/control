@@ -20,7 +20,7 @@ Vcs-Browser: http://git.debian.org/?p=pkg-telepathy/libnice.git
 Package: libnice0
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: ICE library
+Description: ICE library (shared library)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
  establish peer-to-peer UDP data streams. It automates the process of
@@ -37,7 +37,7 @@ Package: libnice-dev
 Section: libdevel
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libnice0 (= ${binary:Version})
-Description: ICE library
+Description: ICE library (development files)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
  establish peer-to-peer UDP data streams. It automates the process of
@@ -54,7 +54,7 @@ Package: gstreamer0.10-nice
 Section: net
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: ICE library
+Description: ICE library (GStreamer plugin)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
  establish peer-to-peer UDP data streams. It automates the process of
@@ -71,7 +71,7 @@ Package: libnice-doc
 Section: doc
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: ICE library
+Description: ICE library (documentation)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
  establish peer-to-peer UDP data streams. It automates the process of
