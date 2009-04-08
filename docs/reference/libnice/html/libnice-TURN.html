@@ -8,7 +8,7 @@
 <link rel="up" href="ch04.html" title="STUN usages">
 <link rel="prev" href="libnice-ICE.html" title="ICE">
 <link rel="next" href="libnice-Timer.html" title="Timer">
-<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="part" href="pt01.html" title="Part I. ICE Library">
 <link rel="chapter" href="ch01.html" title="">
@@ -26,9 +26,11 @@
 <th width="100%" align="center">libnice Reference Manual</th>
 <td><a accesskey="n" href="libnice-Timer.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
-<tr><td colspan="5" class="shortcuts"><nobr><a href="#libnice-TURN.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#libnice-TURN.description" class="shortcut">Description</a></nobr></td></tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libnice-TURN.synopsis" class="shortcut">Top</a>
+                 | 
+                <a href="#libnice-TURN.description" class="shortcut">Description</a>
+</td></tr>
 </table>
 <div class="refentry" lang="en">
 <a name="libnice-TURN"></a><div class="titlepage"></div>
@@ -76,7 +78,7 @@ size_t              <a class="link" href="libnice-TURN.html#stun-usage-turn-crea
                                                          uint8_t *password,
                                                          size_t password_len,
                                                          <a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility">StunUsageTurnCompatibility</a> compatibility);
-<a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a> <a class="link" href="libnice-TURN.html#stun-usage-turn-process" title="stun_usage_turn_process ()">stun_usage_turn_process</a>             (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
+<a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a>  <a class="link" href="libnice-TURN.html#stun-usage-turn-process" title="stun_usage_turn_process ()">stun_usage_turn_process</a>            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          struct sockaddr *relay_addr,
                                                          socklen_t *relay_addrlen,
                                                          struct sockaddr *addr,
@@ -86,7 +88,7 @@ size_t              <a class="link" href="libnice-TURN.html#stun-usage-turn-crea
                                                          uint32_t *bandwidth,
                                                          uint32_t *lifetime,
                                                          <a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility">StunUsageTurnCompatibility</a> compatibility);
-<a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a> <a class="link" href="libnice-TURN.html#stun-usage-turn-refresh-process" title="stun_usage_turn_refresh_process ()">stun_usage_turn_refresh_process</a>     (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
+<a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a>  <a class="link" href="libnice-TURN.html#stun-usage-turn-refresh-process" title="stun_usage_turn_refresh_process ()">stun_usage_turn_refresh_process</a>    (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          uint32_t *lifetime,
                                                          <a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility">StunUsageTurnCompatibility</a> compatibility);
 </pre>
@@ -99,7 +101,6 @@ requests and responses used for TURN. The API allows you to create a new
 allocation or refresh an existing one as well as to parse a response to
 an allocate or refresh request.</p>
 <p>
-
 </p>
 </div>
 <div class="refsect1" lang="en">
@@ -115,25 +116,24 @@ an allocate or refresh request.</p>
 <p>
 Specifies which TURN specification compatibility to use</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-COMPATIBILITY-DRAFT9--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</code></span></p></td>
 <td> Use the specification compatible with
 TURN Draft 09
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-COMPATIBILITY-GOOGLE:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_COMPATIBILITY_GOOGLE</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-COMPATIBILITY-GOOGLE--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_COMPATIBILITY_GOOGLE</code></span></p></td>
 <td> Use the specification compatible with
 Google Talk's relay server
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-COMPATIBILITY-MSN:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_COMPATIBILITY_MSN</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-COMPATIBILITY-MSN--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_COMPATIBILITY_MSN</code></span></p></td>
 <td> Use the specification compatible with
 MSN TURN servers
 </td>
@@ -154,23 +154,22 @@ MSN TURN servers
 This enum is used to specify which port configuration you want when creating
 a new Allocation</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-REQUEST-PORT-NORMAL:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_REQUEST_PORT_NORMAL</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-REQUEST-PORT-NORMAL--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_REQUEST_PORT_NORMAL</code></span></p></td>
 <td> Request a normal port
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-REQUEST-PORT-EVEN:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_REQUEST_PORT_EVEN</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-REQUEST-PORT-EVEN--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_REQUEST_PORT_EVEN</code></span></p></td>
 <td> Request an even port
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-REQUEST-PORT-EVEN-AND-RESERVE:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_REQUEST_PORT_EVEN_AND_RESERVE</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-REQUEST-PORT-EVEN-AND-RESERVE--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_REQUEST_PORT_EVEN_AND_RESERVE</code></span></p></td>
 <td> Request an even port and
 reserve the next higher port
 </td>
@@ -194,35 +193,34 @@ Return value of <a class="link" href="libnice-TURN.html#stun-usage-turn-process"
 <a class="link" href="libnice-TURN.html#stun-usage-turn-refresh-process" title="stun_usage_turn_refresh_process ()"><code class="function">stun_usage_turn_refresh_process()</code></a> which allows you to see what status the
 function call returned.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-RETURN-RELAY-SUCCESS:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_RELAY_SUCCESS</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-RETURN-RELAY-SUCCESS--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_RELAY_SUCCESS</code></span></p></td>
 <td> The response was successful and a relay
 address is provided
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-RETURN-MAPPED-SUCCESS:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_MAPPED_SUCCESS</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-RETURN-MAPPED-SUCCESS--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_MAPPED_SUCCESS</code></span></p></td>
 <td> The response was successful and a
 relay address as well as a mapped address are provided
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-RETURN-ERROR:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_ERROR</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-RETURN-ERROR--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_ERROR</code></span></p></td>
 <td> The response resulted in an error
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-RETURN-INVALID:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_INVALID</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-RETURN-INVALID--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_INVALID</code></span></p></td>
 <td> The response is not a valid response
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-USAGE-TURN-RETURN-ALTERNATE-SERVER:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_ALTERNATE_SERVER</code></span></p></td>
+<td><p><a name="STUN-USAGE-TURN-RETURN-ALTERNATE-SERVER--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_ALTERNATE_SERVER</code></span></p></td>
 <td> The server requests the message
 to be sent to an alternate server
 </td>
@@ -249,7 +247,6 @@ to be sent to an alternate server
 <p>
 Create a new TURN Allocation request</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -288,7 +285,7 @@ allocation which reserved two ports
 <td><p><span class="term"><em class="parameter"><code>request_ports</code></em> :</span></p></td>
 <td> Specify how you want to request the allocated port(s).
 This is only used if the compatibility is set to
-<a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS"><span class="type">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</span></a>
+<a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9--CAPS"><span class="type">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</span></a>
 <p>See <a class="link" href="libnice-TURN.html#StunUsageTurnRequestPorts" title="enum StunUsageTurnRequestPorts"><span class="type">StunUsageTurnRequestPorts</span></a> </p>
 </td>
 </tr>
@@ -297,7 +294,7 @@ This is only used if the compatibility is set to
 <td> The bandwidth to request from the server for the allocation. If
 this value is negative, then no BANDWIDTH attribute is added to the request.
 This is only used if the compatibility is set to
-<a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS"><span class="type">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</span></a>
+<a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9--CAPS"><span class="type">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</span></a>
 </td>
 </tr>
 <tr>
@@ -305,7 +302,7 @@ This is only used if the compatibility is set to
 <td> The lifetime of the allocation to request from the server. If
 this value is negative, then no LIFETIME attribute is added to the request.
 This is only used if the compatibility is set to
-<a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS"><span class="type">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</span></a>
+<a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9--CAPS"><span class="type">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</span></a>
 </td>
 </tr>
 <tr>
@@ -359,7 +356,6 @@ request
 <p>
 Create a new TURN Refresh request</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -397,7 +393,7 @@ long term credentials (using the REALM and NONCE attributes)
 <td> The lifetime of the allocation to request from the server. If
 this value is negative, then no LIFETIME attribute is added to the request.
 This is only used if the compatibility is set to
-<a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS"><span class="type">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</span></a>
+<a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9--CAPS"><span class="type">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</span></a>
 </td>
 </tr>
 <tr>
@@ -437,7 +433,7 @@ request
 <hr>
 <div class="refsect2" lang="en">
 <a name="stun-usage-turn-process"></a><h3>stun_usage_turn_process ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a> stun_usage_turn_process             (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
+<pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a>  stun_usage_turn_process            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          struct sockaddr *relay_addr,
                                                          socklen_t *relay_addrlen,
                                                          struct sockaddr *addr,
@@ -451,7 +447,6 @@ request
 Process a TURN Allocate response and extract the necessary information from
 the message</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -477,7 +472,7 @@ that the TURN server allocated for us
 <td> A pointer to a <span class="type">sockaddr</span> structure to fill with the mapped address
 that the STUN response contains.
 This argument will only be filled if the return value
-of the function is <a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-RETURN-MAPPED-SUCCESS:CAPS"><span class="type">STUN_USAGE_TURN_RETURN_MAPPED_SUCCESS</span></a>
+of the function is <a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-RETURN-MAPPED-SUCCESS--CAPS"><span class="type">STUN_USAGE_TURN_RETURN_MAPPED_SUCCESS</span></a>
 </td>
 </tr>
 <tr>
@@ -491,7 +486,7 @@ of the function is <a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-RETUR
 address of an alternate server to which we should send our new STUN
 Allocate request, in case the currently used TURN server is requesting the use
 of an alternate server. This argument will only be filled if the return value
-of the function is <a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-RETURN-ALTERNATE-SERVER:CAPS"><span class="type">STUN_USAGE_TURN_RETURN_ALTERNATE_SERVER</span></a>
+of the function is <a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-RETURN-ALTERNATE-SERVER--CAPS"><span class="type">STUN_USAGE_TURN_RETURN_ALTERNATE_SERVER</span></a>
 </td>
 </tr>
 <tr>
@@ -526,14 +521,13 @@ response
 <hr>
 <div class="refsect2" lang="en">
 <a name="stun-usage-turn-refresh-process"></a><h3>stun_usage_turn_refresh_process ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a> stun_usage_turn_refresh_process     (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
+<pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a>  stun_usage_turn_refresh_process    (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          uint32_t *lifetime,
                                                          <a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility">StunUsageTurnCompatibility</a> compatibility);</pre>
 <p>
 Process a TURN Refresh response and extract the necessary information from
 the message</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -556,7 +550,7 @@ response
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> A <a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="type">StunUsageTurnReturn</span></a> value. A <a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-RETURN-RELAY-SUCCESS:CAPS"><span class="type">STUN_USAGE_TURN_RETURN_RELAY_SUCCESS</span></a>
+<td> A <a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="type">StunUsageTurnReturn</span></a> value. A <a class="link" href="libnice-TURN.html#STUN-USAGE-TURN-RETURN-RELAY-SUCCESS--CAPS"><span class="type">STUN_USAGE_TURN_RETURN_RELAY_SUCCESS</span></a>
 means the Refresh was successful, but no relay address is given (kept the same
 as for the original allocation)
 </td>
@@ -568,6 +562,6 @@ as for the original allocation)
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.10</div>
+          Generated by GTK-Doc V1.11</div>
 </body>
 </html>

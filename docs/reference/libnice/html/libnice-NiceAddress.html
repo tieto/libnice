@@ -8,7 +8,7 @@
 <link rel="up" href="ch01.html" title="">
 <link rel="prev" href="NiceAgent.html" title="NiceAgent">
 <link rel="next" href="libnice-NiceCandidate.html" title="NiceCandidate">
-<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="part" href="pt01.html" title="Part I. ICE Library">
 <link rel="chapter" href="ch01.html" title="">
@@ -26,9 +26,11 @@
 <th width="100%" align="center">libnice Reference Manual</th>
 <td><a accesskey="n" href="libnice-NiceCandidate.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
-<tr><td colspan="5" class="shortcuts"><nobr><a href="#libnice-NiceAddress.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#libnice-NiceAddress.description" class="shortcut">Description</a></nobr></td></tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libnice-NiceAddress.synopsis" class="shortcut">Top</a>
+                 | 
+                <a href="#libnice-NiceAddress.description" class="shortcut">Description</a>
+</td></tr>
 </table>
 <div class="refentry" lang="en">
 <a name="libnice-NiceAddress"></a><div class="titlepage"></div>
@@ -47,49 +49,49 @@ Stable, unless otherwise indicated
 <a name="libnice-NiceAddress.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
                     <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a>;
-#define             <a class="link" href="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN:CAPS" title="NICE_ADDRESS_STRING_LEN">NICE_ADDRESS_STRING_LEN</a>
+#define             <a class="link" href="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN--CAPS" title="NICE_ADDRESS_STRING_LEN">NICE_ADDRESS_STRING_LEN</a>
 void                <a class="link" href="libnice-NiceAddress.html#nice-address-init" title="nice_address_init ()">nice_address_init</a>                   (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
-<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a>*        <a class="link" href="libnice-NiceAddress.html#nice-address-new" title="nice_address_new ()">nice_address_new</a>                    (void);
+<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *       <a class="link" href="libnice-NiceAddress.html#nice-address-new" title="nice_address_new ()">nice_address_new</a>                    (void);
 void                <a class="link" href="libnice-NiceAddress.html#nice-address-free" title="nice_address_free ()">nice_address_free</a>                   (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
-<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a>*        <a class="link" href="libnice-NiceAddress.html#nice-address-dup" title="nice_address_dup ()">nice_address_dup</a>                    (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
+<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *       <a class="link" href="libnice-NiceAddress.html#nice-address-dup" title="nice_address_dup ()">nice_address_dup</a>                    (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
 void                <a class="link" href="libnice-NiceAddress.html#nice-address-set-ipv4" title="nice_address_set_ipv4 ()">nice_address_set_ipv4</a>               (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint32"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint32"
 >guint32</a> addr_ipv4);
 void                <a class="link" href="libnice-NiceAddress.html#nice-address-set-ipv6" title="nice_address_set_ipv6 ()">nice_address_set_ipv6</a>               (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guchar"
 >guchar</a> *addr_ipv6);
 void                <a class="link" href="libnice-NiceAddress.html#nice-address-set-port" title="nice_address_set_port ()">nice_address_set_port</a>               (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> port);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>               <a class="link" href="libnice-NiceAddress.html#nice-address-get-port" title="nice_address_get_port ()">nice_address_get_port</a>               (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="libnice-NiceAddress.html#nice-address-set-from-string" title="nice_address_set_from_string ()">nice_address_set_from_string</a>        (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *str);
 void                <a class="link" href="libnice-NiceAddress.html#nice-address-set-from-sockaddr" title="nice_address_set_from_sockaddr ()">nice_address_set_from_sockaddr</a>      (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          const struct sockaddr *sin);
 void                <a class="link" href="libnice-NiceAddress.html#nice-address-copy-to-sockaddr" title="nice_address_copy_to_sockaddr ()">nice_address_copy_to_sockaddr</a>       (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          struct sockaddr *sin);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="libnice-NiceAddress.html#nice-address-equal" title="nice_address_equal ()">nice_address_equal</a>                  (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *a,
                                                          const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *b);
 void                <a class="link" href="libnice-NiceAddress.html#nice-address-to-string" title="nice_address_to_string ()">nice_address_to_string</a>              (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *dst);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="libnice-NiceAddress.html#nice-address-is-private" title="nice_address_is_private ()">nice_address_is_private</a>             (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="libnice-NiceAddress.html#nice-address-is-valid" title="nice_address_is_valid ()">nice_address_is_valid</a>               (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
 </pre>
 </div>
@@ -99,7 +101,6 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
 The <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> structure will allow you to easily set/get and modify an IPv4
 or IPv6 address in order to communicate with the <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a>.</p>
 <p>
-
 </p>
 </div>
 <div class="refsect1" lang="en">
@@ -118,7 +119,6 @@ or IPv6 address in order to communicate with the <a class="link" href="NiceAgent
 <p>
 The <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> structure that represents an IPv4 or IPv6 address.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -127,14 +127,14 @@ The <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddre
 </div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="NICE-ADDRESS-STRING-LEN:CAPS"></a><h3>NICE_ADDRESS_STRING_LEN</h3>
-<pre class="programlisting">#define             NICE_ADDRESS_STRING_LEN</pre>
+<a name="NICE-ADDRESS-STRING-LEN--CAPS"></a><h3>NICE_ADDRESS_STRING_LEN</h3>
+<pre class="programlisting">#define NICE_ADDRESS_STRING_LEN INET6_ADDRSTRLEN
+</pre>
 <p>
 The maximum string length representation of an address.
 When using <a class="link" href="libnice-NiceAddress.html#nice-address-to-string" title="nice_address_to_string ()"><code class="function">nice_address_to_string()</code></a> make sure the string has a size of
-at least <a class="link" href="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN:CAPS" title="NICE_ADDRESS_STRING_LEN"><code class="literal">NICE_ADDRESS_STRING_LEN</code></a></p>
+at least <a class="link" href="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN--CAPS" title="NICE_ADDRESS_STRING_LEN"><code class="literal">NICE_ADDRESS_STRING_LEN</code></a></p>
 <p>
-
 </p>
 </div>
 <hr>
@@ -144,7 +144,6 @@ at least <a class="link" href="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN:
 <p>
 Initialize a <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> into an undefined address</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -158,12 +157,11 @@ Initialize a <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="
 <hr>
 <div class="refsect2" lang="en">
 <a name="nice-address-new"></a><h3>nice_address_new ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a>*        nice_address_new                    (void);</pre>
+<pre class="programlisting"><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *       nice_address_new                    (void);</pre>
 <p>
 Create a new <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> with undefined address
 You must free it with <a class="link" href="libnice-NiceAddress.html#nice-address-free" title="nice_address_free ()"><code class="function">nice_address_free()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -181,7 +179,6 @@ You must free it with <a class="link" href="libnice-NiceAddress.html#nice-addres
 <p>
 Frees a <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> created with <a class="link" href="libnice-NiceAddress.html#nice-address-new" title="nice_address_new ()"><code class="function">nice_address_new()</code></a> or <a class="link" href="libnice-NiceAddress.html#nice-address-dup" title="nice_address_dup ()"><code class="function">nice_address_dup()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -195,11 +192,10 @@ Frees a <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceA
 <hr>
 <div class="refsect2" lang="en">
 <a name="nice-address-dup"></a><h3>nice_address_dup ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a>*        nice_address_dup                    (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);</pre>
+<pre class="programlisting"><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *       nice_address_dup                    (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);</pre>
 <p>
 Creates a new <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> with the same address as <em class="parameter"><code>addr</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -222,7 +218,7 @@ Creates a new <a class="link" href="libnice-NiceAddress.html#NiceAddress" title=
 <a name="nice-address-set-ipv4"></a><h3>nice_address_set_ipv4 ()</h3>
 <pre class="programlisting">void                nice_address_set_ipv4               (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint32"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint32"
 >guint32</a> addr_ipv4);</pre>
 <p>
 Set <em class="parameter"><code>addr</code></em> to an IPv4 address using the data from <em class="parameter"><code>addr_ipv4</code></em>
@@ -237,7 +233,6 @@ Set <em class="parameter"><code>addr</code></em> to an IPv4 address using the da
   </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -260,7 +255,7 @@ Set <em class="parameter"><code>addr</code></em> to an IPv4 address using the da
 <a name="nice-address-set-ipv6"></a><h3>nice_address_set_ipv6 ()</h3>
 <pre class="programlisting">void                nice_address_set_ipv6               (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guchar"
 >guchar</a> *addr_ipv6);</pre>
 <p>
 Set <em class="parameter"><code>addr</code></em> to an IPv6 address using the data from <em class="parameter"><code>addr_ipv6</code></em>
@@ -275,7 +270,6 @@ Set <em class="parameter"><code>addr</code></em> to an IPv6 address using the da
   </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -298,12 +292,11 @@ Set <em class="parameter"><code>addr</code></em> to an IPv6 address using the da
 <a name="nice-address-set-port"></a><h3>nice_address_set_port ()</h3>
 <pre class="programlisting">void                nice_address_set_port               (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> port);</pre>
 <p>
 Set the port of <em class="parameter"><code>addr</code></em> to <em class="parameter"><code>port</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -325,12 +318,11 @@ Set the port of <em class="parameter"><code>addr</code></em> to <em class="param
 <div class="refsect2" lang="en">
 <a name="nice-address-get-port"></a><h3>nice_address_get_port ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>               nice_address_get_port               (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);</pre>
 <p>
 Retreive the port of <em class="parameter"><code>addr</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -352,15 +344,14 @@ Retreive the port of <em class="parameter"><code>addr</code></em></p>
 <div class="refsect2" lang="en">
 <a name="nice-address-set-from-string"></a><h3>nice_address_set_from_string ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_address_set_from_string        (<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *str);</pre>
 <p>
 Sets an IPv4 or IPv6 address from the string <em class="parameter"><code>str</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -378,9 +369,9 @@ Sets an IPv4 or IPv6 address from the string <em class="parameter"><code>str</co
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if success, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> on error
 </td>
 </tr>
@@ -395,7 +386,6 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <p>
 Sets an IPv4 or IPv6 address from the sockaddr structure <em class="parameter"><code>sin</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -421,7 +411,6 @@ Sets an IPv4 or IPv6 address from the sockaddr structure <em class="parameter"><
 <p>
 Fills the sockaddr structure <em class="parameter"><code>sin</code></em> with the address contained in <em class="parameter"><code>addr</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -443,13 +432,12 @@ Fills the sockaddr structure <em class="parameter"><code>sin</code></em> with th
 <div class="refsect2" lang="en">
 <a name="nice-address-equal"></a><h3>nice_address_equal ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_address_equal                  (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *a,
                                                          const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *b);</pre>
 <p>
 Compares two <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> structures to see if they contain the same address</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -467,9 +455,9 @@ Compares two <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if <em class="parameter"><code>a</code></em> and <em class="parameter"><code>b</code></em> are the same address, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> if they are different
 </td>
 </tr>
@@ -481,12 +469,11 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <a name="nice-address-to-string"></a><h3>nice_address_to_string ()</h3>
 <pre class="programlisting">void                nice_address_to_string              (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *dst);</pre>
 <p>
 Transforms the address <em class="parameter"><code>addr</code></em> into a human readable string</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -508,12 +495,11 @@ Transforms the address <em class="parameter"><code>addr</code></em> into a human
 <div class="refsect2" lang="en">
 <a name="nice-address-is-private"></a><h3>nice_address_is_private ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_address_is_private             (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);</pre>
 <p>
 Verifies if the address in <em class="parameter"><code>addr</code></em> is a private address or not</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -526,9 +512,9 @@ Verifies if the address in <em class="parameter"><code>addr</code></em> is a pri
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if <em class="parameter"><code>addr</code></em> is a private address, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
@@ -539,12 +525,11 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <div class="refsect2" lang="en">
 <a name="nice-address-is-valid"></a><h3>nice_address_is_valid ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_address_is_valid               (const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);</pre>
 <p>
 Validate whether the <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> <em class="parameter"><code>addr</code></em> is a valid IPv4 or IPv6 address</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -557,9 +542,9 @@ Validate whether the <a class="link" href="libnice-NiceAddress.html#NiceAddress"
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if <em class="parameter"><code>addr</code></em> is valid, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
@@ -570,6 +555,6 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.10</div>
+          Generated by GTK-Doc V1.11</div>
 </body>
 </html>

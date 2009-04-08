@@ -8,7 +8,7 @@
 <link rel="up" href="ch01.html" title="">
 <link rel="prev" href="libnice-NiceAddress.html" title="NiceAddress">
 <link rel="next" href="ch02.html" title="Libnice helper functions">
-<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="part" href="pt01.html" title="Part I. ICE Library">
 <link rel="chapter" href="ch01.html" title="">
@@ -26,9 +26,11 @@
 <th width="100%" align="center">libnice Reference Manual</th>
 <td><a accesskey="n" href="ch02.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
-<tr><td colspan="5" class="shortcuts"><nobr><a href="#libnice-NiceCandidate.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#libnice-NiceCandidate.description" class="shortcut">Description</a></nobr></td></tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libnice-NiceCandidate.synopsis" class="shortcut">Top</a>
+                 | 
+                <a href="#libnice-NiceCandidate.description" class="shortcut">Description</a>
+</td></tr>
 </table>
 <div class="refentry" lang="en">
 <a name="libnice-NiceCandidate"></a><div class="titlepage"></div>
@@ -51,10 +53,10 @@ enum                <a class="link" href="libnice-NiceCandidate.html#NiceCandida
 enum                <a class="link" href="libnice-NiceCandidate.html#NiceCandidateTransport" title="enum NiceCandidateTransport">NiceCandidateTransport</a>;
                     <a class="link" href="libnice-NiceCandidate.html#TurnServer" title="TurnServer">TurnServer</a>;
 enum                <a class="link" href="libnice-NiceCandidate.html#NiceRelayType" title="enum NiceRelayType">NiceRelayType</a>;
-#define             <a class="link" href="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS" title="NICE_CANDIDATE_MAX_FOUNDATION">NICE_CANDIDATE_MAX_FOUNDATION</a>
-<a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a>*      <a class="link" href="libnice-NiceCandidate.html#nice-candidate-new" title="nice_candidate_new ()">nice_candidate_new</a>                  (<a class="link" href="libnice-NiceCandidate.html#NiceCandidateType" title="enum NiceCandidateType">NiceCandidateType</a> type);
+#define             <a class="link" href="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION--CAPS" title="NICE_CANDIDATE_MAX_FOUNDATION">NICE_CANDIDATE_MAX_FOUNDATION</a>
+<a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *     <a class="link" href="libnice-NiceCandidate.html#nice-candidate-new" title="nice_candidate_new ()">nice_candidate_new</a>                  (<a class="link" href="libnice-NiceCandidate.html#NiceCandidateType" title="enum NiceCandidateType">NiceCandidateType</a> type);
 void                <a class="link" href="libnice-NiceCandidate.html#nice-candidate-free" title="nice_candidate_free ()">nice_candidate_free</a>                 (<a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);
-<a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a>*      <a class="link" href="libnice-NiceCandidate.html#nice-candidate-copy" title="nice_candidate_copy ()">nice_candidate_copy</a>                 (const <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);
+<a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *     <a class="link" href="libnice-NiceCandidate.html#nice-candidate-copy" title="nice_candidate_copy ()">nice_candidate_copy</a>                 (const <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);
 </pre>
 </div>
 <div class="refsect1" lang="en">
@@ -66,7 +68,6 @@ understand correctly the concept of ICE candidates.
 <p>
 [1] http://tools.ietf.org/wg/mmusic/draft-ietf-mmusic-ice/</p>
 <p>
-
 </p>
 </div>
 <div class="refsect1" lang="en">
@@ -101,7 +102,6 @@ A structure to represent an ICE candidate
    </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -128,35 +128,35 @@ A structure to represent an ICE candidate
 </tr>
 <tr>
 <td><p><span class="term"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint32"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint32"
 >guint32</a> <em class="structfield"><code>priority</code></em>;</span></p></td>
 <td> The priority of the candidate <span class="emphasis"><em> see note </em></span>
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> <em class="structfield"><code>stream_id</code></em>;</span></p></td>
 <td> The ID of the stream to which belongs the candidate
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> <em class="structfield"><code>component_id</code></em>;</span></p></td>
 <td> The ID of the component to which belongs the candidate
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> <em class="structfield"><code>foundation</code></em>[NICE_CANDIDATE_MAX_FOUNDATION];</span></p></td>
 <td> The foundation of the candidate
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *<em class="structfield"><code>username</code></em>;</span></p></td>
 <td> The candidate-specific username to use (overrides the one set
 by <code class="function">nice_agent_set_local_credentials()</code> or <a class="link" href="NiceAgent.html#nice-agent-set-remote-credentials" title="nice_agent_set_remote_credentials ()"><code class="function">nice_agent_set_remote_credentials()</code></a>)
@@ -164,7 +164,7 @@ by <code class="function">nice_agent_set_local_credentials()</code> or <a class=
 </tr>
 <tr>
 <td><p><span class="term"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *<em class="structfield"><code>password</code></em>;</span></p></td>
 <td> The candidate-specific password to use (overrides the one set
 by <code class="function">nice_agent_set_local_credentials()</code> or <a class="link" href="NiceAgent.html#nice-agent-set-remote-credentials" title="nice_agent_set_remote_credentials ()"><code class="function">nice_agent_set_remote_credentials()</code></a>)
@@ -173,7 +173,7 @@ by <code class="function">nice_agent_set_local_credentials()</code> or <a class=
 <tr>
 <td><p><span class="term"><a class="link" href="libnice-NiceCandidate.html#TurnServer" title="TurnServer">TurnServer</a> *<em class="structfield"><code>turn</code></em>;</span></p></td>
 <td> The <a class="link" href="libnice-NiceCandidate.html#TurnServer" title="TurnServer"><span class="type">TurnServer</span></a> settings if the candidate is
-of type <a class="link" href="libnice-NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAPS"><code class="literal">NICE_CANDIDATE_TYPE_RELAYED</code></a>
+of type <a class="link" href="libnice-NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED--CAPS"><code class="literal">NICE_CANDIDATE_TYPE_RELAYED</code></a>
 </td>
 </tr>
 <tr>
@@ -198,28 +198,27 @@ of type <a class="link" href="libnice-NiceCandidate.html#NICE-CANDIDATE-TYPE-REL
 <p>
 An enum represneting the type of a candidate</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="NICE-CANDIDATE-TYPE-HOST:CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TYPE_HOST</code></span></p></td>
+<td><p><a name="NICE-CANDIDATE-TYPE-HOST--CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TYPE_HOST</code></span></p></td>
 <td> A host candidate
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-CANDIDATE-TYPE-SERVER-REFLEXIVE:CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE</code></span></p></td>
+<td><p><a name="NICE-CANDIDATE-TYPE-SERVER-REFLEXIVE--CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE</code></span></p></td>
 <td> A server reflexive candidate
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-CANDIDATE-TYPE-PEER-REFLEXIVE:CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TYPE_PEER_REFLEXIVE</code></span></p></td>
+<td><p><a name="NICE-CANDIDATE-TYPE-PEER-REFLEXIVE--CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TYPE_PEER_REFLEXIVE</code></span></p></td>
 <td> A peer reflexive candidate
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-CANDIDATE-TYPE-RELAYED:CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TYPE_RELAYED</code></span></p></td>
+<td><p><a name="NICE-CANDIDATE-TYPE-RELAYED--CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TYPE_RELAYED</code></span></p></td>
 <td> A relay candidate
 </td>
 </tr>
@@ -237,12 +236,11 @@ An enum represneting the type of a candidate</p>
 <p>
 An enum representing the type of transport to use</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
-<td><p><a name="NICE-CANDIDATE-TRANSPORT-UDP:CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TRANSPORT_UDP</code></span></p></td>
+<td><p><a name="NICE-CANDIDATE-TRANSPORT-UDP--CAPS"></a><span class="term"><code class="literal">NICE_CANDIDATE_TRANSPORT_UDP</code></span></p></td>
 <td> UDP transport
 </td>
 </tr></tbody>
@@ -261,7 +259,6 @@ An enum representing the type of transport to use</p>
 <p>
 A structure to store the TURN relay settings</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -273,14 +270,14 @@ A structure to store the TURN relay settings</p>
 </tr>
 <tr>
 <td><p><span class="term"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *<em class="structfield"><code>username</code></em>;</span></p></td>
 <td> The TURN username
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *<em class="structfield"><code>password</code></em>;</span></p></td>
 <td> The TURN password
 </td>
@@ -305,23 +302,22 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
 <p>
 An enum representing the type of relay to use</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="NICE-RELAY-TYPE-TURN-UDP:CAPS"></a><span class="term"><code class="literal">NICE_RELAY_TYPE_TURN_UDP</code></span></p></td>
+<td><p><a name="NICE-RELAY-TYPE-TURN-UDP--CAPS"></a><span class="term"><code class="literal">NICE_RELAY_TYPE_TURN_UDP</code></span></p></td>
 <td> A TURN relay using UDP
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-RELAY-TYPE-TURN-TCP:CAPS"></a><span class="term"><code class="literal">NICE_RELAY_TYPE_TURN_TCP</code></span></p></td>
+<td><p><a name="NICE-RELAY-TYPE-TURN-TCP--CAPS"></a><span class="term"><code class="literal">NICE_RELAY_TYPE_TURN_TCP</code></span></p></td>
 <td> A TURN relay using TCP
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-RELAY-TYPE-TURN-TLS:CAPS"></a><span class="term"><code class="literal">NICE_RELAY_TYPE_TURN_TLS</code></span></p></td>
+<td><p><a name="NICE-RELAY-TYPE-TURN-TLS--CAPS"></a><span class="term"><code class="literal">NICE_RELAY_TYPE_TURN_TLS</code></span></p></td>
 <td> A TURN relay using TLS over TCP
 </td>
 </tr>
@@ -330,22 +326,21 @@ An enum representing the type of relay to use</p>
 </div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="NICE-CANDIDATE-MAX-FOUNDATION:CAPS"></a><h3>NICE_CANDIDATE_MAX_FOUNDATION</h3>
-<pre class="programlisting">#define             NICE_CANDIDATE_MAX_FOUNDATION</pre>
+<a name="NICE-CANDIDATE-MAX-FOUNDATION--CAPS"></a><h3>NICE_CANDIDATE_MAX_FOUNDATION</h3>
+<pre class="programlisting">#define NICE_CANDIDATE_MAX_FOUNDATION                32+1
+</pre>
 <p>
 The maximum size a candidate foundation can have.</p>
 <p>
-
 </p>
 </div>
 <hr>
 <div class="refsect2" lang="en">
 <a name="nice-candidate-new"></a><h3>nice_candidate_new ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a>*      nice_candidate_new                  (<a class="link" href="libnice-NiceCandidate.html#NiceCandidateType" title="enum NiceCandidateType">NiceCandidateType</a> type);</pre>
+<pre class="programlisting"><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *     nice_candidate_new                  (<a class="link" href="libnice-NiceCandidate.html#NiceCandidateType" title="enum NiceCandidateType">NiceCandidateType</a> type);</pre>
 <p>
 Creates a new candidate. Must be freed with <a class="link" href="libnice-NiceCandidate.html#nice-candidate-free" title="nice_candidate_free ()"><code class="function">nice_candidate_free()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -370,7 +365,6 @@ Creates a new candidate. Must be freed with <a class="link" href="libnice-NiceCa
 <p>
 Frees a <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -384,11 +378,10 @@ Frees a <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="N
 <hr>
 <div class="refsect2" lang="en">
 <a name="nice-candidate-copy"></a><h3>nice_candidate_copy ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a>*      nice_candidate_copy                 (const <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);</pre>
+<pre class="programlisting"><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *     nice_candidate_copy                 (const <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);</pre>
 <p>
 Makes a copy of a <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -409,11 +402,11 @@ Makes a copy of a <a class="link" href="libnice-NiceCandidate.html#NiceCandidate
 </div>
 <div class="refsect1" lang="en">
 <a name="libnice-NiceCandidate.see-also"></a><h2>See Also</h2>
-<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a>
+#NiceAddress
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.10</div>
+          Generated by GTK-Doc V1.11</div>
 </body>
 </html>

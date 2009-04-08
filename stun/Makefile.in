@@ -217,6 +217,7 @@ sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = . tools tests
@@ -236,7 +237,7 @@ ERROR_CFLAGS = \
 
 # -Wold-style-definition -Winline -Wunreachable-code
 CLEANFILES = *.gcno *.gcda
-AM_CFLAGS = -std=gnu99 $(ERROR_CFLAGS)
+AM_CFLAGS = -std=gnu99 -DG_LOG_DOMAIN=\"libnice-stun\" $(ERROR_CFLAGS)
 AM_CPPFLAGS = -I$(top_srcdir)
 noinst_LTLIBRARIES = libstun.la
 libstun_la_SOURCES = constants.h \

@@ -40,8 +40,7 @@ host_triplet = @host@
 DIST_COMMON = $(dist_check_SCRIPTS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/common.mk
 check_PROGRAMS = test-parse$(EXEEXT) test-format$(EXEEXT) \
-	test-bind$(EXEEXT) test-turn$(EXEEXT) test-conncheck$(EXEEXT) \
-	test-hmac$(EXEEXT)
+	test-bind$(EXEEXT) test-conncheck$(EXEEXT) test-hmac$(EXEEXT)
 subdir = stun/tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -70,10 +69,6 @@ test_parse_SOURCES = test-parse.c
 test_parse_OBJECTS = test-parse.$(OBJEXT)
 test_parse_LDADD = $(LDADD)
 test_parse_DEPENDENCIES = $(top_builddir)/stun/libstun.la
-test_turn_SOURCES = test-turn.c
-test_turn_OBJECTS = test-turn.$(OBJEXT)
-test_turn_LDADD = $(LDADD)
-test_turn_DEPENDENCIES = $(top_builddir)/stun/libstun.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -87,9 +82,9 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = test-bind.c test-conncheck.c test-format.c test-hmac.c \
-	test-parse.c test-turn.c
+	test-parse.c
 DIST_SOURCES = test-bind.c test-conncheck.c test-format.c test-hmac.c \
-	test-parse.c test-turn.c
+	test-parse.c
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -213,6 +208,7 @@ sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ERROR_CFLAGS = \
@@ -291,9 +287,6 @@ test-hmac$(EXEEXT): $(test_hmac_OBJECTS) $(test_hmac_DEPENDENCIES)
 test-parse$(EXEEXT): $(test_parse_OBJECTS) $(test_parse_DEPENDENCIES) 
 	@rm -f test-parse$(EXEEXT)
 	$(LINK) $(test_parse_OBJECTS) $(test_parse_LDADD) $(LIBS)
-test-turn$(EXEEXT): $(test_turn_OBJECTS) $(test_turn_DEPENDENCIES) 
-	@rm -f test-turn$(EXEEXT)
-	$(LINK) $(test_turn_OBJECTS) $(test_turn_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -306,7 +299,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-format.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-hmac.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-parse.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-turn.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

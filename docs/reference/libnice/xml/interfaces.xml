@@ -11,7 +11,6 @@
 <refnamediv>
 <refname>Network interfaces discovery</refname>
 <refpurpose>Utility functions to discover local network interfaces</refpurpose>
-<!--[<xref linkend="desc" endterm="desc.title"/>]-->
 </refnamediv>
 <refsect1 id="libnice-Network-interfaces-discovery.stability-level">
 <title>Stability Level</title>
@@ -25,11 +24,11 @@ Stable, unless otherwise indicated
 
 #include &lt;interfaces.h&gt;
 
-<link linkend="gchar">gchar</link>*              <link linkend="nice-interfaces-get-ip-for-interface">nice_interfaces_get_ip_for_interface</link>
+<link linkend="gchar">gchar</link> *             <link linkend="nice-interfaces-get-ip-for-interface">nice_interfaces_get_ip_for_interface</link>
                                                         (<link linkend="gchar">gchar</link> *interface_name);
-<link linkend="GList">GList</link>*              <link linkend="nice-interfaces-get-local-interfaces">nice_interfaces_get_local_interfaces</link>
+<link linkend="GList">GList</link> *             <link linkend="nice-interfaces-get-local-interfaces">nice_interfaces_get_local_interfaces</link>
                                                         (void);
-<link linkend="GList">GList</link>*              <link linkend="nice-interfaces-get-local-ips">nice_interfaces_get_local_ips</link>       (<link linkend="gboolean">gboolean</link> include_loopback);
+<link linkend="GList">GList</link> *             <link linkend="nice-interfaces-get-local-ips">nice_interfaces_get_local_ips</link>       (<link linkend="gboolean">gboolean</link> include_loopback);
 </synopsis>
 </refsynopsisdiv>
 
@@ -48,7 +47,6 @@ These utility functions allow the discovery of local network interfaces
 in a portable manner, they also allow finding the local ip addresses or
 the address allocated to a network interface.</para>
 <para>
-
 </para>
 </refsect1>
 
@@ -56,43 +54,40 @@ the address allocated to a network interface.</para>
 <title role="details.title">Details</title>
 <refsect2 id="nice-interfaces-get-ip-for-interface" role="function">
 <title>nice_interfaces_get_ip_for_interface ()</title>
-<indexterm zone="nice-interfaces-get-ip-for-interface"><primary>nice_interfaces_get_ip_for_interface</primary></indexterm><programlisting><link linkend="gchar">gchar</link>*              nice_interfaces_get_ip_for_interface
+<indexterm zone="nice-interfaces-get-ip-for-interface"><primary sortas="nice_interfaces_get_ip_for_interface">nice_interfaces_get_ip_for_interface</primary></indexterm><programlisting><link linkend="gchar">gchar</link> *             nice_interfaces_get_ip_for_interface
                                                         (<link linkend="gchar">gchar</link> *interface_name);</programlisting>
 <para>
 Retreives the IPv4 address of an interface by its name</para>
 <para>
-
 </para><variablelist role="params">
-<varlistentry><term><parameter>interface_name</parameter>&nbsp;:</term>
+<varlistentry><term><parameter>interface_name</parameter>&#160;:</term>
 <listitem><simpara> name of local interface
 </simpara></listitem></varlistentry>
-<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a newly-allocated string with the IP address
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara> a newly-allocated string with the IP address
 </simpara></listitem></varlistentry>
 </variablelist></refsect2>
 <refsect2 id="nice-interfaces-get-local-interfaces" role="function">
 <title>nice_interfaces_get_local_interfaces ()</title>
-<indexterm zone="nice-interfaces-get-local-interfaces"><primary>nice_interfaces_get_local_interfaces</primary></indexterm><programlisting><link linkend="GList">GList</link>*              nice_interfaces_get_local_interfaces
+<indexterm zone="nice-interfaces-get-local-interfaces"><primary sortas="nice_interfaces_get_local_interfaces">nice_interfaces_get_local_interfaces</primary></indexterm><programlisting><link linkend="GList">GList</link> *             nice_interfaces_get_local_interfaces
                                                         (void);</programlisting>
 <para>
 Get the list of local interfaces</para>
 <para>
-
 </para><variablelist role="params">
-<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a newly-allocated <link linkend="GList"><type>GList</type></link> of strings. The caller must free it.
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara> a newly-allocated <link linkend="GList"><type>GList</type></link> of strings. The caller must free it.
 </simpara></listitem></varlistentry>
 </variablelist></refsect2>
 <refsect2 id="nice-interfaces-get-local-ips" role="function">
 <title>nice_interfaces_get_local_ips ()</title>
-<indexterm zone="nice-interfaces-get-local-ips"><primary>nice_interfaces_get_local_ips</primary></indexterm><programlisting><link linkend="GList">GList</link>*              nice_interfaces_get_local_ips       (<link linkend="gboolean">gboolean</link> include_loopback);</programlisting>
+<indexterm zone="nice-interfaces-get-local-ips"><primary sortas="nice_interfaces_get_local_ips">nice_interfaces_get_local_ips</primary></indexterm><programlisting><link linkend="GList">GList</link> *             nice_interfaces_get_local_ips       (<link linkend="gboolean">gboolean</link> include_loopback);</programlisting>
 <para>
 Get a list of local ipv4 interface addresses</para>
 <para>
-
 </para><variablelist role="params">
-<varlistentry><term><parameter>include_loopback</parameter>&nbsp;:</term>
+<varlistentry><term><parameter>include_loopback</parameter>&#160;:</term>
 <listitem><simpara> Include any loopback devices
 </simpara></listitem></varlistentry>
-<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a newly-allocated <link linkend="GList"><type>GList</type></link> of strings. The caller must free it.
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara> a newly-allocated <link linkend="GList"><type>GList</type></link> of strings. The caller must free it.
 </simpara></listitem></varlistentry>
 </variablelist></refsect2>
 

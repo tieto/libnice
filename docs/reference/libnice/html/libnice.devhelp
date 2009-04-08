@@ -33,7 +33,7 @@
     <function name="enum NiceProxyType" link="NiceAgent.html#NiceProxyType"/>
     <function name="enum NiceCompatibility" link="NiceAgent.html#NiceCompatibility"/>
     <function name="NiceAgentRecvFunc ()" link="NiceAgent.html#NiceAgentRecvFunc"/>
-    <function name="NICE_AGENT_MAX_REMOTE_CANDIDATES" link="NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS"/>
+    <function name="NICE_AGENT_MAX_REMOTE_CANDIDATES" link="NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES--CAPS"/>
     <function name="nice_agent_new ()" link="NiceAgent.html#nice-agent-new"/>
     <function name="nice_agent_add_local_address ()" link="NiceAgent.html#nice-agent-add-local-address"/>
     <function name="nice_agent_add_stream ()" link="NiceAgent.html#nice-agent-add-stream"/>
@@ -63,25 +63,6 @@
     <function name="The &quot;stun-pacing-timer&quot; property" link="NiceAgent.html#NiceAgent--stun-pacing-timer"/>
     <function name="The &quot;stun-server&quot; property" link="NiceAgent.html#NiceAgent--stun-server"/>
     <function name="The &quot;stun-server-port&quot; property" link="NiceAgent.html#NiceAgent--stun-server-port"/>
-    <function name="The &quot;compatibility&quot; property" link="NiceAgent.html#NiceAgent--compatibility"/>
-    <function name="The &quot;controlling-mode&quot; property" link="NiceAgent.html#NiceAgent--controlling-mode"/>
-    <function name="The &quot;full-mode&quot; property" link="NiceAgent.html#NiceAgent--full-mode"/>
-    <function name="The &quot;main-context&quot; property" link="NiceAgent.html#NiceAgent--main-context"/>
-    <function name="The &quot;max-connectivity-checks&quot; property" link="NiceAgent.html#NiceAgent--max-connectivity-checks"/>
-    <function name="The &quot;proxy-ip&quot; property" link="NiceAgent.html#NiceAgent--proxy-ip"/>
-    <function name="The &quot;proxy-password&quot; property" link="NiceAgent.html#NiceAgent--proxy-password"/>
-    <function name="The &quot;proxy-port&quot; property" link="NiceAgent.html#NiceAgent--proxy-port"/>
-    <function name="The &quot;proxy-type&quot; property" link="NiceAgent.html#NiceAgent--proxy-type"/>
-    <function name="The &quot;proxy-username&quot; property" link="NiceAgent.html#NiceAgent--proxy-username"/>
-    <function name="The &quot;stun-pacing-timer&quot; property" link="NiceAgent.html#NiceAgent--stun-pacing-timer"/>
-    <function name="The &quot;stun-server&quot; property" link="NiceAgent.html#NiceAgent--stun-server"/>
-    <function name="The &quot;stun-server-port&quot; property" link="NiceAgent.html#NiceAgent--stun-server-port"/>
-    <function name="The &quot;candidate-gathering-done&quot; signal" link="NiceAgent.html#NiceAgent-candidate-gathering-done"/>
-    <function name="The &quot;component-state-changed&quot; signal" link="NiceAgent.html#NiceAgent-component-state-changed"/>
-    <function name="The &quot;initial-binding-request-received&quot; signal" link="NiceAgent.html#NiceAgent-initial-binding-request-received"/>
-    <function name="The &quot;new-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-candidate"/>
-    <function name="The &quot;new-remote-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-remote-candidate"/>
-    <function name="The &quot;new-selected-pair&quot; signal" link="NiceAgent.html#NiceAgent-new-selected-pair"/>
     <function name="The &quot;candidate-gathering-done&quot; signal" link="NiceAgent.html#NiceAgent-candidate-gathering-done"/>
     <function name="The &quot;component-state-changed&quot; signal" link="NiceAgent.html#NiceAgent-component-state-changed"/>
     <function name="The &quot;initial-binding-request-received&quot; signal" link="NiceAgent.html#NiceAgent-initial-binding-request-received"/>
@@ -89,7 +70,7 @@
     <function name="The &quot;new-remote-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-remote-candidate"/>
     <function name="The &quot;new-selected-pair&quot; signal" link="NiceAgent.html#NiceAgent-new-selected-pair"/>
     <function name="NiceAddress" link="libnice-NiceAddress.html#NiceAddress"/>
-    <function name="NICE_ADDRESS_STRING_LEN" link="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN:CAPS"/>
+    <function name="NICE_ADDRESS_STRING_LEN" link="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN--CAPS"/>
     <function name="nice_address_init ()" link="libnice-NiceAddress.html#nice-address-init"/>
     <function name="nice_address_new ()" link="libnice-NiceAddress.html#nice-address-new"/>
     <function name="nice_address_free ()" link="libnice-NiceAddress.html#nice-address-free"/>
@@ -110,7 +91,7 @@
     <function name="enum NiceCandidateTransport" link="libnice-NiceCandidate.html#NiceCandidateTransport"/>
     <function name="TurnServer" link="libnice-NiceCandidate.html#TurnServer"/>
     <function name="enum NiceRelayType" link="libnice-NiceCandidate.html#NiceRelayType"/>
-    <function name="NICE_CANDIDATE_MAX_FOUNDATION" link="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS"/>
+    <function name="NICE_CANDIDATE_MAX_FOUNDATION" link="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION--CAPS"/>
     <function name="nice_candidate_new ()" link="libnice-NiceCandidate.html#nice-candidate-new"/>
     <function name="nice_candidate_free ()" link="libnice-NiceCandidate.html#nice-candidate-free"/>
     <function name="nice_candidate_copy ()" link="libnice-NiceCandidate.html#nice-candidate-copy"/>
@@ -134,6 +115,7 @@
     <function name="stun_agent_init_error ()" link="libnice-StunAgent.html#stun-agent-init-error"/>
     <function name="stun_agent_build_unknown_attributes_error ()" link="libnice-StunAgent.html#stun-agent-build-unknown-attributes-error"/>
     <function name="stun_agent_finish_message ()" link="libnice-StunAgent.html#stun-agent-finish-message"/>
+    <function name="stun_agent_forget_transaction ()" link="libnice-StunAgent.html#stun-agent-forget-transaction"/>
     <function name="stun_debug_enable ()" link="libnice-StunAgent.html#stun-debug-enable"/>
     <function name="stun_debug_disable ()" link="libnice-StunAgent.html#stun-debug-disable"/>
     <function name="StunMessage" link="libnice-StunMessage.html#StunMessage"/>
@@ -143,8 +125,8 @@
     <function name="StunTransactionId" link="libnice-StunMessage.html#StunTransactionId"/>
     <function name="enum StunError" link="libnice-StunMessage.html#StunError"/>
     <function name="enum StunMessageReturn" link="libnice-StunMessage.html#StunMessageReturn"/>
-    <function name="STUN_MESSAGE_BUFFER_INCOMPLETE" link="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE:CAPS"/>
-    <function name="STUN_MESSAGE_BUFFER_INVALID" link="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID:CAPS"/>
+    <function name="STUN_MESSAGE_BUFFER_INCOMPLETE" link="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS"/>
+    <function name="STUN_MESSAGE_BUFFER_INVALID" link="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID--CAPS"/>
     <function name="stun_message_init ()" link="libnice-StunMessage.html#stun-message-init"/>
     <function name="stun_message_length ()" link="libnice-StunMessage.html#stun-message-length"/>
     <function name="stun_message_find ()" link="libnice-StunMessage.html#stun-message-find"/>

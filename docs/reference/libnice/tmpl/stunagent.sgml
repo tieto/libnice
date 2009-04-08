@@ -9,12 +9,10 @@ StunAgent
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -203,6 +201,16 @@ StunAgent
 @msg: 
 @key: 
 @key_len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION stun_agent_forget_transaction ##### -->
+<para>
+
+</para>
+
+@agent: 
+@id: 
 @Returns: 
 
 
