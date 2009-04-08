@@ -12,7 +12,7 @@ Build-Depends: cdbs,
                libgstreamer0.10-dev,
                libgstreamer-plugins-base0.10-dev,
                gtk-doc-tools
-Standards-Version: 3.8.0
+Standards-Version: 3.8.1
 Homepage: http://nice.freedesktop.org/
 Vcs-Git: git://git.debian.org/git/pkg-telepathy/libnice.git
 Vcs-Browser: http://git.debian.org/?p=pkg-telepathy/libnice.git

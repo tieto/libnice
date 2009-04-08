@@ -5,11 +5,13 @@ libnice (0.0.6-1) UNRELEASED; urgency=low
 
   [ Jonny Lamb ]
   * New upstream release.
-  * debian/control: Added myself to Uploaders.
+  * debian/control:
+    + Added myself to Uploaders.
+    + Upped Standards-Version. (no changes)
   * debian/gbp.conf: Added upstream-branch, pristine-tar fields, and
     removed no-create-orig field.
 
- -- Jonny Lamb <jonny@debian.org>  Wed, 08 Apr 2009 01:55:41 +0100
+ -- Jonny Lamb <jonny@debian.org>  Wed, 08 Apr 2009 01:56:32 +0100
 
 libnice (0.0.5-1) unstable; urgency=low
 
