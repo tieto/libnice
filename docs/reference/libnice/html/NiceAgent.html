@@ -8,7 +8,7 @@
 <link rel="up" href="ch01.html" title="">
 <link rel="prev" href="ch01.html" title="">
 <link rel="next" href="libnice-NiceAddress.html" title="NiceAddress">
-<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="part" href="pt01.html" title="Part I. ICE Library">
 <link rel="chapter" href="ch01.html" title="">
@@ -26,15 +26,17 @@
 <th width="100%" align="center">libnice Reference Manual</th>
 <td><a accesskey="n" href="libnice-NiceAddress.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
-<tr><td colspan="5" class="shortcuts"><nobr><a href="#NiceAgent.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#NiceAgent.description" class="shortcut">Description</a>
-                   | 
-                  <a href="#NiceAgent.object-hierarchy" class="shortcut">Object Hierarchy</a>
-                   | 
-                  <a href="#NiceAgent.properties" class="shortcut">Properties</a>
-                   | 
-                  <a href="#NiceAgent.signals" class="shortcut">Signals</a></nobr></td></tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#NiceAgent.synopsis" class="shortcut">Top</a>
+                 | 
+                <a href="#NiceAgent.description" class="shortcut">Description</a>
+                 | 
+                <a href="#NiceAgent.object-hierarchy" class="shortcut">Object Hierarchy</a>
+                 | 
+                <a href="#NiceAgent.properties" class="shortcut">Properties</a>
+                 | 
+                <a href="#NiceAgent.signals" class="shortcut">Signals</a>
+</td></tr>
 </table>
 <div class="refentry" lang="en">
 <a name="NiceAgent"></a><div class="titlepage"></div>
@@ -62,176 +64,176 @@ enum                <a class="link" href="NiceAgent.html#NiceProxyType" title="e
 enum                <a class="link" href="NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility">NiceCompatibility</a>;
 void                (<a class="link" href="NiceAgent.html#NiceAgentRecvFunc" title="NiceAgentRecvFunc ()">*NiceAgentRecvFunc</a>)                (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> len,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *buf,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a> user_data);
-#define             <a class="link" href="NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS" title="NICE_AGENT_MAX_REMOTE_CANDIDATES">NICE_AGENT_MAX_REMOTE_CANDIDATES</a>
-<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a>*          <a class="link" href="NiceAgent.html#nice-agent-new" title="nice_agent_new ()">nice_agent_new</a>                      (<a
-href="/usr/share/gtk-doc/html/glib/glib-The-Main-Event-Loop.html#GMainContext"
+#define             <a class="link" href="NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES--CAPS" title="NICE_AGENT_MAX_REMOTE_CANDIDATES">NICE_AGENT_MAX_REMOTE_CANDIDATES</a>
+<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *         <a class="link" href="NiceAgent.html#nice-agent-new" title="nice_agent_new ()">nice_agent_new</a>                      (<a
+href="http://library.gnome.org/devel/glib/unstable/glib-The-Main-Event-Loop.html#GMainContext"
 >GMainContext</a> *ctx,
                                                          <a class="link" href="NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility">NiceCompatibility</a> compat);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="NiceAgent.html#nice-agent-add-local-address" title="nice_agent_add_local_address ()">nice_agent_add_local_address</a>        (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>               <a class="link" href="NiceAgent.html#nice-agent-add-stream" title="nice_agent_add_stream ()">nice_agent_add_stream</a>               (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> n_components);
 void                <a class="link" href="NiceAgent.html#nice-agent-remove-stream" title="nice_agent_remove_stream ()">nice_agent_remove_stream</a>            (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="NiceAgent.html#nice-agent-set-relay-info" title="nice_agent_set_relay_info ()">nice_agent_set_relay_info</a>           (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *server_ip,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> server_port,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *username,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *password,
                                                          <a class="link" href="libnice-NiceCandidate.html#NiceRelayType" title="enum NiceRelayType">NiceRelayType</a> type);
 void                <a class="link" href="NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()">nice_agent_gather_candidates</a>        (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="NiceAgent.html#nice-agent-set-remote-credentials" title="nice_agent_set_remote_credentials ()">nice_agent_set_remote_credentials</a>   (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *ufrag,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *pwd);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="NiceAgent.html#nice-agent-get-local-credentials" title="nice_agent_get_local_credentials ()">nice_agent_get_local_credentials</a>    (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> **ufrag,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> **pwd);
 int                 <a class="link" href="NiceAgent.html#nice-agent-set-remote-candidates" title="nice_agent_set_remote_candidates ()">nice_agent_set_remote_candidates</a>    (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"
+href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"
 >GSList</a> *candidates);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"
->GSList</a>*             <a class="link" href="NiceAgent.html#nice-agent-get-remote-candidates" title="nice_agent_get_remote_candidates ()">nice_agent_get_remote_candidates</a>    (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
+href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"
+>GSList</a> *            <a class="link" href="NiceAgent.html#nice-agent-get-remote-candidates" title="nice_agent_get_remote_candidates ()">nice_agent_get_remote_candidates</a>    (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"
->GSList</a>*             <a class="link" href="NiceAgent.html#nice-agent-get-local-candidates" title="nice_agent_get_local_candidates ()">nice_agent_get_local_candidates</a>     (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
+href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"
+>GSList</a> *            <a class="link" href="NiceAgent.html#nice-agent-get-local-candidates" title="nice_agent_get_local_candidates ()">nice_agent_get_local_candidates</a>     (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"
 >gint</a>                <a class="link" href="NiceAgent.html#nice-agent-send" title="nice_agent_send ()">nice_agent_send</a>                     (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> len,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *buf);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="NiceAgent.html#nice-agent-attach-recv" title="nice_agent_attach_recv ()">nice_agent_attach_recv</a>              (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-The-Main-Event-Loop.html#GMainContext"
+href="http://library.gnome.org/devel/glib/unstable/glib-The-Main-Event-Loop.html#GMainContext"
 >GMainContext</a> *ctx,
                                                          <a class="link" href="NiceAgent.html#NiceAgentRecvFunc" title="NiceAgentRecvFunc ()">NiceAgentRecvFunc</a> func,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a> data);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="NiceAgent.html#nice-agent-set-selected-pair" title="nice_agent_set_selected_pair ()">nice_agent_set_selected_pair</a>        (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *lfoundation,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *rfoundation);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="NiceAgent.html#nice-agent-set-selected-remote-candidate" title="nice_agent_set_selected_remote_candidate ()">nice_agent_set_selected_remote_candidate</a>
                                                         (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            <a class="link" href="NiceAgent.html#nice-agent-restart" title="nice_agent_restart ()">nice_agent_restart</a>                  (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent);
 </pre>
 </div>
@@ -239,7 +241,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
 <a name="NiceAgent.object-hierarchy"></a><h2>Object Hierarchy</h2>
 <pre class="synopsis">
   <a
-href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject"
+href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObject"
 >GObject</a>
    +----NiceAgent
 </pre>
@@ -248,94 +250,49 @@ href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject"
 <a name="NiceAgent.properties"></a><h2>Properties</h2>
 <pre class="synopsis">
   "<a class="link" href="NiceAgent.html#NiceAgent--compatibility" title='The "compatibility" property'>compatibility</a>"            <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write / Construct Only
   "<a class="link" href="NiceAgent.html#NiceAgent--controlling-mode" title='The "controlling-mode" property'>controlling-mode</a>"         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>              : Read / Write
   "<a class="link" href="NiceAgent.html#NiceAgent--full-mode" title='The "full-mode" property'>full-mode</a>"                <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>              : Read / Write / Construct Only
   "<a class="link" href="NiceAgent.html#NiceAgent--main-context" title='The "main-context" property'>main-context</a>"             <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a>              : Read / Write / Construct Only
   "<a class="link" href="NiceAgent.html#NiceAgent--max-connectivity-checks" title='The "max-connectivity-checks" property'>max-connectivity-checks</a>"  <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write
   "<a class="link" href="NiceAgent.html#NiceAgent--proxy-ip" title='The "proxy-ip" property'>proxy-ip</a>"                 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>*                : Read / Write
   "<a class="link" href="NiceAgent.html#NiceAgent--proxy-password" title='The "proxy-password" property'>proxy-password</a>"           <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>*                : Read / Write
   "<a class="link" href="NiceAgent.html#NiceAgent--proxy-port" title='The "proxy-port" property'>proxy-port</a>"               <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write
   "<a class="link" href="NiceAgent.html#NiceAgent--proxy-type" title='The "proxy-type" property'>proxy-type</a>"               <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write
   "<a class="link" href="NiceAgent.html#NiceAgent--proxy-username" title='The "proxy-username" property'>proxy-username</a>"           <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>*                : Read / Write
   "<a class="link" href="NiceAgent.html#NiceAgent--stun-pacing-timer" title='The "stun-pacing-timer" property'>stun-pacing-timer</a>"        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write / Construct Only
   "<a class="link" href="NiceAgent.html#NiceAgent--stun-server" title='The "stun-server" property'>stun-server</a>"              <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>*                : Read / Write
   "<a class="link" href="NiceAgent.html#NiceAgent--stun-server-port" title='The "stun-server-port" property'>stun-server-port</a>"         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--compatibility" title='The "compatibility" property'>compatibility</a>"            <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write / Construct Only
-  "<a class="link" href="NiceAgent.html#NiceAgent--controlling-mode" title='The "controlling-mode" property'>controlling-mode</a>"         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
->gboolean</a>              : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--full-mode" title='The "full-mode" property'>full-mode</a>"                <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
->gboolean</a>              : Read / Write / Construct Only
-  "<a class="link" href="NiceAgent.html#NiceAgent--main-context" title='The "main-context" property'>main-context</a>"             <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
->gpointer</a>              : Read / Write / Construct Only
-  "<a class="link" href="NiceAgent.html#NiceAgent--max-connectivity-checks" title='The "max-connectivity-checks" property'>max-connectivity-checks</a>"  <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--proxy-ip" title='The "proxy-ip" property'>proxy-ip</a>"                 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>*                : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--proxy-password" title='The "proxy-password" property'>proxy-password</a>"           <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>*                : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--proxy-port" title='The "proxy-port" property'>proxy-port</a>"               <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--proxy-type" title='The "proxy-type" property'>proxy-type</a>"               <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--proxy-username" title='The "proxy-username" property'>proxy-username</a>"           <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>*                : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--stun-pacing-timer" title='The "stun-pacing-timer" property'>stun-pacing-timer</a>"        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write / Construct Only
-  "<a class="link" href="NiceAgent.html#NiceAgent--stun-server" title='The "stun-server" property'>stun-server</a>"              <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>*                : Read / Write
-  "<a class="link" href="NiceAgent.html#NiceAgent--stun-server-port" title='The "stun-server-port" property'>stun-server-port</a>"         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write
 </pre>
 </div>
 <div class="refsect1" lang="en">
 <a name="NiceAgent.signals"></a><h2>Signals</h2>
 <pre class="synopsis">
-  "<a class="link" href="NiceAgent.html#NiceAgent-candidate-gathering-done" title='The "candidate-gathering-done" signal'>candidate-gathering-done</a>"                       : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-component-state-changed" title='The "component-state-changed" signal'>component-state-changed</a>"                        : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-initial-binding-request-received" title='The "initial-binding-request-received" signal'>initial-binding-request-received</a>"               : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-new-candidate" title='The "new-candidate" signal'>new-candidate</a>"                                  : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-new-remote-candidate" title='The "new-remote-candidate" signal'>new-remote-candidate</a>"                           : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-new-selected-pair" title='The "new-selected-pair" signal'>new-selected-pair</a>"                              : Run Last
   "<a class="link" href="NiceAgent.html#NiceAgent-candidate-gathering-done" title='The "candidate-gathering-done" signal'>candidate-gathering-done</a>"                       : Run Last
   "<a class="link" href="NiceAgent.html#NiceAgent-component-state-changed" title='The "component-state-changed" signal'>component-state-changed</a>"                        : Run Last
   "<a class="link" href="NiceAgent.html#NiceAgent-initial-binding-request-received" title='The "initial-binding-request-received" signal'>initial-binding-request-received</a>"               : Run Last
@@ -355,7 +312,7 @@ It will take care of discovering your local candidates and do
 <p>
  </p>
 <div class="example">
-<a name="id2717968"></a><p class="title"><b>Example 1. Simple example on how to use libnice</b></p>
+<a name="id2885008"></a><p class="title"><b>Example 1. Simple example on how to use libnice</b></p>
 <div class="example-contents"><pre class="programlisting">
    NiceAddress base_addr;
    guint stream_id;
@@ -400,7 +357,6 @@ It will take care of discovering your local candidates and do
 </div>
 <p><br class="example-break"></p>
 <p>
-
 </p>
 </div>
 <div class="refsect1" lang="en">
@@ -412,7 +368,6 @@ It will take care of discovering your local candidates and do
 The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> is the main GObject of the libnice library and represents
 the ICE agent.</p>
 <p>
-
 </p>
 </div>
 <hr>
@@ -434,45 +389,44 @@ An enum representing the state of a component.
 </p>
 <p> See also: <a class="link" href="NiceAgent.html#NiceAgent-component-state-changed" title='The "component-state-changed" signal'><span class="type">"component-state-changed"</span></a> </p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="NICE-COMPONENT-STATE-DISCONNECTED:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_DISCONNECTED</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-STATE-DISCONNECTED--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_DISCONNECTED</code></span></p></td>
 <td> No activity scheduled
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPONENT-STATE-GATHERING:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_GATHERING</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-STATE-GATHERING--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_GATHERING</code></span></p></td>
 <td> Gathering local candidates
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPONENT-STATE-CONNECTING:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_CONNECTING</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-STATE-CONNECTING--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_CONNECTING</code></span></p></td>
 <td> Establishing connectivity
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPONENT-STATE-CONNECTED:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_CONNECTED</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-STATE-CONNECTED--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_CONNECTED</code></span></p></td>
 <td> At least one working candidate pair
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPONENT-STATE-READY:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_READY</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-STATE-READY--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_READY</code></span></p></td>
 <td> ICE concluded, candidate pair selection
 is now final
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPONENT-STATE-FAILED:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_FAILED</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-STATE-FAILED--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_FAILED</code></span></p></td>
 <td> Connectivity checks have been completed,
 but connectivity was not established
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPONENT-STATE-LAST:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_LAST</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-STATE-LAST--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_STATE_LAST</code></span></p></td>
 <td> Dummy state
 </td>
 </tr>
@@ -493,25 +447,24 @@ Convenience enum representing the type of a component for use as the
 component_id for RTP/RTCP usages.
  </p>
 <div class="example">
-<a name="id2718304"></a><p class="title"><b>Example 2. Example of use.</b></p>
+<a name="id2885344"></a><p class="title"><b>Example 2. Example of use.</b></p>
 <div class="example-contents"><pre class="programlisting">
    nice_agent_send (agent, stream_id, NICE_COMPONENT_TYPE_RTP, len, buf);
    </pre></div>
 </div>
 <p><br class="example-break"></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="NICE-COMPONENT-TYPE-RTP:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_TYPE_RTP</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-TYPE-RTP--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_TYPE_RTP</code></span></p></td>
 <td> RTP Component type
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPONENT-TYPE-RTCP:CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_TYPE_RTCP</code></span></p></td>
+<td><p><a name="NICE-COMPONENT-TYPE-RTCP--CAPS"></a><span class="term"><code class="literal">NICE_COMPONENT_TYPE_RTCP</code></span></p></td>
 <td> RTCP Component type
 </td>
 </tr>
@@ -535,28 +488,27 @@ Note that the proxies will only be used with TCP TURN relaying.
 </p>
 <p> See also: <a class="link" href="NiceAgent.html#NiceAgent--proxy-type" title='The "proxy-type" property'><span class="type">"proxy-type"</span></a> </p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="NICE-PROXY-TYPE-NONE:CAPS"></a><span class="term"><code class="literal">NICE_PROXY_TYPE_NONE</code></span></p></td>
+<td><p><a name="NICE-PROXY-TYPE-NONE--CAPS"></a><span class="term"><code class="literal">NICE_PROXY_TYPE_NONE</code></span></p></td>
 <td> Do not use a proxy
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-PROXY-TYPE-SOCKS5:CAPS"></a><span class="term"><code class="literal">NICE_PROXY_TYPE_SOCKS5</code></span></p></td>
+<td><p><a name="NICE-PROXY-TYPE-SOCKS5--CAPS"></a><span class="term"><code class="literal">NICE_PROXY_TYPE_SOCKS5</code></span></p></td>
 <td> Use a SOCKS5 proxy
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-PROXY-TYPE-HTTP:CAPS"></a><span class="term"><code class="literal">NICE_PROXY_TYPE_HTTP</code></span></p></td>
+<td><p><a name="NICE-PROXY-TYPE-HTTP--CAPS"></a><span class="term"><code class="literal">NICE_PROXY_TYPE_HTTP</code></span></p></td>
 <td> Use an HTTP proxy
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-PROXY-TYPE-LAST:CAPS"></a><span class="term"><code class="literal">NICE_PROXY_TYPE_LAST</code></span></p></td>
+<td><p><a name="NICE-PROXY-TYPE-LAST--CAPS"></a><span class="term"><code class="literal">NICE_PROXY_TYPE_LAST</code></span></p></td>
 <td> Dummy last proxy type
 </td>
 </tr>
@@ -579,34 +531,33 @@ Note that the proxies will only be used with TCP TURN relaying.
 An enum to specify which compatible specifications the <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> should use.
 Use with <a class="link" href="NiceAgent.html#nice-agent-new" title="nice_agent_new ()"><code class="function">nice_agent_new()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="NICE-COMPATIBILITY-DRAFT19:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_DRAFT19</code></span></p></td>
+<td><p><a name="NICE-COMPATIBILITY-DRAFT19--CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_DRAFT19</code></span></p></td>
 <td> Use compatibility for ICE Draft 19 specs
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPATIBILITY-GOOGLE:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_GOOGLE</code></span></p></td>
+<td><p><a name="NICE-COMPATIBILITY-GOOGLE--CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_GOOGLE</code></span></p></td>
 <td> Use compatibility for Google Talk specs
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPATIBILITY-MSN:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_MSN</code></span></p></td>
+<td><p><a name="NICE-COMPATIBILITY-MSN--CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_MSN</code></span></p></td>
 <td> Use compatibility for MSN Messenger specs
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPATIBILITY-WLM2009:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_WLM2009</code></span></p></td>
+<td><p><a name="NICE-COMPATIBILITY-WLM2009--CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_WLM2009</code></span></p></td>
 <td> Use compatibility with Windows Live Messenger
 2009
 </td>
 </tr>
 <tr>
-<td><p><a name="NICE-COMPATIBILITY-LAST:CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_LAST</code></span></p></td>
+<td><p><a name="NICE-COMPATIBILITY-LAST--CAPS"></a><span class="term"><code class="literal">NICE_COMPATIBILITY_LAST</code></span></p></td>
 <td> Dummy last compatibility mode
 </td>
 </tr>
@@ -618,24 +569,23 @@ Use with <a class="link" href="NiceAgent.html#nice-agent-new" title="nice_agent_
 <a name="NiceAgentRecvFunc"></a><h3>NiceAgentRecvFunc ()</h3>
 <pre class="programlisting">void                (*NiceAgentRecvFunc)                (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> len,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *buf,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a> user_data);</pre>
 <p>
 Callback function when data is received on a component</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -676,30 +626,29 @@ Callback function when data is received on a component</p>
 </div>
 <hr>
 <div class="refsect2" lang="en">
-<a name="NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS"></a><h3>NICE_AGENT_MAX_REMOTE_CANDIDATES</h3>
-<pre class="programlisting">#define             NICE_AGENT_MAX_REMOTE_CANDIDATES</pre>
+<a name="NICE-AGENT-MAX-REMOTE-CANDIDATES--CAPS"></a><h3>NICE_AGENT_MAX_REMOTE_CANDIDATES</h3>
+<pre class="programlisting">#define NICE_AGENT_MAX_REMOTE_CANDIDATES    25
+</pre>
 <p>
 A hard limit for the number of remote candidates. This
 limit is enforced to protect against malevolent remote
 clients.</p>
 <p>
-
 </p>
 </div>
 <hr>
 <div class="refsect2" lang="en">
 <a name="nice-agent-new"></a><h3>nice_agent_new ()</h3>
-<pre class="programlisting"><a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a>*          nice_agent_new                      (<a
-href="/usr/share/gtk-doc/html/glib/glib-The-Main-Event-Loop.html#GMainContext"
+<pre class="programlisting"><a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *         nice_agent_new                      (<a
+href="http://library.gnome.org/devel/glib/unstable/glib-The-Main-Event-Loop.html#GMainContext"
 >GMainContext</a> *ctx,
                                                          <a class="link" href="NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility">NiceCompatibility</a> compat);</pre>
 <p>
 Create a new <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a>.
 The returned object must be freed with <a
-href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#g-object-unref"
+href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#g-object-unref"
 ><code class="function">g_object_unref()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -726,13 +675,12 @@ href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#g-object
 <div class="refsect2" lang="en">
 <a name="nice-agent-add-local-address"></a><h3>nice_agent_add_local_address ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_agent_add_local_address        (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress">NiceAddress</a> *addr);</pre>
 <p>
 Add a local address from which to derive local host candidates</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -751,9 +699,9 @@ If the port is 0, then a random port will be chosen by the system
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> on success, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> on fatal (memory allocation) errors
 </td>
 </tr>
@@ -764,15 +712,14 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <div class="refsect2" lang="en">
 <a name="nice-agent-add-stream"></a><h3>nice_agent_add_stream ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>               nice_agent_add_stream               (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> n_components);</pre>
 <p>
 Adds a data stream to <em class="parameter"><code>agent</code></em> containing <em class="parameter"><code>n_components</code></em> components.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -800,12 +747,11 @@ Adds a data stream to <em class="parameter"><code>agent</code></em> containing <
 <a name="nice-agent-remove-stream"></a><h3>nice_agent_remove_stream ()</h3>
 <pre class="programlisting">void                nice_agent_remove_stream            (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id);</pre>
 <p>
 Remove and free a previously created data stream from <em class="parameter"><code>agent</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -827,31 +773,30 @@ Remove and free a previously created data stream from <em class="parameter"><cod
 <div class="refsect2" lang="en">
 <a name="nice-agent-set-relay-info"></a><h3>nice_agent_set_relay_info ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_agent_set_relay_info           (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *server_ip,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> server_port,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *username,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *password,
                                                          <a class="link" href="libnice-NiceCandidate.html#NiceRelayType" title="enum NiceRelayType">NiceRelayType</a> type);</pre>
 <p>
 Sets the settings for using a relay server during the candidate discovery.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -899,10 +844,10 @@ Sets the settings for using a relay server during the candidate discovery.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if the TURN settings were accepted.
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> if the address was invalid.
 </td>
 </tr>
@@ -914,7 +859,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <a name="nice-agent-gather-candidates"></a><h3>nice_agent_gather_candidates ()</h3>
 <pre class="programlisting">void                nice_agent_gather_candidates        (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id);</pre>
 <p>
 Start the candidate gathering process.
@@ -933,7 +878,6 @@ Once done, <a class="link" href="NiceAgent.html#NiceAgent-candidate-gathering-do
    </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -955,16 +899,16 @@ Once done, <a class="link" href="NiceAgent.html#NiceAgent-candidate-gathering-do
 <div class="refsect2" lang="en">
 <a name="nice-agent-set-remote-credentials"></a><h3>nice_agent_set_remote_credentials ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_agent_set_remote_credentials   (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *ufrag,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *pwd);</pre>
 <p>
 Sets the remote credentials for stream <em class="parameter"><code>stream_id</code></em>.
@@ -978,7 +922,6 @@ Sets the remote credentials for stream <em class="parameter"><code>stream_id</co
    </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1008,9 +951,9 @@ Sets the remote credentials for stream <em class="parameter"><code>stream_id</co
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> on success, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> on error.
 </td>
 </tr>
@@ -1021,21 +964,20 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <div class="refsect2" lang="en">
 <a name="nice-agent-get-local-credentials"></a><h3>nice_agent_get_local_credentials ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_agent_get_local_credentials    (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> **ufrag,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> **pwd);</pre>
 <p>
 Gets the local credentials for stream <em class="parameter"><code>stream_id</code></em>.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1055,7 +997,7 @@ Gets the local credentials for stream <em class="parameter"><code>stream_id</cod
 <td> a pointer to a NULL-terminated string containing
 an ICE username fragment [OUT].
 This string must be freed with <a
-href="/usr/share/gtk-doc/html/glib/glib-Memory-Allocation.html#g-free"
+href="http://library.gnome.org/devel/glib/unstable/glib-Memory-Allocation.html#g-free"
 ><code class="function">g_free()</code></a>
 </td>
 </tr>
@@ -1064,16 +1006,16 @@ href="/usr/share/gtk-doc/html/glib/glib-Memory-Allocation.html#g-free"
 <td> a pointer to a NULL-terminated string containing an ICE
 password [OUT]
 This string must be freed with <a
-href="/usr/share/gtk-doc/html/glib/glib-Memory-Allocation.html#g-free"
+href="http://library.gnome.org/devel/glib/unstable/glib-Memory-Allocation.html#g-free"
 ><code class="function">g_free()</code></a>
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> on success, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> on error.
 </td>
 </tr>
@@ -1085,13 +1027,13 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <a name="nice-agent-set-remote-candidates"></a><h3>nice_agent_set_remote_candidates ()</h3>
 <pre class="programlisting">int                 nice_agent_set_remote_candidates    (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"
+href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"
 >GSList</a> *candidates);</pre>
 <p>
 Sets, adds or updates the remote candidates for a component of a stream.
@@ -1111,7 +1053,6 @@ Sets, adds or updates the remote candidates for a component of a stream.
    </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1134,7 +1075,7 @@ Sets, adds or updates the remote candidates for a component of a stream.
 <tr>
 <td><p><span class="term"><em class="parameter"><code>candidates</code></em> :</span></p></td>
 <td> a <a
-href="/usr/share/gtk-doc/html/glib/glib-Doubly-Linked-Lists.html#GList"
+href="http://library.gnome.org/devel/glib/unstable/glib-Doubly-Linked-Lists.html#GList"
 ><span class="type">GList</span></a> of <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> items describing each candidate to add
 </td>
 </tr>
@@ -1151,13 +1092,13 @@ or if the local candidates are not done gathering yet)
 <div class="refsect2" lang="en">
 <a name="nice-agent-get-remote-candidates"></a><h3>nice_agent_get_remote_candidates ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"
->GSList</a>*             nice_agent_get_remote_candidates    (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
+href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"
+>GSList</a> *            nice_agent_get_remote_candidates    (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id);</pre>
 <p>
 Get a list of the remote candidates set on a stream's component
@@ -1177,7 +1118,6 @@ Get a list of the remote candidates set on a stream's component
    </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1200,7 +1140,7 @@ Get a list of the remote candidates set on a stream's component
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> a <a
-href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"
+href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"
 ><span class="type">GSList</span></a> of <span class="type">NiceCandidates</span> objects representing
 the remote candidates set on the <em class="parameter"><code>agent</code></em>
 </td>
@@ -1212,13 +1152,13 @@ the remote candidates set on the <em class="parameter"><code>agent</code></em>
 <div class="refsect2" lang="en">
 <a name="nice-agent-get-local-candidates"></a><h3>nice_agent_get_local_candidates ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"
->GSList</a>*             nice_agent_get_local_candidates     (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
+href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"
+>GSList</a> *            nice_agent_get_local_candidates     (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id);</pre>
 <p>
 Retreive from the agent the list of all local candidates
@@ -1236,7 +1176,6 @@ for a stream's component
    </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1259,7 +1198,7 @@ for a stream's component
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> a <a
-href="/usr/share/gtk-doc/html/glib/glib-Singly-Linked-Lists.html#GSList"
+href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"
 ><span class="type">GSList</span></a> of <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> objects representing
 the local candidates of <em class="parameter"><code>agent</code></em>
 </td>
@@ -1271,19 +1210,19 @@ the local candidates of <em class="parameter"><code>agent</code></em>
 <div class="refsect2" lang="en">
 <a name="nice-agent-send"></a><h3>nice_agent_send ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"
 >gint</a>                nice_agent_send                     (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> len,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *buf);</pre>
 <p>
 Sends a data payload over a stream's component.
@@ -1298,7 +1237,6 @@ Sends a data payload over a stream's component.
    </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1340,26 +1278,25 @@ Sends a data payload over a stream's component.
 <div class="refsect2" lang="en">
 <a name="nice-agent-attach-recv"></a><h3>nice_agent_attach_recv ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_agent_attach_recv              (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-The-Main-Event-Loop.html#GMainContext"
+href="http://library.gnome.org/devel/glib/unstable/glib-The-Main-Event-Loop.html#GMainContext"
 >GMainContext</a> *ctx,
                                                          <a class="link" href="NiceAgent.html#NiceAgentRecvFunc" title="NiceAgentRecvFunc ()">NiceAgentRecvFunc</a> func,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a> data);</pre>
 <p>
 Attaches the stream's component's sockets to the Glib Mainloop Context in
 order to be notified whenever data becomes available for a component.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1398,9 +1335,9 @@ the stream's component
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> on success, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> if the stream or component IDs are invalid.
 </td>
 </tr>
@@ -1411,19 +1348,19 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <div class="refsect2" lang="en">
 <a name="nice-agent-set-selected-pair"></a><h3>nice_agent_set_selected_pair ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_agent_set_selected_pair        (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *lfoundation,
                                                          const <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a> *rfoundation);</pre>
 <p>
 Sets the selected candidate pair for media transmission
@@ -1432,7 +1369,6 @@ disable all further ICE processing (connection check,
 state machine updates, etc). Note that keepalives will
 continue to be sent.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1465,9 +1401,9 @@ continue to be sent.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> on success, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> if the candidate pair cannot be found
 </td>
 </tr>
@@ -1478,14 +1414,14 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <div class="refsect2" lang="en">
 <a name="nice-agent-set-selected-remote-candidate"></a><h3>nice_agent_set_selected_remote_candidate ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_agent_set_selected_remote_candidate
                                                         (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> stream_id,
                                                          <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a> component_id,
                                                          <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);</pre>
 <p>
@@ -1497,7 +1433,6 @@ Calling this function will disable all further ICE processing
 (connection check, state machine updates, etc). Note that keepalives will
 continue to be sent.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1525,9 +1460,9 @@ continue to be sent.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> on success, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> on failure
 </td>
 </tr>
@@ -1538,7 +1473,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <div class="refsect2" lang="en">
 <a name="nice-agent-restart"></a><h3>nice_agent_restart ()</h3>
 <pre class="programlisting"><a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>            nice_agent_restart                  (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *agent);</pre>
 <p>
 Restarts the session as defined in ICE draft 19. This function
@@ -1546,7 +1481,6 @@ needs to be called both when initiating (ICE spec section 9.1.1.1.
 "ICE Restarts"), as well as when reacting (spec section 9.2.1.1.
 "Detecting ICE Restart") to a restart.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1559,9 +1493,9 @@ needs to be called both when initiating (ICE spec section 9.1.1.1.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> on success <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> on error
 </td>
 </tr>
@@ -1574,7 +1508,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--compatibility"></a><h3>The <code class="literal">"compatibility"</code> property</h3>
 <pre class="programlisting">  "compatibility"            <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write / Construct Only</pre>
 <p>
 The Nice agent can work in various compatibility modes depending on
@@ -1582,7 +1516,6 @@ what the application/peer needs.
 </p>
 <p> See also: <a class="link" href="NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility"><span class="type">NiceCompatibility</span></a></p>
 <p>
-
 </p>
 <p>Allowed values: &lt;= 3</p>
 <p>Default value: 0</p>
@@ -1591,7 +1524,7 @@ what the application/peer needs.
 <div class="refsect2" lang="en">
 <a name="NiceAgent--controlling-mode"></a><h3>The <code class="literal">"controlling-mode"</code> property</h3>
 <pre class="programlisting">  "controlling-mode"         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>              : Read / Write</pre>
 <p>Whether the agent is in controlling mode.</p>
 <p>Default value: FALSE</p>
@@ -1600,7 +1533,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--full-mode"></a><h3>The <code class="literal">"full-mode"</code> property</h3>
 <pre class="programlisting">  "full-mode"                <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
 >gboolean</a>              : Read / Write / Construct Only</pre>
 <p>Whether agent runs in ICE full mode.</p>
 <p>Default value: TRUE</p>
@@ -1609,20 +1542,19 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--main-context"></a><h3>The <code class="literal">"main-context"</code> property</h3>
 <pre class="programlisting">  "main-context"             <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a>              : Read / Write / Construct Only</pre>
 <p>
 A GLib main context is needed for all timeouts used by libnice.
 This is a property being set by the <a class="link" href="NiceAgent.html#nice-agent-new" title="nice_agent_new ()"><code class="function">nice_agent_new()</code></a> call.</p>
 <p>
-
 </p>
 </div>
 <hr>
 <div class="refsect2" lang="en">
 <a name="NiceAgent--max-connectivity-checks"></a><h3>The <code class="literal">"max-connectivity-checks"</code> property</h3>
 <pre class="programlisting">  "max-connectivity-checks"  <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write</pre>
 <p>Upper limit for the total number of connectivity checks performed.</p>
 <p>Default value: 0</p>
@@ -1631,7 +1563,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--proxy-ip"></a><h3>The <code class="literal">"proxy-ip"</code> property</h3>
 <pre class="programlisting">  "proxy-ip"                 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>*                : Read / Write</pre>
 <p>The proxy server used to bypass a proxy firewall.</p>
 <p>Default value: NULL</p>
@@ -1640,7 +1572,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--proxy-password"></a><h3>The <code class="literal">"proxy-password"</code> property</h3>
 <pre class="programlisting">  "proxy-password"           <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>*                : Read / Write</pre>
 <p>The password used to authenticate with the proxy.</p>
 <p>Default value: NULL</p>
@@ -1649,7 +1581,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--proxy-port"></a><h3>The <code class="literal">"proxy-port"</code> property</h3>
 <pre class="programlisting">  "proxy-port"               <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write</pre>
 <p>The Proxy server used to bypass a proxy firewall.</p>
 <p>Allowed values: [1,65536]</p>
@@ -1659,7 +1591,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--proxy-type"></a><h3>The <code class="literal">"proxy-type"</code> property</h3>
 <pre class="programlisting">  "proxy-type"               <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write</pre>
 <p>The type of proxy set in the proxy-ip property.</p>
 <p>Allowed values: &lt;= 2</p>
@@ -1669,7 +1601,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--proxy-username"></a><h3>The <code class="literal">"proxy-username"</code> property</h3>
 <pre class="programlisting">  "proxy-username"           <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>*                : Read / Write</pre>
 <p>The username used to authenticate with the proxy.</p>
 <p>Default value: NULL</p>
@@ -1678,7 +1610,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--stun-pacing-timer"></a><h3>The <code class="literal">"stun-pacing-timer"</code> property</h3>
 <pre class="programlisting">  "stun-pacing-timer"        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write / Construct Only</pre>
 <p>Timer 'Ta' (msecs) used in the IETF ICE specification for pacing candidate gathering and sending of connectivity checks.</p>
 <p>Allowed values: &gt;= 1</p>
@@ -1688,7 +1620,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--stun-server"></a><h3>The <code class="literal">"stun-server"</code> property</h3>
 <pre class="programlisting">  "stun-server"              <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>*                : Read / Write</pre>
 <p>The STUN server used to obtain server-reflexive candidates.</p>
 <p>Default value: NULL</p>
@@ -1697,140 +1629,7 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
 <div class="refsect2" lang="en">
 <a name="NiceAgent--stun-server-port"></a><h3>The <code class="literal">"stun-server-port"</code> property</h3>
 <pre class="programlisting">  "stun-server-port"         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write</pre>
-<p>The STUN server used to obtain server-reflexive candidates.</p>
-<p>Allowed values: [1,65536]</p>
-<p>Default value: 1</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--compatibility"></a><h3>The <code class="literal">"compatibility"</code> property</h3>
-<pre class="programlisting">  "compatibility"            <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write / Construct Only</pre>
-<p>
-The Nice agent can work in various compatibility modes depending on
-what the application/peer needs.
-</p>
-<p> See also: <a class="link" href="NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility"><span class="type">NiceCompatibility</span></a></p>
-<p>
-
-</p>
-<p>Allowed values: &lt;= 3</p>
-<p>Default value: 0</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--controlling-mode"></a><h3>The <code class="literal">"controlling-mode"</code> property</h3>
-<pre class="programlisting">  "controlling-mode"         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
->gboolean</a>              : Read / Write</pre>
-<p>Whether the agent is in controlling mode.</p>
-<p>Default value: FALSE</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--full-mode"></a><h3>The <code class="literal">"full-mode"</code> property</h3>
-<pre class="programlisting">  "full-mode"                <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"
->gboolean</a>              : Read / Write / Construct Only</pre>
-<p>Whether agent runs in ICE full mode.</p>
-<p>Default value: TRUE</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--main-context"></a><h3>The <code class="literal">"main-context"</code> property</h3>
-<pre class="programlisting">  "main-context"             <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
->gpointer</a>              : Read / Write / Construct Only</pre>
-<p>
-A GLib main context is needed for all timeouts used by libnice.
-This is a property being set by the <a class="link" href="NiceAgent.html#nice-agent-new" title="nice_agent_new ()"><code class="function">nice_agent_new()</code></a> call.</p>
-<p>
-
-</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--max-connectivity-checks"></a><h3>The <code class="literal">"max-connectivity-checks"</code> property</h3>
-<pre class="programlisting">  "max-connectivity-checks"  <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write</pre>
-<p>Upper limit for the total number of connectivity checks performed.</p>
-<p>Default value: 0</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--proxy-ip"></a><h3>The <code class="literal">"proxy-ip"</code> property</h3>
-<pre class="programlisting">  "proxy-ip"                 <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>*                : Read / Write</pre>
-<p>The proxy server used to bypass a proxy firewall.</p>
-<p>Default value: NULL</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--proxy-password"></a><h3>The <code class="literal">"proxy-password"</code> property</h3>
-<pre class="programlisting">  "proxy-password"           <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>*                : Read / Write</pre>
-<p>The password used to authenticate with the proxy.</p>
-<p>Default value: NULL</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--proxy-port"></a><h3>The <code class="literal">"proxy-port"</code> property</h3>
-<pre class="programlisting">  "proxy-port"               <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write</pre>
-<p>The Proxy server used to bypass a proxy firewall.</p>
-<p>Allowed values: [1,65536]</p>
-<p>Default value: 1</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--proxy-type"></a><h3>The <code class="literal">"proxy-type"</code> property</h3>
-<pre class="programlisting">  "proxy-type"               <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write</pre>
-<p>The type of proxy set in the proxy-ip property.</p>
-<p>Allowed values: &lt;= 2</p>
-<p>Default value: 0</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--proxy-username"></a><h3>The <code class="literal">"proxy-username"</code> property</h3>
-<pre class="programlisting">  "proxy-username"           <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>*                : Read / Write</pre>
-<p>The username used to authenticate with the proxy.</p>
-<p>Default value: NULL</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--stun-pacing-timer"></a><h3>The <code class="literal">"stun-pacing-timer"</code> property</h3>
-<pre class="programlisting">  "stun-pacing-timer"        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>                 : Read / Write / Construct Only</pre>
-<p>Timer 'Ta' (msecs) used in the IETF ICE specification for pacing candidate gathering and sending of connectivity checks.</p>
-<p>Allowed values: &gt;= 1</p>
-<p>Default value: 20</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--stun-server"></a><h3>The <code class="literal">"stun-server"</code> property</h3>
-<pre class="programlisting">  "stun-server"              <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>*                : Read / Write</pre>
-<p>The STUN server used to obtain server-reflexive candidates.</p>
-<p>Default value: NULL</p>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent--stun-server-port"></a><h3>The <code class="literal">"stun-server-port"</code> property</h3>
-<pre class="programlisting">  "stun-server-port"         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>                 : Read / Write</pre>
 <p>The STUN server used to obtain server-reflexive candidates.</p>
 <p>Allowed values: [1,65536]</p>
@@ -1843,16 +1642,15 @@ href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
 <a name="NiceAgent-candidate-gathering-done"></a><h3>The <code class="literal">"candidate-gathering-done"</code> signal</h3>
 <pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      arg1,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a>   user_data)      : Run Last</pre>
 <p>
 This signal is fired whenever a stream has finished gathering its
 candidates after a call to <a class="link" href="NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()"><code class="function">nice_agent_gather_candidates()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1874,23 +1672,22 @@ candidates after a call to <a class="link" href="NiceAgent.html#nice-agent-gathe
 <a name="NiceAgent-component-state-changed"></a><h3>The <code class="literal">"component-state-changed"</code> signal</h3>
 <pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      component_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      state,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      arg3,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a>   user_data)         : Run Last</pre>
 <p>
 This signal is fired whenever a component's state changes</p>
 <p>
-
 </p>
-<div class="variablelist"><table border="0">
+@:<div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
@@ -1920,16 +1717,15 @@ This signal is fired whenever a component's state changes</p>
 <a name="NiceAgent-initial-binding-request-received"></a><h3>The <code class="literal">"initial-binding-request-received"</code> signal</h3>
 <pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      arg1,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a>   user_data)      : Run Last</pre>
 <p>
 This signal is fired when we received our first binding request from
 the peer.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1951,25 +1747,24 @@ the peer.</p>
 <a name="NiceAgent-new-candidate"></a><h3>The <code class="literal">"new-candidate"</code> signal</h3>
 <pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      component_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      foundation,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>     *arg3,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a>   user_data)         : Run Last</pre>
 <p>
 This signal is fired when the agent discovers a new candidate
 </p>
 <p> See also: <span class="type">"candidates-gathering-done"</span> </p>
 <p>
-
 </p>
-<div class="variablelist"><table border="0">
+@:<div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
@@ -1999,16 +1794,16 @@ This signal is fired when the agent discovers a new candidate
 <a name="NiceAgent-new-remote-candidate"></a><h3>The <code class="literal">"new-remote-candidate"</code> signal</h3>
 <pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      component_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      foundation,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>     *arg3,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a>   user_data)         : Run Last</pre>
 <p>
 This signal is fired when the agent discovers a new remote candidate.
@@ -2016,9 +1811,8 @@ This can happen with peer reflexive candidates.
 </p>
 <p> See also: <span class="type">"candidates-gathering-done"</span> </p>
 <p>
-
 </p>
-<div class="variablelist"><table border="0">
+@:<div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
@@ -2048,287 +1842,27 @@ This can happen with peer reflexive candidates.
 <a name="NiceAgent-new-selected-pair"></a><h3>The <code class="literal">"new-selected-pair"</code> signal</h3>
 <pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      component_id,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"
 >guint</a>      lfoundation,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>     *rfoundation,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 >gchar</a>     *arg4,
                                                         <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
+href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"
 >gpointer</a>   user_data)         : Run Last</pre>
 <p>
 This signal is fired once a candidate pair is selected for data transfer for
 a stream's component</p>
 <p>
-
 </p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td> The ID of the stream
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td> The ID of the component
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>lfoundation</code></em> :</span></p></td>
-<td> The local foundation of the selected candidate pair
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>rfoundation</code></em> :</span></p></td>
-<td> The remote foundation of the selected candidate pair
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
-<td>user data set when the signal handler was connected.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent-candidate-gathering-done"></a><h3>The <code class="literal">"candidate-gathering-done"</code> signal</h3>
-<pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      arg1,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
->gpointer</a>   user_data)      : Run Last</pre>
-<p>
-This signal is fired whenever a stream has finished gathering its
-candidates after a call to <a class="link" href="NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()"><code class="function">nice_agent_gather_candidates()</code></a></p>
-<p>
-
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td> The ID of the stream
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
-<td>user data set when the signal handler was connected.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent-component-state-changed"></a><h3>The <code class="literal">"component-state-changed"</code> signal</h3>
-<pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      component_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      state,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      arg3,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
->gpointer</a>   user_data)         : Run Last</pre>
-<p>
-This signal is fired whenever a component's state changes</p>
-<p>
-
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td> The ID of the stream
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td> The ID of the component
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>state</code></em> :</span></p></td>
-<td> The <a class="link" href="NiceAgent.html#NiceComponentState" title="enum NiceComponentState"><span class="type">NiceComponentState</span></a> of the component
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
-<td>user data set when the signal handler was connected.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent-initial-binding-request-received"></a><h3>The <code class="literal">"initial-binding-request-received"</code> signal</h3>
-<pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      arg1,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
->gpointer</a>   user_data)      : Run Last</pre>
-<p>
-This signal is fired when we received our first binding request from
-the peer.</p>
-<p>
-
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td> The ID of the stream
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
-<td>user data set when the signal handler was connected.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent-new-candidate"></a><h3>The <code class="literal">"new-candidate"</code> signal</h3>
-<pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      component_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      foundation,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>     *arg3,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
->gpointer</a>   user_data)         : Run Last</pre>
-<p>
-This signal is fired when the agent discovers a new candidate
-</p>
-<p> See also: <span class="type">"candidates-gathering-done"</span> </p>
-<p>
-
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td> The ID of the stream
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td> The ID of the component
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>foundation</code></em> :</span></p></td>
-<td> The foundation of the new candidate
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
-<td>user data set when the signal handler was connected.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent-new-remote-candidate"></a><h3>The <code class="literal">"new-remote-candidate"</code> signal</h3>
-<pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      component_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      foundation,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>     *arg3,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
->gpointer</a>   user_data)         : Run Last</pre>
-<p>
-This signal is fired when the agent discovers a new remote candidate.
-This can happen with peer reflexive candidates.
-</p>
-<p> See also: <span class="type">"candidates-gathering-done"</span> </p>
-<p>
-
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td> The ID of the stream
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td> The ID of the component
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>foundation</code></em> :</span></p></td>
-<td> The foundation of the new candidate
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
-<td>user data set when the signal handler was connected.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2" lang="en">
-<a name="NiceAgent-new-selected-pair"></a><h3>The <code class="literal">"new-selected-pair"</code> signal</h3>
-<pre class="programlisting">void                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent">NiceAgent</a> *stream_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      component_id,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"
->guint</a>      lfoundation,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>     *rfoundation,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"
->gchar</a>     *arg4,
-                                                        <a
-href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gpointer"
->gpointer</a>   user_data)         : Run Last</pre>
-<p>
-This signal is fired once a candidate pair is selected for data transfer for
-a stream's component</p>
-<p>
-
-</p>
-<div class="variablelist"><table border="0">
+@:
+@:<div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
@@ -2361,11 +1895,11 @@ a stream's component</p>
 </div>
 <div class="refsect1" lang="en">
 <a name="NiceAgent.see-also"></a><h2>See Also</h2>
-<a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a>
+#NiceAddress
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.10</div>
+          Generated by GTK-Doc V1.11</div>
 </body>
 </html>

@@ -201,6 +201,7 @@ sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ERROR_CFLAGS = \
@@ -220,6 +221,7 @@ ERROR_CFLAGS = \
 # -Wold-style-definition -Winline -Wunreachable-code
 CLEANFILES = *.gcno *.gcda
 AM_CFLAGS = \
+	-DG_LOG_DOMAIN=\"libnice-socket\" \
 	$(ERROR_CFLAGS) \
 	$(GLIB_CFLAGS) \
 	-I $(top_srcdir)/random \

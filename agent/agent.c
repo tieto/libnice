@@ -1041,6 +1041,12 @@ nice_agent_set_relay_info(NiceAgent *agent,
 
   Component *component = NULL;
 
+  g_return_val_if_fail (server_ip, FALSE);
+  g_return_val_if_fail (server_port, FALSE);
+  g_return_val_if_fail (username, FALSE);
+  g_return_val_if_fail (password, FALSE);
+  g_return_val_if_fail (type <= NICE_PROXY_TYPE_LAST, FALSE);
+
   g_static_rec_mutex_lock (&agent->mutex);
 
   if (agent_find_component (agent, stream_id, component_id, NULL, &component)) {
@@ -1566,7 +1572,6 @@ nice_agent_send (
       sock = component->selected_pair.local->sockptr;
       addr = &component->selected_pair.remote->addr;
       if (nice_socket_send (sock, addr, len, buf)) {
-        component->media_after_tick = TRUE;
         ret = len;
       }
       goto done;

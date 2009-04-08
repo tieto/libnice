@@ -429,9 +429,45 @@ size_t stun_agent_build_unknown_attributes_error (StunAgent *agent,
  * add the MESSAGE-INTEGRITY and FINGERPRINT attributes if necessary. If the
  * STUN message has a #STUN_REQUEST class, it will save the transaction id of
  * the message in the agent for future matching of the response.
- * Returns: The final size of the message built
+ * <para>See also: stun_agent_forget_transaction()</para>
+ * Returns: The final size of the message built or 0 if an error occured
+ * <note>
+     <para>
+       The return value must always be checked. a value of 0 means the either
+       the buffer's size is too small to contain the finishing attributes
+       (MESSAGE-INTEGRITY, FINGERPRINT), or that there is no more free slots
+       for saving the sent id in the agent's state.
+     </para>
+     <para>
+       Everytime stun_agent_finish_message() is called for a #STUN_REQUEST
+       message, you must make sure to call stun_agent_forget_transaction() in
+       case the response times out and is never received. This is to avoid
+       filling up the #StunAgent's sent ids state preventing any further
+       use of the stun_agent_finish_message()
+     </para>
+   </note>
  */
 size_t stun_agent_finish_message (StunAgent *agent, StunMessage *msg,
    const uint8_t *key, size_t key_len);
+
+/**
+ * stun_agent_forget_transaction:
+ * @agent: The #StunAgent
+ * @id: The #StunTransactionId of the transaction to forget
+ *
+ * This function is used to make the #StunAgent forget about a previously
+ * created transaction.
+ * <para>
+ * This function should be called when a STUN request was previously
+ * created with stun_agent_finish_message() and for which no response was ever
+ * received (timed out). The #StunAgent keeps a list of the sent transactions
+ * in order to validate the responses received. If the response is never received
+ * this will allow the #StunAgent to forget about the timed out transaction and
+ * free its slot for future transactions.
+ * </para>
+ * Returns: %TRUE if the transaction was found, %FALSE otherwise
+ */
+bool stun_agent_forget_transaction (StunAgent *agent, StunTransactionId id);
+
 
 #endif /* _STUN_AGENT_H */

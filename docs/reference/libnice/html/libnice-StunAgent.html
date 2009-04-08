@@ -8,7 +8,7 @@
 <link rel="up" href="ch03.html" title="">
 <link rel="prev" href="ch03.html" title="">
 <link rel="next" href="libnice-StunMessage.html" title="StunMessage">
-<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="part" href="pt01.html" title="Part I. ICE Library">
 <link rel="chapter" href="ch01.html" title="">
@@ -26,9 +26,11 @@
 <th width="100%" align="center">libnice Reference Manual</th>
 <td><a accesskey="n" href="libnice-StunMessage.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
-<tr><td colspan="5" class="shortcuts"><nobr><a href="#libnice-StunAgent.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#libnice-StunAgent.description" class="shortcut">Description</a></nobr></td></tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libnice-StunAgent.synopsis" class="shortcut">Top</a>
+                 | 
+                <a href="#libnice-StunAgent.description" class="shortcut">Description</a>
+</td></tr>
 </table>
 <div class="refentry" lang="en">
 <a name="libnice-StunAgent"></a><div class="titlepage"></div>
@@ -65,7 +67,7 @@ void                <a class="link" href="libnice-StunAgent.html#stun-agent-init
                                                          const uint16_t *known_attributes,
                                                          <a class="link" href="libnice-StunAgent.html#StunCompatibility" title="enum StunCompatibility">StunCompatibility</a> compatibility,
                                                          <a class="link" href="libnice-StunAgent.html#StunAgentUsageFlags" title="enum StunAgentUsageFlags">StunAgentUsageFlags</a> usage_flags);
-<a class="link" href="libnice-StunAgent.html#StunValidationStatus" title="enum StunValidationStatus">StunValidationStatus</a> <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()">stun_agent_validate</a>                (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
+<a class="link" href="libnice-StunAgent.html#StunValidationStatus" title="enum StunValidationStatus">StunValidationStatus</a>  <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()">stun_agent_validate</a>               (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          const uint8_t *buffer,
                                                          size_t buffer_len,
@@ -109,6 +111,8 @@ size_t              <a class="link" href="libnice-StunAgent.html#stun-agent-fini
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          const uint8_t *key,
                                                          size_t key_len);
+bool                <a class="link" href="libnice-StunAgent.html#stun-agent-forget-transaction" title="stun_agent_forget_transaction ()">stun_agent_forget_transaction</a>       (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
+                                                         <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);
 void                <a class="link" href="libnice-StunAgent.html#stun-debug-enable" title="stun_debug_enable ()">stun_debug_enable</a>                   (void);
 void                <a class="link" href="libnice-StunAgent.html#stun-debug-disable" title="stun_debug_disable ()">stun_debug_disable</a>                  (void);
 </pre>
@@ -122,17 +126,17 @@ are compatible with the RFC you create it with. It also tracks the transaction
 ids of the requests you send, so you can validate if a STUN response you
 received should be processed by that agent or not.</p>
 <p>
-
 </p>
 </div>
 <div class="refsect1" lang="en">
 <a name="libnice-StunAgent.details"></a><h2>Details</h2>
 <div class="refsect2" lang="en">
 <a name="StunAgent"></a><h3>StunAgent</h3>
+<pre class="programlisting">typedef struct stun_agent_t StunAgent;
+</pre>
 <p>
 An opaque structure representing the STUN agent.</p>
 <p>
-
 </p>
 </div>
 <hr>
@@ -148,32 +152,31 @@ An opaque structure representing the STUN agent.</p>
 <p>
 Enum that specifies the STUN compatibility mode of the <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-COMPATIBILITY-RFC3489:CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_RFC3489</code></span></p></td>
+<td><p><a name="STUN-COMPATIBILITY-RFC3489--CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_RFC3489</code></span></p></td>
 <td> Use the STUN specifications compatible with
 RFC 3489
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-COMPATIBILITY-RFC5389:CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_RFC5389</code></span></p></td>
+<td><p><a name="STUN-COMPATIBILITY-RFC5389--CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_RFC5389</code></span></p></td>
 <td> Use the STUN specifications compatible with
 RFC 5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-COMPATIBILITY-WLM2009:CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_WLM2009</code></span></p></td>
+<td><p><a name="STUN-COMPATIBILITY-WLM2009--CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_WLM2009</code></span></p></td>
 <td> Use the STUN specifications compatible with
 Windows Live Messenger 2009 (a mix between RFC3489 and RFC5389, as well as
 a special usecase against a typo in their code)
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-COMPATIBILITY-LAST:CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_LAST</code></span></p></td>
+<td><p><a name="STUN-COMPATIBILITY-LAST--CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_LAST</code></span></p></td>
 <td> Dummy last compatibility mode
 </td>
 </tr>
@@ -202,53 +205,52 @@ the agent should behave, independently of the compatibility mode it uses.
 </p>
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a> </p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS</code></span></p></td>
+<td><p><a name="STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS--CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS</code></span></p></td>
 <td> The agent should be using the short
 term credentials mechanism for authenticating STUN messages
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-AGENT-USAGE-LONG-TERM-CREDENTIALS:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS</code></span></p></td>
+<td><p><a name="STUN-AGENT-USAGE-LONG-TERM-CREDENTIALS--CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS</code></span></p></td>
 <td> The agent should be using the long
 term credentials mechanism for authenticating STUN messages
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-AGENT-USAGE-USE-FINGERPRINT:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_USE_FINGERPRINT</code></span></p></td>
+<td><p><a name="STUN-AGENT-USAGE-USE-FINGERPRINT--CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_USE_FINGERPRINT</code></span></p></td>
 <td> The agent should add the FINGERPRINT
 attribute to the STUN messages it creates.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-AGENT-USAGE-ADD-SOFTWARE:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_ADD_SOFTWARE</code></span></p></td>
+<td><p><a name="STUN-AGENT-USAGE-ADD-SOFTWARE--CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_ADD_SOFTWARE</code></span></p></td>
 <td> The agent should add the SOFTWARE attribute
 to the STUN messages it creates
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-AGENT-USAGE-IGNORE-CREDENTIALS:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_IGNORE_CREDENTIALS</code></span></p></td>
+<td><p><a name="STUN-AGENT-USAGE-IGNORE-CREDENTIALS--CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_IGNORE_CREDENTIALS</code></span></p></td>
 <td> The agent should ignore any credentials
 in the STUN messages it receives (the MESSAGE-INTEGRITY attribute
 will never be validated by <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a>)
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-AGENT-USAGE-NO-INDICATION-AUTH:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_NO_INDICATION_AUTH</code></span></p></td>
+<td><p><a name="STUN-AGENT-USAGE-NO-INDICATION-AUTH--CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_NO_INDICATION_AUTH</code></span></p></td>
 <td> The agent should ignore credentials
 in the STUN messages it receives if the <a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass"><span class="type">StunClass</span></a> of the message is
-<a class="link" href="libnice-StunMessage.html#STUN-INDICATION:CAPS"><span class="type">STUN_INDICATION</span></a> (some implementation require <a class="link" href="libnice-StunMessage.html#STUN-INDICATION:CAPS"><span class="type">STUN_INDICATION</span></a> messages to
+<a class="link" href="libnice-StunMessage.html#STUN-INDICATION--CAPS"><span class="type">STUN_INDICATION</span></a> (some implementation require <a class="link" href="libnice-StunMessage.html#STUN-INDICATION--CAPS"><span class="type">STUN_INDICATION</span></a> messages to
 be authenticated, while others never add a MESSAGE-INTEGRITY attribute to a
-<a class="link" href="libnice-StunMessage.html#STUN-INDICATION:CAPS"><span class="type">STUN_INDICATION</span></a> message)
+<a class="link" href="libnice-StunMessage.html#STUN-INDICATION--CAPS"><span class="type">STUN_INDICATION</span></a> message)
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-AGENT-USAGE-FORCE-VALIDATER:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_FORCE_VALIDATER</code></span></p></td>
+<td><p><a name="STUN-AGENT-USAGE-FORCE-VALIDATER--CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_FORCE_VALIDATER</code></span></p></td>
 <td> The agent should always try to validate
 the password of a STUN message, even if it already knows what the password
 should be (a response to a previously created request). This means that the
@@ -278,61 +280,60 @@ a MESSAGE-INTEGRITY attribute.
 This enum is used as the return value of <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a> and represents
 the status result of the validation of a STUN message.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-VALIDATION-SUCCESS:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_SUCCESS</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-SUCCESS--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_SUCCESS</code></span></p></td>
 <td> The message is validated
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-VALIDATION-NOT-STUN:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_NOT_STUN</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-NOT-STUN--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_NOT_STUN</code></span></p></td>
 <td> This is not a valid STUN message
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-VALIDATION-INCOMPLETE-STUN:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_INCOMPLETE_STUN</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-INCOMPLETE-STUN--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_INCOMPLETE_STUN</code></span></p></td>
 <td> The message seems to be valid but incomplete
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-VALIDATION-BAD-REQUEST:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_BAD_REQUEST</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-BAD-REQUEST--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_BAD_REQUEST</code></span></p></td>
 <td> The message does not have the cookie or the
 fingerprint while the agent needs it with its usage
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-VALIDATION-UNAUTHORIZED-BAD-REQUEST:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNAUTHORIZED_BAD_REQUEST</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-UNAUTHORIZED-BAD-REQUEST--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNAUTHORIZED_BAD_REQUEST</code></span></p></td>
 <td> The message is valid but
 unauthorized with no username and message-integrity attributes.
 A BAD_REQUEST error must be generated
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-VALIDATION-UNAUTHORIZED:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNAUTHORIZED</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-UNAUTHORIZED--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNAUTHORIZED</code></span></p></td>
 <td> The message is valid but unauthorized as
 the username/password do not match.
 An UNAUTHORIZED error must be generated
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-VALIDATION-UNMATCHED-RESPONSE:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNMATCHED_RESPONSE</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-UNMATCHED-RESPONSE--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNMATCHED_RESPONSE</code></span></p></td>
 <td> The message is valid but this is a
 response/error that doesn't match a previously sent request
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-VALIDATION-UNKNOWN-REQUEST-ATTRIBUTE:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNKNOWN_REQUEST_ATTRIBUTE</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-UNKNOWN-REQUEST-ATTRIBUTE--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNKNOWN_REQUEST_ATTRIBUTE</code></span></p></td>
 <td> The message is valid but
 contains one or more unknown comprehension attributes.
 <a class="link" href="libnice-StunAgent.html#stun-agent-build-unknown-attributes-error" title="stun_agent_build_unknown_attributes_error ()"><code class="function">stun_agent_build_unknown_attributes_error()</code></a> should be called
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-VALIDATION-UNKNOWN-ATTRIBUTE:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNKNOWN_ATTRIBUTE</code></span></p></td>
+<td><p><a name="STUN-VALIDATION-UNKNOWN-ATTRIBUTE--CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_UNKNOWN_ATTRIBUTE</code></span></p></td>
 <td> The message is valid but contains one
 or more unknown comprehension attributes. This is a response, or error,
 or indication message and no error response should be sent
@@ -357,7 +358,6 @@ function.
 </p>
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a> </p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -402,10 +402,10 @@ validater function.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if the authentication was successful,
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> if the authentication failed
 </td>
 </tr>
@@ -429,7 +429,6 @@ message during validationg.
 </p>
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-default-validater" title="stun_agent_default_validater ()"><code class="function">stun_agent_default_validater()</code></a> </p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -475,18 +474,17 @@ This function must be called to initialize an agent before it is being used.
     The <em class="parameter"><code>known_attributes</code></em> data must exist in memory as long as the <em class="parameter"><code>agent</code></em> is used
     </p>
 <p>
-    If the <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS:CAPS"><span class="type">STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS</span></a> and
-    <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-LONG-TERM-CREDENTIALS:CAPS"><span class="type">STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS</span></a> usage flags are not set, then the
+    If the <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS--CAPS"><span class="type">STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS</span></a> and
+    <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-LONG-TERM-CREDENTIALS--CAPS"><span class="type">STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS</span></a> usage flags are not set, then the
     agent will default in using the short term credentials mechanism
     </p>
 <p>
-    The <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-USE-FINGERPRINT:CAPS"><span class="type">STUN_AGENT_USAGE_USE_FINGERPRINT</span></a> and <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-ADD-SOFTWARE:CAPS"><span class="type">STUN_AGENT_USAGE_ADD_SOFTWARE</span></a>
-    usage flags are only valid if the <a class="link" href="libnice-StunAgent.html#STUN-COMPATIBILITY-RFC5389:CAPS"><span class="type">STUN_COMPATIBILITY_RFC5389</span></a> or
-    <a class="link" href="libnice-StunAgent.html#STUN-COMPATIBILITY-WLM2009:CAPS"><span class="type">STUN_COMPATIBILITY_WLM2009</span></a> <em class="parameter"><code>compatibility</code></em> is used
+    The <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-USE-FINGERPRINT--CAPS"><span class="type">STUN_AGENT_USAGE_USE_FINGERPRINT</span></a> and <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-ADD-SOFTWARE--CAPS"><span class="type">STUN_AGENT_USAGE_ADD_SOFTWARE</span></a>
+    usage flags are only valid if the <a class="link" href="libnice-StunAgent.html#STUN-COMPATIBILITY-RFC5389--CAPS"><span class="type">STUN_COMPATIBILITY_RFC5389</span></a> or
+    <a class="link" href="libnice-StunAgent.html#STUN-COMPATIBILITY-WLM2009--CAPS"><span class="type">STUN_COMPATIBILITY_WLM2009</span></a> <em class="parameter"><code>compatibility</code></em> is used
     </p>
 </div>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -501,8 +499,8 @@ This function must be called to initialize an agent before it is being used.
 <td> An array of <span class="type">uint16_t</span> specifying which attributes should
 be known by the agent. Any STUN message received that contains a mandatory
 attribute that is not in this array will yield a
-<a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-UNKNOWN-REQUEST-ATTRIBUTE:CAPS"><span class="type">STUN_VALIDATION_UNKNOWN_REQUEST_ATTRIBUTE</span></a> or a
-<a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-UNKNOWN-ATTRIBUTE:CAPS"><span class="type">STUN_VALIDATION_UNKNOWN_ATTRIBUTE</span></a> error when calling <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a>
+<a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-UNKNOWN-REQUEST-ATTRIBUTE--CAPS"><span class="type">STUN_VALIDATION_UNKNOWN_REQUEST_ATTRIBUTE</span></a> or a
+<a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-UNKNOWN-ATTRIBUTE--CAPS"><span class="type">STUN_VALIDATION_UNKNOWN_ATTRIBUTE</span></a> error when calling <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a>
 </td>
 </tr>
 <tr>
@@ -523,7 +521,7 @@ STUN usages the agent should use.
 <hr>
 <div class="refsect2" lang="en">
 <a name="stun-agent-validate"></a><h3>stun_agent_validate ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunAgent.html#StunValidationStatus" title="enum StunValidationStatus">StunValidationStatus</a> stun_agent_validate                (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
+<pre class="programlisting"><a class="link" href="libnice-StunAgent.html#StunValidationStatus" title="enum StunValidationStatus">StunValidationStatus</a>  stun_agent_validate               (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          const uint8_t *buffer,
                                                          size_t buffer_len,
@@ -537,7 +535,6 @@ authenticated.
 </p>
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-default-validater" title="stun_agent_default_validater ()"><code class="function">stun_agent_default_validater()</code></a> </p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -568,9 +565,9 @@ authenticated.
 be called if the agent needs to validate a MESSAGE-INTEGRITY attribute. It
 will only be called if the agent finds a message that needs authentication
 and a USERNAME is present in the STUN message, but no password is known.
-The validater will not be called if the <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-IGNORE-CREDENTIALS:CAPS"><span class="type">STUN_AGENT_USAGE_IGNORE_CREDENTIALS</span></a>
+The validater will not be called if the <a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-IGNORE-CREDENTIALS--CAPS"><span class="type">STUN_AGENT_USAGE_IGNORE_CREDENTIALS</span></a>
 usage flag is set on the agent, and it will always be called if the
-<a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-FORCE-VALIDATER:CAPS"><span class="type">STUN_AGENT_USAGE_FORCE_VALIDATER</span></a> usage flag is set on the agent.
+<a class="link" href="libnice-StunAgent.html#STUN-AGENT-USAGE-FORCE-VALIDATER--CAPS"><span class="type">STUN_AGENT_USAGE_FORCE_VALIDATER</span></a> usage flag is set on the agent.
 </td>
 </tr>
 <tr>
@@ -585,14 +582,14 @@ called.
  <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
-   if the return value is different from <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-NOT-STUN:CAPS"><span class="type">STUN_VALIDATION_NOT_STUN</span></a> or
-   <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-INCOMPLETE-STUN:CAPS"><span class="type">STUN_VALIDATION_INCOMPLETE_STUN</span></a>, then the <em class="parameter"><code>msg</code></em> argument will contain a valid
+   if the return value is different from <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-NOT-STUN--CAPS"><span class="type">STUN_VALIDATION_NOT_STUN</span></a> or
+   <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-INCOMPLETE-STUN--CAPS"><span class="type">STUN_VALIDATION_INCOMPLETE_STUN</span></a>, then the <em class="parameter"><code>msg</code></em> argument will contain a valid
    STUN message that can be used.
    This means that you can use the <em class="parameter"><code>msg</code></em> variable as the <em class="parameter"><code>request</code></em> argument to
    functions like <a class="link" href="libnice-StunAgent.html#stun-agent-init-error" title="stun_agent_init_error ()"><code class="function">stun_agent_init_error()</code></a> or
    <a class="link" href="libnice-StunAgent.html#stun-agent-build-unknown-attributes-error" title="stun_agent_build_unknown_attributes_error ()"><code class="function">stun_agent_build_unknown_attributes_error()</code></a>.
-   If the return value is <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-BAD-REQUEST:CAPS"><span class="type">STUN_VALIDATION_BAD_REQUEST</span></a>,
-   <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-UNAUTHORIZED:CAPS"><span class="type">STUN_VALIDATION_UNAUTHORIZED</span></a> or <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-UNAUTHORIZED-BAD-REQUEST:CAPS"><span class="type">STUN_VALIDATION_UNAUTHORIZED_BAD_REQUEST</span></a>
+   If the return value is <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-BAD-REQUEST--CAPS"><span class="type">STUN_VALIDATION_BAD_REQUEST</span></a>,
+   <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-UNAUTHORIZED--CAPS"><span class="type">STUN_VALIDATION_UNAUTHORIZED</span></a> or <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-UNAUTHORIZED-BAD-REQUEST--CAPS"><span class="type">STUN_VALIDATION_UNAUTHORIZED_BAD_REQUEST</span></a>
    then the <em class="parameter"><code>key</code></em> in the <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> will not be set, so that error responses
    will not have a MESSAGE-INTEGRITY attribute.
    </p>
@@ -622,7 +619,6 @@ password
 </p>
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a> </p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -668,10 +664,10 @@ The last element in the array must have a username set to NULL
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if the authentication was successful,
 <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> if the authentication failed
 </td>
 </tr>
@@ -687,9 +683,8 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
                                                          size_t buffer_len,
                                                          <a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod">StunMethod</a> m);</pre>
 <p>
-Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST:CAPS"><span class="type">STUN_REQUEST</span></a> and with the method <em class="parameter"><code>m</code></em></p>
+Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST--CAPS"><span class="type">STUN_REQUEST</span></a> and with the method <em class="parameter"><code>m</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -722,9 +717,9 @@ Creates a new STUN message of class <a class="link" href="libnice-StunMessage.ht
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if the message was initialized correctly, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
@@ -740,9 +735,8 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
                                                          size_t buffer_len,
                                                          <a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod">StunMethod</a> m);</pre>
 <p>
-Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-INDICATION:CAPS"><span class="type">STUN_INDICATION</span></a> and with the method <em class="parameter"><code>m</code></em></p>
+Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-INDICATION--CAPS"><span class="type">STUN_INDICATION</span></a> and with the method <em class="parameter"><code>m</code></em></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -775,9 +769,9 @@ Creates a new STUN message of class <a class="link" href="libnice-StunMessage.ht
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if the message was initialized correctly, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
@@ -793,12 +787,11 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
                                                          size_t buffer_len,
                                                          const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *request);</pre>
 <p>
-Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-RESPONSE:CAPS"><span class="type">STUN_RESPONSE</span></a> and with the same method
+Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-RESPONSE--CAPS"><span class="type">STUN_RESPONSE</span></a> and with the same method
 and transaction ID as the message <em class="parameter"><code>request</code></em>. This will also copy the pointer
 to the key that was used to authenticate the request, so you won't need to
 specify the key with <a class="link" href="libnice-StunAgent.html#stun-agent-finish-message" title="stun_agent_finish_message ()"><code class="function">stun_agent_finish_message()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -825,15 +818,15 @@ specify the key with <a class="link" href="libnice-StunAgent.html#stun-agent-fin
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>request</code></em> :</span></p></td>
-<td> The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST:CAPS"><span class="type">STUN_REQUEST</span></a> that this response is for
+<td> The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST--CAPS"><span class="type">STUN_REQUEST</span></a> that this response is for
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if the message was initialized correctly, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
@@ -850,14 +843,13 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
                                                          const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *request,
                                                          <a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a> err);</pre>
 <p>
-Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-ERROR:CAPS"><span class="type">STUN_ERROR</span></a> and with the same method
+Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-ERROR--CAPS"><span class="type">STUN_ERROR</span></a> and with the same method
 and transaction ID as the message <em class="parameter"><code>request</code></em>. This will also copy the pointer
 to the key that was used to authenticate the request (if authenticated),
 so you won't need to specify the key with <a class="link" href="libnice-StunAgent.html#stun-agent-finish-message" title="stun_agent_finish_message ()"><code class="function">stun_agent_finish_message()</code></a>.
 It will then add the ERROR-CODE attribute with code <em class="parameter"><code>err</code></em> and the associated
 string.</p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -884,7 +876,7 @@ string.</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>request</code></em> :</span></p></td>
-<td> The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST:CAPS"><span class="type">STUN_REQUEST</span></a> that this error response
+<td> The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST--CAPS"><span class="type">STUN_REQUEST</span></a> that this error response
 is for
 </td>
 </tr>
@@ -896,9 +888,9 @@ is for
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
 ><code class="literal">TRUE</code></a> if the message was initialized correctly, <a
-href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
@@ -915,14 +907,13 @@ href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"
                                                          size_t buffer_len,
                                                          const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *request);</pre>
 <p>
-Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-ERROR:CAPS"><span class="type">STUN_ERROR</span></a> and with the same method
+Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-ERROR--CAPS"><span class="type">STUN_ERROR</span></a> and with the same method
 and transaction ID as the message <em class="parameter"><code>request</code></em>.  It will then add the ERROR-CODE
-attribute with code <a class="link" href="libnice-StunMessage.html#STUN-ERROR-UNKNOWN-ATTRIBUTE:CAPS"><span class="type">STUN_ERROR_UNKNOWN_ATTRIBUTE</span></a> and add all the unknown
+attribute with code <a class="link" href="libnice-StunMessage.html#STUN-ERROR-UNKNOWN-ATTRIBUTE--CAPS"><span class="type">STUN_ERROR_UNKNOWN_ATTRIBUTE</span></a> and add all the unknown
 mandatory attributes from the <em class="parameter"><code>request</code></em> STUN message in the
-<a class="link" href="libnice-StunMessage.html#STUN-ATTRIBUTE-UNKNOWN-ATTRIBUTES:CAPS"><span class="type">STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES</span></a> attribute, it will then finish the message
+<a class="link" href="libnice-StunMessage.html#STUN-ATTRIBUTE-UNKNOWN-ATTRIBUTES--CAPS"><span class="type">STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES</span></a> attribute, it will then finish the message
 by calling <a class="link" href="libnice-StunAgent.html#stun-agent-finish-message" title="stun_agent_finish_message ()"><code class="function">stun_agent_finish_message()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -949,7 +940,7 @@ by calling <a class="link" href="libnice-StunAgent.html#stun-agent-finish-messag
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>request</code></em> :</span></p></td>
-<td> The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST:CAPS"><span class="type">STUN_REQUEST</span></a> that this response is for
+<td> The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST--CAPS"><span class="type">STUN_REQUEST</span></a> that this response is for
 </td>
 </tr>
 <tr>
@@ -970,10 +961,11 @@ by calling <a class="link" href="libnice-StunAgent.html#stun-agent-finish-messag
 <p>
 This function will 'finish' a message and make it ready to be sent. It will
 add the MESSAGE-INTEGRITY and FINGERPRINT attributes if necessary. If the
-STUN message has a <a class="link" href="libnice-StunMessage.html#STUN-REQUEST:CAPS"><span class="type">STUN_REQUEST</span></a> class, it will save the transaction id of
-the message in the agent for future matching of the response.</p>
+STUN message has a <a class="link" href="libnice-StunMessage.html#STUN-REQUEST--CAPS"><span class="type">STUN_REQUEST</span></a> class, it will save the transaction id of
+the message in the agent for future matching of the response.
+</p>
+<p>See also: <a class="link" href="libnice-StunAgent.html#stun-agent-forget-transaction" title="stun_agent_forget_transaction ()"><code class="function">stun_agent_forget_transaction()</code></a></p>
 <p>
-
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1000,7 +992,67 @@ the message in the agent for future matching of the response.</p>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The final size of the message built
+<td> The final size of the message built or 0 if an error occured
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+       The return value must always be checked. a value of 0 means the either
+       the buffer's size is too small to contain the finishing attributes
+       (MESSAGE-INTEGRITY, FINGERPRINT), or that there is no more free slots
+       for saving the sent id in the agent's state.
+     </p>
+<p>
+       Everytime <a class="link" href="libnice-StunAgent.html#stun-agent-finish-message" title="stun_agent_finish_message ()"><code class="function">stun_agent_finish_message()</code></a> is called for a <a class="link" href="libnice-StunMessage.html#STUN-REQUEST--CAPS"><span class="type">STUN_REQUEST</span></a>
+       message, you must make sure to call <a class="link" href="libnice-StunAgent.html#stun-agent-forget-transaction" title="stun_agent_forget_transaction ()"><code class="function">stun_agent_forget_transaction()</code></a> in
+       case the response times out and is never received. This is to avoid
+       filling up the <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a>'s sent ids state preventing any further
+       use of the <a class="link" href="libnice-StunAgent.html#stun-agent-finish-message" title="stun_agent_finish_message ()"><code class="function">stun_agent_finish_message()</code></a>
+     </p>
+</div>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="stun-agent-forget-transaction"></a><h3>stun_agent_forget_transaction ()</h3>
+<pre class="programlisting">bool                stun_agent_forget_transaction       (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
+                                                         <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);</pre>
+<p>
+This function is used to make the <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> forget about a previously
+created transaction.
+</p>
+<p>
+This function should be called when a STUN request was previously
+created with <a class="link" href="libnice-StunAgent.html#stun-agent-finish-message" title="stun_agent_finish_message ()"><code class="function">stun_agent_finish_message()</code></a> and for which no response was ever
+received (timed out). The <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> keeps a list of the sent transactions
+in order to validate the responses received. If the response is never received
+this will allow the <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> to forget about the timed out transaction and
+free its slot for future transactions.
+</p>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>id</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId"><span class="type">StunTransactionId</span></a> of the transaction to forget
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td> <a
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
+><code class="literal">TRUE</code></a> if the transaction was found, <a
+href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
+><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -1013,7 +1065,6 @@ the message in the agent for future matching of the response.</p>
 <p>
 Enable debug messages to stderr</p>
 <p>
-
 </p>
 </div>
 <hr>
@@ -1023,17 +1074,16 @@ Enable debug messages to stderr</p>
 <p>
 Disable debug messages to stderr</p>
 <p>
-
 </p>
 </div>
 </div>
 <div class="refsect1" lang="en">
 <a name="libnice-StunAgent.see-also"></a><h2>See Also</h2>
-<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a>
+#StunMessage
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.10</div>
+          Generated by GTK-Doc V1.11</div>
 </body>
 </html>
