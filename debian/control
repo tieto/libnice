@@ -18,7 +18,6 @@ Vcs-Git: git://git.debian.org/git/pkg-telepathy/libnice.git
 Vcs-Browser: http://git.debian.org/?p=pkg-telepathy/libnice.git
 
 Package: libnice0
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: ICE library
