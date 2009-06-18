@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Timer</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="index.html" title="libnice Reference Manual">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch04.html" title="STUN usages">
 <link rel="prev" href="libnice-TURN.html" title="TURN">
 <meta name="generator" content="GTK-Doc V1.11 (XML mode)">
@@ -31,7 +31,7 @@
                 <a href="#libnice-Timer.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" lang="en">
+<div class="refentry" title="Timer">
 <a name="libnice-Timer"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -40,11 +40,11 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Stability Level">
 <a name="libnice-Timer.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv">
+<div class="refsynopsisdiv" title="Synopsis">
 <a name="libnice-Timer.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
 
@@ -58,7 +58,7 @@ void                <a class="link" href="libnice-Timer.html#stun-timer-start-re
 unsigned            <a class="link" href="libnice-Timer.html#stun-timer-remainder" title="stun_timer_remainder ()">stun_timer_remainder</a>                (const <a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer">StunTimer</a> *timer);
 </pre>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Description">
 <a name="libnice-Timer.description"></a><h2>Description</h2>
 <p>
 The STUN timer usage is a set of helpful utility functions that allows you
@@ -68,7 +68,7 @@ as timed out.
 <p>
  </p>
 <div class="example">
-<a name="id2843835"></a><p class="title"><b>Example 3. Simple example on how to use the timer usage</b></p>
+<a name="id2741662"></a><p class="title"><b>Example 3. Simple example on how to use the timer usage</b></p>
 <div class="example-contents"><pre class="programlisting">
    StunTimer timer;
    unsigned remainder;
@@ -120,9 +120,9 @@ as timed out.
 <p>
 </p>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Details">
 <a name="libnice-Timer.details"></a><h2>Details</h2>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="StunTimer">
 <a name="StunTimer"></a><h3>StunTimer</h3>
 <pre class="programlisting">typedef struct stun_timer_s StunTimer;
 </pre>
@@ -132,7 +132,7 @@ An opaque structure representing a STUN transaction retransmission timer</p>
 </p>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunUsageTimerReturn">
 <a name="StunUsageTimerReturn"></a><h3>enum StunUsageTimerReturn</h3>
 <pre class="programlisting">typedef enum {
   STUN_USAGE_TIMER_RETURN_SUCCESS,
@@ -170,7 +170,7 @@ retransmissions, the transaction timed out
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_timer_start ()">
 <a name="stun-timer-start"></a><h3>stun_timer_start ()</h3>
 <pre class="programlisting">void                stun_timer_start                    (<a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer">StunTimer</a> *timer);</pre>
 <p>
@@ -189,7 +189,7 @@ a UDP socket</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_timer_start_reliable ()">
 <a name="stun-timer-start-reliable"></a><h3>stun_timer_start_reliable ()</h3>
 <pre class="programlisting">void                stun_timer_start_reliable           (<a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer">StunTimer</a> *timer);</pre>
 <p>
@@ -208,7 +208,7 @@ a TCP socket</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_timer_refresh ()">
 <a name="stun-timer-refresh"></a><h3>stun_timer_refresh ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-Timer.html#StunUsageTimerReturn" title="enum StunUsageTimerReturn">StunUsageTimerReturn</a>  stun_timer_refresh                (<a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer">StunTimer</a> *timer);</pre>
 <p>
@@ -232,7 +232,7 @@ Updates a STUN transaction retransmission timer.</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_timer_remainder ()">
 <a name="stun-timer-remainder"></a><h3>stun_timer_remainder ()</h3>
 <pre class="programlisting">unsigned            stun_timer_remainder                (const <a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer">StunTimer</a> *timer);</pre>
 <p>

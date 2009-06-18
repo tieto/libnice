@@ -1054,8 +1054,9 @@ Extracts a network address attribute from a STUN message.</para>
 <listitem><simpara> The <link linkend="sockaddr"><type>sockaddr</type></link> to be filled
 </simpara></listitem></varlistentry>
 <varlistentry><term><parameter>addrlen</parameter>&#160;:</term>
-<listitem><simpara> The size of the <parameter>addr</parameter> variable. Will be set to the size of the
-extracted socket address.
+<listitem><simpara> The size of the <parameter>addr</parameter> variable. Must be set to the size of the
+<parameter>addr</parameter> socket address and will be set to the size of the extracted socket
+address.
 </simpara></listitem></varlistentry>
 <varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara> A <link linkend="StunMessageReturn"><type>StunMessageReturn</type></link> value.
 <link linkend="STUN-MESSAGE-RETURN-INVALID--CAPS"><literal>STUN_MESSAGE_RETURN_INVALID</literal></link> is returned if the attribute payload size is
@@ -1083,7 +1084,8 @@ Extracts an obfuscated network address attribute from a STUN message.</para>
 <listitem><simpara> The <link linkend="sockaddr"><type>sockaddr</type></link> to be filled
 </simpara></listitem></varlistentry>
 <varlistentry><term><parameter>addrlen</parameter>&#160;:</term>
-<listitem><simpara> The size of the <parameter>addr</parameter> variable. Will be set to the size of the
+<listitem><simpara> The size of the <parameter>addr</parameter> variable. Must be set to the size of the
+<parameter>addr</parameter> socket address and will be set to the size of the
 extracted socket address.
 </simpara></listitem></varlistentry>
 <varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara> A <link linkend="StunMessageReturn"><type>StunMessageReturn</type></link> value.
@@ -1113,7 +1115,8 @@ Extracts an obfuscated network address attribute from a STUN message.</para>
 <listitem><simpara> The <link linkend="sockaddr"><type>sockaddr</type></link> to be filled
 </simpara></listitem></varlistentry>
 <varlistentry><term><parameter>addrlen</parameter>&#160;:</term>
-<listitem><simpara> The size of the <parameter>addr</parameter> variable. Will be set to the size of the
+<listitem><simpara> The size of the <parameter>addr</parameter> variable. Must be set to the size of the
+<parameter>addr</parameter> socket address and will be set to the size of the
 extracted socket address.
 </simpara></listitem></varlistentry>
 <varlistentry><term><parameter>magic_cookie</parameter>&#160;:</term>

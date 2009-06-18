@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>TURN</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="index.html" title="libnice Reference Manual">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch04.html" title="STUN usages">
 <link rel="prev" href="libnice-ICE.html" title="ICE">
 <link rel="next" href="libnice-Timer.html" title="Timer">
@@ -32,7 +32,7 @@
                 <a href="#libnice-TURN.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" lang="en">
+<div class="refentry" title="TURN">
 <a name="libnice-TURN"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -41,11 +41,11 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Stability Level">
 <a name="libnice-TURN.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv">
+<div class="refsynopsisdiv" title="Synopsis">
 <a name="libnice-TURN.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
 
@@ -93,7 +93,7 @@ size_t              <a class="link" href="libnice-TURN.html#stun-usage-turn-crea
                                                          <a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility">StunUsageTurnCompatibility</a> compatibility);
 </pre>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Description">
 <a name="libnice-TURN.description"></a><h2>Description</h2>
 <p>
 The STUN TURN usage allows for easily creating and parsing STUN Allocate
@@ -103,9 +103,9 @@ an allocate or refresh request.</p>
 <p>
 </p>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Details">
 <a name="libnice-TURN.details"></a><h2>Details</h2>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunUsageTurnCompatibility">
 <a name="StunUsageTurnCompatibility"></a><h3>enum StunUsageTurnCompatibility</h3>
 <pre class="programlisting">typedef enum {
   STUN_USAGE_TURN_COMPATIBILITY_DRAFT9,
@@ -142,7 +142,7 @@ MSN TURN servers
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunUsageTurnRequestPorts">
 <a name="StunUsageTurnRequestPorts"></a><h3>enum StunUsageTurnRequestPorts</h3>
 <pre class="programlisting">typedef enum {
   STUN_USAGE_TURN_REQUEST_PORT_NORMAL = 0,
@@ -178,7 +178,7 @@ reserve the next higher port
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunUsageTurnReturn">
 <a name="StunUsageTurnReturn"></a><h3>enum StunUsageTurnReturn</h3>
 <pre class="programlisting">typedef enum {
   STUN_USAGE_TURN_RETURN_RELAY_SUCCESS,
@@ -229,7 +229,7 @@ to be sent to an alternate server
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_turn_create ()">
 <a name="stun-usage-turn-create"></a><h3>stun_usage_turn_create ()</h3>
 <pre class="programlisting">size_t              stun_usage_turn_create              (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -340,7 +340,7 @@ request
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_turn_create_refresh ()">
 <a name="stun-usage-turn-create-refresh"></a><h3>stun_usage_turn_create_refresh ()</h3>
 <pre class="programlisting">size_t              stun_usage_turn_create_refresh      (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -431,7 +431,7 @@ request
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_turn_process ()">
 <a name="stun-usage-turn-process"></a><h3>stun_usage_turn_process ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a>  stun_usage_turn_process            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          struct sockaddr *relay_addr,
@@ -519,7 +519,7 @@ response
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_turn_refresh_process ()">
 <a name="stun-usage-turn-refresh-process"></a><h3>stun_usage_turn_refresh_process ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn">StunUsageTurnReturn</a>  stun_usage_turn_refresh_process    (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          uint32_t *lifetime,

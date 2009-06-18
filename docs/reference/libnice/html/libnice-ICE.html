@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ICE</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="index.html" title="libnice Reference Manual">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch04.html" title="STUN usages">
 <link rel="prev" href="libnice-Bind.html" title="Bind">
 <link rel="next" href="libnice-TURN.html" title="TURN">
@@ -32,7 +32,7 @@
                 <a href="#libnice-ICE.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" lang="en">
+<div class="refentry" title="ICE">
 <a name="libnice-ICE"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -41,11 +41,11 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Stability Level">
 <a name="libnice-ICE.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv">
+<div class="refsynopsisdiv" title="Synopsis">
 <a name="libnice-ICE.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
 
@@ -86,7 +86,7 @@ bool                <a class="link" href="libnice-ICE.html#stun-usage-ice-connch
                                                         (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);
 </pre>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Description">
 <a name="libnice-ICE.description"></a><h2>Description</h2>
 <p>
 The STUN ICE usage allows for easily creating and parsing STUN Binding
@@ -96,9 +96,9 @@ to an incoming connectivity check request.</p>
 <p>
 </p>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Details">
 <a name="libnice-ICE.details"></a><h2>Details</h2>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunUsageIceCompatibility">
 <a name="StunUsageIceCompatibility"></a><h3>enum StunUsageIceCompatibility</h3>
 <pre class="programlisting">typedef enum {
   STUN_USAGE_ICE_COMPATIBILITY_DRAFT19,
@@ -134,7 +134,7 @@ implementation of ICE
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunUsageIceReturn">
 <a name="StunUsageIceReturn"></a><h3>enum StunUsageIceReturn</h3>
 <pre class="programlisting">typedef enum {
   STUN_USAGE_ICE_RETURN_SUCCESS,
@@ -145,6 +145,7 @@ implementation of ICE
   STUN_USAGE_ICE_RETURN_INVALID_METHOD,
   STUN_USAGE_ICE_RETURN_MEMORY_ERROR,
   STUN_USAGE_ICE_RETURN_INVALID_ADDRESS,
+  STUN_USAGE_ICE_RETURN_NO_MAPPED_ADDRESS,
 } StunUsageIceReturn;
 </pre>
 <p>
@@ -198,11 +199,17 @@ the STUN reply
 an invalid address family
 </td>
 </tr>
+<tr>
+<td><p><a name="STUN-USAGE-ICE-RETURN-NO-MAPPED-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_USAGE_ICE_RETURN_NO_MAPPED_ADDRESS</code></span></p></td>
+<td> The response is valid but no
+MAPPED-ADDRESS or XOR-MAPPED-ADDRESS attribute was found
+</td>
+</tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_ice_conncheck_create ()">
 <a name="stun-usage-ice-conncheck-create"></a><h3>stun_usage_ice_conncheck_create ()</h3>
 <pre class="programlisting">size_t              stun_usage_ice_conncheck_create     (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -309,7 +316,7 @@ request
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_ice_conncheck_process ()">
 <a name="stun-usage-ice-conncheck-process"></a><h3>stun_usage_ice_conncheck_process ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-ICE.html#StunUsageIceReturn" title="enum StunUsageIceReturn">StunUsageIceReturn</a>  stun_usage_ice_conncheck_process    (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          struct sockaddr *addr,
@@ -357,7 +364,7 @@ response
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_ice_conncheck_create_reply ()">
 <a name="stun-usage-ice-conncheck-create-reply"></a><h3>stun_usage_ice_conncheck_create_reply ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-ICE.html#StunUsageIceReturn" title="enum StunUsageIceReturn">StunUsageIceReturn</a>  stun_usage_ice_conncheck_create_reply
                                                         (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
@@ -374,7 +381,7 @@ response
 Tries to parse a STUN connectivity check request and builds a
 response accordingly.
  </p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
      In case of error, the <em class="parameter"><code>msg</code></em> is filled with the appropriate error response
@@ -456,7 +463,7 @@ response
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_ice_conncheck_priority ()">
 <a name="stun-usage-ice-conncheck-priority"></a><h3>stun_usage_ice_conncheck_priority ()</h3>
 <pre class="programlisting">uint32_t            stun_usage_ice_conncheck_priority   (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
 <p>
@@ -480,7 +487,7 @@ Extracts the priority from a STUN message.</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_usage_ice_conncheck_use_candidate ()">
 <a name="stun-usage-ice-conncheck-use-candidate"></a><h3>stun_usage_ice_conncheck_use_candidate ()</h3>
 <pre class="programlisting">bool                stun_usage_ice_conncheck_use_candidate
                                                         (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>

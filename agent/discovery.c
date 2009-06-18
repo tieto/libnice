@@ -102,7 +102,7 @@ void discovery_free (NiceAgent *agent)
 
 /*
  * Prunes the list of discovery processes for items related
- * to stream 'stream_id'. 
+ * to stream 'stream_id'.
  *
  * @return TRUE on success, FALSE on a fatal error
  */
@@ -270,10 +270,35 @@ static gboolean priv_add_local_candidate_pruned (Component *component, NiceCandi
   return TRUE;
 }
 
+static guint priv_highest_remote_foundation (Component *component)
+{
+  GSList *i;
+  guint highest = 1;
+  gchar foundation[NICE_CANDIDATE_MAX_FOUNDATION];
+
+  for (highest = 1;; highest++) {
+    gboolean taken = FALSE;
+
+    g_snprintf (foundation, NICE_CANDIDATE_MAX_FOUNDATION, "%u", highest);
+    for (i = component->remote_candidates; i; i = i->next) {
+      NiceCandidate *cand = i->data;
+      if (strncmp (foundation, cand->foundation,
+              NICE_CANDIDATE_MAX_FOUNDATION) == 0) {
+        taken = TRUE;
+        break;
+      }
+    }
+    if (!taken)
+      return highest;
+  }
+
+  g_return_val_if_reached (highest);
+}
+
 /*
  * Assings a foundation to the candidate.
  *
- * Implements the mechanism described in ICE sect 
+ * Implements the mechanism described in ICE sect
  * 4.1.1.3 "Computing Foundations" (ID-19).
  */
 static void priv_assign_foundation (NiceAgent *agent, NiceCandidate *candidate)
@@ -294,7 +319,7 @@ static void priv_assign_foundation (NiceAgent *agent, NiceCandidate *candidate)
 	/* note: ports are not to be compared */
 	nice_address_set_port (&temp,
                nice_address_get_port (&candidate->base_addr));
-	
+
 	if (candidate->type == n->type &&
             candidate->stream_id == n->stream_id &&
 	    nice_address_equal (&candidate->base_addr, &temp)) {
@@ -316,9 +341,64 @@ static void priv_assign_foundation (NiceAgent *agent, NiceCandidate *candidate)
       }
     }
   }
-      
+
   g_snprintf (candidate->foundation, NICE_CANDIDATE_MAX_FOUNDATION, "%u", agent->next_candidate_id++);
 }
+
+static void priv_assign_remote_foundation (NiceAgent *agent, NiceCandidate *candidate)
+{
+  GSList *i, *j, *k;
+  guint next_remote_id;
+  Component *component = NULL;
+
+  for (i = agent->streams; i; i = i->next) {
+    Stream *stream = i->data;
+    for (j = stream->components; j; j = j->next) {
+      Component *c = j->data;
+
+      if (c->id == candidate->component_id)
+        component = c;
+
+      for (k = c->remote_candidates; k; k = k->next) {
+	NiceCandidate *n = k->data;
+	NiceAddress temp = n->base_addr;
+
+	/* note: candidate must not on the remote candidate list */
+	g_assert (candidate != n);
+
+	/* note: ports are not to be compared */
+	nice_address_set_port (&temp,
+               nice_address_get_port (&candidate->base_addr));
+
+	if (candidate->type == n->type &&
+            candidate->stream_id == n->stream_id &&
+	    nice_address_equal (&candidate->base_addr, &temp)) {
+	  /* note: currently only one STUN/TURN server per stream at a
+	   *       time is supported, so there is no need to check
+	   *       for candidates that would otherwise share the
+	   *       foundation, but have different STUN/TURN servers */
+	  memcpy (candidate->foundation, n->foundation, NICE_CANDIDATE_MAX_FOUNDATION);
+          if (n->username) {
+            g_free (candidate->username);
+            candidate->username = g_strdup (n->username);
+          }
+          if (n->password) {
+            g_free (candidate->password);
+            candidate->password = g_strdup (n->password);
+          }
+	  return;
+	}
+      }
+    }
+  }
+
+  if (component) {
+    next_remote_id = priv_highest_remote_foundation (component);
+    g_snprintf (candidate->foundation, NICE_CANDIDATE_MAX_FOUNDATION,
+        "%u", next_remote_id);
+  }
+}
+
 
 static
 void priv_generate_candidate_credentials (NiceAgent *agent,
@@ -436,7 +516,7 @@ NiceCandidate *discovery_add_local_host_candidate (
     if (udp_socket)
       nice_socket_free (udp_socket);
   }
-  
+
   return candidate;
 }
 
@@ -446,7 +526,7 @@ NiceCandidate *discovery_add_local_host_candidate (
  *
  * @return pointer to the created candidate, or NULL on error
  */
-NiceCandidate* 
+NiceCandidate*
 discovery_add_server_reflexive_candidate (
   NiceAgent *agent,
   guint stream_id,
@@ -676,25 +756,6 @@ discovery_add_peer_reflexive_candidate (
   return candidate;
 }
 
-static guint priv_highest_remote_foundation (Component *component)
-{
-  GSList *i;
-  guint highest = 0;
-  gchar foundation[NICE_CANDIDATE_MAX_FOUNDATION];
-
-  for (;;) {
-    g_snprintf (foundation, NICE_CANDIDATE_MAX_FOUNDATION, "%u", highest);
-    for (i = component->remote_candidates; i; i = i->next) {
-      NiceCandidate *cand = i->data;
-      if (strncmp (foundation, cand->foundation,
-              NICE_CANDIDATE_MAX_FOUNDATION) != 0) {
-        return highest;
-      }
-    }
-  }
-
-  return highest;
-}
 
 /*
  * Adds a new peer reflexive candidate to the list of known
@@ -724,17 +785,27 @@ NiceCandidate *discovery_learn_remote_peer_reflexive_candidate (
   if (candidate) {
     GSList *modified_list;
 
-    guint next_remote_id = priv_highest_remote_foundation (component);
-
     candidate->transport = NICE_CANDIDATE_TRANSPORT_UDP;
     candidate->addr = *remote_address;
     candidate->base_addr = *remote_address;
-    candidate->priority = priority;
+
+    /* if the check didn't contain the PRIORITY attribute, then the priority will
+     * be 0, which is invalid... */
+    if (priority != 0) {
+      candidate->priority = priority;
+    } else if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
+      candidate->priority = nice_candidate_jingle_priority (candidate);
+    } else if (agent->compatibility == NICE_COMPATIBILITY_MSN)  {
+      candidate->priority = nice_candidate_msn_priority (candidate);
+    } else {
+      candidate->priority = nice_candidate_ice_priority_full
+        (NICE_CANDIDATE_TYPE_PREF_PEER_REFLEXIVE, 0, component->id);
+    }
     candidate->stream_id = stream->id;
     candidate->component_id = component->id;
 
-    g_snprintf (candidate->foundation, NICE_CANDIDATE_MAX_FOUNDATION,
-        "%u", next_remote_id);
+
+    priv_assign_remote_foundation (agent, candidate);
 
     if (agent->compatibility == NICE_COMPATIBILITY_MSN &&
 	remote && local) {
@@ -975,6 +1046,13 @@ static gboolean priv_discovery_tick (gpointer pointer)
 
   g_static_rec_mutex_lock (&agent->mutex);
   ret = priv_discovery_tick_unlocked (pointer);
+  if (ret == FALSE) {
+    if (agent->discovery_timer_source != NULL) {
+      g_source_destroy (agent->discovery_timer_source);
+      g_source_unref (agent->discovery_timer_source);
+      agent->discovery_timer_source = NULL;
+    }
+  }
   g_static_rec_mutex_unlock (&agent->mutex);
 
   return ret;

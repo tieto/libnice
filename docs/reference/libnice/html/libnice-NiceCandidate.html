@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>NiceCandidate</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="index.html" title="libnice Reference Manual">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch01.html" title="">
 <link rel="prev" href="libnice-NiceAddress.html" title="NiceAddress">
 <link rel="next" href="ch02.html" title="Libnice helper functions">
@@ -32,7 +32,7 @@
                 <a href="#libnice-NiceCandidate.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" lang="en">
+<div class="refentry" title="NiceCandidate">
 <a name="libnice-NiceCandidate"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -41,11 +41,11 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Stability Level">
 <a name="libnice-NiceCandidate.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv">
+<div class="refsynopsisdiv" title="Synopsis">
 <a name="libnice-NiceCandidate.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
                     <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a>;
@@ -59,7 +59,7 @@ void                <a class="link" href="libnice-NiceCandidate.html#nice-candid
 <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *     <a class="link" href="libnice-NiceCandidate.html#nice-candidate-copy" title="nice_candidate_copy ()">nice_candidate_copy</a>                 (const <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);
 </pre>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Description">
 <a name="libnice-NiceCandidate.description"></a><h2>Description</h2>
 <p>
 A representation of an ICE candidate. Make sure you read the ICE drafts[1] to
@@ -70,9 +70,9 @@ understand correctly the concept of ICE candidates.
 <p>
 </p>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Details">
 <a name="libnice-NiceCandidate.details"></a><h2>Details</h2>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="NiceCandidate">
 <a name="NiceCandidate"></a><h3>NiceCandidate</h3>
 <pre class="programlisting">typedef struct {
   NiceCandidateType type;
@@ -92,7 +92,7 @@ understand correctly the concept of ICE candidates.
 <p>
 A structure to represent an ICE candidate
  </p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
    The <em class="parameter"><code>priority</code></em> is an integer as specified in the ICE draft 19. If you are
@@ -185,7 +185,7 @@ of type <a class="link" href="libnice-NiceCandidate.html#NICE-CANDIDATE-TYPE-REL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum NiceCandidateType">
 <a name="NiceCandidateType"></a><h3>enum NiceCandidateType</h3>
 <pre class="programlisting">typedef enum
 {
@@ -226,7 +226,7 @@ An enum represneting the type of a candidate</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum NiceCandidateTransport">
 <a name="NiceCandidateTransport"></a><h3>enum NiceCandidateTransport</h3>
 <pre class="programlisting">typedef enum
 {
@@ -247,7 +247,7 @@ An enum representing the type of transport to use</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="TurnServer">
 <a name="TurnServer"></a><h3>TurnServer</h3>
 <pre class="programlisting">typedef struct {
   NiceAddress server;       /**&lt; TURN server address */
@@ -291,7 +291,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum NiceRelayType">
 <a name="NiceRelayType"></a><h3>enum NiceRelayType</h3>
 <pre class="programlisting">typedef enum {
   NICE_RELAY_TYPE_TURN_UDP,
@@ -325,7 +325,7 @@ An enum representing the type of relay to use</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="NICE_CANDIDATE_MAX_FOUNDATION">
 <a name="NICE-CANDIDATE-MAX-FOUNDATION--CAPS"></a><h3>NICE_CANDIDATE_MAX_FOUNDATION</h3>
 <pre class="programlisting">#define NICE_CANDIDATE_MAX_FOUNDATION                32+1
 </pre>
@@ -335,7 +335,7 @@ The maximum size a candidate foundation can have.</p>
 </p>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="nice_candidate_new ()">
 <a name="nice-candidate-new"></a><h3>nice_candidate_new ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *     nice_candidate_new                  (<a class="link" href="libnice-NiceCandidate.html#NiceCandidateType" title="enum NiceCandidateType">NiceCandidateType</a> type);</pre>
 <p>
@@ -359,7 +359,7 @@ Creates a new candidate. Must be freed with <a class="link" href="libnice-NiceCa
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="nice_candidate_free ()">
 <a name="nice-candidate-free"></a><h3>nice_candidate_free ()</h3>
 <pre class="programlisting">void                nice_candidate_free                 (<a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);</pre>
 <p>
@@ -376,7 +376,7 @@ Frees a <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="N
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="nice_candidate_copy ()">
 <a name="nice-candidate-copy"></a><h3>nice_candidate_copy ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *     nice_candidate_copy                 (const <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate">NiceCandidate</a> *candidate);</pre>
 <p>
@@ -400,7 +400,7 @@ Makes a copy of a <a class="link" href="libnice-NiceCandidate.html#NiceCandidate
 </table></div>
 </div>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="See Also">
 <a name="libnice-NiceCandidate.see-also"></a><h2>See Also</h2>
 #NiceAddress
 </div>
