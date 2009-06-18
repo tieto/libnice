@@ -153,7 +153,8 @@ message. Also checks for the ALTERNATE-SERVER attribute.</para>
 that the STUN server gives us
 </simpara></listitem></varlistentry>
 <varlistentry><term><parameter>addrlen</parameter>&#160;:</term>
-<listitem><simpara> The length of <parameter>addr</parameter>
+<listitem><simpara> The length of <parameter>add</parameter>. rMust be set to the size of the <parameter>addr</parameter> socket
+address and will be set to the actual length of the socket address.
 </simpara></listitem></varlistentry>
 <varlistentry><term><parameter>alternate_server</parameter>&#160;:</term>
 <listitem><simpara> A pointer to a <link linkend="sockaddr"><type>sockaddr</type></link> structure to fill with the
@@ -163,7 +164,9 @@ of an alternate server. This argument will only be filled if the return value
 of the function is <link linkend="STUN-USAGE-BIND-RETURN-ALTERNATE-SERVER--CAPS"><type>STUN_USAGE_BIND_RETURN_ALTERNATE_SERVER</type></link>
 </simpara></listitem></varlistentry>
 <varlistentry><term><parameter>alternate_server_len</parameter>&#160;:</term>
-<listitem><simpara> The length of <parameter>alternate_server</parameter>
+<listitem><simpara> The length of <parameter>alternate_server</parameter>. Must be set to
+the size of the <parameter>alternate_server</parameter> socket address and will be set to the
+actual length of the socket address.
 </simpara></listitem></varlistentry>
 <varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara> A <link linkend="StunUsageBindReturn"><type>StunUsageBindReturn</type></link> value.
 Note that <link linkend="STUN-USAGE-BIND-RETURN-TIMEOUT--CAPS"><type>STUN_USAGE_BIND_RETURN_TIMEOUT</type></link> cannot be returned by this function

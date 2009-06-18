@@ -972,8 +972,7 @@ candidates after a call to <link linkend="nice-agent-gather-candidates"><functio
 <para>
 This signal is fired whenever a component's state changes</para>
 <para>
-</para>
-@:<variablelist role="params">
+</para><variablelist role="params">
 <varlistentry><term><parameter>stream_id</parameter>&#160;:</term>
 <listitem><simpara> The ID of the stream
 </simpara></listitem></varlistentry>
@@ -1009,8 +1008,7 @@ the peer.</para>
 This signal is fired when the agent discovers a new candidate
 <para> See also: <link linkend="NiceAgent-candidates-gathering-done"><type>"candidates-gathering-done"</type></link> </para></para>
 <para>
-</para>
-@:<variablelist role="params">
+</para><variablelist role="params">
 <varlistentry><term><parameter>stream_id</parameter>&#160;:</term>
 <listitem><simpara> The ID of the stream
 </simpara></listitem></varlistentry>
@@ -1033,8 +1031,7 @@ This signal is fired when the agent discovers a new remote candidate.
 This can happen with peer reflexive candidates.
 <para> See also: <link linkend="NiceAgent-candidates-gathering-done"><type>"candidates-gathering-done"</type></link> </para></para>
 <para>
-</para>
-@:<variablelist role="params">
+</para><variablelist role="params">
 <varlistentry><term><parameter>stream_id</parameter>&#160;:</term>
 <listitem><simpara> The ID of the stream
 </simpara></listitem></varlistentry>
@@ -1057,9 +1054,7 @@ This can happen with peer reflexive candidates.
 This signal is fired once a candidate pair is selected for data transfer for
 a stream's component</para>
 <para>
-</para>
-@:
-@:<variablelist role="params">
+</para><variablelist role="params">
 <varlistentry><term><parameter>stream_id</parameter>&#160;:</term>
 <listitem><simpara> The ID of the stream
 </simpara></listitem></varlistentry>

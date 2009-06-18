@@ -122,6 +122,7 @@ implementation of ICE
   STUN_USAGE_ICE_RETURN_INVALID_METHOD,
   STUN_USAGE_ICE_RETURN_MEMORY_ERROR,
   STUN_USAGE_ICE_RETURN_INVALID_ADDRESS,
+  STUN_USAGE_ICE_RETURN_NO_MAPPED_ADDRESS,
 } StunUsageIceReturn;
 </programlisting>
 <para>
@@ -170,6 +171,12 @@ the STUN reply
 <term><literal>STUN_USAGE_ICE_RETURN_INVALID_ADDRESS</literal></term>
 <listitem><simpara> The mapped address argument has
 an invalid address family
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="STUN-USAGE-ICE-RETURN-NO-MAPPED-ADDRESS--CAPS" role="constant">
+<term><literal>STUN_USAGE_ICE_RETURN_NO_MAPPED_ADDRESS</literal></term>
+<listitem><simpara> The response is valid but no
+MAPPED-ADDRESS or XOR-MAPPED-ADDRESS attribute was found
 </simpara></listitem>
 </varlistentry>
 </variablelist></refsect2>

@@ -36,8 +36,6 @@ NiceAgent
 
 </para>
 
-@:
-
 @niceagent: the object which received the signal.
 @arg1: 
 @arg2: 
@@ -56,8 +54,6 @@ NiceAgent
 
 </para>
 
-@:
-
 @niceagent: the object which received the signal.
 @arg1: 
 @arg2: 
@@ -68,8 +64,6 @@ NiceAgent
 
 </para>
 
-@:
-
 @niceagent: the object which received the signal.
 @arg1: 
 @arg2: 
@@ -79,9 +73,6 @@ NiceAgent
 <para>
 
 </para>
-
-@: 
-@:
 
 @niceagent: the object which received the signal.
 @arg1: 

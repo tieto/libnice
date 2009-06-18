@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>StunMessage</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="index.html" title="libnice Reference Manual">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch03.html" title="">
 <link rel="prev" href="libnice-StunAgent.html" title="StunAgent">
 <link rel="next" href="ch04.html" title="STUN usages">
@@ -32,7 +32,7 @@
                 <a href="#libnice-StunMessage.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" lang="en">
+<div class="refentry" title="StunMessage">
 <a name="libnice-StunMessage"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -41,11 +41,11 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Stability Level">
 <a name="libnice-StunMessage.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv">
+<div class="refsynopsisdiv" title="Synopsis">
 <a name="libnice-StunMessage.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
 
@@ -141,7 +141,7 @@ bool                <a class="link" href="libnice-StunMessage.html#stun-optional
 const char *        <a class="link" href="libnice-StunMessage.html#stun-strerror" title="stun_strerror ()">stun_strerror</a>                       (<a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a> code);
 </pre>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Description">
 <a name="libnice-StunMessage.description"></a><h2>Description</h2>
 <p>
 The STUN Messages API allows you to create STUN messages easily as well as to
@@ -149,9 +149,9 @@ parse existing messages.</p>
 <p>
 </p>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Details">
 <a name="libnice-StunMessage.details"></a><h2>Details</h2>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="StunMessage">
 <a name="StunMessage"></a><h3>StunMessage</h3>
 <pre class="programlisting">typedef struct {
   StunAgent *agent;
@@ -212,7 +212,7 @@ data
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunClass">
 <a name="StunClass"></a><h3>enum StunClass</h3>
 <pre class="programlisting">typedef enum
 {
@@ -254,7 +254,7 @@ a STUN message, as defined in RFC5389</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunMethod">
 <a name="StunMethod"></a><h3>enum StunMethod</h3>
 <pre class="programlisting">typedef enum
 {
@@ -356,7 +356,7 @@ the TURN draft 12
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunAttribute">
 <a name="StunAttribute"></a><h3>enum StunAttribute</h3>
 <pre class="programlisting">typedef enum
 {
@@ -692,7 +692,7 @@ defined by ICE draft 19
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="StunTransactionId">
 <a name="StunTransactionId"></a><h3>StunTransactionId</h3>
 <pre class="programlisting">typedef uint8_t StunTransactionId[STUN_MESSAGE_TRANS_ID_LEN];
 </pre>
@@ -702,7 +702,7 @@ A type that holds a STUN transaction id.</p>
 </p>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunError">
 <a name="StunError"></a><h3>enum StunError</h3>
 <pre class="programlisting">typedef enum
 {
@@ -859,7 +859,7 @@ Equivalent to the "No Binding" error defined in TURN draft 04.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunMessageReturn">
 <a name="StunMessageReturn"></a><h3>enum StunMessageReturn</h3>
 <pre class="programlisting">typedef enum
 {
@@ -911,7 +911,7 @@ the STUN message is not supported.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="STUN_MESSAGE_BUFFER_INCOMPLETE">
 <a name="STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS"></a><h3>STUN_MESSAGE_BUFFER_INCOMPLETE</h3>
 <pre class="programlisting">#define STUN_MESSAGE_BUFFER_INCOMPLETE 0
 </pre>
@@ -922,7 +922,7 @@ data to validate does not hold a complete STUN message</p>
 </p>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="STUN_MESSAGE_BUFFER_INVALID">
 <a name="STUN-MESSAGE-BUFFER-INVALID--CAPS"></a><h3>STUN_MESSAGE_BUFFER_INVALID</h3>
 <pre class="programlisting">#define STUN_MESSAGE_BUFFER_INVALID -1
 </pre>
@@ -933,7 +933,7 @@ data to validate is not a valid STUN message</p>
 </p>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_init ()">
 <a name="stun-message-init"></a><h3>stun_message_init ()</h3>
 <pre class="programlisting">bool                stun_message_init                   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass">StunClass</a> c,
@@ -977,7 +977,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRU
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_length ()">
 <a name="stun-message-length"></a><h3>stun_message_length ()</h3>
 <pre class="programlisting">uint16_t            stun_message_length                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
 <p>
@@ -1001,7 +1001,7 @@ Get the length of the message (including the header)</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find ()">
 <a name="stun-message-find"></a><h3>stun_message_find ()</h3>
 <pre class="programlisting">const void *        stun_message_find                   (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1038,7 +1038,7 @@ otherwise NULL.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find_flag ()">
 <a name="stun-message-find-flag"></a><h3>stun_message_find_flag ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_flag              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);</pre>
@@ -1069,7 +1069,7 @@ Looks for a flag attribute within a valid STUN message.</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find32 ()">
 <a name="stun-message-find32"></a><h3>stun_message_find32 ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find32                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1107,7 +1107,7 @@ Extracts a 32-bits attribute from a STUN message.</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find64 ()">
 <a name="stun-message-find64"></a><h3>stun_message_find64 ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find64                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1145,7 +1145,7 @@ Extracts a 64-bits attribute from a STUN message.</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find_string ()">
 <a name="stun-message-find-string"></a><h3>stun_message_find_string ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_string            (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1186,7 +1186,7 @@ encoded
 <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-NOT-ENOUGH-SPACE--CAPS"><code class="literal">STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE</code></a> is return if the buffer size is too
 small to hold the string
 
- <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+ <div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
     The string will be NULL-terminated.
@@ -1199,7 +1199,7 @@ small to hold the string
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find_addr ()">
 <a name="stun-message-find-addr"></a><h3>stun_message_find_addr ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_addr              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1229,8 +1229,9 @@ Extracts a network address attribute from a STUN message.</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>addrlen</code></em> :</span></p></td>
-<td> The size of the <em class="parameter"><code>addr</code></em> variable. Will be set to the size of the
-extracted socket address.
+<td> The size of the <em class="parameter"><code>addr</code></em> variable. Must be set to the size of the
+<em class="parameter"><code>addr</code></em> socket address and will be set to the size of the extracted socket
+address.
 </td>
 </tr>
 <tr>
@@ -1245,7 +1246,7 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find_xor_addr ()">
 <a name="stun-message-find-xor-addr"></a><h3>stun_message_find_xor_addr ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_xor_addr          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1275,7 +1276,8 @@ Extracts an obfuscated network address attribute from a STUN message.</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>addrlen</code></em> :</span></p></td>
-<td> The size of the <em class="parameter"><code>addr</code></em> variable. Will be set to the size of the
+<td> The size of the <em class="parameter"><code>addr</code></em> variable. Must be set to the size of the
+<em class="parameter"><code>addr</code></em> socket address and will be set to the size of the
 extracted socket address.
 </td>
 </tr>
@@ -1291,7 +1293,7 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find_xor_addr_full ()">
 <a name="stun-message-find-xor-addr-full"></a><h3>stun_message_find_xor_addr_full ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_xor_addr_full     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1322,7 +1324,8 @@ Extracts an obfuscated network address attribute from a STUN message.</p>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>addrlen</code></em> :</span></p></td>
-<td> The size of the <em class="parameter"><code>addr</code></em> variable. Will be set to the size of the
+<td> The size of the <em class="parameter"><code>addr</code></em> variable. Must be set to the size of the
+<em class="parameter"><code>addr</code></em> socket address and will be set to the size of the
 extracted socket address.
 </td>
 </tr>
@@ -1343,7 +1346,7 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_find_error ()">
 <a name="stun-message-find-error"></a><h3>stun_message_find_error ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_error             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          int *code);</pre>
@@ -1374,7 +1377,7 @@ Extract the error response code from a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append ()">
 <a name="stun-message-append"></a><h3>stun_message_append ()</h3>
 <pre class="programlisting">void *              stun_message_append                 (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1412,7 +1415,7 @@ enough room in the STUN message buffer.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append_bytes ()">
 <a name="stun-message-append-bytes"></a><h3>stun_message_append_bytes ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_bytes           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1454,7 +1457,7 @@ Appends a binary value to a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append_flag ()">
 <a name="stun-message-append-flag"></a><h3>stun_message_append_flag ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_flag            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);</pre>
@@ -1484,7 +1487,7 @@ Appends an empty flag attribute to a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append32 ()">
 <a name="stun-message-append32"></a><h3>stun_message_append32 ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append32               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1520,7 +1523,7 @@ Appends a 32-bits value attribute to a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append64 ()">
 <a name="stun-message-append64"></a><h3>stun_message_append64 ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append64               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1556,7 +1559,7 @@ Appends a 64-bits value attribute to a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append_string ()">
 <a name="stun-message-append-string"></a><h3>stun_message_append_string ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_string          (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1592,7 +1595,7 @@ Adds an attribute from a NULL-terminated string to a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append_addr ()">
 <a name="stun-message-append-addr"></a><h3>stun_message_append_addr ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_addr            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1636,7 +1639,7 @@ Append a network address attribute to a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append_xor_addr ()">
 <a name="stun-message-append-xor-addr"></a><h3>stun_message_append_xor_addr ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_xor_addr        (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1680,7 +1683,7 @@ Append an obfuscated network address attribute to a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append_xor_addr_full ()">
 <a name="stun-message-append-xor-addr-full"></a><h3>stun_message_append_xor_addr_full ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_xor_addr_full   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
@@ -1730,7 +1733,7 @@ Append an obfuscated network address attribute from a STUN message.</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_append_error ()">
 <a name="stun-message-append-error"></a><h3>stun_message_append_error ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_error           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a> code);</pre>
@@ -1761,7 +1764,7 @@ to <span class="type">code</span></p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_validate_buffer_length ()">
 <a name="stun-message-validate-buffer-length"></a><h3>stun_message_validate_buffer_length ()</h3>
 <pre class="programlisting">int                 stun_message_validate_buffer_length (const uint8_t *msg,
                                                          size_t length);</pre>
@@ -1795,7 +1798,7 @@ provide us with the length of the STUN message.</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_id ()">
 <a name="stun-message-id"></a><h3>stun_message_id ()</h3>
 <pre class="programlisting">void                stun_message_id                     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);</pre>
@@ -1820,7 +1823,7 @@ Retreive the STUN transaction id from a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_get_class ()">
 <a name="stun-message-get-class"></a><h3>stun_message_get_class ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass">StunClass</a>           stun_message_get_class              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
 <p>
@@ -1844,7 +1847,7 @@ Retreive the STUN class from a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_get_method ()">
 <a name="stun-message-get-method"></a><h3>stun_message_get_method ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod">StunMethod</a>          stun_message_get_method             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
 <p>
@@ -1868,7 +1871,7 @@ Retreive the STUN method from a STUN message</p>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_has_attribute ()">
 <a name="stun-message-has-attribute"></a><h3>stun_message_has_attribute ()</h3>
 <pre class="programlisting">bool                stun_message_has_attribute          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
                                                          <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);</pre>
@@ -1902,7 +1905,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_message_has_cookie ()">
 <a name="stun-message-has-cookie"></a><h3>stun_message_has_cookie ()</h3>
 <pre class="programlisting">bool                stun_message_has_cookie             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
 <p>
@@ -1930,7 +1933,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_optional ()">
 <a name="stun-optional"></a><h3>stun_optional ()</h3>
 <pre class="programlisting">bool                stun_optional                       (uint16_t t);</pre>
 <p>
@@ -1957,7 +1960,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRU
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_strerror ()">
 <a name="stun-strerror"></a><h3>stun_strerror ()</h3>
 <pre class="programlisting">const char *        stun_strerror                       (<a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a> code);</pre>
 <p>
@@ -1981,7 +1984,7 @@ Transforms a STUN error-code into a human readable string</p>
 </table></div>
 </div>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="See Also">
 <a name="libnice-StunMessage.see-also"></a><h2>See Also</h2>
 #StunAgent
 </div>

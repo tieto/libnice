@@ -41,6 +41,13 @@
 
 /* note: this is a private header part of agent.h */
 
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#else
+#define NICEAPI_EXPORT
+#endif
+
 #include <glib.h>
 
 #include "agent.h"
@@ -52,6 +59,10 @@
 #include "stun/stunagent.h"
 #include "stun/usages/turn.h"
 #include "stun/usages/ice.h"
+
+#ifdef HAVE_GUPNP
+#include <libgupnp-igd/gupnp-simple-igd-thread.h>
+#endif
 
 /* XXX: starting from ICE ID-18, Ta SHOULD now be set according
  *      to session bandwidth -> this is not yet implemented in NICE */
@@ -101,6 +112,14 @@ struct _NiceAgent
   GStaticRecMutex mutex;                 /* Mutex used for thread-safe lib */
   NiceCompatibility compatibility; /* property: Compatibility mode */
   StunAgent stun_agent;            /* STUN agent */
+  gboolean media_after_tick;       /* Received media after keepalive tick */
+#ifdef HAVE_GUPNP
+  GUPnPSimpleIgdThread* upnp;	   /* GUPnP Single IGD agent */
+  gboolean upnp_enabled;           /* whether UPnP discovery is enabled */
+  guint upnp_timeout;              /* UPnP discovery timeout */
+  GSList *upnp_mapping;            /* list of Candidates being mapped */
+  GSource *upnp_timer_source;      /* source of upnp timeout timer */
+#endif
   /* XXX: add pointer to internal data struct for ABI-safe extensions */
 };
 

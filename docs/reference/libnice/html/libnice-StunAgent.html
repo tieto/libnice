@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>StunAgent</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
-<link rel="start" href="index.html" title="libnice Reference Manual">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.1">
+<link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch03.html" title="">
 <link rel="prev" href="ch03.html" title="">
 <link rel="next" href="libnice-StunMessage.html" title="StunMessage">
@@ -32,7 +32,7 @@
                 <a href="#libnice-StunAgent.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" lang="en">
+<div class="refentry" title="StunAgent">
 <a name="libnice-StunAgent"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -41,11 +41,11 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Stability Level">
 <a name="libnice-StunAgent.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv">
+<div class="refsynopsisdiv" title="Synopsis">
 <a name="libnice-StunAgent.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
 
@@ -117,7 +117,7 @@ void                <a class="link" href="libnice-StunAgent.html#stun-debug-enab
 void                <a class="link" href="libnice-StunAgent.html#stun-debug-disable" title="stun_debug_disable ()">stun_debug_disable</a>                  (void);
 </pre>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Description">
 <a name="libnice-StunAgent.description"></a><h2>Description</h2>
 <p>
 The STUN Agent allows you to create and validate STUN messages easily.
@@ -128,9 +128,9 @@ received should be processed by that agent or not.</p>
 <p>
 </p>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="Details">
 <a name="libnice-StunAgent.details"></a><h2>Details</h2>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="StunAgent">
 <a name="StunAgent"></a><h3>StunAgent</h3>
 <pre class="programlisting">typedef struct stun_agent_t StunAgent;
 </pre>
@@ -140,7 +140,7 @@ An opaque structure representing the STUN agent.</p>
 </p>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunCompatibility">
 <a name="StunCompatibility"></a><h3>enum StunCompatibility</h3>
 <pre class="programlisting">typedef enum {
   STUN_COMPATIBILITY_RFC3489,
@@ -184,7 +184,7 @@ a special usecase against a typo in their code)
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunAgentUsageFlags">
 <a name="StunAgentUsageFlags"></a><h3>enum StunAgentUsageFlags</h3>
 <pre class="programlisting">typedef enum {
   STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS    = (1 &lt;&lt; 0),
@@ -262,7 +262,7 @@ a MESSAGE-INTEGRITY attribute.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="enum StunValidationStatus">
 <a name="StunValidationStatus"></a><h3>enum StunValidationStatus</h3>
 <pre class="programlisting">typedef enum {
   STUN_VALIDATION_SUCCESS,
@@ -343,7 +343,7 @@ or indication message and no error response should be sent
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="StunMessageIntegrityValidate ()">
 <a name="StunMessageIntegrityValidate"></a><h3>StunMessageIntegrityValidate ()</h3>
 <pre class="programlisting">bool                (*StunMessageIntegrityValidate)     (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *message,
@@ -413,7 +413,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="StunDefaultValidaterData">
 <a name="StunDefaultValidaterData"></a><h3>StunDefaultValidaterData</h3>
 <pre class="programlisting">typedef struct {
   uint8_t *username;
@@ -457,7 +457,7 @@ message during validationg.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_init ()">
 <a name="stun-agent-init"></a><h3>stun_agent_init ()</h3>
 <pre class="programlisting">void                stun_agent_init                     (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          const uint16_t *known_attributes,
@@ -468,7 +468,7 @@ This function must be called to initialize an agent before it is being used.
 </p>
 <p>
  </p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
     The <em class="parameter"><code>known_attributes</code></em> data must exist in memory as long as the <em class="parameter"><code>agent</code></em> is used
@@ -519,7 +519,7 @@ STUN usages the agent should use.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_validate ()">
 <a name="stun-agent-validate"></a><h3>stun_agent_validate ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunAgent.html#StunValidationStatus" title="enum StunValidationStatus">StunValidationStatus</a>  stun_agent_validate               (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -579,7 +579,7 @@ called.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunAgent.html#StunValidationStatus" title="enum StunValidationStatus"><span class="type">StunValidationStatus</span></a>
- <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+ <div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
    if the return value is different from <a class="link" href="libnice-StunAgent.html#STUN-VALIDATION-NOT-STUN--CAPS"><span class="type">STUN_VALIDATION_NOT_STUN</span></a> or
@@ -600,7 +600,7 @@ called.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_default_validater ()">
 <a name="stun-agent-default-validater"></a><h3>stun_agent_default_validater ()</h3>
 <pre class="programlisting">bool                stun_agent_default_validater        (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *message,
@@ -675,7 +675,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_init_request ()">
 <a name="stun-agent-init-request"></a><h3>stun_agent_init_request ()</h3>
 <pre class="programlisting">bool                stun_agent_init_request             (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -727,7 +727,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_init_indication ()">
 <a name="stun-agent-init-indication"></a><h3>stun_agent_init_indication ()</h3>
 <pre class="programlisting">bool                stun_agent_init_indication          (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -779,7 +779,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_init_response ()">
 <a name="stun-agent-init-response"></a><h3>stun_agent_init_response ()</h3>
 <pre class="programlisting">bool                stun_agent_init_response            (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -834,7 +834,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_init_error ()">
 <a name="stun-agent-init-error"></a><h3>stun_agent_init_error ()</h3>
 <pre class="programlisting">bool                stun_agent_init_error               (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -898,7 +898,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_build_unknown_attributes_error ()">
 <a name="stun-agent-build-unknown-attributes-error"></a><h3>stun_agent_build_unknown_attributes_error ()</h3>
 <pre class="programlisting">size_t              stun_agent_build_unknown_attributes_error
                                                         (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
@@ -952,7 +952,7 @@ by calling <a class="link" href="libnice-StunAgent.html#stun-agent-finish-messag
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_finish_message ()">
 <a name="stun-agent-finish-message"></a><h3>stun_agent_finish_message ()</h3>
 <pre class="programlisting">size_t              stun_agent_finish_message           (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
@@ -993,7 +993,7 @@ the message in the agent for future matching of the response.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> The final size of the message built or 0 if an error occured
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
        The return value must always be checked. a value of 0 means the either
@@ -1015,7 +1015,7 @@ the message in the agent for future matching of the response.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_agent_forget_transaction ()">
 <a name="stun-agent-forget-transaction"></a><h3>stun_agent_forget_transaction ()</h3>
 <pre class="programlisting">bool                stun_agent_forget_transaction       (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);</pre>
@@ -1059,7 +1059,7 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_debug_enable ()">
 <a name="stun-debug-enable"></a><h3>stun_debug_enable ()</h3>
 <pre class="programlisting">void                stun_debug_enable                   (void);</pre>
 <p>
@@ -1068,7 +1068,7 @@ Enable debug messages to stderr</p>
 </p>
 </div>
 <hr>
-<div class="refsect2" lang="en">
+<div class="refsect2" title="stun_debug_disable ()">
 <a name="stun-debug-disable"></a><h3>stun_debug_disable ()</h3>
 <pre class="programlisting">void                stun_debug_disable                  (void);</pre>
 <p>
@@ -1077,7 +1077,7 @@ Disable debug messages to stderr</p>
 </p>
 </div>
 </div>
-<div class="refsect1" lang="en">
+<div class="refsect1" title="See Also">
 <a name="libnice-StunAgent.see-also"></a><h2>See Also</h2>
 #StunMessage
 </div>

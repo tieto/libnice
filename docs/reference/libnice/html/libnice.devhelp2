@@ -329,6 +329,7 @@
     <keyword type="constant" name="STUN_USAGE_ICE_RETURN_INVALID_METHOD" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-INVALID-METHOD--CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_RETURN_MEMORY_ERROR" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-MEMORY-ERROR--CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_RETURN_INVALID_ADDRESS" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-INVALID-ADDRESS--CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_NO_MAPPED_ADDRESS" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-NO-MAPPED-ADDRESS--CAPS"/>
     <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_DRAFT9" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9--CAPS"/>
     <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_GOOGLE" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-GOOGLE--CAPS"/>
     <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_MSN" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-MSN--CAPS"/>
