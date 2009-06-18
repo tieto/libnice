@@ -1,7 +1,7 @@
 update-patches:
 	mkdir -p $(CURDIR)/debian/patches
 	rm -f $(CURDIR)/debian/patches/*.patch
-	git-format-patch -o $(CURDIR)/debian/patches debian-patches ^upstream
+	git format-patch -o $(CURDIR)/debian/patches debian-patches ^upstream
 	for patch in $$(ls $(CURDIR)/debian/patches/*.patch) ; \
 	do \
 		lines=$$(cat $$patch | wc -l) ; \

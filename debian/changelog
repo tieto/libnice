@@ -5,8 +5,9 @@ libnice (0.0.7-1) UNRELEASED; urgency=low
   * debian/control:
     - Add explicit libglib2.0-dev build-dep
   * debian/copyright: Cleanup copyright file to please lintian
+  * debian/update-patches.mk: Fix script to work with last git version
 
- -- Laurent Bigonville <bigon@debian.org>  Thu, 18 Jun 2009 11:57:10 +0200
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 18 Jun 2009 15:55:50 +0200
 
 libnice (0.0.6-1) unstable; urgency=low
 
