@@ -1,9 +1,10 @@
 libnice (0.0.7-1) UNRELEASED; urgency=low
 
   * New upstream release
+  * debian/control: Add explicit libglib2.0-dev build-dep
   * debian/copyright: Cleanup copyright file to please lintian
 
- -- Laurent Bigonville <bigon@debian.org>  Thu, 18 Jun 2009 10:34:25 +0200
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 18 Jun 2009 10:38:00 +0200
 
 libnice (0.0.6-1) unstable; urgency=low
 
