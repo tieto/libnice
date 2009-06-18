@@ -1,3 +1,9 @@
+libnice (0.0.7-1) UNRELEASED; urgency=low
+
+  * New upstream release
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 18 Jun 2009 10:29:46 +0200
+
 libnice (0.0.6-1) unstable; urgency=low
 
   [ Laurent Bigonville ]
