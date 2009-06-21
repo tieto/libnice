@@ -12,7 +12,6 @@ Build-Depends: cdbs,
                libglib2.0-dev (>= 2.10)
                libgstreamer0.10-dev,
                libgstreamer-plugins-base0.10-dev,
-               libgupnp-igd-1.0-dev,
                gtk-doc-tools
 Standards-Version: 3.8.1
 Homepage: http://nice.freedesktop.org/

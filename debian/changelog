@@ -10,8 +10,9 @@ libnice (0.0.8-1) UNRELEASED; urgency=low
 
   [ Sjoerd Simons ]
   * New Upstream Version
+  * Disable UPNP support until libgupnp-igd comes out of the NEW queue
 
- -- Sjoerd Simons <sjoerd@debian.org>  Sun, 21 Jun 2009 15:01:51 +0100
+ -- Sjoerd Simons <sjoerd@debian.org>  Sun, 21 Jun 2009 15:13:27 +0100
 
 libnice (0.0.6-1) unstable; urgency=low
 
