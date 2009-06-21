@@ -1,5 +1,6 @@
-libnice (0.0.7-1) UNRELEASED; urgency=low
+libnice (0.0.8-1) UNRELEASED; urgency=low
 
+  [ Laurent Bigonville ]
   * New upstream release
   * Add libgupnp-igd-1.0-dev build-dep and pass --enable-gupnp to configure
   * debian/control:
@@ -7,7 +8,10 @@ libnice (0.0.7-1) UNRELEASED; urgency=low
   * debian/copyright: Cleanup copyright file to please lintian
   * debian/update-patches.mk: Fix script to work with last git version
 
- -- Laurent Bigonville <bigon@debian.org>  Thu, 18 Jun 2009 15:55:50 +0200
+  [ Sjoerd Simons ]
+  * New Upstream Version
+
+ -- Sjoerd Simons <sjoerd@debian.org>  Sun, 21 Jun 2009 15:01:51 +0100
 
 libnice (0.0.6-1) unstable; urgency=low
 
