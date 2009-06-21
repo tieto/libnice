@@ -1,4 +1,4 @@
-libnice (0.0.8-1) UNRELEASED; urgency=low
+libnice (0.0.8-1) unstable; urgency=low
 
   [ Laurent Bigonville ]
   * New upstream release
@@ -9,10 +9,10 @@ libnice (0.0.8-1) UNRELEASED; urgency=low
   * debian/update-patches.mk: Fix script to work with last git version
 
   [ Sjoerd Simons ]
-  * New Upstream Version
+  * New Upstream release (0.0.8)
   * Disable UPNP support until libgupnp-igd comes out of the NEW queue
 
- -- Sjoerd Simons <sjoerd@debian.org>  Sun, 21 Jun 2009 15:13:27 +0100
+ -- Sjoerd Simons <sjoerd@debian.org>  Sun, 21 Jun 2009 15:18:08 +0100
 
 libnice (0.0.6-1) unstable; urgency=low
 
