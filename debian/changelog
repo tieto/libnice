@@ -1,6 +1,7 @@
 libnice (0.0.8-2) UNRELEASED; urgency=low
 
   * debian/control: Add missing comma in build-deps (LP: #392225)
+    (Closes: #537013)
 
  -- Laurent Bigonville <bigon@debian.org>  Sat, 27 Jun 2009 18:03:24 +0200
 
