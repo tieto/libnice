@@ -31,6 +31,7 @@ libnice.so.0 libnice0 #MINVER#
   nice_agent_set_remote_credentials@Base 0.0.1
   nice_agent_set_selected_pair@Base 0.0.1
   nice_agent_set_selected_remote_candidate@Base 0.0.1
+  nice_agent_set_stream_tos@Base 0.0.9
   nice_candidate_free@Base 0.0.1
   nice_candidate_new@Base 0.0.1
   nice_debug_disable@Base 0.0.1

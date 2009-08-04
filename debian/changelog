@@ -1,11 +1,12 @@
 libnice (0.0.9-1) UNRELEASED; urgency=low
 
   * New upstream release.
+    - Adjust .symbols file
   * debian/control: Add missing comma in build-deps (LP: #392225)
     (Closes: #537013)
   * Bump Standards-Version to 3.8.2 (no further changes)
 
- -- Laurent Bigonville <bigon@debian.org>  Tue, 04 Aug 2009 18:56:44 +0200
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 04 Aug 2009 20:19:32 +0200
 
 libnice (0.0.8-1) unstable; urgency=low
 
