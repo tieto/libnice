@@ -1,4 +1,4 @@
-libnice (0.0.9-1) UNRELEASED; urgency=low
+libnice (0.0.9-1) unstable; urgency=low
 
   * New upstream release.
     - Adjust .symbols file
@@ -6,7 +6,7 @@ libnice (0.0.9-1) UNRELEASED; urgency=low
     (Closes: #537013)
   * Bump Standards-Version to 3.8.2 (no further changes)
 
- -- Laurent Bigonville <bigon@debian.org>  Tue, 04 Aug 2009 20:19:32 +0200
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 04 Aug 2009 21:29:49 +0200
 
 libnice (0.0.8-1) unstable; urgency=low
 
