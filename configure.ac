@@ -3,7 +3,7 @@ AC_PREREQ(2.59c)
 
 dnl releases only do -Wall, cvs and prerelease does -Werror too
 dnl use a three digit version number for releases, and four for cvs/prerelease
-AC_INIT(libnice, 0.0.8)
+AC_INIT(libnice, 0.0.9)
 LIBNICE_RELEASE="yes"
 
 AC_CONFIG_SRCDIR([agent/agent.c])
@@ -33,9 +33,9 @@ AC_CONFIG_FILES([
 #      Increment CURRENT and AGE. Set REVISION to 0
 #    If there was an incompatible interface change:
 #      Increment CURRENT. Set AGE and REVISION to 0
-LIBNICE_CURRENT=4
-LIBNICE_REVISION=2
-LIBNICE_AGE=4
+LIBNICE_CURRENT=5
+LIBNICE_REVISION=0
+LIBNICE_AGE=5
 LIBNICE_LIBVERSION=${LIBNICE_CURRENT}:${LIBNICE_REVISION}:${LIBNICE_AGE}
 LIBNICE_LT_LDFLAGS="-version-info ${LIBNICE_LIBVERSION}"
 AC_SUBST(LIBNICE_LT_LDFLAGS)
@@ -56,7 +56,9 @@ AC_HEADER_ASSERT
 AC_HEADER_STDBOOL
 AC_DEFINE([_FORTIFY_SOURCE], [2], [Define to `2' to get GNU/libc warnings.])
 AC_DEFINE([NICEAPI_EXPORT], [ ], [Public library function implementation])
-AC_CHECK_HEADERS([arpa/inet.h net/in.h ifaddrs.h])
+AC_CHECK_HEADERS([arpa/inet.h net/in.h ifaddrs.h], \
+		      [AC_DEFINE(HAVE_GETIFADDRS, [1], \
+		       [Whether getifaddrs() is available on the system])])
 
 LIBNICE_CFLAGS="-Wall"
 dnl if asked for, add -Werror if supported

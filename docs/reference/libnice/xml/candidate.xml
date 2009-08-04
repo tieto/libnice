@@ -264,8 +264,7 @@ An enum representing the type of relay to use</para>
 </variablelist></refsect2>
 <refsect2 id="NICE-CANDIDATE-MAX-FOUNDATION--CAPS" role="macro">
 <title>NICE_CANDIDATE_MAX_FOUNDATION</title>
-<indexterm zone="NICE-CANDIDATE-MAX-FOUNDATION--CAPS"><primary sortas="NICE_CANDIDATE_MAX_FOUNDATION">NICE_CANDIDATE_MAX_FOUNDATION</primary></indexterm><programlisting>#define NICE_CANDIDATE_MAX_FOUNDATION                32+1
-</programlisting>
+<indexterm zone="NICE-CANDIDATE-MAX-FOUNDATION--CAPS"><primary sortas="NICE_CANDIDATE_MAX_FOUNDATION">NICE_CANDIDATE_MAX_FOUNDATION</primary></indexterm><programlisting>#define             NICE_CANDIDATE_MAX_FOUNDATION</programlisting>
 <para>
 The maximum size a candidate foundation can have.</para>
 <para>

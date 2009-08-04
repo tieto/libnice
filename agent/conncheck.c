@@ -926,7 +926,7 @@ static void priv_preprocess_conn_check_pending_data (NiceAgent *agent, Stream *s
  */
 void conn_check_remote_candidates_set(NiceAgent *agent)
 {
-  GSList *i, *j, *k, *l;
+  GSList *i, *j, *k, *l, *m, *n;
   for (i = agent->streams; i ; i = i->next) {
     Stream *stream = i->data;
     for (j = stream->conncheck_list; j ; j = j->next) {
@@ -952,18 +952,72 @@ void conn_check_remote_candidates_set(NiceAgent *agent)
 	if (match != TRUE) {
 	  /* note: we have gotten an incoming connectivity check from
 	   *       an address that is not a known remote candidate */
-	  NiceCandidate *candidate =
-	    discovery_learn_remote_peer_reflexive_candidate (agent,
-                stream,
-                component,
-                icheck->priority,
-                &icheck->from,
-                icheck->local_socket,
-                NULL, NULL);
-	  if (candidate) {
-	    priv_schedule_triggered_check (agent, stream, component, icheck->local_socket, candidate, icheck->use_candidate);
-	  }
-	}
+
+          NiceCandidate *local_candidate = NULL;
+          NiceCandidate *remote_candidate = NULL;
+
+          if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE ||
+              agent->compatibility == NICE_COMPATIBILITY_MSN) {
+            /* We need to find which local candidate was used */
+            uint8_t uname[NICE_STREAM_MAX_UNAME];
+            guint uname_len;
+
+            nice_debug ("Agent %p: We have a peer-reflexive candidate in a "
+                "stored pending check", agent);
+
+            for (m = component->remote_candidates;
+                 m != NULL && remote_candidate == NULL; m = m->next) {
+              for (n = component->local_candidates; n; n = n->next) {
+                NiceCandidate *rcand = m->data;
+                NiceCandidate *lcand = n->data;
+
+                uname_len = priv_create_username (agent, stream,
+                    component->id,  rcand, lcand,
+                    uname, sizeof (uname), TRUE);
+
+                stun_debug ("pending check, comparing username '");
+                stun_debug_bytes (icheck->username,
+                    icheck->username? icheck->username_len : 0);
+                stun_debug ("' (%d) with '", icheck->username_len);
+                stun_debug_bytes (uname, uname_len);
+                stun_debug ("' (%d) : %d\n",
+                    uname_len, icheck->username &&
+                    uname_len == icheck->username_len &&
+                    memcmp (icheck->username, uname, uname_len) == 0);
+
+                if (icheck->username &&
+                    uname_len == icheck->username_len &&
+                    memcmp (uname, icheck->username, icheck->username_len) == 0) {
+                  local_candidate = lcand;
+                  remote_candidate = rcand;
+                  break;
+                }
+              }
+            }
+          }
+
+          if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE &&
+              local_candidate == NULL) {
+            /* if we couldn't match the username, then the matching remote
+             * candidate hasn't been received yet.. we must wait */
+            nice_debug ("Agent %p : Username check failed. pending check has "
+                "to wait to be processed", agent);
+          } else {
+            NiceCandidate *candidate =
+                discovery_learn_remote_peer_reflexive_candidate (agent,
+                    stream,
+                    component,
+                    icheck->priority,
+                    &icheck->from,
+                    icheck->local_socket,
+                    local_candidate, remote_candidate);
+            if (candidate) {
+              conn_check_add_for_candidate (agent, stream->id, component, candidate);
+
+              priv_schedule_triggered_check (agent, stream, component, icheck->local_socket, candidate, icheck->use_candidate);
+            }
+          }
+        }
       }
     }
   }
@@ -981,6 +1035,8 @@ static GSList *priv_limit_conn_check_list_size (GSList *conncheck_list, guint up
   GSList *result = conncheck_list;
 
   if (list_len > upper_limit) {
+    nice_debug ("Agent : Pruning candidates. Conncheck list has %d elements. "
+        "Maximum connchecks allowed : %d", list_len, upper_limit);
     c = list_len - upper_limit;
     if (c == list_len) {
       /* case: delete whole list */
@@ -1195,8 +1251,10 @@ static gboolean priv_add_new_check_pair (NiceAgent *agent, guint stream_id, Comp
 
       /* implement the hard upper limit for number of 
 	 checks (see sect 5.7.3 ICE ID-19): */
-      stream->conncheck_list = 
-	priv_limit_conn_check_list_size (stream->conncheck_list, agent->max_conn_checks);
+      if (agent->compatibility == NICE_COMPATIBILITY_DRAFT19) {
+        stream->conncheck_list = 
+            priv_limit_conn_check_list_size (stream->conncheck_list, agent->max_conn_checks);
+      }
       if (!stream->conncheck_list) {
 	stream->conncheck_state = NICE_CHECKLIST_FAILED;  
 	result = FALSE;
@@ -1794,7 +1852,9 @@ static void priv_reply_to_conn_check (NiceAgent *agent, Stream *stream, Componen
  *
  * @return non-zero on error, zero on success
  */
-static int priv_store_pending_check (NiceAgent *agent, Component *component, const NiceAddress *from, NiceSocket *socket, uint32_t priority, gboolean use_candidate)
+static int priv_store_pending_check (NiceAgent *agent, Component *component,
+    const NiceAddress *from, NiceSocket *socket, uint8_t *username,
+    uint16_t username_len, uint32_t priority, gboolean use_candidate)
 {
   IncomingCheck *icheck;
   nice_debug ("Agent %p : Storing pending check.", agent);
@@ -1815,6 +1875,10 @@ static int priv_store_pending_check (NiceAgent *agent, Component *component, con
       icheck->local_socket = socket;
       icheck->priority = priority;
       icheck->use_candidate = use_candidate;
+      icheck->username_len = username_len;
+      icheck->username = NULL;
+      if (username_len > 0)
+        icheck->username = g_memdup (username, username_len);
       return 0;
     }
   }
@@ -2658,7 +2722,8 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
   if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE ||
       agent->compatibility == NICE_COMPATIBILITY_MSN) {
     /* We need to find which local candidate was used */
-    for (i = component->remote_candidates; i; i = i->next) {
+    for (i = component->remote_candidates;
+         i != NULL && remote_candidate2 == NULL; i = i->next) {
       for (j = component->local_candidates; j; j = j->next) {
         gboolean inbound = TRUE;
         NiceCandidate *rcand = i->data;
@@ -2769,6 +2834,8 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
             agent, stream, component, priority, from, socket,
             local_candidate,
             remote_candidate2 ? remote_candidate2 : remote_candidate);
+        if(remote_candidate)
+          conn_check_add_for_candidate (agent, stream->id, component, remote_candidate);
       }
 
       priv_reply_to_conn_check (agent, stream, component, remote_candidate,
@@ -2783,7 +2850,7 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
 
         /* step: send a reply immediately but postpone other processing */
         priv_store_pending_check (agent, component, from, socket,
-            priority, use_candidate);
+            username, username_len, priority, use_candidate);
       }
     } else {
       nice_debug ("Agent %p : Invalid STUN packet, ignoring... %s",

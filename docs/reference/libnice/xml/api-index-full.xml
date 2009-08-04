@@ -66,6 +66,7 @@
 <indexentry><primaryie linkends="nice-agent-set-remote-credentials"><link linkend="nice-agent-set-remote-credentials">nice_agent_set_remote_credentials</link></primaryie></indexentry>
 <indexentry><primaryie linkends="nice-agent-set-selected-pair"><link linkend="nice-agent-set-selected-pair">nice_agent_set_selected_pair</link></primaryie></indexentry>
 <indexentry><primaryie linkends="nice-agent-set-selected-remote-candidate"><link linkend="nice-agent-set-selected-remote-candidate">nice_agent_set_selected_remote_candidate</link></primaryie></indexentry>
+<indexentry><primaryie linkends="nice-agent-set-stream-tos"><link linkend="nice-agent-set-stream-tos">nice_agent_set_stream_tos</link></primaryie></indexentry>
 <indexentry><primaryie linkends="nice-candidate-copy"><link linkend="nice-candidate-copy">nice_candidate_copy</link></primaryie></indexentry>
 <indexentry><primaryie linkends="nice-candidate-free"><link linkend="nice-candidate-free">nice_candidate_free</link></primaryie></indexentry>
 <indexentry><primaryie linkends="NICE-CANDIDATE-MAX-FOUNDATION--CAPS"><link linkend="NICE-CANDIDATE-MAX-FOUNDATION--CAPS">NICE_CANDIDATE_MAX_FOUNDATION</link></primaryie></indexentry>
