@@ -1,5 +1,6 @@
-libnice (0.0.8-2) UNRELEASED; urgency=low
+libnice (0.0.9-1) UNRELEASED; urgency=low
 
+  * New upstream release.
   * debian/control: Add missing comma in build-deps (LP: #392225)
     (Closes: #537013)
 
