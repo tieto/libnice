@@ -55,7 +55,6 @@
  <example>
    <title>Simple example on how to use libnice</title>
    <programlisting>
-   NiceAddress base_addr;
    guint stream_id;
    gchar buffer[] = "hello world!";
    GSList *lcands = NULL;
@@ -66,9 +65,9 @@
    // Connect the signals
    g_signal_connect (G_OBJECT (agent), "candidate-gathering-done",
                      G_CALLBACK (cb_candidate_gathering_done), NULL);
-   g_signal_connect (G_OBJECT (lagent), "component-state-changed",
+   g_signal_connect (G_OBJECT (agent), "component-state-changed",
                      G_CALLBACK (cb_component_state_changed), NULL);
-   g_signal_connect (G_OBJECT (lagent), "new-selected-pair",
+   g_signal_connect (G_OBJECT (agent), "new-selected-pair",
                      G_CALLBACK (cb_new_selected_pair), NULL);
 
    // Create a new stream with one component and start gathering candidates
@@ -87,7 +86,7 @@
 
    // ... Wait until the signal new-selected-pair is fired ...
    // Send our message!
-   nice_agent_send (lagent, ls_id, 1, sizeof(buffer), buffer);
+   nice_agent_send (agent, stream_id, 1, sizeof(buffer), buffer);
 
    // Anything received will be received through the cb_nice_recv callback
 
@@ -620,6 +619,22 @@ nice_agent_set_selected_remote_candidate (
   guint stream_id,
   guint component_id,
   NiceCandidate *candidate);
+
+
+/**
+ * nice_agent_set_stream_tos:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @tos: The ToS to set
+ *
+ * Sets the IP_TOS and/or IPV6_TCLASS field on the stream's sockets' options
+ *
+ */
+void nice_agent_set_stream_tos (
+  NiceAgent *agent,
+  guint stream_id,
+  gint tos);
+
 
 G_END_DECLS
 

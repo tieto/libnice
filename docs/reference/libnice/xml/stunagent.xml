@@ -115,9 +115,7 @@ received should be processed by that agent or not.</para>
 <title role="details.title">Details</title>
 <refsect2 id="StunAgent" role="typedef">
 <title>StunAgent</title>
-<indexterm zone="StunAgent"><primary sortas="StunAgent">StunAgent</primary></indexterm><programlisting>typedef struct stun_agent_t StunAgent;
-</programlisting>
-<para>
+<indexterm zone="StunAgent"><primary sortas="StunAgent">StunAgent</primary></indexterm><para>
 An opaque structure representing the STUN agent.</para>
 <para>
 </para></refsect2>

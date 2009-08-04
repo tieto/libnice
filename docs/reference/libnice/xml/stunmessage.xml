@@ -653,9 +653,7 @@ defined by ICE draft 19
 </variablelist></refsect2>
 <refsect2 id="StunTransactionId" role="typedef">
 <title>StunTransactionId</title>
-<indexterm zone="StunTransactionId"><primary sortas="StunTransactionId">StunTransactionId</primary></indexterm><programlisting>typedef uint8_t StunTransactionId[STUN_MESSAGE_TRANS_ID_LEN];
-</programlisting>
-<para>
+<indexterm zone="StunTransactionId"><primary sortas="StunTransactionId">StunTransactionId</primary></indexterm><para>
 A type that holds a STUN transaction id.</para>
 <para>
 </para></refsect2>
@@ -858,8 +856,7 @@ the STUN message is not supported.
 </variablelist></refsect2>
 <refsect2 id="STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS" role="macro">
 <title>STUN_MESSAGE_BUFFER_INCOMPLETE</title>
-<indexterm zone="STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS"><primary sortas="STUN_MESSAGE_BUFFER_INCOMPLETE">STUN_MESSAGE_BUFFER_INCOMPLETE</primary></indexterm><programlisting>#define STUN_MESSAGE_BUFFER_INCOMPLETE 0
-</programlisting>
+<indexterm zone="STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS"><primary sortas="STUN_MESSAGE_BUFFER_INCOMPLETE">STUN_MESSAGE_BUFFER_INCOMPLETE</primary></indexterm><programlisting>#define             STUN_MESSAGE_BUFFER_INCOMPLETE</programlisting>
 <para>
 Convenience macro for <link linkend="stun-message-validate-buffer-length"><function>stun_message_validate_buffer_length()</function></link> meaning that the
 data to validate does not hold a complete STUN message</para>
@@ -867,8 +864,7 @@ data to validate does not hold a complete STUN message</para>
 </para></refsect2>
 <refsect2 id="STUN-MESSAGE-BUFFER-INVALID--CAPS" role="macro">
 <title>STUN_MESSAGE_BUFFER_INVALID</title>
-<indexterm zone="STUN-MESSAGE-BUFFER-INVALID--CAPS"><primary sortas="STUN_MESSAGE_BUFFER_INVALID">STUN_MESSAGE_BUFFER_INVALID</primary></indexterm><programlisting>#define STUN_MESSAGE_BUFFER_INVALID -1
-</programlisting>
+<indexterm zone="STUN-MESSAGE-BUFFER-INVALID--CAPS"><primary sortas="STUN_MESSAGE_BUFFER_INVALID">STUN_MESSAGE_BUFFER_INVALID</primary></indexterm><programlisting>#define             STUN_MESSAGE_BUFFER_INVALID</programlisting>
 <para>
 Convenience macro for <link linkend="stun-message-validate-buffer-length"><function>stun_message_validate_buffer_length()</function></link> meaning that the
 data to validate is not a valid STUN message</para>
