@@ -1,3 +1,9 @@
+libnice (0.0.9-2) unstable; urgency=low
+
+  * Re-enable gupnp-igd support
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 06 Aug 2009 08:16:59 +0200
+
 libnice (0.0.9-1) unstable; urgency=low
 
   * New upstream release.
