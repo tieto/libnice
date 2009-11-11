@@ -214,6 +214,15 @@ StunAgent
 @Returns: 
 
 
+<!-- ##### FUNCTION stun_agent_set_software ##### -->
+<para>
+
+</para>
+
+@agent: 
+@software: 
+
+
 <!-- ##### FUNCTION stun_debug_enable ##### -->
 <para>
 

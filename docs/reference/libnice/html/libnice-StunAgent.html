@@ -113,6 +113,8 @@ size_t              <a class="link" href="libnice-StunAgent.html#stun-agent-fini
                                                          size_t key_len);
 bool                <a class="link" href="libnice-StunAgent.html#stun-agent-forget-transaction" title="stun_agent_forget_transaction ()">stun_agent_forget_transaction</a>       (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
                                                          <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);
+void                <a class="link" href="libnice-StunAgent.html#stun-agent-set-software" title="stun_agent_set_software ()">stun_agent_set_software</a>             (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
+                                                         const char *software);
 void                <a class="link" href="libnice-StunAgent.html#stun-debug-enable" title="stun_debug_enable ()">stun_debug_enable</a>                   (void);
 void                <a class="link" href="libnice-StunAgent.html#stun-debug-disable" title="stun_debug_disable ()">stun_debug_disable</a>                  (void);
 </pre>
@@ -132,6 +134,8 @@ received should be processed by that agent or not.</p>
 <a name="libnice-StunAgent.details"></a><h2>Details</h2>
 <div class="refsect2" title="StunAgent">
 <a name="StunAgent"></a><h3>StunAgent</h3>
+<pre class="programlisting">typedef struct stun_agent_t StunAgent;
+</pre>
 <p>
 An opaque structure representing the STUN agent.</p>
 <p>
@@ -228,7 +232,10 @@ attribute to the STUN messages it creates.
 <tr>
 <td><p><a name="STUN-AGENT-USAGE-ADD-SOFTWARE--CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_ADD_SOFTWARE</code></span></p></td>
 <td> The agent should add the SOFTWARE attribute
-to the STUN messages it creates
+to the STUN messages it creates. Calling <a class="link" href="NiceAgent.html#nice-agent-set-software" title="nice_agent_set_software ()"><code class="function">nice_agent_set_software()</code></a> will have
+the same effect as enabling this Usage. STUN Indications do not have the
+SOFTWARE attributes added to them though. The SOFTWARE attribute is only
+added for the RFC5389 and WLM2009 compatibility modes.
 </td>
 </tr>
 <tr>
@@ -1051,6 +1058,50 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRU
 ><code class="literal">TRUE</code></a> if the transaction was found, <a
 href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
 ><code class="literal">FALSE</code></a> otherwise
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" title="stun_agent_set_software ()">
+<a name="stun-agent-set-software"></a><h3>stun_agent_set_software ()</h3>
+<pre class="programlisting">void                stun_agent_set_software             (<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *agent,
+                                                         const char *software);</pre>
+<p>
+This function will set the value of the SOFTWARE attribute to be added to
+STUN requests, responses and error responses.
+</p>
+<p>
+Calling this function will automatically enable the addition of the SOFTWARE
+attribute for RFC5389 and WLM2009 compatibility modes.
+</p>
+<p>
+</p>
+<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+       The <em class="parameter"><code>software</code></em> argument must be in UTF-8 encoding and only the first
+       128 characters will be sent.
+     </p>
+<p>
+       The value of the <em class="parameter"><code>software</code></em> argument must stay valid throughout the life of
+       the StunAgent's life. Do not free its content.
+     </p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
+<td> The <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>software</code></em> :</span></p></td>
+<td> The value of the SOFTWARE attribute to add.
 </td>
 </tr>
 </tbody>

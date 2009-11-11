@@ -86,6 +86,8 @@ enum                <link linkend="StunValidationStatus">StunValidationStatus</l
                                                          <link linkend="size-t">size_t</link> key_len);
 <link linkend="bool">bool</link>                <link linkend="stun-agent-forget-transaction">stun_agent_forget_transaction</link>       (<link linkend="StunAgent">StunAgent</link> *agent,
                                                          <link linkend="StunTransactionId">StunTransactionId</link> id);
+<link linkend="void">void</link>                <link linkend="stun-agent-set-software">stun_agent_set_software</link>             (<link linkend="StunAgent">StunAgent</link> *agent,
+                                                         const <link linkend="char">char</link> *software);
 <link linkend="void">void</link>                <link linkend="stun-debug-enable">stun_debug_enable</link>                   (void);
 <link linkend="void">void</link>                <link linkend="stun-debug-disable">stun_debug_disable</link>                  (void);
 </synopsis>
@@ -115,7 +117,9 @@ received should be processed by that agent or not.</para>
 <title role="details.title">Details</title>
 <refsect2 id="StunAgent" role="typedef">
 <title>StunAgent</title>
-<indexterm zone="StunAgent"><primary sortas="StunAgent">StunAgent</primary></indexterm><para>
+<indexterm zone="StunAgent"><primary sortas="StunAgent">StunAgent</primary></indexterm><programlisting>typedef struct stun_agent_t StunAgent;
+</programlisting>
+<para>
 An opaque structure representing the STUN agent.</para>
 <para>
 </para></refsect2>
@@ -197,7 +201,10 @@ attribute to the STUN messages it creates.
 <varlistentry id="STUN-AGENT-USAGE-ADD-SOFTWARE--CAPS" role="constant">
 <term><literal>STUN_AGENT_USAGE_ADD_SOFTWARE</literal></term>
 <listitem><simpara> The agent should add the SOFTWARE attribute
-to the STUN messages it creates
+to the STUN messages it creates. Calling <link linkend="nice-agent-set-software"><function>nice_agent_set_software()</function></link> will have
+the same effect as enabling this Usage. STUN Indications do not have the
+SOFTWARE attributes added to them though. The SOFTWARE attribute is only
+added for the RFC5389 and WLM2009 compatibility modes.
 </simpara></listitem>
 </varlistentry>
 <varlistentry id="STUN-AGENT-USAGE-IGNORE-CREDENTIALS--CAPS" role="constant">
@@ -763,6 +770,36 @@ free its slot for future transactions.
 <listitem><simpara> The <link linkend="StunTransactionId"><type>StunTransactionId</type></link> of the transaction to forget
 </simpara></listitem></varlistentry>
 <varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara> <link linkend="TRUE--CAPS"><literal>TRUE</literal></link> if the transaction was found, <link linkend="FALSE--CAPS"><literal>FALSE</literal></link> otherwise
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="stun-agent-set-software" role="function">
+<title>stun_agent_set_software ()</title>
+<indexterm zone="stun-agent-set-software"><primary sortas="stun_agent_set_software">stun_agent_set_software</primary></indexterm><programlisting><link linkend="void">void</link>                stun_agent_set_software             (<link linkend="StunAgent">StunAgent</link> *agent,
+                                                         const <link linkend="char">char</link> *software);</programlisting>
+<para>
+This function will set the value of the SOFTWARE attribute to be added to
+STUN requests, responses and error responses.
+<para>
+Calling this function will automatically enable the addition of the SOFTWARE
+attribute for RFC5389 and WLM2009 compatibility modes.
+</para>
+<note>
+     <para>
+       The <parameter>software</parameter> argument must be in UTF-8 encoding and only the first
+       128 characters will be sent.
+     </para>
+     <para>
+       The value of the <parameter>software</parameter> argument must stay valid throughout the life of
+       the StunAgent's life. Do not free its content.
+     </para>
+   </note></para>
+<para>
+</para><variablelist role="params">
+<varlistentry><term><parameter>agent</parameter>&#160;:</term>
+<listitem><simpara> The <link linkend="StunAgent"><type>StunAgent</type></link>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>software</parameter>&#160;:</term>
+<listitem><simpara> The value of the SOFTWARE attribute to add.
 </simpara></listitem></varlistentry>
 </variablelist></refsect2>
 <refsect2 id="stun-debug-enable" role="function">

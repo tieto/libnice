@@ -180,7 +180,8 @@ gst_nice_src_init (GstNiceSrc *src, GstNiceSrcClass *g_class)
   src->agent = NULL;
   src->stream_id = 0;
   src->component_id = 0;
-  src->mainloop = g_main_loop_new (g_main_context_new (), FALSE);
+  src->mainctx = g_main_context_new ();
+  src->mainloop = g_main_loop_new (src->mainctx, FALSE);
   src->unlocked = FALSE;
   src->idle_source = NULL;
 }
@@ -218,6 +219,7 @@ gst_nice_src_unlock_idler (gpointer data)
     g_main_loop_quit (nicesrc->mainloop);
 
   if (nicesrc->idle_source) {
+    g_source_destroy (nicesrc->idle_source);
     g_source_unref (nicesrc->idle_source);
     nicesrc->idle_source = NULL;
   }
@@ -236,10 +238,12 @@ gst_nice_src_unlock (GstBaseSrc *src)
 
   g_main_loop_quit (nicesrc->mainloop);
 
-  nicesrc->idle_source = g_idle_source_new ();
-  g_source_set_priority (nicesrc->idle_source, G_PRIORITY_HIGH);
-  g_source_set_callback (nicesrc->idle_source, gst_nice_src_unlock_idler, src, NULL);
-  g_source_attach (nicesrc->idle_source, g_main_loop_get_context (nicesrc->mainloop));
+  if (!nicesrc->idle_source) {
+    nicesrc->idle_source = g_idle_source_new ();
+    g_source_set_priority (nicesrc->idle_source, G_PRIORITY_HIGH);
+    g_source_set_callback (nicesrc->idle_source, gst_nice_src_unlock_idler, src, NULL);
+    g_source_attach (nicesrc->idle_source, g_main_loop_get_context (nicesrc->mainloop));
+  }
   GST_OBJECT_UNLOCK (src);
 
   return TRUE;
@@ -252,8 +256,10 @@ gst_nice_src_unlock_stop (GstBaseSrc *src)
 
   GST_OBJECT_LOCK (src);
   nicesrc->unlocked = FALSE;
-  if (nicesrc->idle_source)
+  if (nicesrc->idle_source) {
     g_source_destroy (nicesrc->idle_source);
+    g_source_unref(nicesrc->idle_source);
+  }
   nicesrc->idle_source = NULL;
   GST_OBJECT_UNLOCK (src);
 
@@ -307,6 +313,10 @@ gst_nice_src_dispose (GObject *object)
   if (src->mainloop)
     g_main_loop_unref (src->mainloop);
   src->mainloop = NULL;
+
+  if (src->mainctx)
+    g_main_context_unref (src->mainctx);
+  src->mainctx = NULL;
 
   GST_CALL_PARENT (G_OBJECT_CLASS, dispose, (object));
 }
@@ -392,13 +402,12 @@ gst_nice_src_change_state (GstElement * element, GstStateChange transition)
       else
         {
           nice_agent_attach_recv (src->agent, src->stream_id, src->component_id,
-              g_main_loop_get_context (src->mainloop),
-              gst_nice_src_read_callback, (gpointer) src);
+              src->mainctx, gst_nice_src_read_callback, (gpointer) src);
         }
       break;
     case GST_STATE_CHANGE_READY_TO_NULL:
       nice_agent_attach_recv (src->agent, src->stream_id, src->component_id,
-          g_main_loop_get_context (src->mainloop), NULL, NULL);
+          src->mainctx, NULL, NULL);
       break;
     default:
       break;
