@@ -106,7 +106,9 @@ as timed out.
 <title role="details.title">Details</title>
 <refsect2 id="StunTimer" role="typedef">
 <title>StunTimer</title>
-<indexterm zone="StunTimer"><primary sortas="StunTimer">StunTimer</primary></indexterm><para>
+<indexterm zone="StunTimer"><primary sortas="StunTimer">StunTimer</primary></indexterm><programlisting>typedef struct stun_timer_s StunTimer;
+</programlisting>
+<para>
 An opaque structure representing a STUN transaction retransmission timer</para>
 <para>
 </para></refsect2>

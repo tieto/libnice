@@ -694,6 +694,8 @@ defined by ICE draft 19
 <hr>
 <div class="refsect2" title="StunTransactionId">
 <a name="StunTransactionId"></a><h3>StunTransactionId</h3>
+<pre class="programlisting">typedef uint8_t StunTransactionId[STUN_MESSAGE_TRANS_ID_LEN];
+</pre>
 <p>
 A type that holds a STUN transaction id.</p>
 <p>
@@ -911,7 +913,8 @@ the STUN message is not supported.
 <hr>
 <div class="refsect2" title="STUN_MESSAGE_BUFFER_INCOMPLETE">
 <a name="STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS"></a><h3>STUN_MESSAGE_BUFFER_INCOMPLETE</h3>
-<pre class="programlisting">#define             STUN_MESSAGE_BUFFER_INCOMPLETE</pre>
+<pre class="programlisting">#define STUN_MESSAGE_BUFFER_INCOMPLETE 0
+</pre>
 <p>
 Convenience macro for <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()"><code class="function">stun_message_validate_buffer_length()</code></a> meaning that the
 data to validate does not hold a complete STUN message</p>
@@ -921,7 +924,8 @@ data to validate does not hold a complete STUN message</p>
 <hr>
 <div class="refsect2" title="STUN_MESSAGE_BUFFER_INVALID">
 <a name="STUN-MESSAGE-BUFFER-INVALID--CAPS"></a><h3>STUN_MESSAGE_BUFFER_INVALID</h3>
-<pre class="programlisting">#define             STUN_MESSAGE_BUFFER_INVALID</pre>
+<pre class="programlisting">#define STUN_MESSAGE_BUFFER_INVALID -1
+</pre>
 <p>
 Convenience macro for <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()"><code class="function">stun_message_validate_buffer_length()</code></a> meaning that the
 data to validate is not a valid STUN message</p>

@@ -553,6 +553,7 @@ nice_agent_init (NiceAgent *agent)
   agent->keepalive_timer_source = NULL;
   agent->refresh_list = NULL;
   agent->media_after_tick = FALSE;
+  agent->software_attribute = NULL;
 
   agent->compatibility = NICE_COMPATIBILITY_DRAFT19;
 
@@ -702,6 +703,7 @@ nice_agent_set_property (
             STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
             STUN_AGENT_USAGE_USE_FINGERPRINT);
       }
+      stun_agent_set_software (&agent->stun_agent, agent->software_attribute);
 
       break;
 
@@ -1055,6 +1057,7 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
             STUN_AGENT_USAGE_ADD_SOFTWARE |
             STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS);
       }
+      stun_agent_set_software (&cdisco->stun_agent, agent->software_attribute);
 
       nice_debug ("Agent %p : Adding new relay-rflx candidate discovery %p\n",
           agent, cdisco);
@@ -1557,7 +1560,14 @@ static gboolean priv_add_remote_candidate (
   /* step: check whether the candidate already exists */
   candidate = component_find_remote_candidate(component, addr, transport);
   if (candidate) {
-    nice_debug ("Agent %p : Update existing remote candidate %p.", agent, candidate);
+    {
+      gchar tmpbuf[INET6_ADDRSTRLEN];
+      nice_address_to_string (addr, tmpbuf);
+      nice_debug ("Agent %p : Updating existing remote candidate with addr [%s]:%u"
+          " for s%d/c%d. U/P '%s'/'%s' prio: %u", agent, tmpbuf,
+          nice_address_get_port (addr), stream_id, component_id,
+          username, password, priority);
+    }
     /* case 1: an existing candidate, update the attributes */
     candidate->type = type;
     if (base_addr)
@@ -1605,9 +1615,9 @@ static gboolean priv_add_remote_candidate (
 	  gchar tmpbuf[INET6_ADDRSTRLEN];
 	  nice_address_to_string (addr, tmpbuf);
 	  nice_debug ("Agent %p : Adding remote candidate with addr [%s]:%u"
-              " for s%d/c%d. U/P '%s'/'%s'", agent, tmpbuf,
+              " for s%d/c%d. U/P '%s'/'%s' prio: %u", agent, tmpbuf,
               nice_address_get_port (addr), stream_id, component_id,
-              username, password);
+              username, password, priority);
 	}
 	
 	if (base_addr)
@@ -1996,6 +2006,9 @@ nice_agent_dispose (GObject *object)
 
   priv_free_upnp (agent);
 
+  g_free (agent->software_attribute);
+  agent->software_attribute = NULL;
+
   if (G_OBJECT_CLASS (nice_agent_parent_class)->dispose)
     G_OBJECT_CLASS (nice_agent_parent_class)->dispose (object);
 
@@ -2361,4 +2374,18 @@ void nice_agent_set_stream_tos (NiceAgent *agent,
   }
 
   agent_unlock();
+}
+
+void nice_agent_set_software (NiceAgent *agent, const gchar *software)
+{
+  agent_lock();
+
+  g_free (agent->software_attribute);
+  if (software)
+    agent->software_attribute = g_strdup_printf ("%s/%s",
+        software, PACKAGE_STRING);
+
+  stun_agent_set_software (&agent->stun_agent, agent->software_attribute);
+
+  agent_unlock ();
 }

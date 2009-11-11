@@ -554,7 +554,7 @@ static gboolean priv_conn_keepalive_retransmissions_tick (gpointer pointer)
  */
 static gboolean priv_conn_keepalive_tick_unlocked (NiceAgent *agent)
 {
-  GSList *i, *j;
+  GSList *i, *j, *k;
   int errors = 0;
   gboolean ret = FALSE;
   size_t buf_len = 0;
@@ -657,12 +657,36 @@ static gboolean priv_conn_keepalive_tick_unlocked (NiceAgent *agent)
    *         (ref ICE sect 4.1.1.4 "Keeping Candidates Alive" ID-19)  */
   for (i = agent->streams; i; i = i->next) {
     Stream *stream = i->data;
-    if (stream->conncheck_state == NICE_CHECKLIST_RUNNING) {
-      for (j = stream->conncheck_list; j ; j = j->next) {
-	CandidateCheckPair *p = j->data;
+    for (j = stream->components; j; j = j->next) {
+      Component *component = j->data;
+      if (component->state < NICE_COMPONENT_STATE_READY &&
+          agent->stun_server_ip) {
+        NiceAddress stun_server;
+        if (nice_address_set_from_string (&stun_server, agent->stun_server_ip)) {
+          StunAgent stun_agent;
+          uint8_t stun_buffer[STUN_MAX_MESSAGE_SIZE];
+          StunMessage stun_message;
+          size_t buffer_len = 0;
 
-        nice_debug ("Agent %p : resending STUN-CC to keep the candidate alive (pair %p).", agent, p);
-        conn_check_send (agent, p);
+          nice_address_set_port (&stun_server, agent->stun_server_port);
+
+          stun_agent_init (&stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
+              STUN_COMPATIBILITY_RFC3489, 0);
+
+          buffer_len = stun_usage_bind_create (&stun_agent,
+              &stun_message, stun_buffer, sizeof(stun_buffer));
+
+          for (k = component->local_candidates; k; k = k->next) {
+            NiceCandidate *candidate = (NiceCandidate *) k->data;
+            if (candidate->type == NICE_CANDIDATE_TYPE_HOST) {
+              /* send the conncheck */
+              nice_debug ("Agent %p : resending STUN on %s to keep the "
+                  "candidate alive.", agent, candidate->foundation);
+              nice_socket_send (candidate->sockptr, &stun_server,
+                  buffer_len, (gchar *)stun_buffer);
+            }
+          }
+        }
       }
     }
   }
@@ -1018,6 +1042,16 @@ void conn_check_remote_candidates_set(NiceAgent *agent)
             }
           }
         }
+        /* Once we process the pending checks, we should free them to avoid
+         * reprocessing them again if a dribble-mode set_remote_candidates
+         * is called */
+        for (m = component->incoming_checks; m; m = m->next) {
+          IncomingCheck *icheck = m->data;
+          g_free (icheck->username);
+          g_slice_free (IncomingCheck, icheck);
+        }
+        g_slist_free (component->incoming_checks);
+        component->incoming_checks = NULL;
       }
     }
   }
@@ -1076,8 +1110,8 @@ static gboolean priv_update_selected_pair (NiceAgent *agent, Component *componen
   g_assert (pair);
   if (pair->priority > component->selected_pair.priority) {
     nice_debug ("Agent %p : changing SELECTED PAIR for component %u: %s:%s "
-        "(prio:%lu).", agent, component->id, pair->local->foundation,
-        pair->remote->foundation, (long unsigned)pair->priority);
+        "(prio:%" G_GUINT64_FORMAT ").", agent, component->id, pair->local->foundation,
+        pair->remote->foundation, pair->priority);
 
     if (component->selected_pair.keepalive.tick_source != NULL) {
       g_source_destroy (component->selected_pair.keepalive.tick_source);
@@ -1170,18 +1204,20 @@ static void priv_update_check_list_state_for_ready (NiceAgent *agent, Stream *st
 	++succeeded;
 	if (p->nominated == TRUE) {
           ++nominated;
-          /* Only go to READY if no checks are left in progress. If there are
-           * any that are kept, then this function will be called again when the
-           * conncheck tick timer finishes them all */
-	  if (priv_prune_pending_checks (stream, p->component_id) == 0) {
-            agent_signal_component_state_change (agent, p->stream_id,
-                p->component_id, NICE_COMPONENT_STATE_READY);
-          }
 	}
       }
     }
   }
-  
+
+  if (nominated > 0) {
+    /* Only go to READY if no checks are left in progress. If there are
+     * any that are kept, then this function will be called again when the
+     * conncheck tick timer finishes them all */
+    if (priv_prune_pending_checks (stream, component->id) == 0) {
+      agent_signal_component_state_change (agent, stream->id,
+          component->id, NICE_COMPONENT_STATE_READY);
+    }
+  }
   nice_debug ("Agent %p : conn.check list status: %u nominated, %u succeeded, c-id %u.", agent, nominated, succeeded, component->id);
 }
 
@@ -1677,6 +1713,8 @@ static guint priv_prune_pending_checks (Stream *stream, guint component_id)
   guint64 highest_nominated_priority = 0;
   guint in_progress = 0;
 
+  nice_debug ("Finding highest priority for component %d", component_id);
+
   for (i = stream->conncheck_list; i; i = i->next) {
     CandidateCheckPair *p = i->data;
     if (p->component_id == component_id &&
@@ -1690,7 +1728,7 @@ static guint priv_prune_pending_checks (Stream *stream, guint component_id)
   }
 
   nice_debug ("Agent XXX: Pruning pending checks. Highest nominated priority "
-      "is %lu", highest_nominated_priority);
+      "is %" G_GUINT64_FORMAT, highest_nominated_priority);
 
   /* step: cancel all FROZEN and WAITING pairs for the component */
   for (i = stream->conncheck_list; i; i = i->next) {
@@ -1713,9 +1751,9 @@ static guint priv_prune_pending_checks (Stream *stream, guint component_id)
         } else {
           /* We must keep the higher priority pairs running because if a udp
            * packet was lost, we might end up using a bad candidate */
-          nice_debug ("Agent XXX : pair %p kept IN_PROGRESS because priority %d"
-              " is higher than currently nominated pair %d", p, p->priority,
-              highest_nominated_priority);
+          nice_debug ("Agent XXX : pair %p kept IN_PROGRESS because priority %"
+              G_GUINT64_FORMAT " is higher than currently nominated pair %"
+              G_GUINT64_FORMAT, p, p->priority, highest_nominated_priority);
           in_progress++;
         }
       }
@@ -2325,8 +2363,9 @@ static gboolean priv_map_reply_to_relay_request (NiceAgent *agent, StunMessage *
              d->nicesock,
              d->turn);
 
-          priv_add_new_turn_refresh (d, relay_cand, lifetime);
-
+          if (relay_cand) {
+            priv_add_new_turn_refresh (d, relay_cand, lifetime);
+          }
 
           d->stun_message.buffer = NULL;
           d->stun_message.buffer_len = 0;

@@ -50,6 +50,7 @@
     <function name="nice_agent_set_selected_pair ()" link="NiceAgent.html#nice-agent-set-selected-pair"/>
     <function name="nice_agent_set_selected_remote_candidate ()" link="NiceAgent.html#nice-agent-set-selected-remote-candidate"/>
     <function name="nice_agent_set_stream_tos ()" link="NiceAgent.html#nice-agent-set-stream-tos"/>
+    <function name="nice_agent_set_software ()" link="NiceAgent.html#nice-agent-set-software"/>
     <function name="nice_agent_restart ()" link="NiceAgent.html#nice-agent-restart"/>
     <function name="The &quot;compatibility&quot; property" link="NiceAgent.html#NiceAgent--compatibility"/>
     <function name="The &quot;controlling-mode&quot; property" link="NiceAgent.html#NiceAgent--controlling-mode"/>
@@ -64,25 +65,6 @@
     <function name="The &quot;stun-pacing-timer&quot; property" link="NiceAgent.html#NiceAgent--stun-pacing-timer"/>
     <function name="The &quot;stun-server&quot; property" link="NiceAgent.html#NiceAgent--stun-server"/>
     <function name="The &quot;stun-server-port&quot; property" link="NiceAgent.html#NiceAgent--stun-server-port"/>
-    <function name="The &quot;compatibility&quot; property" link="NiceAgent.html#NiceAgent--compatibility"/>
-    <function name="The &quot;controlling-mode&quot; property" link="NiceAgent.html#NiceAgent--controlling-mode"/>
-    <function name="The &quot;full-mode&quot; property" link="NiceAgent.html#NiceAgent--full-mode"/>
-    <function name="The &quot;main-context&quot; property" link="NiceAgent.html#NiceAgent--main-context"/>
-    <function name="The &quot;max-connectivity-checks&quot; property" link="NiceAgent.html#NiceAgent--max-connectivity-checks"/>
-    <function name="The &quot;proxy-ip&quot; property" link="NiceAgent.html#NiceAgent--proxy-ip"/>
-    <function name="The &quot;proxy-password&quot; property" link="NiceAgent.html#NiceAgent--proxy-password"/>
-    <function name="The &quot;proxy-port&quot; property" link="NiceAgent.html#NiceAgent--proxy-port"/>
-    <function name="The &quot;proxy-type&quot; property" link="NiceAgent.html#NiceAgent--proxy-type"/>
-    <function name="The &quot;proxy-username&quot; property" link="NiceAgent.html#NiceAgent--proxy-username"/>
-    <function name="The &quot;stun-pacing-timer&quot; property" link="NiceAgent.html#NiceAgent--stun-pacing-timer"/>
-    <function name="The &quot;stun-server&quot; property" link="NiceAgent.html#NiceAgent--stun-server"/>
-    <function name="The &quot;stun-server-port&quot; property" link="NiceAgent.html#NiceAgent--stun-server-port"/>
-    <function name="The &quot;candidate-gathering-done&quot; signal" link="NiceAgent.html#NiceAgent-candidate-gathering-done"/>
-    <function name="The &quot;component-state-changed&quot; signal" link="NiceAgent.html#NiceAgent-component-state-changed"/>
-    <function name="The &quot;initial-binding-request-received&quot; signal" link="NiceAgent.html#NiceAgent-initial-binding-request-received"/>
-    <function name="The &quot;new-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-candidate"/>
-    <function name="The &quot;new-remote-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-remote-candidate"/>
-    <function name="The &quot;new-selected-pair&quot; signal" link="NiceAgent.html#NiceAgent-new-selected-pair"/>
     <function name="The &quot;candidate-gathering-done&quot; signal" link="NiceAgent.html#NiceAgent-candidate-gathering-done"/>
     <function name="The &quot;component-state-changed&quot; signal" link="NiceAgent.html#NiceAgent-component-state-changed"/>
     <function name="The &quot;initial-binding-request-received&quot; signal" link="NiceAgent.html#NiceAgent-initial-binding-request-received"/>
@@ -136,6 +118,7 @@
     <function name="stun_agent_build_unknown_attributes_error ()" link="libnice-StunAgent.html#stun-agent-build-unknown-attributes-error"/>
     <function name="stun_agent_finish_message ()" link="libnice-StunAgent.html#stun-agent-finish-message"/>
     <function name="stun_agent_forget_transaction ()" link="libnice-StunAgent.html#stun-agent-forget-transaction"/>
+    <function name="stun_agent_set_software ()" link="libnice-StunAgent.html#stun-agent-set-software"/>
     <function name="stun_debug_enable ()" link="libnice-StunAgent.html#stun-debug-enable"/>
     <function name="stun_debug_disable ()" link="libnice-StunAgent.html#stun-debug-disable"/>
     <function name="StunMessage" link="libnice-StunMessage.html#StunMessage"/>
