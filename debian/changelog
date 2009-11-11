@@ -3,8 +3,9 @@ libnice (0.0.10-1) UNRELEASED; urgency=low
   * New upstream release.
     - Adjust .symbols file
   * Run checks at build time
+  * Bump Standards-Version to 3.8.3 (no further changes)
 
- -- Laurent Bigonville <bigon@debian.org>  Thu, 12 Nov 2009 00:40:46 +0100
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 12 Nov 2009 00:41:46 +0100
 
 libnice (0.0.9-2) unstable; urgency=low
 
