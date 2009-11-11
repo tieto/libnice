@@ -31,6 +31,7 @@ libnice.so.0 libnice0 #MINVER#
   nice_agent_set_remote_credentials@Base 0.0.1
   nice_agent_set_selected_pair@Base 0.0.1
   nice_agent_set_selected_remote_candidate@Base 0.0.1
+  nice_agent_set_software@Base 0.0.10
   nice_agent_set_stream_tos@Base 0.0.9
   nice_candidate_free@Base 0.0.1
   nice_candidate_new@Base 0.0.1
@@ -48,6 +49,7 @@ libnice.so.0 libnice0 #MINVER#
   stun_agent_init_indication@Base 0.0.5
   stun_agent_init_request@Base 0.0.5
   stun_agent_init_response@Base 0.0.5
+  stun_agent_set_software@Base 0.0.10
   stun_agent_validate@Base 0.0.5
   stun_debug_disable@Base 0.0.5
   stun_debug_enable@Base 0.0.5
