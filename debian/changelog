@@ -1,8 +1,8 @@
-libnice (0.0.10-2) UNRELEASED; urgency=low
+libnice (0.0.10-2) unstable; urgency=low
 
   * Disable check on non-linux arch for now as they are buggy on these arch
 
- -- Laurent Bigonville <bigon@debian.org>  Fri, 13 Nov 2009 22:49:36 +0100
+ -- Laurent Bigonville <bigon@debian.org>  Fri, 13 Nov 2009 22:53:11 +0100
 
 libnice (0.0.10-1) unstable; urgency=low
 
