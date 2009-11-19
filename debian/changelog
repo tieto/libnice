@@ -1,3 +1,12 @@
+libnice (1:0.0.10-0maemo1) unstable; urgency=low
+
+  * Add a nice_agent_set_software and stun_agent_set_software API
+  * Fix test-bind timeout from 10s to 20s for the test that lasts ~10s and fails on slow machines
+  * Fix various warnings from coverity report
+  * Fixes: NB#146042:<coverity> defects from libnice
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Thu, 19 Nov 2009 16:35:45 -0500
+
 libnice (1:0.0.9-0maemo7) unstable; urgency=low
 
   * Catch EAGAIN error on recvfrom for UDP sockets too as it might happen for obscure reasons (bad checksum?)
