@@ -324,6 +324,7 @@ static int stun_err_dequeue (int fd)
   errno = saved_errno;
   return ret;
 #else
+  (void) fd;
   return 0;
 #endif
 }
@@ -517,11 +518,11 @@ StunUsageBindReturn stun_usage_bind_run (const struct sockaddr *srv,
       } else if (bind_ret ==  STUN_USAGE_BIND_RETURN_INVALID) {
         ret = STUN_USAGE_TRANS_RETURN_RETRY;
       } else {
-        return bind_ret;
+        break;
       }
     }
   }
   while (ret == STUN_USAGE_TRANS_RETURN_RETRY);
 
-  return STUN_USAGE_BIND_RETURN_SUCCESS;
+  return bind_ret;
 }
