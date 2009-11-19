@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk
+
+DEB_DH_INSTALL_SOURCEDIR=debian/tmp
+DEB_CONFIGURE_EXTRA_FLAGS = --with-gstreamer --enable-gtk-doc
+DEB_DH_STRIP_ARGS=--dbg-package=libnice0-dbg
+
+CFLAGS := -g $(DEB_OPT_FLAG)
+
+# List any files which are not installed
+include /usr/share/cdbs/1/rules/utils.mk
+common-binary-post-install-arch:: list-missing
+
+debian/stamp-autotools-files:
+	test -d m4 || mkdir m4
+	gtkdocize
+	autoreconf -v --force --install
+	touch debian/stamp-autotools-files

@@ -1,0 +1,5 @@
+usr/include/nice
+usr/include/stun
+usr/lib/libnice.so
+usr/lib/libnice.a
+usr/lib/pkgconfig/nice.pc

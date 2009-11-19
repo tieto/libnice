@@ -1,0 +1,211 @@
+libnice (1:0.0.9-0maemo7) unstable; urgency=low
+
+  * Catch EAGAIN error on recvfrom for UDP sockets too as it might happen for obscure reasons (bad checksum?)
+  * Fixes: NB#141906:VoIP audio is lost in between active call.
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Tue, 10 Nov 2009 14:31:25 -0400
+
+libnice (1:0.0.9-0maemo6) unstable; urgency=low
+
+  * Fix a crash because using the wrong variable. sorry...
+  * Fixes: NB#142579:Telepathy-stream engine crash after initiating a VOIP call
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Mon, 12 Oct 2009 13:10:31 -0400
+
+libnice (1:0.0.9-0maemo5) unstable; urgency=low
+
+  * Fix a bad copy/paste that made libnice not build correctly
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Fri, 09 Oct 2009 18:56:53 -0400
+
+libnice (1:0.0.9-0maemo4) unstable; urgency=low
+
+  * Fix a bug where we would send hundreds of stun requests for no reason
+  * Fixed some log output
+  * Some performance improvements (do not prune pending checks more than necessary)
+  * Fix compilation and compatibility with BSD systems.
+  * Memory leak fix in the gstreamer element
+  * Memory leak fix in case of a restart
+  * Fix processing of pending checks multiple times when in dribble mode
+  * Fix a crash in case a relay candidate could not be added
+  * Fixes: NB#141946: "telepathy-stream-engine" Crash observed interacting with VOIP call and local video playback
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Fri, 09 Oct 2009 17:23:30 -0400
+
+libnice (1:0.0.9-0maemo3) unstable; urgency=low
+
+  * Do not modify the foundation/username for gtalk relay candidates
+  * Fixes: NB#132201: Audio not heard in receiving end during GTalk
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Mon, 17 Aug 2009 12:38:07 -0400
+
+libnice (1:0.0.9-0maemo2) unstable; urgency=low
+
+  * Fix g_main_context FD leak by Olivier. Related to bug #127743
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Mon, 10 Aug 2009 16:49:42 -0400
+
+libnice (1:0.0.9-0maemo1) unstable; urgency=low
+
+  * Update to 0.0.9 release
+  * Adds support for setting the ToS
+  * Fixes some issues with google talk connectivity
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Fri, 31 Jul 2009 18:06:48 -0400
+
+libnice (1:0.0.8-0maemo1) unstable; urgency=low
+
+  * Update to 0.0.8 release
+  * Correctly set the username of remote peer-reflexive candidates in google mode for early ichecks
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Tue, 30 Jun 2009 16:09:41 -0400
+
+libnice (1:0.0.7-0maemo3) unstable; urgency=low
+
+  * Use a global mutex for all nice agents and use g_source_is_destroyed to avoid the race condition of a source being destroyed while we wait for the mutex
+  * unlock the mutex before calling the recv callback
+  * Fixes: NB#123138: random SE crash observed
+  * Fixes: NB#122442: Integrate libnice API doc to sys int repository.
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Tue, 16 Jun 2009 20:46:46 -0400
+
+libnice (1:0.0.7-0maemo2) unstable; urgency=low
+
+  * Use addr instead of base_addr for remote peer-reflexive discovery
+  * Fixes: NB#122453: Sometimes VoIP Audio Call drops with SE crash
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Fri, 12 Jun 2009 14:15:42 -0400
+
+libnice (1:0.0.7-0maemo1) unstable; urgency=low
+
+  * Keep in progress checks running if their priority is higher than the nominated pair
+  * fix keepalive issue when there is network/cpu bottleneck
+  * Fixes: NB#121369: Fremantle To Fremantle video call gets disconnected automatically
+  * Fix foundation generation for remote peer reflexive candidates
+  * Add support for droping packets when using TCP and the bandwidth is too slow for the data output
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Thu, 11 Jun 2009 15:42:23 -0400
+
+libnice (1:0.0.6-0maemo6) unstable; urgency=low
+
+  * unset timer's source if they return FALSE
+  * Fix interoperability with gtalk2voip.com
+  * Use Thread-safe version of GUPnP Simple IGD
+  * Fixes: NB#115943: Crash in s-e/libsoup
+  * Fixes: NB#117078: Multi calls:A random SE crash is observed
+  * Avoid a race condition where a candidate has the wrong user/pass
+  * Add support for delayed setting of the remote candidates in google mode
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Tue, 02 Jun 2009 20:18:34 -0400
+
+libnice (1:0.0.6-0maemo5) unstable; urgency=low
+
+  * Fix UPnP support
+  * Fixes: NB#117179 - telepathy-stream-engine crashes and call disconnected when trying to make a VoIP call
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Fri, 15 May 2009 17:36:49 -0400
+
+libnice (1:0.0.6-0maemo4) unstable; urgency=low
+
+  * Build against properly packaged GuPNP-IGD 
+
+ -- Olivier Crête <olivier.crete@collabora.co.uk>  Mon, 11 May 2009 17:40:52 -0400
+
+libnice (1:0.0.6-0maemo3) unstable; urgency=low
+
+  * Add upnp dependency and make it build with it 
+  * Install stun header files
+
+ -- Olivier Crête <olivier.crete@collabora.co.uk>  Thu,  7 May 2009 16:27:24 -0400
+
+libnice (1:0.0.6-0maemo2) unstable; urgency=low
+
+  * Add UPnP Support to libnice
+  * Fix race condition
+  * Fixes: NB#113032 - Found telepathy stream engine crash for incoming gtalk call when device and t&k locked
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Tue, 28 Apr 2009 20:02:51 -0400
+
+libnice (1:0.0.6-0maemo1) unstable; urgency=low
+
+  * Added a new STUN API : stun_agent_forget_transaction
+  * Fix a possible crash if tcp-turn is shutdown early in the process
+  * Fix a crash when a stream is removed
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Fri, 31 Mar 2009 16:53:10 -0500
+
+libnice (1:0.0.5-0osso4) unstable; urgency=low
+
+  * Store 10 times more sent ids in the stun agent because we can easily reach the current limit
+  * Fix a race condition crash with retransmission ticks
+  * Refuse invalid relay informations to avoid a crash
+  * Fixes: NB#106784 - fremantle-diablo call, remote video appearance in fremantle not consistent
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Fri, 20 Mar 2009 10:33:18 +0200
+
+libnice (1:0.0.5-0osso3) unstable; urgency=low
+
+  * fix debian/changelog
+
+ -- Reto Zingg <reto.zingg@nokia.com>  Tue, 10 Mar 2009 11:33:50 +0200
+
+libnice (1:0.0.5-0osso2) unstable; urgency=low
+
+  * Correctly do connectivity checks to detect peer disconnections
+  * Fixes: NB#102316 - Call do not gets disconnected if the other party is unavailable.
+  * Fix issue where a call with libjingle would not output any sound after 30 seconds on the libjingle side
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Thu, 09 Mar 2009 17:16:54 -0500
+
+libnice (1:0.0.5-0osso1) unstable; urgency=low
+
+  * Updated to version 0.0.5 from upstream
+  * Name change from nice to libnice
+  * Added support for HTTP proxies
+  * Added a nice_interfaces API to query the local interfaces/ips
+  * Fixed libnice when used in dribble mode
+  * Fix a data corruption issue with the SHA1 algorithm
+  * Endianness gets checked at runtime so libnice should compile and work everywhere
+  * Add compatiblity for WLM2009 ICE
+  * Export libstun API and add documentation for libstun
+  * Add connectivity checks during the connection to detect when the peer gets disconnected. Fixes: NB#102316
+  * Bug fixes and code cleaning
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Thu, 05 Mar 2009 16:18:49 -0500
+
+nice (1:0.0.4-0osso1) unstable; urgency=low
+
+  * Update to version 0.0.4 from upstream
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Fri, 19 Dec 2008 21:20:14 -0500
+
+nice (1:0.0.2-0osso1) unstable; urgency=low
+
+  * Update to version 0.0.2 from upstream 
+
+ -- Olivier Crête <olivier.crete@collabora.co.uk>  Thu, 13 Nov 2008 07:28:40 -0500
+
+nice (0.0.3~gtalk-fs2-0osso3) unstable; urgency=low
+
+  * so-versions added to binary name
+
+ -- Dmitry Rozhkov <dmitry.rozhkov@nokia.com>  Mon,  1 Sep 2008 14:04:34 +0300
+
+nice (0.0.3~gtalk-fs2-0osso2) unstable; urgency=low
+
+  * Update to newer snapshot
+  * adds set_selected_candidates() api
+
+ -- Olivier Crête <olivier.crete@collabora.co.uk>  Mon, 28 Jul 2008 17:44:56 -0400
+
+nice (0.0.3~gtalk-fs2-0osso1) unstable; urgency=low
+
+  * Import tester's git nice-tester-2 branch from May 8 2007
+
+ -- Olivier Crête <olivier.crete@collabora.co.uk>  Fri,  9 May 2008 13:32:12 -0400
+
+nice (0.0.1-1~1) unstable; urgency=low
+
+  * Initial package.
+
+ -- Dafydd Harries <daf@debian.org>  Fri,  2 Feb 2007 11:51:27 +0000

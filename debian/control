@@ -1,0 +1,63 @@
+Source: libnice
+Maintainer: Dafydd Harries <daf@debian.org>, Youness Alaoui <youness.alaoui@collabora.co.uk>
+Standards-Version: 3.7.2
+Priority: optional
+Build-Depends: debhelper (>= 5.0.0),
+               cdbs,
+               libglib2.0-dev (>= 2.10), 
+               libgstreamer0.10-dev,
+               libgstreamer-plugins-base0.10-dev,
+               gtk-doc-tools (>= 1.9),
+               libgupnp-igd-1.0-dev (>= 0.1.3-0maemo1)
+
+Package: libnice0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: libnice
+ Libnice implements traversal of network address translators (NATs) for
+ peer-to-peer data streams.
+
+Package: libnice0-dbg
+Section: libdevel
+Architecture: any
+Depends: libnice0 (= ${binary:Version})
+Description: libnice. Debug symbols
+ Libnice implements traversal of network address translators (NATs) for
+ peer-to-peer data streams.
+ .
+ Debug symbols for libnice.
+
+Package: libnice-dev
+Section: libdevel
+Depends: libnice0 (= ${binary:Version})
+Architecture: any
+Description: development files for libnice
+ Libnice implements traversal of network address translators (NATs) for
+ peer-to-peer data streams.
+ .
+ This package provides a static library and other development files. 
+ The API is unstable.
+
+Package: libnice-gstreamer0.10
+Section: libs
+Depends: libnice0, ${shlibs:Depends}, ${misc:Depends}
+Architecture: any
+Description: gstreamer plugins for libnice
+ Libnice implements traversal of network address translators (NATs) for
+ peer-to-peer data streams. These are Gst elements to use with libnice.
+ .
+ This package provides a static library and other development files. There is
+ currently no dynamic library as the API is unstable.
+
+
+Package: libnice-doc
+Section: doc
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: ICE library (documentation)
+ Libnice implements traversal of network address translators (NATs) for
+ peer-to-peer data streams. These are Gst elements to use with libnice.
+ .
+ This package contains documentation for libnice.
+
