@@ -34,9 +34,6 @@ missing
 stamp-h.in
 stamp-h1
 
-# top level stuff
-debian
-
 # address/ stuff
 address/libaddress.la
 address/test
