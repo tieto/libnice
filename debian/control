@@ -14,7 +14,7 @@ Package: libnice0
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: libnice
+Description: Library implementing the Interactive Connectivity Establishment (ICE) RFC.
  Libnice implements traversal of network address translators (NATs) for
  peer-to-peer data streams.
 
