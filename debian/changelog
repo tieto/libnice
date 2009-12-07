@@ -1,3 +1,9 @@
+libnice (1:0.0.10-0maemo2) unstable; urgency=low
+
+  * Fix description of the package
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Mon, 07 Dec 2009 14:44:39 -0400
+
 libnice (1:0.0.10-0maemo1) unstable; urgency=low
 
   * Add a nice_agent_set_software and stun_agent_set_software API
