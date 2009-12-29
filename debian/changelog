@@ -1,3 +1,11 @@
+libnice (1:0.0.10-0maemo3) unstable; urgency=low
+
+  * Fix coverity CID 7523
+  * Fixes: NB#146042:<coverity> defects from libnice
+  * Do not remove the upnp and upnp-timeout properties of the object if upnp is disabled at build-time
+
+ -- Youness Alaoui <youness.alaoui@collabora.co.uk>  Mon, 29 Dec 2009 15:44:38 -0400
+
 libnice (1:0.0.10-0maemo2) unstable; urgency=low
 
   * Fix description of the package
