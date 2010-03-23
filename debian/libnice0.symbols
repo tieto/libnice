@@ -23,6 +23,7 @@ libnice.so.0 libnice0 #MINVER#
   nice_agent_get_remote_candidates@Base 0.0.1
   nice_agent_get_type@Base 0.0.1
   nice_agent_new@Base 0.0.1
+  nice_agent_new_reliable@Base 0.0.11
   nice_agent_remove_stream@Base 0.0.1
   nice_agent_restart@Base 0.0.1
   nice_agent_send@Base 0.0.1
@@ -40,6 +41,17 @@ libnice.so.0 libnice0 #MINVER#
   nice_interfaces_get_ip_for_interface@Base 0.0.5
   nice_interfaces_get_local_interfaces@Base 0.0.5
   nice_interfaces_get_local_ips@Base 0.0.5
+  pseudo_tcp_set_debug_level@Base 0.0.11
+  pseudo_tcp_socket_close@Base 0.0.11
+  pseudo_tcp_socket_connect@Base 0.0.11
+  pseudo_tcp_socket_get_error@Base 0.0.11
+  pseudo_tcp_socket_get_next_clock@Base 0.0.11
+  pseudo_tcp_socket_new@Base 0.0.11
+  pseudo_tcp_socket_notify_clock@Base 0.0.11
+  pseudo_tcp_socket_notify_mtu@Base 0.0.11
+  pseudo_tcp_socket_notify_packet@Base 0.0.11
+  pseudo_tcp_socket_recv@Base 0.0.11
+  pseudo_tcp_socket_send@Base 0.0.11
   stun_agent_build_unknown_attributes_error@Base 0.0.5
   stun_agent_default_validater@Base 0.0.5
   stun_agent_finish_message@Base 0.0.5
