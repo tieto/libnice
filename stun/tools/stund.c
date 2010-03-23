@@ -1,7 +1,9 @@
 /*
  * This file is part of the Nice GLib ICE library.
  *
- * (C) 2007 Nokia Corporation. All rights reserved.
+ * (C) 2008-2009 Collabora Ltd.
+ *  Contact: Youness Alaoui
+ * (C) 2007-2009 Nokia Corporation. All rights reserved.
  *  Contact: Rémi Denis-Courmont
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -20,6 +22,7 @@
  * Corporation. All Rights Reserved.
  *
  * Contributors:
+ *   Youness Alaoui, Collabora Ltd.
  *   Rémi Denis-Courmont, Nokia
  *
  * Alternatively, the contents of this file may be used under the terms of the
@@ -75,7 +78,7 @@ static const uint16_t known_attributes[] =  {
   0
 };
 
-/**
+/*
  * Creates a listening socket
  */
 int listen_socket (int fam, int type, int proto, unsigned int port)
@@ -164,6 +167,7 @@ static int recv_err (int fd)
   memset (&hdr, 0, sizeof (hdr));
   return recvmsg (fd, &hdr, MSG_ERRQUEUE) >= 0;
 #else
+  (void) fd;
   return 0;
 #endif
 }
@@ -213,7 +217,7 @@ static int dgram_process (int sock, StunAgent *oldagent, StunAgent *newagent)
   struct msghdr mh =
   {
     .msg_name = (struct sockaddr *)&addr,
-    .msg_namelen = sizeof (struct sockaddr),
+    .msg_namelen = sizeof (struct sockaddr_in),
     .msg_iov = &iov,
     .msg_iovlen = 1,
     .msg_control = ctlbuf,
@@ -262,8 +266,9 @@ static int dgram_process (int sock, StunAgent *oldagent, StunAgent *newagent)
       break;
 
     default:
-      stun_agent_init_error (agent, &response, buf, sizeof (buf),
-          &request, STUN_ERROR_BAD_REQUEST);
+      if (!stun_agent_init_error (agent, &response, buf, sizeof (buf),
+              &request, STUN_ERROR_BAD_REQUEST))
+        return -1;
   }
 
   iov.iov_len = stun_agent_finish_message (agent, &response, NULL, 0);

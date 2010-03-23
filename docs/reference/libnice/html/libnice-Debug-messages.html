@@ -8,7 +8,7 @@
 <link rel="up" href="ch02.html" title="Libnice helper functions">
 <link rel="prev" href="ch02.html" title="Libnice helper functions">
 <link rel="next" href="libnice-Network-interfaces-discovery.html" title="Network interfaces discovery">
-<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.13 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="part" href="pt01.html" title="Part I. ICE Library">
 <link rel="chapter" href="ch01.html" title="">
@@ -16,6 +16,8 @@
 <link rel="part" href="pt02.html" title="Part II. STUN Library">
 <link rel="chapter" href="ch03.html" title="">
 <link rel="chapter" href="ch04.html" title="STUN usages">
+<link rel="part" href="pt03.html" title="Part III. Pseudo TCP Socket implementation">
+<link rel="chapter" href="ch05.html" title="">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
@@ -28,8 +30,8 @@
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#libnice-Debug-messages.synopsis" class="shortcut">Top</a>
-                 | 
-                <a href="#libnice-Debug-messages.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#libnice-Debug-messages.description" class="shortcut">Description</a>
 </td></tr>
 </table>
 <div class="refentry" title="Debug messages">
@@ -43,47 +45,61 @@
 </tr></table></div>
 <div class="refsect1" title="Stability Level">
 <a name="libnice-Debug-messages.stability-level"></a><h2>Stability Level</h2>
-More flags are to come and a better API to
-enable/disable each flag should be added. Unstable, unless otherwise indicated
+Unstable, unless otherwise indicated
 </div>
 <div class="refsynopsisdiv" title="Synopsis">
 <a name="libnice-Debug-messages.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-void                <a class="link" href="libnice-Debug-messages.html#nice-debug-enable" title="nice_debug_enable ()">nice_debug_enable</a>                   (<a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
->gboolean</a> with_stun);
-void                <a class="link" href="libnice-Debug-messages.html#nice-debug-disable" title="nice_debug_disable ()">nice_debug_disable</a>                  (<a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
->gboolean</a> with_stun);
+<pre class="synopsis"><span class="returnvalue">void</span>                <a class="link" href="libnice-Debug-messages.html#nice-debug-enable" title="nice_debug_enable ()">nice_debug_enable</a>                   (<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a> with_stun);
+<span class="returnvalue">void</span>                <a class="link" href="libnice-Debug-messages.html#nice-debug-disable" title="nice_debug_disable ()">nice_debug_disable</a>                  (<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a> with_stun);
 </pre>
 </div>
 <div class="refsect1" title="Description">
 <a name="libnice-Debug-messages.description"></a><h2>Description</h2>
 <p>
-Libnice can output a lot of information when debug messages are enabled.
+</p>
+<p>Libnice can output a lot of information when debug messages are enabled.
 This can significantly help track down problems and/or understand what
-it's doing.
-You can enable/disable the debug messages by calling <a class="link" href="libnice-Debug-messages.html#nice-debug-enable" title="nice_debug_enable ()"><code class="function">nice_debug_enable()</code></a>
-or <a class="link" href="libnice-Debug-messages.html#nice-debug-disable" title="nice_debug_disable ()"><code class="function">nice_debug_disable()</code></a> and choosing whether you want only ICE debug messages
-or also stun debug messages.
-By default, the debug messages are disabled, unless the environment variable
-NICE_DEBUG is set, in which case, it must contain a comma separated list of
-flags specifying which debug to enable. The flags can be "nice", "stun",
-or "all" to enable all debug messages.</p>
+it's doing.</p>
 <p>
 </p>
+<p>
+</p>
+<p>You can enable/disable the debug messages by calling <a class="link" href="libnice-Debug-messages.html#nice-debug-enable" title="nice_debug_enable ()"><code class="function">nice_debug_enable()</code></a>
+or <a class="link" href="libnice-Debug-messages.html#nice-debug-disable" title="nice_debug_disable ()"><code class="function">nice_debug_disable()</code></a> and choosing whether you want only ICE debug messages
+or also stun debug messages.</p>
+<p>
+</p>
+<p>
+</p>
+<p>By default, the debug messages are disabled, unless the environment
+variable NICE_DEBUG is set, in which case, it must contain a comma separated
+list of flags specifying which debug to enable.</p>
+<p>
+</p>
+<p> The currently available flags are "nice", "stun", "pseudotcp",
+"pseudotcp-verbose" or "all" to enable all debug messages.</p>
+<p>
+</p>
+<p> If the 'pseudotcp' flag is enabled, then 'pseudotcp-verbose' gets
+automatically disabled. This is to allow the use of the 'all' flag without
+having verbose messages from pseudotcp. You can enable verbose debug messages
+from the pseudotcp layer by specifying 'pseudotcp-verbose' without the
+'pseudotcp' flag.</p>
+<p>
+</p>
+<p>
+</p>
+<p>This API is unstable and is subject to change at any time...
+More flags are to come and a better API to enable/disable each flag
+should be added.</p>
 </div>
 <div class="refsect1" title="Details">
 <a name="libnice-Debug-messages.details"></a><h2>Details</h2>
 <div class="refsect2" title="nice_debug_enable ()">
 <a name="nice-debug-enable"></a><h3>nice_debug_enable ()</h3>
-<pre class="programlisting">void                nice_debug_enable                   (<a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
->gboolean</a> with_stun);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                nice_debug_enable                   (<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a> with_stun);</pre>
 <p>
 Enables libnice debug output to the terminal</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -96,13 +112,9 @@ Enables libnice debug output to the terminal</p>
 <hr>
 <div class="refsect2" title="nice_debug_disable ()">
 <a name="nice-debug-disable"></a><h3>nice_debug_disable ()</h3>
-<pre class="programlisting">void                nice_debug_disable                  (<a
-href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"
->gboolean</a> with_stun);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                nice_debug_disable                  (<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a> with_stun);</pre>
 <p>
 Disables libnice debug output to the terminal</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
@@ -116,6 +128,6 @@ Disables libnice debug output to the terminal</p>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.11</div>
+          Generated by GTK-Doc V1.13</div>
 </body>
 </html>

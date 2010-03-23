@@ -1,9 +1,9 @@
 /*
  * This file is part of the Nice GLib ICE library.
  *
- * (C) 2006, 2007 Collabora Ltd.
- *  Contact: Dafydd Harries
- * (C) 2006, 2007 Nokia Corporation. All rights reserved.
+ * (C) 2006-2009 Collabora Ltd.
+ *  Contact: Youness Alaoui
+ * (C) 2006-2009 Nokia Corporation. All rights reserved.
  *  Contact: Kai Vehmanen
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -23,6 +23,7 @@
  *
  * Contributors:
  *   Dafydd Harries, Collabora Ltd.
+ *   Youness Alaoui, Collabora Ltd.
  *   Kai Vehmanen, Nokia
  *
  * Alternatively, the contents of this file may be used under the terms of the
@@ -54,8 +55,6 @@
 
 
 G_BEGIN_DECLS
-
-#include "socket.h"
 
 
 #define NICE_CANDIDATE_TYPE_PREF_HOST                 120
@@ -177,7 +176,7 @@ struct _NiceCandidate
   gchar *username;        /* pointer to a NULL-terminated username string */
   gchar *password;        /* pointer to a NULL-terminated password string */
   TurnServer *turn;
-  NiceSocket *sockptr;
+  gpointer sockptr;
 };
 
 /**
