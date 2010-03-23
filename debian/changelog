@@ -1,3 +1,9 @@
+libnice (0.0.10-3) UNRELEASED; urgency=low
+
+  * debian/control: Bump Standards-Version (no further changes)
+
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 23 Mar 2010 09:30:31 +0100
+
 libnice (0.0.10-2) unstable; urgency=low
 
   * Disable check on non-linux arch for now as they are buggy on these arch
