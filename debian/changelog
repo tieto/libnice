@@ -2,8 +2,9 @@ libnice (0.0.11-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * debian/control: Bump Standards-Version (no further changes)
+  * Use new source version format "3.0 (quilt)"
 
- -- Laurent Bigonville <bigon@debian.org>  Tue, 23 Mar 2010 09:30:31 +0100
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 23 Mar 2010 09:37:36 +0100
 
 libnice (0.0.10-2) unstable; urgency=low
 
