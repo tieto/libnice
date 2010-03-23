@@ -6,7 +6,7 @@
     <title>libnice Reference Manual</title>
     <releaseinfo>
       The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="http://libnice.freedesktop.org/libnice/index.html">http://libnice.freedesktop.org/libnice/</ulink>.
+      <ulink role="online-location" url="http://nice.freedesktop.org/libnice/index.html">http://nice.freedesktop.org/libnice/</ulink>.
     </releaseinfo>
   </bookinfo>
 
@@ -39,8 +39,14 @@
     </chapter>
   </part>
 
+  <part>
+    <title>Pseudo TCP Socket implementation</title>
+    <chapter>
+      <xi:include href="xml/pseudotcp.xml"/>
+    </chapter>
+  </part>
 
-  <para>The libnice library contains both the ICE library and the
-    STUN library.
+  <para>The libnice library contains the ICE library and the
+    STUN library as well as a Pseudo TCP socket implementation.
   </para>
 </book>

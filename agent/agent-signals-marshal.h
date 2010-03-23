@@ -33,6 +33,14 @@ extern void agent_marshal_VOID__UINT_UINT_STRING (GClosure     *closure,
 /* VOID:UINT (agent-signals-marshal.list:9) */
 #define agent_marshal_VOID__UINT	g_cclosure_marshal_VOID__UINT
 
+/* VOID:UINT,UINT (agent-signals-marshal.list:11) */
+extern void agent_marshal_VOID__UINT_UINT (GClosure     *closure,
+                                           GValue       *return_value,
+                                           guint         n_param_values,
+                                           const GValue *param_values,
+                                           gpointer      invocation_hint,
+                                           gpointer      marshal_data);
+
 G_END_DECLS
 
 #endif /* __agent_marshal_MARSHAL_H__ */

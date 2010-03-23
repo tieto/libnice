@@ -25,6 +25,11 @@
         <sub name="Timer" link="libnice-Timer.html"/>
       </sub>
     </sub>
+    <sub name="Pseudo TCP Socket implementation" link="pt03.html">
+      <sub name="" link="ch05.html">
+        <sub name="Pseudo TCP Socket" link="libnice-Pseudo-TCP-Socket.html"/>
+      </sub>
+    </sub>
   </chapters>
   <functions>
     <function name="NiceAgent" link="NiceAgent.html#NiceAgent-struct"/>
@@ -33,8 +38,9 @@
     <function name="enum NiceProxyType" link="NiceAgent.html#NiceProxyType"/>
     <function name="enum NiceCompatibility" link="NiceAgent.html#NiceCompatibility"/>
     <function name="NiceAgentRecvFunc ()" link="NiceAgent.html#NiceAgentRecvFunc"/>
-    <function name="NICE_AGENT_MAX_REMOTE_CANDIDATES" link="NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES--CAPS"/>
+    <function name="NICE_AGENT_MAX_REMOTE_CANDIDATES" link="NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS"/>
     <function name="nice_agent_new ()" link="NiceAgent.html#nice-agent-new"/>
+    <function name="nice_agent_new_reliable ()" link="NiceAgent.html#nice-agent-new-reliable"/>
     <function name="nice_agent_add_local_address ()" link="NiceAgent.html#nice-agent-add-local-address"/>
     <function name="nice_agent_add_stream ()" link="NiceAgent.html#nice-agent-add-stream"/>
     <function name="nice_agent_remove_stream ()" link="NiceAgent.html#nice-agent-remove-stream"/>
@@ -62,17 +68,21 @@
     <function name="The &quot;proxy-port&quot; property" link="NiceAgent.html#NiceAgent--proxy-port"/>
     <function name="The &quot;proxy-type&quot; property" link="NiceAgent.html#NiceAgent--proxy-type"/>
     <function name="The &quot;proxy-username&quot; property" link="NiceAgent.html#NiceAgent--proxy-username"/>
+    <function name="The &quot;reliable&quot; property" link="NiceAgent.html#NiceAgent--reliable"/>
     <function name="The &quot;stun-pacing-timer&quot; property" link="NiceAgent.html#NiceAgent--stun-pacing-timer"/>
     <function name="The &quot;stun-server&quot; property" link="NiceAgent.html#NiceAgent--stun-server"/>
     <function name="The &quot;stun-server-port&quot; property" link="NiceAgent.html#NiceAgent--stun-server-port"/>
+    <function name="The &quot;upnp&quot; property" link="NiceAgent.html#NiceAgent--upnp"/>
+    <function name="The &quot;upnp-timeout&quot; property" link="NiceAgent.html#NiceAgent--upnp-timeout"/>
     <function name="The &quot;candidate-gathering-done&quot; signal" link="NiceAgent.html#NiceAgent-candidate-gathering-done"/>
     <function name="The &quot;component-state-changed&quot; signal" link="NiceAgent.html#NiceAgent-component-state-changed"/>
     <function name="The &quot;initial-binding-request-received&quot; signal" link="NiceAgent.html#NiceAgent-initial-binding-request-received"/>
     <function name="The &quot;new-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-candidate"/>
     <function name="The &quot;new-remote-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-remote-candidate"/>
     <function name="The &quot;new-selected-pair&quot; signal" link="NiceAgent.html#NiceAgent-new-selected-pair"/>
+    <function name="The &quot;reliable-transport-writable&quot; signal" link="NiceAgent.html#NiceAgent-reliable-transport-writable"/>
     <function name="NiceAddress" link="libnice-NiceAddress.html#NiceAddress"/>
-    <function name="NICE_ADDRESS_STRING_LEN" link="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN--CAPS"/>
+    <function name="NICE_ADDRESS_STRING_LEN" link="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN:CAPS"/>
     <function name="nice_address_init ()" link="libnice-NiceAddress.html#nice-address-init"/>
     <function name="nice_address_new ()" link="libnice-NiceAddress.html#nice-address-new"/>
     <function name="nice_address_free ()" link="libnice-NiceAddress.html#nice-address-free"/>
@@ -93,7 +103,7 @@
     <function name="enum NiceCandidateTransport" link="libnice-NiceCandidate.html#NiceCandidateTransport"/>
     <function name="TurnServer" link="libnice-NiceCandidate.html#TurnServer"/>
     <function name="enum NiceRelayType" link="libnice-NiceCandidate.html#NiceRelayType"/>
-    <function name="NICE_CANDIDATE_MAX_FOUNDATION" link="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION--CAPS"/>
+    <function name="NICE_CANDIDATE_MAX_FOUNDATION" link="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS"/>
     <function name="nice_candidate_new ()" link="libnice-NiceCandidate.html#nice-candidate-new"/>
     <function name="nice_candidate_free ()" link="libnice-NiceCandidate.html#nice-candidate-free"/>
     <function name="nice_candidate_copy ()" link="libnice-NiceCandidate.html#nice-candidate-copy"/>
@@ -128,8 +138,8 @@
     <function name="StunTransactionId" link="libnice-StunMessage.html#StunTransactionId"/>
     <function name="enum StunError" link="libnice-StunMessage.html#StunError"/>
     <function name="enum StunMessageReturn" link="libnice-StunMessage.html#StunMessageReturn"/>
-    <function name="STUN_MESSAGE_BUFFER_INCOMPLETE" link="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS"/>
-    <function name="STUN_MESSAGE_BUFFER_INVALID" link="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID--CAPS"/>
+    <function name="STUN_MESSAGE_BUFFER_INCOMPLETE" link="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE:CAPS"/>
+    <function name="STUN_MESSAGE_BUFFER_INVALID" link="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID:CAPS"/>
     <function name="stun_message_init ()" link="libnice-StunMessage.html#stun-message-init"/>
     <function name="stun_message_length ()" link="libnice-StunMessage.html#stun-message-length"/>
     <function name="stun_message_find ()" link="libnice-StunMessage.html#stun-message-find"/>
@@ -184,5 +194,24 @@
     <function name="stun_timer_start_reliable ()" link="libnice-Timer.html#stun-timer-start-reliable"/>
     <function name="stun_timer_refresh ()" link="libnice-Timer.html#stun-timer-refresh"/>
     <function name="stun_timer_remainder ()" link="libnice-Timer.html#stun-timer-remainder"/>
+    <function name="PseudoTcpSocket" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket-struct"/>
+    <function name="enum PseudoTcpState" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpState"/>
+    <function name="enum PseudoTcpWriteResult" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpWriteResult"/>
+    <function name="PseudoTcpCallbacks" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpCallbacks"/>
+    <function name="enum PseudoTcpDebugLevel" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpDebugLevel"/>
+    <function name="pseudo_tcp_socket_new ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-new"/>
+    <function name="pseudo_tcp_socket_connect ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-connect"/>
+    <function name="pseudo_tcp_socket_recv ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-recv"/>
+    <function name="pseudo_tcp_socket_send ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-send"/>
+    <function name="pseudo_tcp_socket_close ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-close"/>
+    <function name="pseudo_tcp_socket_get_error ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-get-error"/>
+    <function name="pseudo_tcp_socket_get_next_clock ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-get-next-clock"/>
+    <function name="pseudo_tcp_socket_notify_clock ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-clock"/>
+    <function name="pseudo_tcp_socket_notify_mtu ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-mtu"/>
+    <function name="pseudo_tcp_socket_notify_packet ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-packet"/>
+    <function name="pseudo_tcp_set_debug_level ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-set-debug-level"/>
+    <function name="The &quot;callbacks&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--callbacks"/>
+    <function name="The &quot;conversation&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--conversation"/>
+    <function name="The &quot;state&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--state"/>
   </functions>
 </book>

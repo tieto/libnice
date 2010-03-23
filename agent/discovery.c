@@ -1,7 +1,9 @@
 /*
  * This file is part of the Nice GLib ICE library.
  *
- * (C) 2007 Nokia Corporation. All rights reserved.
+ * (C) 2008-2009 Collabora Ltd.
+ *  Contact: Youness Alaoui
+ * (C) 2007-2009 Nokia Corporation. All rights reserved.
  *  Contact: Kai Vehmanen
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -20,6 +22,7 @@
  * Corporation. All Rights Reserved.
  *
  * Contributors:
+ *   Youness Alaoui, Collabora Ltd.
  *   Kai Vehmanen, Nokia
  *
  * Alternatively, the contents of this file may be used under the terms of the
@@ -330,7 +333,8 @@ static void priv_assign_foundation (NiceAgent *agent, NiceCandidate *candidate)
 	   *       time is supported, so there is no need to check
 	   *       for candidates that would otherwise share the
 	   *       foundation, but have different STUN/TURN servers */
-	  memcpy (candidate->foundation, n->foundation, NICE_CANDIDATE_MAX_FOUNDATION);
+	  g_strlcpy (candidate->foundation, n->foundation,
+              NICE_CANDIDATE_MAX_FOUNDATION);
           if (n->username) {
             g_free (candidate->username);
             candidate->username = g_strdup (n->username);
@@ -345,7 +349,8 @@ static void priv_assign_foundation (NiceAgent *agent, NiceCandidate *candidate)
     }
   }
 
-  g_snprintf (candidate->foundation, NICE_CANDIDATE_MAX_FOUNDATION, "%u", agent->next_candidate_id++);
+  g_snprintf (candidate->foundation, NICE_CANDIDATE_MAX_FOUNDATION,
+      "%u", agent->next_candidate_id++);
 }
 
 static void priv_assign_remote_foundation (NiceAgent *agent, NiceCandidate *candidate)
@@ -380,7 +385,8 @@ static void priv_assign_remote_foundation (NiceAgent *agent, NiceCandidate *cand
 	   *       time is supported, so there is no need to check
 	   *       for candidates that would otherwise share the
 	   *       foundation, but have different STUN/TURN servers */
-	  memcpy (candidate->foundation, n->foundation, NICE_CANDIDATE_MAX_FOUNDATION);
+	  g_strlcpy (candidate->foundation, n->foundation,
+              NICE_CANDIDATE_MAX_FOUNDATION);
           if (n->username) {
             g_free (candidate->username);
             candidate->username = g_strdup (n->username);

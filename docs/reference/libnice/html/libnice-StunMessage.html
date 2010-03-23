@@ -8,7 +8,7 @@
 <link rel="up" href="ch03.html" title="">
 <link rel="prev" href="libnice-StunAgent.html" title="StunAgent">
 <link rel="next" href="ch04.html" title="STUN usages">
-<meta name="generator" content="GTK-Doc V1.11 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.13 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rel="part" href="pt01.html" title="Part I. ICE Library">
 <link rel="chapter" href="ch01.html" title="">
@@ -16,6 +16,8 @@
 <link rel="part" href="pt02.html" title="Part II. STUN Library">
 <link rel="chapter" href="ch03.html" title="">
 <link rel="chapter" href="ch04.html" title="STUN usages">
+<link rel="part" href="pt03.html" title="Part III. Pseudo TCP Socket implementation">
+<link rel="chapter" href="ch05.html" title="">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
@@ -28,8 +30,8 @@
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#libnice-StunMessage.synopsis" class="shortcut">Top</a>
-                 | 
-                <a href="#libnice-StunMessage.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#libnice-StunMessage.description" class="shortcut">Description</a>
 </td></tr>
 </table>
 <div class="refentry" title="StunMessage">
@@ -48,7 +50,6 @@ Stable, unless otherwise indicated
 <div class="refsynopsisdiv" title="Synopsis">
 <a name="libnice-StunMessage.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
-
 #include &lt;stun/stunmessage.h&gt;
 
                     <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a>;
@@ -58,87 +59,87 @@ enum                <a class="link" href="libnice-StunMessage.html#StunAttribute
 typedef             <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a>;
 enum                <a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a>;
 enum                <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>;
-#define             <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS" title="STUN_MESSAGE_BUFFER_INCOMPLETE">STUN_MESSAGE_BUFFER_INCOMPLETE</a>
-#define             <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID--CAPS" title="STUN_MESSAGE_BUFFER_INVALID">STUN_MESSAGE_BUFFER_INVALID</a>
-bool                <a class="link" href="libnice-StunMessage.html#stun-message-init" title="stun_message_init ()">stun_message_init</a>                   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass">StunClass</a> c,
-                                                         <a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod">StunMethod</a> m,
-                                                         const <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);
-uint16_t            <a class="link" href="libnice-StunMessage.html#stun-message-length" title="stun_message_length ()">stun_message_length</a>                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);
-const void *        <a class="link" href="libnice-StunMessage.html#stun-message-find" title="stun_message_find ()">stun_message_find</a>                   (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint16_t *palen);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-flag" title="stun_message_find_flag ()">stun_message_find_flag</a>              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-find32" title="stun_message_find32 ()">stun_message_find32</a>                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint32_t *pval);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-find64" title="stun_message_find64 ()">stun_message_find64</a>                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint64_t *pval);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-string" title="stun_message_find_string ()">stun_message_find_string</a>            (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         char *buf,
-                                                         size_t buflen);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-addr" title="stun_message_find_addr ()">stun_message_find_addr</a>              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         struct sockaddr *addr,
-                                                         socklen_t *addrlen);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-xor-addr" title="stun_message_find_xor_addr ()">stun_message_find_xor_addr</a>          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         struct sockaddr *addr,
-                                                         socklen_t *addrlen);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-xor-addr-full" title="stun_message_find_xor_addr_full ()">stun_message_find_xor_addr_full</a>     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         struct sockaddr *addr,
-                                                         socklen_t *addrlen,
-                                                         uint32_t magic_cookie);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-error" title="stun_message_find_error ()">stun_message_find_error</a>             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         int *code);
-void *              <a class="link" href="libnice-StunMessage.html#stun-message-append" title="stun_message_append ()">stun_message_append</a>                 (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         size_t length);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-bytes" title="stun_message_append_bytes ()">stun_message_append_bytes</a>           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const void *data,
-                                                         size_t len);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-flag" title="stun_message_append_flag ()">stun_message_append_flag</a>            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append32" title="stun_message_append32 ()">stun_message_append32</a>               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint32_t value);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append64" title="stun_message_append64 ()">stun_message_append64</a>               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint64_t value);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-string" title="stun_message_append_string ()">stun_message_append_string</a>          (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const char *str);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-addr" title="stun_message_append_addr ()">stun_message_append_addr</a>            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const struct sockaddr *addr,
-                                                         socklen_t addrlen);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-xor-addr" title="stun_message_append_xor_addr ()">stun_message_append_xor_addr</a>        (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const struct sockaddr *addr,
-                                                         socklen_t addrlen);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-xor-addr-full" title="stun_message_append_xor_addr_full ()">stun_message_append_xor_addr_full</a>   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const struct sockaddr *addr,
-                                                         socklen_t addrlen,
-                                                         uint32_t magic_cookie);
-<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-error" title="stun_message_append_error ()">stun_message_append_error</a>           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a> code);
-int                 <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()">stun_message_validate_buffer_length</a> (const uint8_t *msg,
-                                                         size_t length);
-void                <a class="link" href="libnice-StunMessage.html#stun-message-id" title="stun_message_id ()">stun_message_id</a>                     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);
-<a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass">StunClass</a>           <a class="link" href="libnice-StunMessage.html#stun-message-get-class" title="stun_message_get_class ()">stun_message_get_class</a>              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);
-<a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod">StunMethod</a>          <a class="link" href="libnice-StunMessage.html#stun-message-get-method" title="stun_message_get_method ()">stun_message_get_method</a>             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);
-bool                <a class="link" href="libnice-StunMessage.html#stun-message-has-attribute" title="stun_message_has_attribute ()">stun_message_has_attribute</a>          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);
-bool                <a class="link" href="libnice-StunMessage.html#stun-message-has-cookie" title="stun_message_has_cookie ()">stun_message_has_cookie</a>             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);
-bool                <a class="link" href="libnice-StunMessage.html#stun-optional" title="stun_optional ()">stun_optional</a>                       (uint16_t t);
-const char *        <a class="link" href="libnice-StunMessage.html#stun-strerror" title="stun_strerror ()">stun_strerror</a>                       (<a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a> code);
+#define             <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE:CAPS" title="STUN_MESSAGE_BUFFER_INCOMPLETE">STUN_MESSAGE_BUFFER_INCOMPLETE</a>
+#define             <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID:CAPS" title="STUN_MESSAGE_BUFFER_INVALID">STUN_MESSAGE_BUFFER_INVALID</a>
+<span class="returnvalue">bool</span>                <a class="link" href="libnice-StunMessage.html#stun-message-init" title="stun_message_init ()">stun_message_init</a>                   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass"><span class="returnvalue">StunClass</span></a> c,
+                                                         <a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod"><span class="returnvalue">StunMethod</span></a> m,
+                                                         const <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId"><span class="returnvalue">StunTransactionId</span></a> id);
+<span class="returnvalue">uint16_t</span>            <a class="link" href="libnice-StunMessage.html#stun-message-length" title="stun_message_length ()">stun_message_length</a>                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg);
+const <span class="returnvalue">void</span> *        <a class="link" href="libnice-StunMessage.html#stun-message-find" title="stun_message_find ()">stun_message_find</a>                   (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint16_t</span> *palen);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-flag" title="stun_message_find_flag ()">stun_message_find_flag</a>              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-find32" title="stun_message_find32 ()">stun_message_find32</a>                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint32_t</span> *pval);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-find64" title="stun_message_find64 ()">stun_message_find64</a>                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint64_t</span> *pval);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-string" title="stun_message_find_string ()">stun_message_find_string</a>            (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">char</span> *buf,
+                                                         <span class="returnvalue">size_t</span> buflen);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-addr" title="stun_message_find_addr ()">stun_message_find_addr</a>              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> *addrlen);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-xor-addr" title="stun_message_find_xor_addr ()">stun_message_find_xor_addr</a>          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> *addrlen);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-xor-addr-full" title="stun_message_find_xor_addr_full ()">stun_message_find_xor_addr_full</a>     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> *addrlen,
+                                                         <span class="returnvalue">uint32_t</span> magic_cookie);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-find-error" title="stun_message_find_error ()">stun_message_find_error</a>             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <span class="returnvalue">int</span> *code);
+<span class="returnvalue">void</span> *              <a class="link" href="libnice-StunMessage.html#stun-message-append" title="stun_message_append ()">stun_message_append</a>                 (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">size_t</span> length);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-bytes" title="stun_message_append_bytes ()">stun_message_append_bytes</a>           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">void</span> *data,
+                                                         <span class="returnvalue">size_t</span> len);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-flag" title="stun_message_append_flag ()">stun_message_append_flag</a>            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append32" title="stun_message_append32 ()">stun_message_append32</a>               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint32_t</span> value);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append64" title="stun_message_append64 ()">stun_message_append64</a>               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint64_t</span> value);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-string" title="stun_message_append_string ()">stun_message_append_string</a>          (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">char</span> *str);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-addr" title="stun_message_append_addr ()">stun_message_append_addr</a>            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> addrlen);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-xor-addr" title="stun_message_append_xor_addr ()">stun_message_append_xor_addr</a>        (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> addrlen);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-xor-addr-full" title="stun_message_append_xor_addr_full ()">stun_message_append_xor_addr_full</a>   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> addrlen,
+                                                         <span class="returnvalue">uint32_t</span> magic_cookie);
+<a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-error" title="stun_message_append_error ()">stun_message_append_error</a>           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError"><span class="returnvalue">StunError</span></a> code);
+<span class="returnvalue">int</span>                 <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()">stun_message_validate_buffer_length</a> (const <span class="returnvalue">uint8_t</span> *msg,
+                                                         <span class="returnvalue">size_t</span> length);
+<span class="returnvalue">void</span>                <a class="link" href="libnice-StunMessage.html#stun-message-id" title="stun_message_id ()">stun_message_id</a>                     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId"><span class="returnvalue">StunTransactionId</span></a> id);
+<a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass"><span class="returnvalue">StunClass</span></a>           <a class="link" href="libnice-StunMessage.html#stun-message-get-class" title="stun_message_get_class ()">stun_message_get_class</a>              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg);
+<a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod"><span class="returnvalue">StunMethod</span></a>          <a class="link" href="libnice-StunMessage.html#stun-message-get-method" title="stun_message_get_method ()">stun_message_get_method</a>             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg);
+<span class="returnvalue">bool</span>                <a class="link" href="libnice-StunMessage.html#stun-message-has-attribute" title="stun_message_has_attribute ()">stun_message_has_attribute</a>          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type);
+<span class="returnvalue">bool</span>                <a class="link" href="libnice-StunMessage.html#stun-message-has-cookie" title="stun_message_has_cookie ()">stun_message_has_cookie</a>             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg);
+<span class="returnvalue">bool</span>                <a class="link" href="libnice-StunMessage.html#stun-optional" title="stun_optional ()">stun_optional</a>                       (<span class="returnvalue">uint16_t</span> t);
+const <span class="returnvalue">char</span> *        <a class="link" href="libnice-StunMessage.html#stun-strerror" title="stun_strerror ()">stun_strerror</a>                       (<a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError"><span class="returnvalue">StunError</span></a> code);
 </pre>
 </div>
 <div class="refsect1" title="Description">
@@ -146,8 +147,6 @@ const char *        <a class="link" href="libnice-StunMessage.html#stun-strerror
 <p>
 The STUN Messages API allows you to create STUN messages easily as well as to
 parse existing messages.</p>
-<p>
-</p>
 </div>
 <div class="refsect1" title="Details">
 <a name="libnice-StunMessage.details"></a><h2>Details</h2>
@@ -165,45 +164,43 @@ parse existing messages.</p>
 </pre>
 <p>
 This structure represents a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><span class="term"><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent">StunAgent</a> *<em class="structfield"><code>agent</code></em>;</span></p></td>
+<td><p><span class="term"><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> *<em class="structfield"><code><a name="StunMessage.agent"></a>agent</code></em>;</span></p></td>
 <td> The agent that created or validated this message
 </td>
 </tr>
 <tr>
-<td><p><span class="term">uint8_t *<em class="structfield"><code>buffer</code></em>;</span></p></td>
+<td><p><span class="term"><span class="type">uint8_t</span> *<em class="structfield"><code><a name="StunMessage.buffer"></a>buffer</code></em>;</span></p></td>
 <td> The buffer containing the STUN message
 </td>
 </tr>
 <tr>
-<td><p><span class="term">size_t <em class="structfield"><code>buffer_len</code></em>;</span></p></td>
+<td><p><span class="term"><span class="type">size_t</span> <em class="structfield"><code><a name="StunMessage.buffer-len"></a>buffer_len</code></em>;</span></p></td>
 <td> The length of the buffer (not the size of the message)
 </td>
 </tr>
 <tr>
-<td><p><span class="term">uint8_t *<em class="structfield"><code>key</code></em>;</span></p></td>
+<td><p><span class="term"><span class="type">uint8_t</span> *<em class="structfield"><code><a name="StunMessage.key"></a>key</code></em>;</span></p></td>
 <td> The short term credentials key to use for authentication validation
 or that was used to finalize this message
 </td>
 </tr>
 <tr>
-<td><p><span class="term">size_t <em class="structfield"><code>key_len</code></em>;</span></p></td>
+<td><p><span class="term"><span class="type">size_t</span> <em class="structfield"><code><a name="StunMessage.key-len"></a>key_len</code></em>;</span></p></td>
 <td> The length of the associated key
 </td>
 </tr>
 <tr>
-<td><p><span class="term">uint8_t <em class="structfield"><code>long_term_key</code></em>[16];</span></p></td>
+<td><p><span class="term"><span class="type">uint8_t</span> <em class="structfield"><code><a name="StunMessage.long-term-key"></a>long_term_key</code></em>[16];</span></p></td>
 <td> The long term credential key to use for authentication
 validation or that was used to finalize this message
 </td>
 </tr>
 <tr>
-<td><p><span class="term">bool <em class="structfield"><code>long_term_valid</code></em>;</span></p></td>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="StunMessage.long-term-valid"></a>long_term_valid</code></em>;</span></p></td>
 <td> Whether or not the <span class="type">long_term_key</span> variable contains valid
 data
 </td>
@@ -225,28 +222,26 @@ data
 <p>
 This enum is used to represent the class of
 a STUN message, as defined in RFC5389</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-REQUEST--CAPS"></a><span class="term"><code class="literal">STUN_REQUEST</code></span></p></td>
+<td><p><a name="STUN-REQUEST:CAPS"></a><span class="term"><code class="literal">STUN_REQUEST</code></span></p></td>
 <td> A STUN Request message
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-INDICATION--CAPS"></a><span class="term"><code class="literal">STUN_INDICATION</code></span></p></td>
+<td><p><a name="STUN-INDICATION:CAPS"></a><span class="term"><code class="literal">STUN_INDICATION</code></span></p></td>
 <td> A STUN indication message
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-RESPONSE--CAPS"></a><span class="term"><code class="literal">STUN_RESPONSE</code></span></p></td>
+<td><p><a name="STUN-RESPONSE:CAPS"></a><span class="term"><code class="literal">STUN_RESPONSE</code></span></p></td>
 <td> A STUN Response message
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR--CAPS"></a><span class="term"><code class="literal">STUN_ERROR</code></span></p></td>
+<td><p><a name="STUN-ERROR:CAPS"></a><span class="term"><code class="literal">STUN_ERROR</code></span></p></td>
 <td> A STUN Error message
 </td>
 </tr>
@@ -276,79 +271,77 @@ a STUN message, as defined in RFC5389</p>
 <p>
 This enum is used to represent the method of
 a STUN message, as defined by various RFCs</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-BINDING--CAPS"></a><span class="term"><code class="literal">STUN_BINDING</code></span></p></td>
+<td><p><a name="STUN-BINDING:CAPS"></a><span class="term"><code class="literal">STUN_BINDING</code></span></p></td>
 <td> The Binding method as defined by the RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-SHARED-SECRET--CAPS"></a><span class="term"><code class="literal">STUN_SHARED_SECRET</code></span></p></td>
+<td><p><a name="STUN-SHARED-SECRET:CAPS"></a><span class="term"><code class="literal">STUN_SHARED_SECRET</code></span></p></td>
 <td> The Shared-Secret method as defined by the RFC3489
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ALLOCATE--CAPS"></a><span class="term"><code class="literal">STUN_ALLOCATE</code></span></p></td>
+<td><p><a name="STUN-ALLOCATE:CAPS"></a><span class="term"><code class="literal">STUN_ALLOCATE</code></span></p></td>
 <td> The Allocate method as defined by the TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-SET-ACTIVE-DST--CAPS"></a><span class="term"><code class="literal">STUN_SET_ACTIVE_DST</code></span></p></td>
+<td><p><a name="STUN-SET-ACTIVE-DST:CAPS"></a><span class="term"><code class="literal">STUN_SET_ACTIVE_DST</code></span></p></td>
 <td> The Set-Active-Destination method as defined by
 the TURN draft 4
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-REFRESH--CAPS"></a><span class="term"><code class="literal">STUN_REFRESH</code></span></p></td>
+<td><p><a name="STUN-REFRESH:CAPS"></a><span class="term"><code class="literal">STUN_REFRESH</code></span></p></td>
 <td> The Refresh method as defined by the TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-SEND--CAPS"></a><span class="term"><code class="literal">STUN_SEND</code></span></p></td>
+<td><p><a name="STUN-SEND:CAPS"></a><span class="term"><code class="literal">STUN_SEND</code></span></p></td>
 <td> The Send method as defined by the TURN draft 00
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-CONNECT--CAPS"></a><span class="term"><code class="literal">STUN_CONNECT</code></span></p></td>
+<td><p><a name="STUN-CONNECT:CAPS"></a><span class="term"><code class="literal">STUN_CONNECT</code></span></p></td>
 <td> The Connect method as defined by the TURN draft 4
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-OLD-SET-ACTIVE-DST--CAPS"></a><span class="term"><code class="literal">STUN_OLD_SET_ACTIVE_DST</code></span></p></td>
+<td><p><a name="STUN-OLD-SET-ACTIVE-DST:CAPS"></a><span class="term"><code class="literal">STUN_OLD_SET_ACTIVE_DST</code></span></p></td>
 <td> The older Set-Active-Destination method as
 defined by the TURN draft 0
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-IND-SEND--CAPS"></a><span class="term"><code class="literal">STUN_IND_SEND</code></span></p></td>
+<td><p><a name="STUN-IND-SEND:CAPS"></a><span class="term"><code class="literal">STUN_IND_SEND</code></span></p></td>
 <td> The Send method used in indication messages as defined
 by the TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-IND-DATA--CAPS"></a><span class="term"><code class="literal">STUN_IND_DATA</code></span></p></td>
+<td><p><a name="STUN-IND-DATA:CAPS"></a><span class="term"><code class="literal">STUN_IND_DATA</code></span></p></td>
 <td> The Data method used in indication messages as defined
 by the TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-IND-CONNECT-STATUS--CAPS"></a><span class="term"><code class="literal">STUN_IND_CONNECT_STATUS</code></span></p></td>
+<td><p><a name="STUN-IND-CONNECT-STATUS:CAPS"></a><span class="term"><code class="literal">STUN_IND_CONNECT_STATUS</code></span></p></td>
 <td>  The Connect-Status method used in indication
 messages as defined by the TURN draft 4
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-CREATEPERMISSION--CAPS"></a><span class="term"><code class="literal">STUN_CREATEPERMISSION</code></span></p></td>
+<td><p><a name="STUN-CREATEPERMISSION:CAPS"></a><span class="term"><code class="literal">STUN_CREATEPERMISSION</code></span></p></td>
 <td> The CreatePermission method as defined by
 the TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-CHANNELBIND--CAPS"></a><span class="term"><code class="literal">STUN_CHANNELBIND</code></span></p></td>
+<td><p><a name="STUN-CHANNELBIND:CAPS"></a><span class="term"><code class="literal">STUN_CHANNELBIND</code></span></p></td>
 <td> The ChannelBind method as defined by the TURN draft 12
 </td>
 </tr>
@@ -429,261 +422,259 @@ the TURN draft 12
 </pre>
 <p>
 Known STUN attribute types as defined by various RFCs and drafts</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-MAPPED-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MAPPED_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-MAPPED-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MAPPED_ADDRESS</code></span></p></td>
 <td> The MAPPED-ADDRESS attribute as defined
 by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-RESPONSE-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_RESPONSE_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-RESPONSE-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_RESPONSE_ADDRESS</code></span></p></td>
 <td> The RESPONSE-ADDRESS attribute as defined
 by RFC3489
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-CHANGE-REQUEST--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CHANGE_REQUEST</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-CHANGE-REQUEST:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CHANGE_REQUEST</code></span></p></td>
 <td> The CHANGE-REQUEST attribute as defined by
 RFC3489
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-SOURCE-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_SOURCE_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-SOURCE-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_SOURCE_ADDRESS</code></span></p></td>
 <td> The SOURCE-ADDRESS attribute as defined by
 RFC3489
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-CHANGED-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CHANGED_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-CHANGED-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CHANGED_ADDRESS</code></span></p></td>
 <td> The CHANGED-ADDRESS attribute as defined
 by RFC3489
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-USERNAME--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_USERNAME</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-USERNAME:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_USERNAME</code></span></p></td>
 <td> The USERNAME attribute as defined by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-PASSWORD--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_PASSWORD</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-PASSWORD:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_PASSWORD</code></span></p></td>
 <td> The PASSWORD attribute as defined by RFC3489
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-MESSAGE-INTEGRITY--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MESSAGE_INTEGRITY</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-MESSAGE-INTEGRITY:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MESSAGE_INTEGRITY</code></span></p></td>
 <td> The MESSAGE-INTEGRITY attribute as defined
 by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-ERROR-CODE--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ERROR_CODE</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-ERROR-CODE:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ERROR_CODE</code></span></p></td>
 <td> The ERROR-CODE attribute as defined by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-UNKNOWN-ATTRIBUTES--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-UNKNOWN-ATTRIBUTES:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES</code></span></p></td>
 <td> The UNKNOWN-ATTRIBUTES attribute as
 defined by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-REFLECTED-FROM--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REFLECTED_FROM</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-REFLECTED-FROM:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REFLECTED_FROM</code></span></p></td>
 <td> The REFLECTED-FROM attribute as defined
 by RFC3489
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-CHANNEL-NUMBER--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CHANNEL_NUMBER</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-CHANNEL-NUMBER:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CHANNEL_NUMBER</code></span></p></td>
 <td> The CHANNEL-NUMBER attribute as defined by
 TURN draft 09 and 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-LIFETIME--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_LIFETIME</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-LIFETIME:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_LIFETIME</code></span></p></td>
 <td> The LIFETIME attribute as defined by TURN
 draft 04, 09 and 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-MAGIC-COOKIE--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MAGIC_COOKIE</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-MAGIC-COOKIE:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MAGIC_COOKIE</code></span></p></td>
 <td> The MAGIC-COOKIE attribute as defined by
 the rosenberg-midcom TURN draft 08
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-BANDWIDTH--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_BANDWIDTH</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-BANDWIDTH:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_BANDWIDTH</code></span></p></td>
 <td> The BANDWIDTH attribute as defined by TURN draft 04
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-DESTINATION-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_DESTINATION_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-DESTINATION-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_DESTINATION_ADDRESS</code></span></p></td>
 <td> The DESTINATION-ADDRESS attribute as
 defined by the rosenberg-midcom TURN draft 08
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-REMOTE-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REMOTE_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-REMOTE-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REMOTE_ADDRESS</code></span></p></td>
 <td> The REMOTE-ADDRESS attribute as defined by
 TURN draft 04
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-PEER-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_PEER_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-PEER-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_PEER_ADDRESS</code></span></p></td>
 <td> The PEER-ADDRESS attribute as defined by
 TURN draft 09
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-XOR-PEER-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_XOR_PEER_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-XOR-PEER-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_XOR_PEER_ADDRESS</code></span></p></td>
 <td> The XOR-PEER-ADDRESS attribute as defined
 by TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-DATA--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_DATA</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-DATA:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_DATA</code></span></p></td>
 <td> The DATA attribute as defined by TURN draft 04,
 09 and 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-REALM--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REALM</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-REALM:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REALM</code></span></p></td>
 <td> The REALM attribute as defined by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-NONCE--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_NONCE</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-NONCE:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_NONCE</code></span></p></td>
 <td> The NONCE attribute as defined by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-RELAY-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_RELAY_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-RELAY-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_RELAY_ADDRESS</code></span></p></td>
 <td> The RELAY-ADDRESS attribute as defined by
 TURN draft 04
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-RELAYED-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_RELAYED_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-RELAYED-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_RELAYED_ADDRESS</code></span></p></td>
 <td> The RELAYED-ADDRESS attribute as defined by
 TURN draft 09
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-XOR-RELAYED-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_XOR_RELAYED_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-XOR-RELAYED-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_XOR_RELAYED_ADDRESS</code></span></p></td>
 <td> The XOR-RELAYED-ADDRESS attribute as
 defined by TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-REQUESTED-ADDRESS-TYPE--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_ADDRESS_TYPE</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-REQUESTED-ADDRESS-TYPE:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_ADDRESS_TYPE</code></span></p></td>
 <td> The REQUESTED-ADDRESS-TYPE attribute
 as defined by TURN-IPV6 draft 05
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-REQUESTED-PORT-PROPS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_PORT_PROPS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-REQUESTED-PORT-PROPS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_PORT_PROPS</code></span></p></td>
 <td> The REQUESTED-PORT-PROPS attribute
 as defined by TURN draft 04
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-REQUESTED-PROPS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_PROPS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-REQUESTED-PROPS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_PROPS</code></span></p></td>
 <td> The REQUESTED-PROPS attribute as defined
 by TURN draft 09
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-EVEN-PORT--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_EVEN_PORT</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-EVEN-PORT:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_EVEN_PORT</code></span></p></td>
 <td> The EVEN-PORT attribute as defined by TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-REQUESTED-TRANSPORT--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_TRANSPORT</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-REQUESTED-TRANSPORT:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_TRANSPORT</code></span></p></td>
 <td> The REQUESTED-TRANSPORT attribute as
 defined by TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-DONT-FRAGMENT--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_DONT_FRAGMENT</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-DONT-FRAGMENT:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_DONT_FRAGMENT</code></span></p></td>
 <td> The DONT-FRAGMENT attribute as defined
 by TURN draft 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-XOR-MAPPED-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-XOR-MAPPED-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS</code></span></p></td>
 <td> The XOR-MAPPED-ADDRESS attribute as
 defined by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-TIMER-VAL--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_TIMER_VAL</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-TIMER-VAL:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_TIMER_VAL</code></span></p></td>
 <td> The TIMER-VAL attribute as defined by TURN draft 04
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-REQUESTED-IP--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_IP</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-REQUESTED-IP:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_REQUESTED_IP</code></span></p></td>
 <td> The REQUESTED-IP attribute as defined by
 TURN draft 04
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-RESERVATION-TOKEN--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_RESERVATION_TOKEN</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-RESERVATION-TOKEN:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_RESERVATION_TOKEN</code></span></p></td>
 <td> The RESERVATION-TOKEN attribute as defined
 by TURN draft 09 and 12
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-CONNECT-STAT--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CONNECT_STAT</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-CONNECT-STAT:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CONNECT_STAT</code></span></p></td>
 <td> The CONNECT-STAT attribute as defined by TURN
 draft 04
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-PRIORITY--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_PRIORITY</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-PRIORITY:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_PRIORITY</code></span></p></td>
 <td> The PRIORITY attribute as defined by ICE draft 19
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-USE-CANDIDATE--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_USE_CANDIDATE</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-USE-CANDIDATE:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_USE_CANDIDATE</code></span></p></td>
 <td> The USE-CANDIDATE attribute as defined by
 ICE draft 19
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-OPTIONS--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_OPTIONS</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-OPTIONS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_OPTIONS</code></span></p></td>
 <td> The OPTIONS optional attribute as defined by
 libjingle
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-SOFTWARE--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_SOFTWARE</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-SOFTWARE:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_SOFTWARE</code></span></p></td>
 <td> The SOFTWARE optional attribute as defined by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-ALTERNATE-SERVER--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ALTERNATE_SERVER</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-ALTERNATE-SERVER:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ALTERNATE_SERVER</code></span></p></td>
 <td> The ALTERNATE-SERVER optional attribute as
 defined by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-FINGERPRINT--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_FINGERPRINT</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-FINGERPRINT:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_FINGERPRINT</code></span></p></td>
 <td> The FINGERPRINT optional attribute as defined
 by RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-ICE-CONTROLLED--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ICE_CONTROLLED</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-ICE-CONTROLLED:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ICE_CONTROLLED</code></span></p></td>
 <td> The ICE-CONTROLLED optional attribute as
 defined by ICE draft 19
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ATTRIBUTE-ICE-CONTROLLING--CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ICE_CONTROLLING</code></span></p></td>
+<td><p><a name="STUN-ATTRIBUTE-ICE-CONTROLLING:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ICE_CONTROLLING</code></span></p></td>
 <td> The ICE-CONTROLLING optional attribute as
 defined by ICE draft 19
 </td>
@@ -698,8 +689,6 @@ defined by ICE draft 19
 </pre>
 <p>
 A type that holds a STUN transaction id.</p>
-<p>
-</p>
 </div>
 <hr>
 <div class="refsect2" title="enum StunError">
@@ -730,128 +719,126 @@ A type that holds a STUN transaction id.</p>
 </pre>
 <p>
 STUN error codes as defined by various RFCs and drafts</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-ERROR-TRY-ALTERNATE--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_TRY_ALTERNATE</code></span></p></td>
+<td><p><a name="STUN-ERROR-TRY-ALTERNATE:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_TRY_ALTERNATE</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Try Alternate" error as defined in RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-BAD-REQUEST--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_BAD_REQUEST</code></span></p></td>
+<td><p><a name="STUN-ERROR-BAD-REQUEST:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_BAD_REQUEST</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Bad Request" error as defined in RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-UNAUTHORIZED--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_UNAUTHORIZED</code></span></p></td>
+<td><p><a name="STUN-ERROR-UNAUTHORIZED:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_UNAUTHORIZED</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Unauthorized" error as defined in RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-UNKNOWN-ATTRIBUTE--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_UNKNOWN_ATTRIBUTE</code></span></p></td>
+<td><p><a name="STUN-ERROR-UNKNOWN-ATTRIBUTE:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_UNKNOWN_ATTRIBUTE</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Unknown Attribute" error as defined in RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-ALLOCATION-MISMATCH--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_ALLOCATION_MISMATCH</code></span></p></td>
+<td><p><a name="STUN-ERROR-ALLOCATION-MISMATCH:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_ALLOCATION_MISMATCH</code></span></p></td>
 <td>The ERROR-CODE value for the
 "Allocation Mismatch" error as defined in TURN draft 12.
 Equivalent to the "No Binding" error defined in TURN draft 04.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-STALE-NONCE--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_STALE_NONCE</code></span></p></td>
+<td><p><a name="STUN-ERROR-STALE-NONCE:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_STALE_NONCE</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Stale Nonce" error as defined in RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-ACT-DST-ALREADY--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_ACT_DST_ALREADY</code></span></p></td>
+<td><p><a name="STUN-ERROR-ACT-DST-ALREADY:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_ACT_DST_ALREADY</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Active Destination Already Set" error as defined in TURN draft 04.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-UNSUPPORTED-FAMILY--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_UNSUPPORTED_FAMILY</code></span></p></td>
+<td><p><a name="STUN-ERROR-UNSUPPORTED-FAMILY:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_UNSUPPORTED_FAMILY</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Address Family not Supported" error as defined in TURN IPV6 Draft 05.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-WRONG-CREDENTIALS--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_WRONG_CREDENTIALS</code></span></p></td>
+<td><p><a name="STUN-ERROR-WRONG-CREDENTIALS:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_WRONG_CREDENTIALS</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Wrong Credentials" error as defined in TURN Draft 12.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-UNSUPPORTED-TRANSPORT--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_UNSUPPORTED_TRANSPORT</code></span></p></td>
+<td><p><a name="STUN-ERROR-UNSUPPORTED-TRANSPORT:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_UNSUPPORTED_TRANSPORT</code></span></p></td>
 <td>he ERROR-CODE value for the
 "Unsupported Transport Protocol" error as defined in TURN Draft 12.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-INVALID-IP--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_INVALID_IP</code></span></p></td>
+<td><p><a name="STUN-ERROR-INVALID-IP:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_INVALID_IP</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Invalid IP Address" error as defined in TURN draft 04.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-INVALID-PORT--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_INVALID_PORT</code></span></p></td>
+<td><p><a name="STUN-ERROR-INVALID-PORT:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_INVALID_PORT</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Invalid Port" error as defined in TURN draft 04.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-OP-TCP-ONLY--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_OP_TCP_ONLY</code></span></p></td>
+<td><p><a name="STUN-ERROR-OP-TCP-ONLY:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_OP_TCP_ONLY</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Operation for TCP Only" error as defined in TURN draft 04.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-CONN-ALREADY--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_CONN_ALREADY</code></span></p></td>
+<td><p><a name="STUN-ERROR-CONN-ALREADY:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_CONN_ALREADY</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Connection Already Exists" error as defined in TURN draft 04.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-ALLOCATION-QUOTA-REACHED--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_ALLOCATION_QUOTA_REACHED</code></span></p></td>
+<td><p><a name="STUN-ERROR-ALLOCATION-QUOTA-REACHED:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_ALLOCATION_QUOTA_REACHED</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Allocation Quota Reached" error as defined in TURN draft 12.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-ROLE-CONFLICT--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_ROLE_CONFLICT</code></span></p></td>
+<td><p><a name="STUN-ERROR-ROLE-CONFLICT:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_ROLE_CONFLICT</code></span></p></td>
 <td>The ERROR-CODE value for the
 "Role Conflict" error as defined in ICE draft 19.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-SERVER-ERROR--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_SERVER_ERROR</code></span></p></td>
+<td><p><a name="STUN-ERROR-SERVER-ERROR:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_SERVER_ERROR</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Server Error" error as defined in RFC5389
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-SERVER-CAPACITY--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_SERVER_CAPACITY</code></span></p></td>
+<td><p><a name="STUN-ERROR-SERVER-CAPACITY:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_SERVER_CAPACITY</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Insufficient Capacity" error as defined in TURN draft 04.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-INSUFFICIENT-CAPACITY--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_INSUFFICIENT_CAPACITY</code></span></p></td>
+<td><p><a name="STUN-ERROR-INSUFFICIENT-CAPACITY:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_INSUFFICIENT_CAPACITY</code></span></p></td>
 <td> The ERROR-CODE value for the
 "Insufficient Capacity" error as defined in TURN draft 12.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-ERROR-MAX--CAPS"></a><span class="term"><code class="literal">STUN_ERROR_MAX</code></span></p></td>
+<td><p><a name="STUN-ERROR-MAX:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_MAX</code></span></p></td>
 <td> The maximum possible ERROR-CODE value as defined by RFC 5389.
 </td>
 </tr>
@@ -874,35 +861,33 @@ Equivalent to the "No Binding" error defined in TURN draft 04.
 The return value of most stun_message_* functions.
 This enum will report on whether an operation was successful or not
 and what error occured if any.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><a name="STUN-MESSAGE-RETURN-SUCCESS--CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_SUCCESS</code></span></p></td>
+<td><p><a name="STUN-MESSAGE-RETURN-SUCCESS:CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_SUCCESS</code></span></p></td>
 <td> The operation was successful
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-MESSAGE-RETURN-NOT-FOUND--CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_NOT_FOUND</code></span></p></td>
+<td><p><a name="STUN-MESSAGE-RETURN-NOT-FOUND:CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_NOT_FOUND</code></span></p></td>
 <td> The attribute was not found
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-MESSAGE-RETURN-INVALID--CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></span></p></td>
+<td><p><a name="STUN-MESSAGE-RETURN-INVALID:CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></span></p></td>
 <td> The argument or data is invalid
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-MESSAGE-RETURN-NOT-ENOUGH-SPACE--CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE</code></span></p></td>
+<td><p><a name="STUN-MESSAGE-RETURN-NOT-ENOUGH-SPACE:CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE</code></span></p></td>
 <td> There is not enough space in the
 message to append data to it, or not enough in an argument to fill it with
 the data requested.
 </td>
 </tr>
 <tr>
-<td><p><a name="STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS--CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS</code></span></p></td>
+<td><p><a name="STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS</code></span></p></td>
 <td> The address in the arguments or in
 the STUN message is not supported.
 </td>
@@ -912,37 +897,31 @@ the STUN message is not supported.
 </div>
 <hr>
 <div class="refsect2" title="STUN_MESSAGE_BUFFER_INCOMPLETE">
-<a name="STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS"></a><h3>STUN_MESSAGE_BUFFER_INCOMPLETE</h3>
+<a name="STUN-MESSAGE-BUFFER-INCOMPLETE:CAPS"></a><h3>STUN_MESSAGE_BUFFER_INCOMPLETE</h3>
 <pre class="programlisting">#define STUN_MESSAGE_BUFFER_INCOMPLETE 0
 </pre>
 <p>
 Convenience macro for <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()"><code class="function">stun_message_validate_buffer_length()</code></a> meaning that the
 data to validate does not hold a complete STUN message</p>
-<p>
-</p>
 </div>
 <hr>
 <div class="refsect2" title="STUN_MESSAGE_BUFFER_INVALID">
-<a name="STUN-MESSAGE-BUFFER-INVALID--CAPS"></a><h3>STUN_MESSAGE_BUFFER_INVALID</h3>
+<a name="STUN-MESSAGE-BUFFER-INVALID:CAPS"></a><h3>STUN_MESSAGE_BUFFER_INVALID</h3>
 <pre class="programlisting">#define STUN_MESSAGE_BUFFER_INVALID -1
 </pre>
 <p>
 Convenience macro for <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()"><code class="function">stun_message_validate_buffer_length()</code></a> meaning that the
 data to validate is not a valid STUN message</p>
-<p>
-</p>
 </div>
 <hr>
 <div class="refsect2" title="stun_message_init ()">
 <a name="stun-message-init"></a><h3>stun_message_init ()</h3>
-<pre class="programlisting">bool                stun_message_init                   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass">StunClass</a> c,
-                                                         <a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod">StunMethod</a> m,
-                                                         const <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);</pre>
+<pre class="programlisting"><span class="returnvalue">bool</span>                stun_message_init                   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass"><span class="returnvalue">StunClass</span></a> c,
+                                                         <a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod"><span class="returnvalue">StunMethod</span></a> m,
+                                                         const <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId"><span class="returnvalue">StunTransactionId</span></a> id);</pre>
 <p>
 Initializes a STUN message buffer, with no attributes.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -968,9 +947,7 @@ Initializes a STUN message buffer, with no attributes.</p>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
-><code class="literal">TRUE</code></a> if the initialization was successful
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the initialization was successful
 </td>
 </tr>
 </tbody>
@@ -979,11 +956,9 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRU
 <hr>
 <div class="refsect2" title="stun_message_length ()">
 <a name="stun-message-length"></a><h3>stun_message_length ()</h3>
-<pre class="programlisting">uint16_t            stun_message_length                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
+<pre class="programlisting"><span class="returnvalue">uint16_t</span>            stun_message_length                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg);</pre>
 <p>
 Get the length of the message (including the header)</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1003,13 +978,11 @@ Get the length of the message (including the header)</p>
 <hr>
 <div class="refsect2" title="stun_message_find ()">
 <a name="stun-message-find"></a><h3>stun_message_find ()</h3>
-<pre class="programlisting">const void *        stun_message_find                   (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint16_t *palen);</pre>
+<pre class="programlisting">const <span class="returnvalue">void</span> *        stun_message_find                   (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint16_t</span> *palen);</pre>
 <p>
 Finds an attribute in a STUN message and fetches its content</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1040,12 +1013,10 @@ otherwise NULL.
 <hr>
 <div class="refsect2" title="stun_message_find_flag ()">
 <a name="stun-message-find-flag"></a><h3>stun_message_find_flag ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_flag              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_find_flag              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type);</pre>
 <p>
 Looks for a flag attribute within a valid STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1062,7 +1033,7 @@ Looks for a flag attribute within a valid STUN message.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute's size is not zero.
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute's size is not zero.
 </td>
 </tr>
 </tbody>
@@ -1071,13 +1042,11 @@ Looks for a flag attribute within a valid STUN message.</p>
 <hr>
 <div class="refsect2" title="stun_message_find32 ()">
 <a name="stun-message-find32"></a><h3>stun_message_find32 ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find32                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint32_t *pval);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_find32                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint32_t</span> *pval);</pre>
 <p>
 Extracts a 32-bits attribute from a STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1099,7 +1068,7 @@ Extracts a 32-bits attribute from a STUN message.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>  A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute's size is not
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute's size is not
 4 bytes.
 </td>
 </tr>
@@ -1109,13 +1078,11 @@ Extracts a 32-bits attribute from a STUN message.</p>
 <hr>
 <div class="refsect2" title="stun_message_find64 ()">
 <a name="stun-message-find64"></a><h3>stun_message_find64 ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find64                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint64_t *pval);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_find64                 (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint64_t</span> *pval);</pre>
 <p>
 Extracts a 64-bits attribute from a STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1137,7 +1104,7 @@ Extracts a 64-bits attribute from a STUN message.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>  A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute's size is not
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute's size is not
 8 bytes.
 </td>
 </tr>
@@ -1147,14 +1114,12 @@ Extracts a 64-bits attribute from a STUN message.</p>
 <hr>
 <div class="refsect2" title="stun_message_find_string ()">
 <a name="stun-message-find-string"></a><h3>stun_message_find_string ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_string            (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         char *buf,
-                                                         size_t buflen);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_find_string            (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">char</span> *buf,
+                                                         <span class="returnvalue">size_t</span> buflen);</pre>
 <p>
 Extracts an UTF-8 string from a valid STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1181,9 +1146,9 @@ Extracts an UTF-8 string from a valid STUN message.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute is improperly
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute is improperly
 encoded
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-NOT-ENOUGH-SPACE--CAPS"><code class="literal">STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE</code></a> is return if the buffer size is too
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-NOT-ENOUGH-SPACE:CAPS"><code class="literal">STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE</code></a> is return if the buffer size is too
 small to hold the string
 
  <div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
@@ -1201,14 +1166,12 @@ small to hold the string
 <hr>
 <div class="refsect2" title="stun_message_find_addr ()">
 <a name="stun-message-find-addr"></a><h3>stun_message_find_addr ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_addr              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         struct sockaddr *addr,
-                                                         socklen_t *addrlen);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_find_addr              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> *addrlen);</pre>
 <p>
 Extracts a network address attribute from a STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1237,9 +1200,9 @@ address.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute payload size is
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute payload size is
 wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
-<code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESSS</code> if the address family is unknown.
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS:CAPS"><code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS</code></a> if the address family is unknown.
 </td>
 </tr>
 </tbody>
@@ -1248,14 +1211,12 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 <hr>
 <div class="refsect2" title="stun_message_find_xor_addr ()">
 <a name="stun-message-find-xor-addr"></a><h3>stun_message_find_xor_addr ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_xor_addr          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         struct sockaddr *addr,
-                                                         socklen_t *addrlen);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_find_xor_addr          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> *addrlen);</pre>
 <p>
 Extracts an obfuscated network address attribute from a STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1284,9 +1245,9 @@ extracted socket address.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute payload size is
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute payload size is
 wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
-<code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESSS</code> if the address family is unknown.
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS:CAPS"><code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS</code></a> if the address family is unknown.
 </td>
 </tr>
 </tbody>
@@ -1295,15 +1256,13 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 <hr>
 <div class="refsect2" title="stun_message_find_xor_addr_full ()">
 <a name="stun-message-find-xor-addr-full"></a><h3>stun_message_find_xor_addr_full ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_xor_addr_full     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         struct sockaddr *addr,
-                                                         socklen_t *addrlen,
-                                                         uint32_t magic_cookie);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_find_xor_addr_full     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> *addrlen,
+                                                         <span class="returnvalue">uint32_t</span> magic_cookie);</pre>
 <p>
 Extracts an obfuscated network address attribute from a STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1337,9 +1296,9 @@ extracted socket address.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute payload size is
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the attribute payload size is
 wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
-<code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESSS</code> if the address family is unknown.
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS:CAPS"><code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS</code></a> if the address family is unknown.
 </td>
 </tr>
 </tbody>
@@ -1348,12 +1307,10 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 <hr>
 <div class="refsect2" title="stun_message_find_error ()">
 <a name="stun-message-find-error"></a><h3>stun_message_find_error ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_find_error             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         int *code);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_find_error             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <span class="returnvalue">int</span> *code);</pre>
 <p>
 Extract the error response code from a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1370,7 +1327,7 @@ Extract the error response code from a STUN message</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the value is invalid
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the value is invalid
 </td>
 </tr>
 </tbody>
@@ -1379,13 +1336,11 @@ Extract the error response code from a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_append ()">
 <a name="stun-message-append"></a><h3>stun_message_append ()</h3>
-<pre class="programlisting">void *              stun_message_append                 (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         size_t length);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span> *              stun_message_append                 (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">size_t</span> length);</pre>
 <p>
 Reserves room for appending an attribute to an unfinished STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1417,14 +1372,12 @@ enough room in the STUN message buffer.
 <hr>
 <div class="refsect2" title="stun_message_append_bytes ()">
 <a name="stun-message-append-bytes"></a><h3>stun_message_append_bytes ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_bytes           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const void *data,
-                                                         size_t len);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append_bytes           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">void</span> *data,
+                                                         <span class="returnvalue">size_t</span> len);</pre>
 <p>
 Appends a binary value to a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1459,12 +1412,10 @@ Appends a binary value to a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_append_flag ()">
 <a name="stun-message-append-flag"></a><h3>stun_message_append_flag ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_flag            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append_flag            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type);</pre>
 <p>
 Appends an empty flag attribute to a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1489,13 +1440,11 @@ Appends an empty flag attribute to a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_append32 ()">
 <a name="stun-message-append32"></a><h3>stun_message_append32 ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append32               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint32_t value);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append32               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint32_t</span> value);</pre>
 <p>
 Appends a 32-bits value attribute to a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1525,13 +1474,11 @@ Appends a 32-bits value attribute to a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_append64 ()">
 <a name="stun-message-append64"></a><h3>stun_message_append64 ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append64               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         uint64_t value);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append64               (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         <span class="returnvalue">uint64_t</span> value);</pre>
 <p>
 Appends a 64-bits value attribute to a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1561,13 +1508,11 @@ Appends a 64-bits value attribute to a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_append_string ()">
 <a name="stun-message-append-string"></a><h3>stun_message_append_string ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_string          (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const char *str);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append_string          (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">char</span> *str);</pre>
 <p>
 Adds an attribute from a NULL-terminated string to a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1597,14 +1542,12 @@ Adds an attribute from a NULL-terminated string to a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_append_addr ()">
 <a name="stun-message-append-addr"></a><h3>stun_message_append_addr ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_addr            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const struct sockaddr *addr,
-                                                         socklen_t addrlen);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append_addr            (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> addrlen);</pre>
 <p>
 Append a network address attribute to a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1631,8 +1574,8 @@ Append a network address attribute to a STUN message</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the <em class="parameter"><code>addrlen</code></em> is too small
-<code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESSS</code> if the address family is unknown.
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the <em class="parameter"><code>addrlen</code></em> is too small
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS:CAPS"><code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS</code></a> if the address family is unknown.
 </td>
 </tr>
 </tbody>
@@ -1641,14 +1584,12 @@ Append a network address attribute to a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_append_xor_addr ()">
 <a name="stun-message-append-xor-addr"></a><h3>stun_message_append_xor_addr ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_xor_addr        (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const struct sockaddr *addr,
-                                                         socklen_t addrlen);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append_xor_addr        (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> addrlen);</pre>
 <p>
 Append an obfuscated network address attribute to a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1675,8 +1616,8 @@ Append an obfuscated network address attribute to a STUN message</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the <em class="parameter"><code>addrlen</code></em> is too small
-<code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESSS</code> if the address family is unknown.
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the <em class="parameter"><code>addrlen</code></em> is too small
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS:CAPS"><code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS</code></a> if the address family is unknown.
 </td>
 </tr>
 </tbody>
@@ -1685,15 +1626,13 @@ Append an obfuscated network address attribute to a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_append_xor_addr_full ()">
 <a name="stun-message-append-xor-addr-full"></a><h3>stun_message_append_xor_addr_full ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_xor_addr_full   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type,
-                                                         const struct sockaddr *addr,
-                                                         socklen_t addrlen,
-                                                         uint32_t magic_cookie);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append_xor_addr_full   (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type,
+                                                         const <span class="returnvalue">struct sockaddr</span> *addr,
+                                                         <span class="returnvalue">socklen_t</span> addrlen,
+                                                         <span class="returnvalue">uint32_t</span> magic_cookie);</pre>
 <p>
 Append an obfuscated network address attribute from a STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1725,8 +1664,8 @@ Append an obfuscated network address attribute from a STUN message.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> A <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="type">StunMessageReturn</span></a> value.
-<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID--CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the <em class="parameter"><code>addrlen</code></em> is too small
-<code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESSS</code> if the address family is unknown.
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"><code class="literal">STUN_MESSAGE_RETURN_INVALID</code></a> is returned if the <em class="parameter"><code>addrlen</code></em> is too small
+<a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS:CAPS"><code class="literal">STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS</code></a> if the address family is unknown.
 </td>
 </tr>
 </tbody>
@@ -1735,13 +1674,11 @@ Append an obfuscated network address attribute from a STUN message.</p>
 <hr>
 <div class="refsect2" title="stun_message_append_error ()">
 <a name="stun-message-append-error"></a><h3>stun_message_append_error ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn">StunMessageReturn</a>   stun_message_append_error           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a> code);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append_error           (<a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError"><span class="returnvalue">StunError</span></a> code);</pre>
 <p>
 Appends the ERROR-CODE attribute to the STUN message and fills it according
 to <span class="type">code</span></p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1766,14 +1703,12 @@ to <span class="type">code</span></p>
 <hr>
 <div class="refsect2" title="stun_message_validate_buffer_length ()">
 <a name="stun-message-validate-buffer-length"></a><h3>stun_message_validate_buffer_length ()</h3>
-<pre class="programlisting">int                 stun_message_validate_buffer_length (const uint8_t *msg,
-                                                         size_t length);</pre>
+<pre class="programlisting"><span class="returnvalue">int</span>                 stun_message_validate_buffer_length (const <span class="returnvalue">uint8_t</span> *msg,
+                                                         <span class="returnvalue">size_t</span> length);</pre>
 <p>
 This function will take a data buffer and will try to validate whether it is
 a STUN message or if it's not or if it's an incomplete STUN message and will
 provide us with the length of the STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1790,8 +1725,8 @@ provide us with the length of the STUN message.</p>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td> The length of the valid STUN message in the buffer.
-<p> See also: <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE--CAPS" title="STUN_MESSAGE_BUFFER_INCOMPLETE"><span class="type">STUN_MESSAGE_BUFFER_INCOMPLETE</span></a> </p>
-<p> See also: <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID--CAPS" title="STUN_MESSAGE_BUFFER_INVALID"><span class="type">STUN_MESSAGE_BUFFER_INVALID</span></a> </p>
+<p> See also: <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE:CAPS" title="STUN_MESSAGE_BUFFER_INCOMPLETE"><span class="type">STUN_MESSAGE_BUFFER_INCOMPLETE</span></a> </p>
+<p> See also: <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID:CAPS" title="STUN_MESSAGE_BUFFER_INVALID"><span class="type">STUN_MESSAGE_BUFFER_INVALID</span></a> </p>
 </td>
 </tr>
 </tbody>
@@ -1800,12 +1735,10 @@ provide us with the length of the STUN message.</p>
 <hr>
 <div class="refsect2" title="stun_message_id ()">
 <a name="stun-message-id"></a><h3>stun_message_id ()</h3>
-<pre class="programlisting">void                stun_message_id                     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId">StunTransactionId</a> id);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                stun_message_id                     (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId"><span class="returnvalue">StunTransactionId</span></a> id);</pre>
 <p>
 Retreive the STUN transaction id from a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1825,11 +1758,9 @@ Retreive the STUN transaction id from a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_get_class ()">
 <a name="stun-message-get-class"></a><h3>stun_message_get_class ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass">StunClass</a>           stun_message_get_class              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass"><span class="returnvalue">StunClass</span></a>           stun_message_get_class              (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg);</pre>
 <p>
 Retreive the STUN class from a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1849,11 +1780,9 @@ Retreive the STUN class from a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_get_method ()">
 <a name="stun-message-get-method"></a><h3>stun_message_get_method ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod">StunMethod</a>          stun_message_get_method             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
+<pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMethod" title="enum StunMethod"><span class="returnvalue">StunMethod</span></a>          stun_message_get_method             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg);</pre>
 <p>
 Retreive the STUN method from a STUN message</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1873,12 +1802,10 @@ Retreive the STUN method from a STUN message</p>
 <hr>
 <div class="refsect2" title="stun_message_has_attribute ()">
 <a name="stun-message-has-attribute"></a><h3>stun_message_has_attribute ()</h3>
-<pre class="programlisting">bool                stun_message_has_attribute          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg,
-                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute">StunAttribute</a> type);</pre>
+<pre class="programlisting"><span class="returnvalue">bool</span>                stun_message_has_attribute          (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg,
+                                                         <a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="returnvalue">StunAttribute</span></a> type);</pre>
 <p>
 Checks if an attribute is present within a STUN message.</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1894,11 +1821,7 @@ Checks if an attribute is present within a STUN message.</p>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
-><code class="literal">TRUE</code></a> if the attribute is found, <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
-><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is found, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -1907,11 +1830,9 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 <hr>
 <div class="refsect2" title="stun_message_has_cookie ()">
 <a name="stun-message-has-cookie"></a><h3>stun_message_has_cookie ()</h3>
-<pre class="programlisting">bool                stun_message_has_cookie             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage">StunMessage</a> *msg);</pre>
+<pre class="programlisting"><span class="returnvalue">bool</span>                stun_message_has_cookie             (const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="returnvalue">StunMessage</span></a> *msg);</pre>
 <p>
 Checks if the STUN message has a RFC5389 compatible cookie</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1922,11 +1843,7 @@ Checks if the STUN message has a RFC5389 compatible cookie</p>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
-><code class="literal">TRUE</code></a> if the cookie is present, <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE--CAPS"
-><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the cookie is present, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -1935,12 +1852,10 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FAL
 <hr>
 <div class="refsect2" title="stun_optional ()">
 <a name="stun-optional"></a><h3>stun_optional ()</h3>
-<pre class="programlisting">bool                stun_optional                       (uint16_t t);</pre>
+<pre class="programlisting"><span class="returnvalue">bool</span>                stun_optional                       (<span class="returnvalue">uint16_t</span> t);</pre>
 <p>
 Helper function that checks whether a STUN attribute is a mandatory
 or an optional attribute</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1951,9 +1866,7 @@ or an optional attribute</p>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a
-href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE--CAPS"
-><code class="literal">TRUE</code></a> if the attribute is an optional one
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is an optional one
 </td>
 </tr>
 </tbody>
@@ -1962,11 +1875,9 @@ href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRU
 <hr>
 <div class="refsect2" title="stun_strerror ()">
 <a name="stun-strerror"></a><h3>stun_strerror ()</h3>
-<pre class="programlisting">const char *        stun_strerror                       (<a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError">StunError</a> code);</pre>
+<pre class="programlisting">const <span class="returnvalue">char</span> *        stun_strerror                       (<a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError"><span class="returnvalue">StunError</span></a> code);</pre>
 <p>
 Transforms a STUN error-code into a human readable string</p>
-<p>
-</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
@@ -1986,11 +1897,11 @@ Transforms a STUN error-code into a human readable string</p>
 </div>
 <div class="refsect1" title="See Also">
 <a name="libnice-StunMessage.see-also"></a><h2>See Also</h2>
-#StunAgent
+<a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.11</div>
+          Generated by GTK-Doc V1.13</div>
 </body>
 </html>
