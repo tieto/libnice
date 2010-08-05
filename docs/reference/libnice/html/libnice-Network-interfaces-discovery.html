@@ -8,16 +8,8 @@
 <link rel="up" href="ch02.html" title="Libnice helper functions">
 <link rel="prev" href="libnice-Debug-messages.html" title="Debug messages">
 <link rel="next" href="pt02.html" title="Part II. STUN Library">
-<meta name="generator" content="GTK-Doc V1.13 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
-<link rel="part" href="pt01.html" title="Part I. ICE Library">
-<link rel="chapter" href="ch01.html" title="">
-<link rel="chapter" href="ch02.html" title="Libnice helper functions">
-<link rel="part" href="pt02.html" title="Part II. STUN Library">
-<link rel="chapter" href="ch03.html" title="">
-<link rel="chapter" href="ch04.html" title="STUN usages">
-<link rel="part" href="pt03.html" title="Part III. Pseudo TCP Socket implementation">
-<link rel="chapter" href="ch05.html" title="">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
@@ -52,11 +44,11 @@ Stable, unless otherwise indicated
 <pre class="synopsis">
 #include &lt;interfaces.h&gt;
 
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libnice-Network-interfaces-discovery.html#nice-interfaces-get-ip-for-interface" title="nice_interfaces_get_ip_for_interface ()">nice_interfaces_get_ip_for_interface</a>
-                                                        (<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *interface_name);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             <a class="link" href="libnice-Network-interfaces-discovery.html#nice-interfaces-get-local-interfaces" title="nice_interfaces_get_local_interfaces ()">nice_interfaces_get_local_interfaces</a>
-                                                        (void);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             <a class="link" href="libnice-Network-interfaces-discovery.html#nice-interfaces-get-local-ips" title="nice_interfaces_get_local_ips ()">nice_interfaces_get_local_ips</a>       (<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a> include_loopback);
+<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libnice-Network-interfaces-discovery.html#nice-interfaces-get-ip-for-interface" title="nice_interfaces_get_ip_for_interface ()">nice_interfaces_get_ip_for_interface</a>
+                                                        (<em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *interface_name</code></em>);
+<a href="/usr/share/gtk-doc/html/glib/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             <a class="link" href="libnice-Network-interfaces-discovery.html#nice-interfaces-get-local-interfaces" title="nice_interfaces_get_local_interfaces ()">nice_interfaces_get_local_interfaces</a>
+                                                        (<em class="parameter"><code><span class="type">void</span></code></em>);
+<a href="/usr/share/gtk-doc/html/glib/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             <a class="link" href="libnice-Network-interfaces-discovery.html#nice-interfaces-get-local-ips" title="nice_interfaces_get_local_ips ()">nice_interfaces_get_local_ips</a>       (<em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> include_loopback</code></em>);
 </pre>
 </div>
 <div class="refsect1" title="Description">
@@ -64,22 +56,24 @@ Stable, unless otherwise indicated
 <p>
 These utility functions allow the discovery of local network interfaces
 in a portable manner, they also allow finding the local ip addresses or
-the address allocated to a network interface.</p>
+the address allocated to a network interface.
+</p>
 </div>
 <div class="refsect1" title="Details">
 <a name="libnice-Network-interfaces-discovery.details"></a><h2>Details</h2>
 <div class="refsect2" title="nice_interfaces_get_ip_for_interface ()">
 <a name="nice-interfaces-get-ip-for-interface"></a><h3>nice_interfaces_get_ip_for_interface ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             nice_interfaces_get_ip_for_interface
-                                                        (<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *interface_name);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             nice_interfaces_get_ip_for_interface
+                                                        (<em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *interface_name</code></em>);</pre>
 <p>
-Retreives the IPv4 address of an interface by its name</p>
+Retreives the IPv4 address of an interface by its name
+</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>interface_name</code></em> :</span></p></td>
-<td> name of local interface
+<td>name of local interface
 </td>
 </tr>
 <tr>
@@ -93,15 +87,16 @@ Retreives the IPv4 address of an interface by its name</p>
 <hr>
 <div class="refsect2" title="nice_interfaces_get_local_interfaces ()">
 <a name="nice-interfaces-get-local-interfaces"></a><h3>nice_interfaces_get_local_interfaces ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             nice_interfaces_get_local_interfaces
-                                                        (void);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             nice_interfaces_get_local_interfaces
+                                                        (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 <p>
-Get the list of local interfaces</p>
+Get the list of local interfaces
+</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> a newly-allocated <a href="http://library.gnome.org/devel/glib/unstable/glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> of strings. The caller must free it.
+<td> a newly-allocated <a href="/usr/share/gtk-doc/html/glib/glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> of strings. The caller must free it.
 </td>
 </tr></tbody>
 </table></div>
@@ -109,20 +104,21 @@ Get the list of local interfaces</p>
 <hr>
 <div class="refsect2" title="nice_interfaces_get_local_ips ()">
 <a name="nice-interfaces-get-local-ips"></a><h3>nice_interfaces_get_local_ips ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             nice_interfaces_get_local_ips       (<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a> include_loopback);</pre>
+<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             nice_interfaces_get_local_ips       (<em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> include_loopback</code></em>);</pre>
 <p>
-Get a list of local ipv4 interface addresses</p>
+Get a list of local ipv4 interface addresses
+</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>include_loopback</code></em> :</span></p></td>
-<td> Include any loopback devices
+<td>Include any loopback devices
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> a newly-allocated <a href="http://library.gnome.org/devel/glib/unstable/glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> of strings. The caller must free it.
+<td> a newly-allocated <a href="/usr/share/gtk-doc/html/glib/glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> of strings. The caller must free it.
 </td>
 </tr>
 </tbody>
@@ -132,6 +128,6 @@ Get a list of local ipv4 interface addresses</p>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.13</div>
+          Generated by GTK-Doc V1.15</div>
 </body>
 </html>

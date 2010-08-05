@@ -17,6 +17,9 @@ NiceAddress
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT NiceAddress ##### -->
 <para>
 
@@ -43,6 +46,7 @@ NiceAddress
 
 </para>
 
+@void: 
 @Returns: 
 
 

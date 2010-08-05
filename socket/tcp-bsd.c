@@ -91,7 +91,7 @@ nice_tcp_bsd_socket_new (NiceAgent *agent, GMainContext *ctx, NiceAddress *addr)
   int ret;
   struct sockaddr_storage name;
   guint name_len = sizeof (name);
-  NiceSocket *sock = g_slice_new0 (NiceSocket);
+  NiceSocket *sock;
   TcpPriv *priv;
 
   if (addr == NULL) {
@@ -99,16 +99,24 @@ nice_tcp_bsd_socket_new (NiceAgent *agent, GMainContext *ctx, NiceAddress *addr)
     return NULL;
   }
 
+  sock = g_slice_new0 (NiceSocket);
+
   nice_address_copy_to_sockaddr(addr, (struct sockaddr *)&name);
 
-  if ((sockfd == -1) &&
-      ((name.ss_family == AF_UNSPEC) ||
-          (name.ss_family == AF_INET))) {
-    sockfd = socket (PF_INET, SOCK_STREAM, 0);
-    name.ss_family = AF_INET;
+  if (sockfd == -1) {
+    if (name.ss_family == AF_UNSPEC || name.ss_family == AF_INET) {
+      sockfd = socket (PF_INET, SOCK_STREAM, 0);
+      name.ss_family = AF_INET;
 #ifdef HAVE_SA_LEN
-    name.ss_len = sizeof (struct sockaddr_in);
+      name.ss_len = sizeof (struct sockaddr_in);
 #endif
+    } else if (name.ss_family == AF_INET6) {
+      sockfd = socket (PF_INET6, SOCK_STREAM, 0);
+      name.ss_family = AF_INET6;
+#ifdef HAVE_SA_LEN
+      name.ss_len = sizeof (struct sockaddr_in6);
+#endif
+    }
   }
 
   if (sockfd == -1) {

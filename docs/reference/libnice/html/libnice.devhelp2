@@ -226,10 +226,11 @@
     <keyword type="constant" name="NICE_PROXY_TYPE_SOCKS5" link="NiceAgent.html#NICE-PROXY-TYPE-SOCKS5:CAPS"/>
     <keyword type="constant" name="NICE_PROXY_TYPE_HTTP" link="NiceAgent.html#NICE-PROXY-TYPE-HTTP:CAPS"/>
     <keyword type="constant" name="NICE_PROXY_TYPE_LAST" link="NiceAgent.html#NICE-PROXY-TYPE-LAST:CAPS"/>
-    <keyword type="constant" name="NICE_COMPATIBILITY_DRAFT19" link="NiceAgent.html#NICE-COMPATIBILITY-DRAFT19:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_RFC5245" link="NiceAgent.html#NICE-COMPATIBILITY-RFC5245:CAPS"/>
     <keyword type="constant" name="NICE_COMPATIBILITY_GOOGLE" link="NiceAgent.html#NICE-COMPATIBILITY-GOOGLE:CAPS"/>
     <keyword type="constant" name="NICE_COMPATIBILITY_MSN" link="NiceAgent.html#NICE-COMPATIBILITY-MSN:CAPS"/>
     <keyword type="constant" name="NICE_COMPATIBILITY_WLM2009" link="NiceAgent.html#NICE-COMPATIBILITY-WLM2009:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_DRAFT19" link="NiceAgent.html#NICE-COMPATIBILITY-DRAFT19:CAPS"/>
     <keyword type="constant" name="NICE_COMPATIBILITY_LAST" link="NiceAgent.html#NICE-COMPATIBILITY-LAST:CAPS"/>
     <keyword type="constant" name="NICE_CANDIDATE_TYPE_HOST" link="libnice-NiceCandidate.html#NICE-CANDIDATE-TYPE-HOST:CAPS"/>
     <keyword type="constant" name="NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE" link="libnice-NiceCandidate.html#NICE-CANDIDATE-TYPE-SERVER-REFLEXIVE:CAPS"/>
@@ -350,9 +351,10 @@
     <keyword type="constant" name="STUN_USAGE_BIND_RETURN_INVALID" link="libnice-Bind.html#STUN-USAGE-BIND-RETURN-INVALID:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_BIND_RETURN_ALTERNATE_SERVER" link="libnice-Bind.html#STUN-USAGE-BIND-RETURN-ALTERNATE-SERVER:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_BIND_RETURN_TIMEOUT" link="libnice-Bind.html#STUN-USAGE-BIND-RETURN-TIMEOUT:CAPS"/>
-    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_DRAFT19" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_RFC5245" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-RFC5245:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_GOOGLE" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-GOOGLE:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_MSN" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-MSN:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_DRAFT19" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_RETURN_SUCCESS" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-SUCCESS:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_RETURN_ERROR" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-ERROR:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_RETURN_INVALID" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-INVALID:CAPS"/>
