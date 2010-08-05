@@ -25,10 +25,11 @@
 <ANCHOR id="NICE-PROXY-TYPE-HTTP:CAPS" href="libnice/NiceAgent.html#NICE-PROXY-TYPE-HTTP:CAPS">
 <ANCHOR id="NICE-PROXY-TYPE-LAST:CAPS" href="libnice/NiceAgent.html#NICE-PROXY-TYPE-LAST:CAPS">
 <ANCHOR id="NiceCompatibility" href="libnice/NiceAgent.html#NiceCompatibility">
-<ANCHOR id="NICE-COMPATIBILITY-DRAFT19:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-DRAFT19:CAPS">
+<ANCHOR id="NICE-COMPATIBILITY-RFC5245:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-RFC5245:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-GOOGLE:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-GOOGLE:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-MSN:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-MSN:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-WLM2009:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-WLM2009:CAPS">
+<ANCHOR id="NICE-COMPATIBILITY-DRAFT19:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-DRAFT19:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-LAST:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-LAST:CAPS">
 <ANCHOR id="NiceAgentRecvFunc" href="libnice/NiceAgent.html#NiceAgentRecvFunc">
 <ANCHOR id="NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS" href="libnice/NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS">
@@ -333,9 +334,10 @@
 <ANCHOR id="libnice-ICE.description" href="libnice/libnice-ICE.html#libnice-ICE.description">
 <ANCHOR id="libnice-ICE.details" href="libnice/libnice-ICE.html#libnice-ICE.details">
 <ANCHOR id="StunUsageIceCompatibility" href="libnice/libnice-ICE.html#StunUsageIceCompatibility">
-<ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS">
+<ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-RFC5245:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-RFC5245:CAPS">
 <ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-GOOGLE:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-GOOGLE:CAPS">
 <ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-MSN:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-MSN:CAPS">
+<ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS">
 <ANCHOR id="StunUsageIceReturn" href="libnice/libnice-ICE.html#StunUsageIceReturn">
 <ANCHOR id="STUN-USAGE-ICE-RETURN-SUCCESS:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-RETURN-SUCCESS:CAPS">
 <ANCHOR id="STUN-USAGE-ICE-RETURN-ERROR:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-RETURN-ERROR:CAPS">

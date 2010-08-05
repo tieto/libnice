@@ -73,10 +73,6 @@ nice_udp_bsd_socket_new (NiceAddress *addr)
   socklen_t name_len = sizeof (name);
   NiceSocket *sock = g_slice_new0 (NiceSocket);
 
-  if (!sock) {
-    return NULL;
-  }
-
   if (addr != NULL) {
     nice_address_copy_to_sockaddr(addr, (struct sockaddr *)&name);
   } else {
@@ -89,6 +85,12 @@ nice_udp_bsd_socket_new (NiceAddress *addr)
     name.ss_family = AF_INET;
 #ifdef HAVE_SA_LEN
     name.ss_len = sizeof (struct sockaddr_in);
+#endif
+  } else if (name.ss_family == AF_INET6) {
+    sockfd = socket (PF_INET6, SOCK_DGRAM, IPPROTO_UDP);
+    name.ss_family = AF_INET6;
+#ifdef HAVE_SA_LEN
+    name.ss_len = sizeof (struct sockaddr_in6);
 #endif
   }
 

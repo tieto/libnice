@@ -17,14 +17,18 @@ ICE
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM StunUsageIceCompatibility ##### -->
 <para>
 
 </para>
 
-@STUN_USAGE_ICE_COMPATIBILITY_DRAFT19: 
+@STUN_USAGE_ICE_COMPATIBILITY_RFC5245: 
 @STUN_USAGE_ICE_COMPATIBILITY_GOOGLE: 
 @STUN_USAGE_ICE_COMPATIBILITY_MSN: 
+@STUN_USAGE_ICE_COMPATIBILITY_DRAFT19: 
 
 <!-- ##### ENUM StunUsageIceReturn ##### -->
 <para>

@@ -17,6 +17,9 @@ StunAgent
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### TYPEDEF StunAgent ##### -->
 <para>
 
@@ -228,6 +231,7 @@ StunAgent
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION stun_debug_disable ##### -->
@@ -235,5 +239,6 @@ StunAgent
 
 </para>
 
+@void: 
 
 

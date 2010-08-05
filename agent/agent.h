@@ -61,7 +61,7 @@
    GSList *lcands = NULL;
 
    // Create a nice agent
-   NiceAgent *agent = nice_agent_new (NULL, NICE_COMPATIBILITY_DRAFT19);
+   NiceAgent *agent = nice_agent_new (NULL, NICE_COMPATIBILITY_RFC5245);
 
    // Connect the signals
    g_signal_connect (G_OBJECT (agent), "candidate-gathering-done",
@@ -208,23 +208,29 @@ typedef enum
 
 /**
  * NiceCompatibility:
- * @NICE_COMPATIBILITY_DRAFT19: Use compatibility for ICE Draft 19 specs
+ * @NICE_COMPATIBILITY_RFC5245: Use compatibility with the RFC5245 ICE specs
  * @NICE_COMPATIBILITY_GOOGLE: Use compatibility for Google Talk specs
  * @NICE_COMPATIBILITY_MSN: Use compatibility for MSN Messenger specs
  * @NICE_COMPATIBILITY_WLM2009: Use compatibility with Windows Live Messenger
  * 2009
+ * @NICE_COMPATIBILITY_DRAFT19: Use compatibility for ICE Draft 19 specs
  * @NICE_COMPATIBILITY_LAST: Dummy last compatibility mode
  *
  * An enum to specify which compatible specifications the #NiceAgent should use.
  * Use with nice_agent_new()
+ *
+ * <warning>@NICE_COMPATIBILITY_DRAFT19 is deprecated and should not be used
+ * in newly-written code. It is kept for compatibility reasons and
+ * represents the same compatibility as @NICE_COMPATIBILITY_RFC5245 </warning>
  */
 typedef enum
 {
-  NICE_COMPATIBILITY_DRAFT19 = 0,
+  NICE_COMPATIBILITY_RFC5245 = 0,
   NICE_COMPATIBILITY_GOOGLE,
   NICE_COMPATIBILITY_MSN,
   NICE_COMPATIBILITY_WLM2009,
-  NICE_COMPATIBILITY_LAST = NICE_COMPATIBILITY_WLM2009
+  NICE_COMPATIBILITY_DRAFT19 = NICE_COMPATIBILITY_RFC5245,
+  NICE_COMPATIBILITY_LAST = NICE_COMPATIBILITY_WLM2009,
 } NiceCompatibility;
 
 /**
@@ -379,6 +385,8 @@ gboolean nice_agent_set_relay_info(
  * Start the candidate gathering process.
  * Once done, #NiceAgent::candidate-gathering-done is called for the stream
  *
+ * Returns: %FALSE if there were no local addresses and they couldn't be discovered. In this case, call nice_agent_add_local_address() first.
+ *
  * See also: nice_agent_add_local_address()
  <note>
    <para>
@@ -391,7 +399,7 @@ gboolean nice_agent_set_relay_info(
    </para>
  </note>
  */
-void
+gboolean
 nice_agent_gather_candidates (
   NiceAgent *agent,
   guint stream_id);
@@ -675,7 +683,7 @@ void nice_agent_set_stream_tos (
  * This function will set the value of the SOFTWARE attribute to be added to
  * STUN requests, responses and error responses sent during connectivity checks.
  * <para>
- * The SOFTWARE attribute will only be added in the #NICE_COMPATIBILITY_DRAFT19
+ * The SOFTWARE attribute will only be added in the #NICE_COMPATIBILITY_RFC5245
  * and #NICE_COMPATIBILITY_WLM2009 compatibility modes.
  *
  * </para>
