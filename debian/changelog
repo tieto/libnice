@@ -1,8 +1,9 @@
 libnice (0.0.13-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Bump Standards-Version to 3.9.1 (no further changes)
 
- -- Laurent Bigonville <bigon@debian.org>  Thu, 05 Aug 2010 21:30:12 +0200
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 05 Aug 2010 21:30:45 +0200
 
 libnice (0.0.11-1) unstable; urgency=low
 
