@@ -1,11 +1,16 @@
 libnice (0.0.13-1) UNRELEASED; urgency=low
 
+  [ Laurent Bigonville ]
   * New upstream release.
   * Bump Standards-Version to 3.9.1 (no further changes)
   * debian/source/format: Explicitly set source format to 1.0
   * debian/copyright: Fix copyright file
 
- -- Laurent Bigonville <bigon@debian.org>  Thu, 05 Aug 2010 22:33:35 +0200
+  [ Jonny Lamb ]
+  * debian/control: Add Recommends: libglib2.0-dev to
+    libnice-dev. (Closes: #592740)
+
+ -- Jonny Lamb <jonny@debian.org>  Fri, 13 Aug 2010 10:09:13 -0400
 
 libnice (0.0.11-1) unstable; urgency=low
 
