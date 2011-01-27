@@ -12,6 +12,8 @@ ifeq ($(DEB_BUILD_ARCH_OS),linux)
   DEB_MAKE_CHECK_TARGET := check
 endif
 
+DEB_DBG_PACKAGE_libnice10 := libnice-dbg
+
 DEB_CONFIGURE_EXTRA_FLAGS := --enable-gupnp
 
 include $(CURDIR)/debian/update-patches.mk

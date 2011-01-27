@@ -86,3 +86,21 @@ Description: ICE library (documentation)
  Nice includes integration with GStreamer.
  .
  This package contains documentation for libnice.
+
+Package: libnice-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: ${misc:Depends}, libnice10 (= ${binary:Version})
+Description: ICE library (debugging symbols)
+ Nice is an implementation of the IETF's draft Interactive Connectivity
+ Establishment standard (ICE).  ICE is useful for applications that want to
+ establish peer-to-peer UDP data streams. It automates the process of
+ traversing NATs and provides security against some attacks.
+ .
+ Existing standards that use ICE include the Session Initiation Protocol (SIP)
+ and the Jingle XMPP extension for audio/video calls.
+ .
+ Nice includes integration with GStreamer.
+ .
+ This package provides debugging symbols for nice.
