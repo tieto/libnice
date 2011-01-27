@@ -59,6 +59,13 @@
 # include <stdint.h>
 #endif
 
+#ifdef _WIN32
+#include <winsock2.h>
+#else
+#include <sys/types.h>
+#include <sys/socket.h>
+#endif
+
 # include "stun/stunagent.h"
 
 # ifdef __cplusplus
@@ -96,6 +103,8 @@ typedef enum {
   STUN_USAGE_TURN_COMPATIBILITY_DRAFT9,
   STUN_USAGE_TURN_COMPATIBILITY_GOOGLE,
   STUN_USAGE_TURN_COMPATIBILITY_MSN,
+  STUN_USAGE_TURN_COMPATIBILITY_OC2007,
+  STUN_USAGE_TURN_COMPATIBILITY_RFC5766,
 } StunUsageTurnCompatibility;
 
 /**
@@ -194,6 +203,16 @@ size_t stun_usage_turn_create_refresh (StunAgent *agent, StunMessage *msg,
     StunMessage *previous_response, int32_t lifetime,
     uint8_t *username, size_t username_len,
     uint8_t *password, size_t password_len,
+    StunUsageTurnCompatibility compatibility);
+
+
+size_t stun_usage_turn_create_permission (StunAgent *agent, StunMessage *msg,
+    uint8_t *buffer, size_t buffer_len,
+    uint8_t *username, size_t username_len,
+    uint8_t *password, size_t password_len,
+    uint8_t *realm, size_t realm_len,
+    uint8_t *nonce, size_t nonce_len,
+    struct sockaddr *peer,
     StunUsageTurnCompatibility compatibility);
 
 /**

@@ -139,7 +139,8 @@ An opaque structure representing the STUN agent.
   STUN_COMPATIBILITY_RFC3489,
   STUN_COMPATIBILITY_RFC5389,
   STUN_COMPATIBILITY_WLM2009,
-  STUN_COMPATIBILITY_LAST = STUN_COMPATIBILITY_WLM2009
+  STUN_COMPATIBILITY_OC2007,
+  STUN_COMPATIBILITY_LAST = STUN_COMPATIBILITY_OC2007
 } StunCompatibility;
 </pre>
 <p>
@@ -168,6 +169,13 @@ a special usecase against a typo in their code)
 </td>
 </tr>
 <tr>
+<td><p><a name="STUN-COMPATIBILITY-OC2007:CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_OC2007</code></span></p></td>
+<td>Use the STUN specifications compatible with
+Microsoft Office Communicator 2007 (basically RFC3489 with swapped
+REALM and NONCE attribute hex IDs, attributes are not aligned)
+</td>
+</tr>
+<tr>
 <td><p><a name="STUN-COMPATIBILITY-LAST:CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_LAST</code></span></p></td>
 <td>Dummy last compatibility mode
 </td>
@@ -186,6 +194,7 @@ a special usecase against a typo in their code)
   STUN_AGENT_USAGE_IGNORE_CREDENTIALS        = (1 &lt;&lt; 4),
   STUN_AGENT_USAGE_NO_INDICATION_AUTH        = (1 &lt;&lt; 5),
   STUN_AGENT_USAGE_FORCE_VALIDATER           = (1 &lt;&lt; 6),
+  STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES     = (1 &lt;&lt; 7),
 } StunAgentUsageFlags;
 </pre>
 <p>
@@ -251,6 +260,13 @@ the password of a STUN message, even if it already knows what the password
 should be (a response to a previously created request). This means that the
 <a class="link" href="libnice-StunAgent.html#StunMessageIntegrityValidate" title="StunMessageIntegrityValidate ()"><span class="type">StunMessageIntegrityValidate</span></a> callback will always be called when there is
 a MESSAGE-INTEGRITY attribute.
+</td>
+</tr>
+<tr>
+<td><p><a name="STUN-AGENT-USAGE-NO-ALIGNED-ATTRIBUTES:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES</code></span></p></td>
+<td>The agent should not assume STUN
+attributes are aligned on 32-bit boundaries when parsing messages and also
+do not add padding when creating messages.
 </td>
 </tr>
 </tbody>
@@ -395,8 +411,8 @@ validater function.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the authentication was successful,
-<a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the authentication failed
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the authentication was successful,
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the authentication failed
 </td>
 </tr>
 </tbody>
@@ -653,8 +669,8 @@ The last element in the array must have a username set to NULL
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the authentication was successful,
-<a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the authentication failed
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the authentication was successful,
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the authentication failed
 </td>
 </tr>
 </tbody>
@@ -701,7 +717,7 @@ Creates a new STUN message of class <a class="link" href="libnice-StunMessage.ht
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -748,7 +764,7 @@ Creates a new STUN message of class <a class="link" href="libnice-StunMessage.ht
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -798,7 +814,7 @@ specify the key with <a class="link" href="libnice-StunAgent.html#stun-agent-fin
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -857,7 +873,7 @@ is for
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -1013,7 +1029,7 @@ free its slot for future transactions.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the transaction was found, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the transaction was found, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>

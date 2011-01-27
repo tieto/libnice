@@ -28,6 +28,7 @@ ICE
 @STUN_USAGE_ICE_COMPATIBILITY_RFC5245: 
 @STUN_USAGE_ICE_COMPATIBILITY_GOOGLE: 
 @STUN_USAGE_ICE_COMPATIBILITY_MSN: 
+@STUN_USAGE_ICE_COMPATIBILITY_WLM2009: 
 @STUN_USAGE_ICE_COMPATIBILITY_DRAFT19: 
 
 <!-- ##### ENUM StunUsageIceReturn ##### -->
@@ -62,6 +63,7 @@ ICE
 @controlling: 
 @priority: 
 @tie: 
+@candidate_identifier: 
 @compatibility: 
 @Returns: 
 

@@ -213,6 +213,8 @@ typedef enum
  * @NICE_COMPATIBILITY_MSN: Use compatibility for MSN Messenger specs
  * @NICE_COMPATIBILITY_WLM2009: Use compatibility with Windows Live Messenger
  * 2009
+ * @NICE_COMPATIBILITY_OC2007: Use compatibility with Microsoft Office Communicator 2007
+ * @NICE_COMPATIBILITY_OC2007R2: Use compatibility with Microsoft Office Communicator 2007 R2
  * @NICE_COMPATIBILITY_DRAFT19: Use compatibility for ICE Draft 19 specs
  * @NICE_COMPATIBILITY_LAST: Dummy last compatibility mode
  *
@@ -229,8 +231,10 @@ typedef enum
   NICE_COMPATIBILITY_GOOGLE,
   NICE_COMPATIBILITY_MSN,
   NICE_COMPATIBILITY_WLM2009,
+  NICE_COMPATIBILITY_OC2007,
+  NICE_COMPATIBILITY_OC2007R2,
   NICE_COMPATIBILITY_DRAFT19 = NICE_COMPATIBILITY_RFC5245,
-  NICE_COMPATIBILITY_LAST = NICE_COMPATIBILITY_WLM2009,
+  NICE_COMPATIBILITY_LAST = NICE_COMPATIBILITY_OC2007R2,
 } NiceCompatibility;
 
 /**
@@ -351,6 +355,33 @@ nice_agent_remove_stream (
   NiceAgent *agent,
   guint stream_id);
 
+
+/**
+ * nice_agent_set_port_range:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @component_id: The ID of the component
+ * @min_port: The minimum port to use
+ * @max_port: The maximum port to use
+ *
+ * Sets a preferred port range for allocating host candidates.
+ * <para>
+ * If a local host candidate cannot be created on that port
+ * range, then the nice_agent_gather_candidates() call will fail.
+ * </para>
+ * <para>
+ * This MUST be called before nice_agent_gather_candidates()
+ * </para>
+ *
+ */
+void
+nice_agent_set_port_range (
+    NiceAgent *agent,
+    guint stream_id,
+    guint component_id,
+    guint min_port,
+    guint max_port);
+
 /**
  * nice_agent_set_relay_info:
  * @agent: The #NiceAgent Object
@@ -385,9 +416,12 @@ gboolean nice_agent_set_relay_info(
  * Start the candidate gathering process.
  * Once done, #NiceAgent::candidate-gathering-done is called for the stream
  *
- * Returns: %FALSE if there were no local addresses and they couldn't be discovered. In this case, call nice_agent_add_local_address() first.
+ * <para>See also: nice_agent_add_local_address()</para>
+ * <para>See also: nice_agent_set_port_range()</para>
  *
- * See also: nice_agent_add_local_address()
+ * Returns: %FALSE if the stream id is invalid or if a host candidate couldn't be allocated
+ * on the requested interfaces/ports.
+ *
  <note>
    <para>
     Local addresses can be previously set with nice_agent_add_local_address()
@@ -457,7 +491,7 @@ nice_agent_get_local_credentials (
  * @agent: The #NiceAgent Object
  * @stream_id: The ID of the stream the candidates are for
  * @component_id: The ID of the component the candidates are for
- * @candidates: a #GList of #NiceCandidate items describing each candidate to add
+ * @candidates: a #GSList of #NiceCandidate items describing each candidate to add
  *
  * Sets, adds or updates the remote candidates for a component of a stream.
  *
@@ -499,7 +533,23 @@ nice_agent_set_remote_candidates (
      Component state MUST be NICE_COMPONENT_STATE_READY, or as a special case,
      in any state if component was in READY state before and was then restarted
    </para>
- </note>
+   <para>
+   In reliable mode, the -1 error value means either that you are not yet
+   connected or that the send buffer is full (equivalent to EWOULDBLOCK).
+   In both cases, you simply need to wait for the
+   #NiceAgent::reliable-transport-writable signal to be fired before resending
+   the data.
+   </para>
+   <para>
+   In non-reliable mode, it will virtually never happen with UDP sockets, but
+   it might happen if the active candidate is a TURN-TCP connection that got
+   disconnected.
+   </para>
+   <para>
+   In both reliable and non-reliable mode, a -1 error code could also mean that
+   the stream_id and/or component_id are invalid.
+   </para>
+</note>
  *
  * Returns: The number of bytes sent, or negative error code
  */

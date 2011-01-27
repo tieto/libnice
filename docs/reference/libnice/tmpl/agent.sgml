@@ -212,6 +212,8 @@ NiceAgent
 @NICE_COMPATIBILITY_GOOGLE: 
 @NICE_COMPATIBILITY_MSN: 
 @NICE_COMPATIBILITY_WLM2009: 
+@NICE_COMPATIBILITY_OC2007: 
+@NICE_COMPATIBILITY_OC2007R2: 
 @NICE_COMPATIBILITY_DRAFT19: 
 @NICE_COMPATIBILITY_LAST: 
 
@@ -263,6 +265,18 @@ NiceAgent
 @agent: 
 @addr: 
 @Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_set_port_range ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@min_port: 
+@max_port: 
 
 
 <!-- ##### FUNCTION nice_agent_add_stream ##### -->

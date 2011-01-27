@@ -141,6 +141,7 @@ void refresh_free_item (gpointer data, gpointer user_data)
   uint8_t *password;
   size_t password_len;
   size_t buffer_len = 0;
+  StunUsageTurnCompatibility turn_compat = agent_to_turn_compatibility (agent);
 
   g_assert (user_data == NULL);
 
@@ -160,7 +161,8 @@ void refresh_free_item (gpointer data, gpointer user_data)
   password = (uint8_t *)cand->turn->password;
   password_len = (size_t) strlen (cand->turn->password);
 
-  if (agent_to_turn_compatibility (agent) == STUN_USAGE_TURN_COMPATIBILITY_MSN) {
+  if (turn_compat == STUN_USAGE_TURN_COMPATIBILITY_MSN ||
+      turn_compat == STUN_USAGE_TURN_COMPATIBILITY_OC2007) {
     username = g_base64_decode ((gchar *)username, &username_len);
     password = g_base64_decode ((gchar *)password, &password_len);
   }
@@ -188,7 +190,8 @@ void refresh_free_item (gpointer data, gpointer user_data)
 
   }
 
-  if (agent_to_turn_compatibility (agent) == STUN_USAGE_TURN_COMPATIBILITY_MSN) {
+  if (turn_compat == STUN_USAGE_TURN_COMPATIBILITY_MSN ||
+      turn_compat == STUN_USAGE_TURN_COMPATIBILITY_OC2007) {
     g_free (username);
     g_free (password);
   }
@@ -403,7 +406,8 @@ void priv_generate_candidate_credentials (NiceAgent *agent,
     NiceCandidate *candidate)
 {
 
-  if (agent->compatibility == NICE_COMPATIBILITY_MSN) {
+  if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
+      agent->compatibility == NICE_COMPATIBILITY_OC2007) {
     guchar username[32];
     guchar password[16];
 
@@ -458,7 +462,8 @@ NiceCandidate *discovery_add_local_host_candidate (
   candidate->base_addr = *address;
   if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
     candidate->priority = nice_candidate_jingle_priority (candidate);
-  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN)  {
+  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
+             agent->compatibility == NICE_COMPATIBILITY_OC2007)  {
     candidate->priority = nice_candidate_msn_priority (candidate);
   } else {
     candidate->priority = nice_candidate_ice_priority (candidate);
@@ -486,7 +491,6 @@ NiceCandidate *discovery_add_local_host_candidate (
     goto errors;
 
   component->sockets = g_slist_append (component->sockets, udp_socket);
-  agent_signal_new_candidate (agent, candidate);
 
   return candidate;
 
@@ -523,7 +527,8 @@ discovery_add_server_reflexive_candidate (
 
   if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
     candidate->priority = nice_candidate_jingle_priority (candidate);
-  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN)  {
+  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
+             agent->compatibility == NICE_COMPATIBILITY_OC2007)  {
     candidate->priority = nice_candidate_msn_priority (candidate);
   } else {
     candidate->priority =  nice_candidate_ice_priority_full
@@ -580,7 +585,8 @@ discovery_add_relay_candidate (
 
   if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
     candidate->priority = nice_candidate_jingle_priority (candidate);
-  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN)  {
+  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
+             agent->compatibility == NICE_COMPATIBILITY_OC2007)  {
     candidate->priority = nice_candidate_msn_priority (candidate);
   } else {
     candidate->priority =  nice_candidate_ice_priority_full
@@ -656,7 +662,8 @@ discovery_add_peer_reflexive_candidate (
   candidate->transport = NICE_CANDIDATE_TRANSPORT_UDP;
   if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
     candidate->priority = nice_candidate_jingle_priority (candidate);
-  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN)  {
+  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
+             agent->compatibility == NICE_COMPATIBILITY_OC2007)  {
     candidate->priority = nice_candidate_msn_priority (candidate);
   } else {
     candidate->priority = nice_candidate_ice_priority_full
@@ -670,7 +677,8 @@ discovery_add_peer_reflexive_candidate (
 
   priv_assign_foundation (agent, candidate);
 
-  if (agent->compatibility == NICE_COMPATIBILITY_MSN &&
+  if ((agent->compatibility == NICE_COMPATIBILITY_MSN ||
+       agent->compatibility == NICE_COMPATIBILITY_OC2007) &&
       remote && local) {
     guchar *new_username = NULL;
     guchar *decoded_local = NULL;
@@ -751,7 +759,8 @@ NiceCandidate *discovery_learn_remote_peer_reflexive_candidate (
     candidate->priority = priority;
   } else if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
     candidate->priority = nice_candidate_jingle_priority (candidate);
-  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN)  {
+  } else if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
+             agent->compatibility == NICE_COMPATIBILITY_OC2007)  {
     candidate->priority = nice_candidate_msn_priority (candidate);
   } else {
     candidate->priority = nice_candidate_ice_priority_full
@@ -763,7 +772,8 @@ NiceCandidate *discovery_learn_remote_peer_reflexive_candidate (
 
   priv_assign_remote_foundation (agent, candidate);
 
-  if (agent->compatibility == NICE_COMPATIBILITY_MSN &&
+  if ((agent->compatibility == NICE_COMPATIBILITY_MSN ||
+       agent->compatibility == NICE_COMPATIBILITY_OC2007) &&
       remote && local) {
     guchar *new_username = NULL;
     guchar *decoded_local = NULL;
@@ -860,9 +870,11 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
           size_t username_len = (size_t) strlen (cand->turn->username);
           uint8_t *password = (uint8_t *)cand->turn->password;
           size_t password_len = (size_t) strlen (cand->turn->password);
+          StunUsageTurnCompatibility turn_compat =
+              agent_to_turn_compatibility (agent);
 
-          if (agent_to_turn_compatibility (agent) ==
-              STUN_USAGE_TURN_COMPATIBILITY_MSN) {
+          if (turn_compat == STUN_USAGE_TURN_COMPATIBILITY_MSN ||
+              turn_compat == STUN_USAGE_TURN_COMPATIBILITY_OC2007) {
             username = g_base64_decode ((gchar *)username, &username_len);
             password = g_base64_decode ((gchar *)password, &password_len);
           }
@@ -874,10 +886,10 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
               -1, -1,
               username, username_len,
               password, password_len,
-              agent_to_turn_compatibility (agent));
+              turn_compat);
 
-          if (agent_to_turn_compatibility (agent) ==
-              STUN_USAGE_TURN_COMPATIBILITY_MSN) {
+          if (turn_compat == STUN_USAGE_TURN_COMPATIBILITY_MSN ||
+              turn_compat == STUN_USAGE_TURN_COMPATIBILITY_OC2007) {
             g_free (cand->msn_turn_username);
             g_free (cand->msn_turn_password);
             cand->msn_turn_username = username;
@@ -886,7 +898,8 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
         }
 
 	if (buffer_len > 0) {
-          stun_timer_start (&cand->timer);
+          stun_timer_start (&cand->timer, 200,
+              STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS);
 
           /* send the conncheck */
           nice_socket_send (cand->nicesock, &cand->server,

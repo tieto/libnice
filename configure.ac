@@ -3,7 +3,7 @@ AC_PREREQ(2.59c)
 
 dnl releases only do -Wall, cvs and prerelease does -Werror too
 dnl use a three digit version number for releases, and four for cvs/prerelease
-AC_INIT(libnice, 0.0.13)
+AC_INIT(libnice, 0.1.0)
 LIBNICE_RELEASE="yes"
 
 AC_CONFIG_SRCDIR([agent/agent.c])
@@ -33,12 +33,18 @@ AC_CONFIG_FILES([
 #      Increment CURRENT and AGE. Set REVISION to 0
 #    If there was an incompatible interface change:
 #      Increment CURRENT. Set AGE and REVISION to 0
-LIBNICE_CURRENT=9
+LIBNICE_CURRENT=10
 LIBNICE_REVISION=0
-LIBNICE_AGE=9
+LIBNICE_AGE=0
 LIBNICE_LIBVERSION=${LIBNICE_CURRENT}:${LIBNICE_REVISION}:${LIBNICE_AGE}
 LIBNICE_LT_LDFLAGS="-version-info ${LIBNICE_LIBVERSION}"
 AC_SUBST(LIBNICE_LT_LDFLAGS)
+
+
+dnl use pretty build output with automake >= 1.11
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])],
+  [AM_DEFAULT_VERBOSITY=1
+   AC_SUBST(AM_DEFAULT_VERBOSITY)])
 
 
 # Checks for programs.

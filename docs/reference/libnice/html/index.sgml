@@ -29,6 +29,8 @@
 <ANCHOR id="NICE-COMPATIBILITY-GOOGLE:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-GOOGLE:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-MSN:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-MSN:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-WLM2009:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-WLM2009:CAPS">
+<ANCHOR id="NICE-COMPATIBILITY-OC2007:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-OC2007:CAPS">
+<ANCHOR id="NICE-COMPATIBILITY-OC2007R2:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-OC2007R2:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-DRAFT19:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-DRAFT19:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-LAST:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-LAST:CAPS">
 <ANCHOR id="NiceAgentRecvFunc" href="libnice/NiceAgent.html#NiceAgentRecvFunc">
@@ -36,6 +38,7 @@
 <ANCHOR id="nice-agent-new" href="libnice/NiceAgent.html#nice-agent-new">
 <ANCHOR id="nice-agent-new-reliable" href="libnice/NiceAgent.html#nice-agent-new-reliable">
 <ANCHOR id="nice-agent-add-local-address" href="libnice/NiceAgent.html#nice-agent-add-local-address">
+<ANCHOR id="nice-agent-set-port-range" href="libnice/NiceAgent.html#nice-agent-set-port-range">
 <ANCHOR id="nice-agent-add-stream" href="libnice/NiceAgent.html#nice-agent-add-stream">
 <ANCHOR id="nice-agent-remove-stream" href="libnice/NiceAgent.html#nice-agent-remove-stream">
 <ANCHOR id="nice-agent-set-relay-info" href="libnice/NiceAgent.html#nice-agent-set-relay-info">
@@ -148,6 +151,7 @@
 <ANCHOR id="STUN-COMPATIBILITY-RFC3489:CAPS" href="libnice/libnice-StunAgent.html#STUN-COMPATIBILITY-RFC3489:CAPS">
 <ANCHOR id="STUN-COMPATIBILITY-RFC5389:CAPS" href="libnice/libnice-StunAgent.html#STUN-COMPATIBILITY-RFC5389:CAPS">
 <ANCHOR id="STUN-COMPATIBILITY-WLM2009:CAPS" href="libnice/libnice-StunAgent.html#STUN-COMPATIBILITY-WLM2009:CAPS">
+<ANCHOR id="STUN-COMPATIBILITY-OC2007:CAPS" href="libnice/libnice-StunAgent.html#STUN-COMPATIBILITY-OC2007:CAPS">
 <ANCHOR id="STUN-COMPATIBILITY-LAST:CAPS" href="libnice/libnice-StunAgent.html#STUN-COMPATIBILITY-LAST:CAPS">
 <ANCHOR id="StunAgentUsageFlags" href="libnice/libnice-StunAgent.html#StunAgentUsageFlags">
 <ANCHOR id="STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS:CAPS" href="libnice/libnice-StunAgent.html#STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS:CAPS">
@@ -157,6 +161,7 @@
 <ANCHOR id="STUN-AGENT-USAGE-IGNORE-CREDENTIALS:CAPS" href="libnice/libnice-StunAgent.html#STUN-AGENT-USAGE-IGNORE-CREDENTIALS:CAPS">
 <ANCHOR id="STUN-AGENT-USAGE-NO-INDICATION-AUTH:CAPS" href="libnice/libnice-StunAgent.html#STUN-AGENT-USAGE-NO-INDICATION-AUTH:CAPS">
 <ANCHOR id="STUN-AGENT-USAGE-FORCE-VALIDATER:CAPS" href="libnice/libnice-StunAgent.html#STUN-AGENT-USAGE-FORCE-VALIDATER:CAPS">
+<ANCHOR id="STUN-AGENT-USAGE-NO-ALIGNED-ATTRIBUTES:CAPS" href="libnice/libnice-StunAgent.html#STUN-AGENT-USAGE-NO-ALIGNED-ATTRIBUTES:CAPS">
 <ANCHOR id="StunValidationStatus" href="libnice/libnice-StunAgent.html#StunValidationStatus">
 <ANCHOR id="STUN-VALIDATION-SUCCESS:CAPS" href="libnice/libnice-StunAgent.html#STUN-VALIDATION-SUCCESS:CAPS">
 <ANCHOR id="STUN-VALIDATION-NOT-STUN:CAPS" href="libnice/libnice-StunAgent.html#STUN-VALIDATION-NOT-STUN:CAPS">
@@ -222,6 +227,7 @@
 <ANCHOR id="STUN-ATTRIBUTE-REFLECTED-FROM:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-REFLECTED-FROM:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-CHANNEL-NUMBER:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-CHANNEL-NUMBER:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-LIFETIME:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-LIFETIME:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-MS-ALTERNATE-SERVER:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-MS-ALTERNATE-SERVER:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-MAGIC-COOKIE:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-MAGIC-COOKIE:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-BANDWIDTH:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-BANDWIDTH:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-DESTINATION-ADDRESS:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-DESTINATION-ADDRESS:CAPS">
@@ -248,11 +254,14 @@
 <ANCHOR id="STUN-ATTRIBUTE-PRIORITY:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-PRIORITY:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-USE-CANDIDATE:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-USE-CANDIDATE:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-OPTIONS:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-OPTIONS:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-MS-VERSION:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-MS-VERSION:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-SOFTWARE:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-SOFTWARE:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-ALTERNATE-SERVER:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-ALTERNATE-SERVER:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-FINGERPRINT:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-FINGERPRINT:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-ICE-CONTROLLED:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-ICE-CONTROLLED:CAPS">
 <ANCHOR id="STUN-ATTRIBUTE-ICE-CONTROLLING:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-ICE-CONTROLLING:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-MS-SEQUENCE-NUMBER:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-MS-SEQUENCE-NUMBER:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-CANDIDATE-IDENTIFIER:CAPS" href="libnice/libnice-StunMessage.html#STUN-ATTRIBUTE-CANDIDATE-IDENTIFIER:CAPS">
 <ANCHOR id="StunTransactionId" href="libnice/libnice-StunMessage.html#StunTransactionId">
 <ANCHOR id="StunError" href="libnice/libnice-StunMessage.html#StunError">
 <ANCHOR id="STUN-ERROR-TRY-ALTERNATE:CAPS" href="libnice/libnice-StunMessage.html#STUN-ERROR-TRY-ALTERNATE:CAPS">
@@ -337,6 +346,7 @@
 <ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-RFC5245:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-RFC5245:CAPS">
 <ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-GOOGLE:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-GOOGLE:CAPS">
 <ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-MSN:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-MSN:CAPS">
+<ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-WLM2009:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-WLM2009:CAPS">
 <ANCHOR id="STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS">
 <ANCHOR id="StunUsageIceReturn" href="libnice/libnice-ICE.html#StunUsageIceReturn">
 <ANCHOR id="STUN-USAGE-ICE-RETURN-SUCCESS:CAPS" href="libnice/libnice-ICE.html#STUN-USAGE-ICE-RETURN-SUCCESS:CAPS">
@@ -362,6 +372,8 @@
 <ANCHOR id="STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS" href="libnice/libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS">
 <ANCHOR id="STUN-USAGE-TURN-COMPATIBILITY-GOOGLE:CAPS" href="libnice/libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-GOOGLE:CAPS">
 <ANCHOR id="STUN-USAGE-TURN-COMPATIBILITY-MSN:CAPS" href="libnice/libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-MSN:CAPS">
+<ANCHOR id="STUN-USAGE-TURN-COMPATIBILITY-OC2007:CAPS" href="libnice/libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-OC2007:CAPS">
+<ANCHOR id="STUN-USAGE-TURN-COMPATIBILITY-RFC5766:CAPS" href="libnice/libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-RFC5766:CAPS">
 <ANCHOR id="StunUsageTurnRequestPorts" href="libnice/libnice-TURN.html#StunUsageTurnRequestPorts">
 <ANCHOR id="STUN-USAGE-TURN-REQUEST-PORT-NORMAL:CAPS" href="libnice/libnice-TURN.html#STUN-USAGE-TURN-REQUEST-PORT-NORMAL:CAPS">
 <ANCHOR id="STUN-USAGE-TURN-REQUEST-PORT-EVEN:CAPS" href="libnice/libnice-TURN.html#STUN-USAGE-TURN-REQUEST-PORT-EVEN:CAPS">
@@ -386,6 +398,9 @@
 <ANCHOR id="STUN-USAGE-TIMER-RETURN-SUCCESS:CAPS" href="libnice/libnice-Timer.html#STUN-USAGE-TIMER-RETURN-SUCCESS:CAPS">
 <ANCHOR id="STUN-USAGE-TIMER-RETURN-RETRANSMIT:CAPS" href="libnice/libnice-Timer.html#STUN-USAGE-TIMER-RETURN-RETRANSMIT:CAPS">
 <ANCHOR id="STUN-USAGE-TIMER-RETURN-TIMEOUT:CAPS" href="libnice/libnice-Timer.html#STUN-USAGE-TIMER-RETURN-TIMEOUT:CAPS">
+<ANCHOR id="STUN-TIMER-DEFAULT-MAX-RETRANSMISSIONS:CAPS" href="libnice/libnice-Timer.html#STUN-TIMER-DEFAULT-MAX-RETRANSMISSIONS:CAPS">
+<ANCHOR id="STUN-TIMER-DEFAULT-RELIABLE-TIMEOUT:CAPS" href="libnice/libnice-Timer.html#STUN-TIMER-DEFAULT-RELIABLE-TIMEOUT:CAPS">
+<ANCHOR id="STUN-TIMER-DEFAULT-TIMEOUT:CAPS" href="libnice/libnice-Timer.html#STUN-TIMER-DEFAULT-TIMEOUT:CAPS">
 <ANCHOR id="stun-timer-start" href="libnice/libnice-Timer.html#stun-timer-start">
 <ANCHOR id="stun-timer-start-reliable" href="libnice/libnice-Timer.html#stun-timer-start-reliable">
 <ANCHOR id="stun-timer-refresh" href="libnice/libnice-Timer.html#stun-timer-refresh">

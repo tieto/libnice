@@ -74,6 +74,13 @@
 #include "timer.h"
 
 
+#ifndef SOL_IP
+# define SOL_IP IPPROTO_IP
+#endif
+
+#ifndef SOL_IPV6
+# define SOL_IPV6 IPPROTO_IPV6
+#endif
 
 
 /** Non-blocking mode STUN binding discovery */
@@ -460,7 +467,8 @@ StunUsageBindReturn stun_usage_bind_run (const struct sockaddr *srv,
     return STUN_USAGE_BIND_RETURN_ERROR;
   }
 
-  stun_timer_start (&timer);
+  stun_timer_start (&timer, STUN_TIMER_DEFAULT_TIMEOUT,
+      STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS);
   stun_debug ("STUN transaction started (timeout %dms).\n",
       stun_timer_remainder (&timer));
 
@@ -516,7 +524,8 @@ StunUsageBindReturn stun_usage_bind_run (const struct sockaddr *srv,
         if (val < -1)
           return STUN_USAGE_BIND_RETURN_ERROR;
 
-        stun_timer_start (&timer);
+        stun_timer_start (&timer, STUN_TIMER_DEFAULT_TIMEOUT,
+            STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS);
         ret = STUN_USAGE_TRANS_RETURN_RETRY;
       } else if (bind_ret ==  STUN_USAGE_BIND_RETURN_INVALID) {
         ret = STUN_USAGE_TRANS_RETURN_RETRY;
