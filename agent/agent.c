@@ -149,6 +149,12 @@ agent_to_ice_compatibility (NiceAgent *agent)
       STUN_USAGE_ICE_COMPATIBILITY_GOOGLE :
       agent->compatibility == NICE_COMPATIBILITY_MSN ?
       STUN_USAGE_ICE_COMPATIBILITY_MSN :
+      agent->compatibility == NICE_COMPATIBILITY_WLM2009 ?
+      STUN_USAGE_ICE_COMPATIBILITY_WLM2009 :
+      agent->compatibility == NICE_COMPATIBILITY_OC2007 ?
+      STUN_USAGE_ICE_COMPATIBILITY_MSN :
+      agent->compatibility == NICE_COMPATIBILITY_OC2007R2 ?
+      STUN_USAGE_ICE_COMPATIBILITY_WLM2009 :
       STUN_USAGE_ICE_COMPATIBILITY_RFC5245;
 }
 
@@ -161,7 +167,12 @@ agent_to_turn_compatibility (NiceAgent *agent)
       agent->compatibility == NICE_COMPATIBILITY_MSN ?
       STUN_USAGE_TURN_COMPATIBILITY_MSN :
       agent->compatibility == NICE_COMPATIBILITY_WLM2009 ?
-      STUN_USAGE_TURN_COMPATIBILITY_MSN : STUN_USAGE_TURN_COMPATIBILITY_DRAFT9;
+      STUN_USAGE_TURN_COMPATIBILITY_MSN :
+      agent->compatibility == NICE_COMPATIBILITY_OC2007 ?
+      STUN_USAGE_TURN_COMPATIBILITY_OC2007 :
+      agent->compatibility == NICE_COMPATIBILITY_OC2007R2 ?
+      STUN_USAGE_TURN_COMPATIBILITY_OC2007 :
+      STUN_USAGE_TURN_COMPATIBILITY_RFC5766;
 }
 
 NiceTurnSocketCompatibility
@@ -173,7 +184,11 @@ agent_to_turn_socket_compatibility (NiceAgent *agent)
       NICE_TURN_SOCKET_COMPATIBILITY_MSN :
       agent->compatibility == NICE_COMPATIBILITY_WLM2009 ?
       NICE_TURN_SOCKET_COMPATIBILITY_MSN :
-      NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9;
+      agent->compatibility == NICE_COMPATIBILITY_OC2007 ?
+      NICE_TURN_SOCKET_COMPATIBILITY_OC2007 :
+      agent->compatibility == NICE_COMPATIBILITY_OC2007R2 ?
+      NICE_TURN_SOCKET_COMPATIBILITY_OC2007 :
+      NICE_TURN_SOCKET_COMPATIBILITY_RFC5766;
 }
 
 Stream *agent_find_stream (NiceAgent *agent, guint stream_id)
@@ -283,8 +298,8 @@ nice_agent_class_init (NiceAgentClass *klass)
   g_object_class_install_property (gobject_class, PROP_STUN_SERVER,
       g_param_spec_string (
         "stun-server",
-        "STUN server",
-        "The STUN server used to obtain server-reflexive candidates",
+        "STUN server IP address",
+        "The IP address (not the hostname) of the STUN server to use",
         NULL,
         G_PARAM_READWRITE));
 
@@ -292,7 +307,7 @@ nice_agent_class_init (NiceAgentClass *klass)
       g_param_spec_uint (
         "stun-server-port",
         "STUN server port",
-        "The STUN server used to obtain server-reflexive candidates",
+        "Port of the STUN server used to gather server-reflexive candidates",
         1, 65536,
 	1, /* not a construct property, ignored */
         G_PARAM_READWRITE));
@@ -840,6 +855,18 @@ nice_agent_set_property (
             STUN_COMPATIBILITY_WLM2009,
             STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
             STUN_AGENT_USAGE_USE_FINGERPRINT);
+      } else if (agent->compatibility == NICE_COMPATIBILITY_OC2007) {
+        stun_agent_init (&agent->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
+            STUN_COMPATIBILITY_RFC3489,
+            STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
+            STUN_AGENT_USAGE_FORCE_VALIDATER |
+            STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES);
+      } else if (agent->compatibility == NICE_COMPATIBILITY_OC2007R2) {
+        stun_agent_init (&agent->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
+            STUN_COMPATIBILITY_WLM2009,
+            STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS |
+            STUN_AGENT_USAGE_USE_FINGERPRINT |
+            STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES);
       } else {
         stun_agent_init (&agent->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
             STUN_COMPATIBILITY_RFC5389,
@@ -851,6 +878,7 @@ nice_agent_set_property (
       break;
 
     case PROP_STUN_SERVER:
+      g_free (agent->stun_server_ip);
       agent->stun_server_ip = g_value_dup_string (value);
       break;
 
@@ -875,6 +903,7 @@ nice_agent_set_property (
       break;
 
     case PROP_PROXY_IP:
+      g_free (agent->proxy_ip);
       agent->proxy_ip = g_value_dup_string (value);
       break;
 
@@ -887,10 +916,12 @@ nice_agent_set_property (
       break;
 
     case PROP_PROXY_USERNAME:
+      g_free (agent->proxy_username);
       agent->proxy_username = g_value_dup_string (value);
       break;
 
     case PROP_PROXY_PASSWORD:
+      g_free (agent->proxy_password);
       agent->proxy_password = g_value_dup_string (value);
       break;
 
@@ -1057,9 +1088,7 @@ pseudo_tcp_socket_write_packet (PseudoTcpSocket *sock,
     const gchar *buffer, guint32 len, gpointer user_data)
 {
   TcpUserData *data = (TcpUserData *)user_data;
-  NiceAgent *agent = data->agent;
   Component *component = data->component;
-  Stream *stream = data->stream;
 
   if (component->selected_pair.local != NULL) {
     NiceSocket *sock;
@@ -1069,8 +1098,8 @@ pseudo_tcp_socket_write_packet (PseudoTcpSocket *sock,
     gchar tmpbuf[INET6_ADDRSTRLEN];
     nice_address_to_string (&component->selected_pair.remote->addr, tmpbuf);
 
-    nice_debug ("Agent %p : s%d:%d: sending %d bytes to [%s]:%d", agent,
-        stream->id, component->id, len, tmpbuf,
+    nice_debug ("Agent %p : s%d:%d: sending %d bytes to [%s]:%d", data->agent,
+        data->stream->id, component->id, len, tmpbuf,
         nice_address_get_port (&component->selected_pair.remote->addr));
 #endif
 
@@ -1313,7 +1342,10 @@ priv_add_new_candidate_discovery_stun (NiceAgent *agent,
   cdisco->component = stream_find_component_by_id (stream, component_id);
   cdisco->agent = agent;
   stun_agent_init (&cdisco->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
-      STUN_COMPATIBILITY_RFC3489, 0);
+      STUN_COMPATIBILITY_RFC3489,
+      (agent->compatibility == NICE_COMPATIBILITY_OC2007 ||
+       agent->compatibility == NICE_COMPATIBILITY_OC2007R2) ?
+        STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES : 0);
 
   nice_debug ("Agent %p : Adding new srv-rflx candidate discovery %p\n",
       agent, cdisco);
@@ -1410,6 +1442,12 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
     stun_agent_init (&cdisco->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
         STUN_COMPATIBILITY_RFC3489,
         STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS);
+  } else if (agent->compatibility == NICE_COMPATIBILITY_OC2007 ||
+      agent->compatibility == NICE_COMPATIBILITY_OC2007R2) {
+    stun_agent_init (&cdisco->stun_agent, STUN_MSOC_KNOWN_ATTRIBUTES,
+        STUN_COMPATIBILITY_OC2007,
+        STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS |
+        STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES);
   } else {
     stun_agent_init (&cdisco->stun_agent, STUN_ALL_KNOWN_ATTRIBUTES,
         STUN_COMPATIBILITY_RFC5389,
@@ -1488,7 +1526,7 @@ nice_agent_set_relay_info(NiceAgent *agent,
   g_return_val_if_fail (server_port, FALSE);
   g_return_val_if_fail (username, FALSE);
   g_return_val_if_fail (password, FALSE);
-  g_return_val_if_fail (type <= NICE_PROXY_TYPE_LAST, FALSE);
+  g_return_val_if_fail (type <= NICE_RELAY_TYPE_TURN_TLS, FALSE);
 
   agent_lock();
 
@@ -1566,7 +1604,7 @@ static void _upnp_mapped_external_port (GUPnPSimpleIgd *self, gchar *proto,
 
   agent_lock();
 
-  nice_debug ("Agent %p : Sucessfully mapped %s:%d to %s:%d", agent, local_ip,
+  nice_debug ("Agent %p : Successfully mapped %s:%d to %s:%d", agent, local_ip,
       local_port, external_ip, external_port);
 
   if (!nice_address_set_from_string (&localaddr, local_ip))
@@ -1666,12 +1704,15 @@ nice_agent_gather_candidates (
   guint n;
   GSList *i;
   Stream *stream;
+  GSList *local_addresses = NULL;
+  gboolean ret = TRUE;
 
   agent_lock();
 
   stream = agent_find_stream (agent, stream_id);
   if (stream == NULL) {
-    goto done;
+    agent_unlock();
+    return FALSE;
   }
 
   nice_debug ("Agent %p : In %s mode, starting candidate gathering.", agent,
@@ -1710,17 +1751,25 @@ nice_agent_gather_candidates (
       NiceAddress *addr = nice_address_new ();
 
       if (nice_address_set_from_string (addr, item->data)) {
-        nice_agent_add_local_address (agent, addr);
+        local_addresses = g_slist_append (local_addresses, addr);
+      } else {
+        nice_address_free (addr);
       }
-      nice_address_free (addr);
     }
 
     g_list_foreach (addresses, (GFunc) g_free, NULL);
     g_list_free (addresses);
+  } else {
+    for (i = agent->local_addresses; i; i = i->next) {
+      NiceAddress *addr = i->data;
+      NiceAddress *dup = nice_address_dup (addr);
+
+      local_addresses = g_slist_append (local_addresses, dup);
+    }
   }
 
   /* generate a local host candidate for each local address */
-  for (i = agent->local_addresses; i; i = i->next){
+  for (i = local_addresses; i; i = i->next) {
     NiceAddress *addr = i->data;
     NiceCandidate *host_candidate;
 
@@ -1731,6 +1780,7 @@ nice_agent_gather_candidates (
 
     for (n = 0; n < stream->n_components; n++) {
       Component *component = stream_find_component_by_id (stream, n + 1);
+      guint current_port = component->min_port;
 
       if (agent->reliable && component->tcp == NULL) {
         nice_debug ("Agent %p: not gathering candidates for s%d:%d because "
@@ -1739,12 +1789,26 @@ nice_agent_gather_candidates (
         continue;
       }
 
-      host_candidate = discovery_add_local_host_candidate (agent, stream->id,
-          n + 1, addr);
+      host_candidate = NULL;
+      while (host_candidate == NULL) {
+        nice_debug ("Agent %p: Trying to create host candidate on port %d", agent, current_port);
+        nice_address_set_port (addr, current_port);
+        host_candidate = discovery_add_local_host_candidate (agent, stream->id,
+            n + 1, addr);
+        if (current_port > 0)
+          current_port++;
+        if (current_port == 0 || current_port > component->max_port)
+          break;
+      }
+      nice_address_set_port (addr, 0);
 
       if (!host_candidate) {
-        g_warning ("No host candidate??");
-        return FALSE;
+        gchar ip[NICE_ADDRESS_STRING_LEN];
+        nice_address_to_string (addr, ip);
+        nice_debug ("Agent %p: Unable to add local host candidate %s for s%d:%d"
+            ". Invalid interface?", agent, ip, stream->id, component->id);
+        ret = FALSE;
+        goto error;
       }
 
 #ifdef HAVE_GUPNP
@@ -1792,6 +1856,16 @@ nice_agent_gather_candidates (
   stream->gathering = TRUE;
 
 
+  /* Only signal the new candidates after we're sure that the gathering was
+   * succesfful. But before sending gathering-done */
+  for (n = 0; n < stream->n_components; n++) {
+    Component *component = stream_find_component_by_id (stream, n + 1);
+    for (i = component->local_candidates; i; i = i->next) {
+      NiceCandidate *candidate = i->data;
+      agent_signal_new_candidate (agent, candidate);
+    }
+  }
+
   /* note: no async discoveries pending, signal that we are ready */
   if (agent->discovery_unsched_items == 0) {
     nice_debug ("Agent %p: Candidate gathering FINISHED, no scheduled items.",
@@ -1802,11 +1876,37 @@ nice_agent_gather_candidates (
     discovery_schedule (agent);
   }
 
- done:
+ error:
+  for (i = local_addresses; i; i = i->next)
+    nice_address_free (i->data);
+  g_slist_free (local_addresses);
+
+  if (ret == FALSE) {
+    priv_free_upnp (agent);
+    for (n = 0; n < stream->n_components; n++) {
+      Component *component = stream_find_component_by_id (stream, n + 1);
+
+      priv_detach_stream_component (stream, component);
+
+      for (i = component->local_candidates; i; i = i->next) {
+        NiceCandidate *candidate = i->data;
+        nice_candidate_free (candidate);
+      }
+      for (i = component->sockets; i; i = i->next) {
+        NiceSocket *udpsocket = i->data;
+        nice_socket_free (udpsocket);
+      }
+      g_slist_free (component->local_candidates);
+      component->local_candidates = NULL;
+      g_slist_free (component->sockets);
+      component->sockets = NULL;
+    }
+    discovery_prune_stream (agent, stream_id);
+  }
 
   agent_unlock();
 
-  return TRUE;
+  return ret;
 }
 
 static void priv_free_upnp (NiceAgent *agent)
@@ -1872,6 +1972,22 @@ nice_agent_remove_stream (
     priv_remove_keepalive_timer (agent);
 
  done:
+  agent_unlock();
+}
+
+NICEAPI_EXPORT void
+nice_agent_set_port_range (NiceAgent *agent, guint stream_id, guint component_id,
+    guint min_port, guint max_port)
+{
+  Component *component;
+
+  agent_lock();
+
+  if (agent_find_component (agent, stream_id, component_id, NULL, &component)) {
+    component->min_port = min_port;
+    component->max_port = max_port;
+  }
+
   agent_unlock();
 }
 
@@ -2181,7 +2297,9 @@ _nice_agent_recv (
 
   agent->media_after_tick = TRUE;
 
-  if (stun_message_validate_buffer_length ((uint8_t *) buf, (size_t) len) != len)
+  if (stun_message_validate_buffer_length ((uint8_t *) buf, (size_t) len,
+      (agent->compatibility != NICE_COMPATIBILITY_OC2007 &&
+       agent->compatibility != NICE_COMPATIBILITY_OC2007R2)) != len)
     /* If the retval is no 0, its not a valid stun packet, probably data */
     return len;
 
@@ -2371,6 +2489,13 @@ nice_agent_dispose (GObject *object)
 
   g_free (agent->stun_server_ip);
   agent->stun_server_ip = NULL;
+
+  g_free (agent->proxy_ip);
+  agent->proxy_ip = NULL;
+  g_free (agent->proxy_username);
+  agent->proxy_username = NULL;
+  g_free (agent->proxy_password);
+  agent->proxy_password = NULL;
 
   nice_rng_free (agent->rng);
   agent->rng = NULL;

@@ -35,12 +35,35 @@ Timer
 @STUN_USAGE_TIMER_RETURN_RETRANSMIT: 
 @STUN_USAGE_TIMER_RETURN_TIMEOUT: 
 
+<!-- ##### MACRO STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO STUN_TIMER_DEFAULT_TIMEOUT ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION stun_timer_start ##### -->
 <para>
 
 </para>
 
 @timer: 
+@initial_timeout: 
+@max_retransmissions: 
 
 
 <!-- ##### FUNCTION stun_timer_start_reliable ##### -->
@@ -49,6 +72,7 @@ Timer
 </para>
 
 @timer: 
+@initial_timeout: 
 
 
 <!-- ##### FUNCTION stun_timer_refresh ##### -->

@@ -58,6 +58,7 @@ enum                <a class="link" href="libnice-ICE.html#StunUsageIceReturn" t
                                                          <em class="parameter"><code><span class="type">bool</span> controlling</code></em>,
                                                          <em class="parameter"><code><span class="type">uint32_t</span> priority</code></em>,
                                                          <em class="parameter"><code><span class="type">uint64_t</span> tie</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *candidate_identifier</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-ICE.html#StunUsageIceCompatibility" title="enum StunUsageIceCompatibility"><span class="type">StunUsageIceCompatibility</span></a> compatibility</code></em>);
 <a class="link" href="libnice-ICE.html#StunUsageIceReturn" title="enum StunUsageIceReturn"><span class="returnvalue">StunUsageIceReturn</span></a>  <a class="link" href="libnice-ICE.html#stun-usage-ice-conncheck-process" title="stun_usage_ice_conncheck_process ()">stun_usage_ice_conncheck_process</a>    (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
@@ -96,6 +97,7 @@ to an incoming connectivity check request.
   STUN_USAGE_ICE_COMPATIBILITY_RFC5245,
   STUN_USAGE_ICE_COMPATIBILITY_GOOGLE,
   STUN_USAGE_ICE_COMPATIBILITY_MSN,
+  STUN_USAGE_ICE_COMPATIBILITY_WLM2009,
   STUN_USAGE_ICE_COMPATIBILITY_DRAFT19 = STUN_USAGE_ICE_COMPATIBILITY_RFC5245,
 } StunUsageIceCompatibility;
 </pre>
@@ -130,6 +132,12 @@ implementation of ICE
 <td><p><a name="STUN-USAGE-ICE-COMPATIBILITY-MSN:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_ICE_COMPATIBILITY_MSN</code></span></p></td>
 <td>The ICE compatibility with MSN's
 implementation of ICE
+</td>
+</tr>
+<tr>
+<td><p><a name="STUN-USAGE-ICE-COMPATIBILITY-WLM2009:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_ICE_COMPATIBILITY_WLM2009</code></span></p></td>
+<td>The ICE compatibility with Windows
+Live Messenger and Microsoft Office Communicator 2007 R2 implementation of ICE
 </td>
 </tr>
 <tr>
@@ -229,11 +237,14 @@ MAPPED-ADDRESS or XOR-MAPPED-ADDRESS attribute was found
                                                          <em class="parameter"><code><span class="type">bool</span> controlling</code></em>,
                                                          <em class="parameter"><code><span class="type">uint32_t</span> priority</code></em>,
                                                          <em class="parameter"><code><span class="type">uint64_t</span> tie</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *candidate_identifier</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-ICE.html#StunUsageIceCompatibility" title="enum StunUsageIceCompatibility"><span class="type">StunUsageIceCompatibility</span></a> compatibility</code></em>);</pre>
 <p>
 Builds an ICE connectivity check STUN message.
 If the compatibility is not <a class="link" href="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-RFC5245:CAPS"><span class="type">STUN_USAGE_ICE_COMPATIBILITY_RFC5245</span></a>, the
 <em class="parameter"><code>cand_use</code></em>, <em class="parameter"><code>controlling</code></em>, <em class="parameter"><code>priority</code></em> and <em class="parameter"><code>tie</code></em> arguments are not used.
+If the compatibility is not <a class="link" href="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-WLM2009:CAPS"><span class="type">STUN_USAGE_ICE_COMPATIBILITY_WLM2009</span></a>, the
+<em class="parameter"><code>candidate_identifier</code></em> argument is not used.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -280,13 +291,13 @@ If the compatibility is not <a class="link" href="libnice-ICE.html#STUN-USAGE-IC
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cand_use</code></em> :</span></p></td>
-<td>Set to <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> to append the USE-CANDIDATE flag to the request
+<td>Set to <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> to append the USE-CANDIDATE flag to the request
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>controlling</code></em> :</span></p></td>
-<td>Set to <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if you are the controlling agent or set to
-<a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if you are the controlled agent.
+<td>Set to <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if you are the controlling agent or set to
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if you are the controlled agent.
 </td>
 </tr>
 <tr>
@@ -298,6 +309,12 @@ If the compatibility is not <a class="link" href="libnice-ICE.html#STUN-USAGE-IC
 <td><p><span class="term"><em class="parameter"><code>tie</code></em> :</span></p></td>
 <td>The value of the tie-breaker to put in the ICE-CONTROLLED or
 ICE-CONTROLLING attribute
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>candidate_identifier</code></em> :</span></p></td>
+<td>The foundation value to put in the
+CANDIDATE-IDENTIFIER attribute
 </td>
 </tr>
 <tr>
@@ -433,8 +450,8 @@ response
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>control</code></em> :</span></p></td>
-<td>Set to <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if you are the controlling agent or set to
-<a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if you are the controlled agent.
+<td>Set to <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if you are the controlling agent or set to
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if you are the controlled agent.
 </td>
 </tr>
 <tr>
@@ -498,7 +515,7 @@ Extracts the USE-CANDIDATE attribute flag from a STUN message.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the flag is set, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if not.
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the flag is set, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if not.
 </td>
 </tr>
 </tbody>

@@ -42,6 +42,7 @@
     <keyword type="function" name="nice_agent_new ()" link="NiceAgent.html#nice-agent-new"/>
     <keyword type="function" name="nice_agent_new_reliable ()" link="NiceAgent.html#nice-agent-new-reliable" since="0.0.11"/>
     <keyword type="function" name="nice_agent_add_local_address ()" link="NiceAgent.html#nice-agent-add-local-address"/>
+    <keyword type="function" name="nice_agent_set_port_range ()" link="NiceAgent.html#nice-agent-set-port-range"/>
     <keyword type="function" name="nice_agent_add_stream ()" link="NiceAgent.html#nice-agent-add-stream"/>
     <keyword type="function" name="nice_agent_remove_stream ()" link="NiceAgent.html#nice-agent-remove-stream"/>
     <keyword type="function" name="nice_agent_set_relay_info ()" link="NiceAgent.html#nice-agent-set-relay-info"/>
@@ -190,6 +191,9 @@
     <keyword type="function" name="stun_usage_turn_refresh_process ()" link="libnice-TURN.html#stun-usage-turn-refresh-process"/>
     <keyword type="typedef" name="StunTimer" link="libnice-Timer.html#StunTimer"/>
     <keyword type="enum" name="enum StunUsageTimerReturn" link="libnice-Timer.html#StunUsageTimerReturn"/>
+    <keyword type="macro" name="STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS" link="libnice-Timer.html#STUN-TIMER-DEFAULT-MAX-RETRANSMISSIONS:CAPS"/>
+    <keyword type="macro" name="STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT" link="libnice-Timer.html#STUN-TIMER-DEFAULT-RELIABLE-TIMEOUT:CAPS"/>
+    <keyword type="macro" name="STUN_TIMER_DEFAULT_TIMEOUT" link="libnice-Timer.html#STUN-TIMER-DEFAULT-TIMEOUT:CAPS"/>
     <keyword type="function" name="stun_timer_start ()" link="libnice-Timer.html#stun-timer-start"/>
     <keyword type="function" name="stun_timer_start_reliable ()" link="libnice-Timer.html#stun-timer-start-reliable"/>
     <keyword type="function" name="stun_timer_refresh ()" link="libnice-Timer.html#stun-timer-refresh"/>
@@ -230,6 +234,8 @@
     <keyword type="constant" name="NICE_COMPATIBILITY_GOOGLE" link="NiceAgent.html#NICE-COMPATIBILITY-GOOGLE:CAPS"/>
     <keyword type="constant" name="NICE_COMPATIBILITY_MSN" link="NiceAgent.html#NICE-COMPATIBILITY-MSN:CAPS"/>
     <keyword type="constant" name="NICE_COMPATIBILITY_WLM2009" link="NiceAgent.html#NICE-COMPATIBILITY-WLM2009:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_OC2007" link="NiceAgent.html#NICE-COMPATIBILITY-OC2007:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_OC2007R2" link="NiceAgent.html#NICE-COMPATIBILITY-OC2007R2:CAPS"/>
     <keyword type="constant" name="NICE_COMPATIBILITY_DRAFT19" link="NiceAgent.html#NICE-COMPATIBILITY-DRAFT19:CAPS"/>
     <keyword type="constant" name="NICE_COMPATIBILITY_LAST" link="NiceAgent.html#NICE-COMPATIBILITY-LAST:CAPS"/>
     <keyword type="constant" name="NICE_CANDIDATE_TYPE_HOST" link="libnice-NiceCandidate.html#NICE-CANDIDATE-TYPE-HOST:CAPS"/>
@@ -243,6 +249,7 @@
     <keyword type="constant" name="STUN_COMPATIBILITY_RFC3489" link="libnice-StunAgent.html#STUN-COMPATIBILITY-RFC3489:CAPS"/>
     <keyword type="constant" name="STUN_COMPATIBILITY_RFC5389" link="libnice-StunAgent.html#STUN-COMPATIBILITY-RFC5389:CAPS"/>
     <keyword type="constant" name="STUN_COMPATIBILITY_WLM2009" link="libnice-StunAgent.html#STUN-COMPATIBILITY-WLM2009:CAPS"/>
+    <keyword type="constant" name="STUN_COMPATIBILITY_OC2007" link="libnice-StunAgent.html#STUN-COMPATIBILITY-OC2007:CAPS"/>
     <keyword type="constant" name="STUN_COMPATIBILITY_LAST" link="libnice-StunAgent.html#STUN-COMPATIBILITY-LAST:CAPS"/>
     <keyword type="constant" name="STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS" link="libnice-StunAgent.html#STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS:CAPS"/>
     <keyword type="constant" name="STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS" link="libnice-StunAgent.html#STUN-AGENT-USAGE-LONG-TERM-CREDENTIALS:CAPS"/>
@@ -251,6 +258,7 @@
     <keyword type="constant" name="STUN_AGENT_USAGE_IGNORE_CREDENTIALS" link="libnice-StunAgent.html#STUN-AGENT-USAGE-IGNORE-CREDENTIALS:CAPS"/>
     <keyword type="constant" name="STUN_AGENT_USAGE_NO_INDICATION_AUTH" link="libnice-StunAgent.html#STUN-AGENT-USAGE-NO-INDICATION-AUTH:CAPS"/>
     <keyword type="constant" name="STUN_AGENT_USAGE_FORCE_VALIDATER" link="libnice-StunAgent.html#STUN-AGENT-USAGE-FORCE-VALIDATER:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES" link="libnice-StunAgent.html#STUN-AGENT-USAGE-NO-ALIGNED-ATTRIBUTES:CAPS"/>
     <keyword type="constant" name="STUN_VALIDATION_SUCCESS" link="libnice-StunAgent.html#STUN-VALIDATION-SUCCESS:CAPS"/>
     <keyword type="constant" name="STUN_VALIDATION_NOT_STUN" link="libnice-StunAgent.html#STUN-VALIDATION-NOT-STUN:CAPS"/>
     <keyword type="constant" name="STUN_VALIDATION_INCOMPLETE_STUN" link="libnice-StunAgent.html#STUN-VALIDATION-INCOMPLETE-STUN:CAPS"/>
@@ -290,6 +298,7 @@
     <keyword type="constant" name="STUN_ATTRIBUTE_REFLECTED_FROM" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REFLECTED-FROM:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_CHANNEL_NUMBER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-CHANNEL-NUMBER:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_LIFETIME" link="libnice-StunMessage.html#STUN-ATTRIBUTE-LIFETIME:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MS_ALTERNATE_SERVER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MS-ALTERNATE-SERVER:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_MAGIC_COOKIE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MAGIC-COOKIE:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_BANDWIDTH" link="libnice-StunMessage.html#STUN-ATTRIBUTE-BANDWIDTH:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_DESTINATION_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-DESTINATION-ADDRESS:CAPS"/>
@@ -316,11 +325,14 @@
     <keyword type="constant" name="STUN_ATTRIBUTE_PRIORITY" link="libnice-StunMessage.html#STUN-ATTRIBUTE-PRIORITY:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_USE_CANDIDATE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-USE-CANDIDATE:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_OPTIONS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-OPTIONS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MS_VERSION" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MS-VERSION:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_SOFTWARE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-SOFTWARE:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_ALTERNATE_SERVER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-ALTERNATE-SERVER:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_FINGERPRINT" link="libnice-StunMessage.html#STUN-ATTRIBUTE-FINGERPRINT:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_ICE_CONTROLLED" link="libnice-StunMessage.html#STUN-ATTRIBUTE-ICE-CONTROLLED:CAPS"/>
     <keyword type="constant" name="STUN_ATTRIBUTE_ICE_CONTROLLING" link="libnice-StunMessage.html#STUN-ATTRIBUTE-ICE-CONTROLLING:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MS_SEQUENCE_NUMBER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MS-SEQUENCE-NUMBER:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_CANDIDATE_IDENTIFIER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-CANDIDATE-IDENTIFIER:CAPS"/>
     <keyword type="constant" name="STUN_ERROR_TRY_ALTERNATE" link="libnice-StunMessage.html#STUN-ERROR-TRY-ALTERNATE:CAPS"/>
     <keyword type="constant" name="STUN_ERROR_BAD_REQUEST" link="libnice-StunMessage.html#STUN-ERROR-BAD-REQUEST:CAPS"/>
     <keyword type="constant" name="STUN_ERROR_UNAUTHORIZED" link="libnice-StunMessage.html#STUN-ERROR-UNAUTHORIZED:CAPS"/>
@@ -354,6 +366,7 @@
     <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_RFC5245" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-RFC5245:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_GOOGLE" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-GOOGLE:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_MSN" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-MSN:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_WLM2009" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-WLM2009:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_DRAFT19" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_RETURN_SUCCESS" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-SUCCESS:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_ICE_RETURN_ERROR" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-ERROR:CAPS"/>
@@ -367,6 +380,8 @@
     <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_DRAFT9" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_GOOGLE" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-GOOGLE:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_MSN" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-MSN:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_OC2007" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-OC2007:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_RFC5766" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-RFC5766:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_TURN_REQUEST_PORT_NORMAL" link="libnice-TURN.html#STUN-USAGE-TURN-REQUEST-PORT-NORMAL:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_TURN_REQUEST_PORT_EVEN" link="libnice-TURN.html#STUN-USAGE-TURN-REQUEST-PORT-EVEN:CAPS"/>
     <keyword type="constant" name="STUN_USAGE_TURN_REQUEST_PORT_EVEN_AND_RESERVE" link="libnice-TURN.html#STUN-USAGE-TURN-REQUEST-PORT-EVEN-AND-RESERVE:CAPS"/>

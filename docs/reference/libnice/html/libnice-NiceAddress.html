@@ -48,24 +48,24 @@ Stable, unless otherwise indicated
 <span class="returnvalue">void</span>                <a class="link" href="libnice-NiceAddress.html#nice-address-free" title="nice_address_free ()">nice_address_free</a>                   (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);
 <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="returnvalue">NiceAddress</span></a> *       <a class="link" href="libnice-NiceAddress.html#nice-address-dup" title="nice_address_dup ()">nice_address_dup</a>                    (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libnice-NiceAddress.html#nice-address-set-ipv4" title="nice_address_set_ipv4 ()">nice_address_set_ipv4</a>               (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint32"><span class="type">guint32</span></a> addr_ipv4</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint32"><span class="type">guint32</span></a> addr_ipv4</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libnice-NiceAddress.html#nice-address-set-ipv6" title="nice_address_set_ipv6 ()">nice_address_set_ipv6</a>               (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code>const <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guchar"><span class="type">guchar</span></a> *addr_ipv6</code></em>);
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guchar"><span class="type">guchar</span></a> *addr_ipv6</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libnice-NiceAddress.html#nice-address-set-port" title="nice_address_set_port ()">nice_address_set_port</a>               (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a> port</code></em>);
-<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="libnice-NiceAddress.html#nice-address-get-port" title="nice_address_get_port ()">nice_address_get_port</a>               (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);
-<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libnice-NiceAddress.html#nice-address-set-from-string" title="nice_address_set_from_string ()">nice_address_set_from_string</a>        (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code>const <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *str</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> port</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="libnice-NiceAddress.html#nice-address-get-port" title="nice_address_get_port ()">nice_address_get_port</a>               (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libnice-NiceAddress.html#nice-address-set-from-string" title="nice_address_set_from_string ()">nice_address_set_from_string</a>        (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *str</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libnice-NiceAddress.html#nice-address-set-from-sockaddr" title="nice_address_set_from_sockaddr ()">nice_address_set_from_sockaddr</a>      (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
                                                          <em class="parameter"><code>const <span class="type">struct sockaddr</span> *sin</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libnice-NiceAddress.html#nice-address-copy-to-sockaddr" title="nice_address_copy_to_sockaddr ()">nice_address_copy_to_sockaddr</a>       (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *sin</code></em>);
-<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libnice-NiceAddress.html#nice-address-equal" title="nice_address_equal ()">nice_address_equal</a>                  (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *a</code></em>,
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libnice-NiceAddress.html#nice-address-equal" title="nice_address_equal ()">nice_address_equal</a>                  (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *a</code></em>,
                                                          <em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *b</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libnice-NiceAddress.html#nice-address-to-string" title="nice_address_to_string ()">nice_address_to_string</a>              (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *dst</code></em>);
-<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libnice-NiceAddress.html#nice-address-is-private" title="nice_address_is_private ()">nice_address_is_private</a>             (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);
-<a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libnice-NiceAddress.html#nice-address-is-valid" title="nice_address_is_valid ()">nice_address_is_valid</a>               (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *dst</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libnice-NiceAddress.html#nice-address-is-private" title="nice_address_is_private ()">nice_address_is_private</a>             (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libnice-NiceAddress.html#nice-address-is-valid" title="nice_address_is_valid ()">nice_address_is_valid</a>               (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);
 </pre>
 </div>
 <div class="refsect1" title="Description">
@@ -183,7 +183,7 @@ Creates a new <a class="link" href="libnice-NiceAddress.html#NiceAddress" title=
 <div class="refsect2" title="nice_address_set_ipv4 ()">
 <a name="nice-address-set-ipv4"></a><h3>nice_address_set_ipv4 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                nice_address_set_ipv4               (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint32"><span class="type">guint32</span></a> addr_ipv4</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint32"><span class="type">guint32</span></a> addr_ipv4</code></em>);</pre>
 <p>
 Set <em class="parameter"><code>addr</code></em> to an IPv4 address using the data from <em class="parameter"><code>addr_ipv4</code></em>
 </p>
@@ -218,7 +218,7 @@ Set <em class="parameter"><code>addr</code></em> to an IPv4 address using the da
 <div class="refsect2" title="nice_address_set_ipv6 ()">
 <a name="nice-address-set-ipv6"></a><h3>nice_address_set_ipv6 ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                nice_address_set_ipv6               (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code>const <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guchar"><span class="type">guchar</span></a> *addr_ipv6</code></em>);</pre>
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guchar"><span class="type">guchar</span></a> *addr_ipv6</code></em>);</pre>
 <p>
 Set <em class="parameter"><code>addr</code></em> to an IPv6 address using the data from <em class="parameter"><code>addr_ipv6</code></em>
 </p>
@@ -253,7 +253,7 @@ Set <em class="parameter"><code>addr</code></em> to an IPv6 address using the da
 <div class="refsect2" title="nice_address_set_port ()">
 <a name="nice-address-set-port"></a><h3>nice_address_set_port ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                nice_address_set_port               (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a> port</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> port</code></em>);</pre>
 <p>
 Set the port of <em class="parameter"><code>addr</code></em> to <em class="parameter"><code>port</code></em>
 </p>
@@ -276,7 +276,7 @@ Set the port of <em class="parameter"><code>addr</code></em> to <em class="param
 <hr>
 <div class="refsect2" title="nice_address_get_port ()">
 <a name="nice-address-get-port"></a><h3>nice_address_get_port ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               nice_address_get_port               (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               nice_address_get_port               (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);</pre>
 <p>
 Retreive the port of <em class="parameter"><code>addr</code></em>
 </p>
@@ -299,8 +299,8 @@ Retreive the port of <em class="parameter"><code>addr</code></em>
 <hr>
 <div class="refsect2" title="nice_address_set_from_string ()">
 <a name="nice-address-set-from-string"></a><h3>nice_address_set_from_string ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_address_set_from_string        (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code>const <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *str</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_address_set_from_string        (<em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *str</code></em>);</pre>
 <p>
 Sets an IPv4 or IPv6 address from the string <em class="parameter"><code>str</code></em>
 </p>
@@ -319,7 +319,7 @@ Sets an IPv4 or IPv6 address from the string <em class="parameter"><code>str</co
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if success, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on error
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on error
 </td>
 </tr>
 </tbody>
@@ -376,7 +376,7 @@ Fills the sockaddr structure <em class="parameter"><code>sin</code></em> with th
 <hr>
 <div class="refsect2" title="nice_address_equal ()">
 <a name="nice-address-equal"></a><h3>nice_address_equal ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_address_equal                  (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *a</code></em>,
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_address_equal                  (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *a</code></em>,
                                                          <em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *b</code></em>);</pre>
 <p>
 Compares two <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> structures to see if they contain the same address
@@ -396,7 +396,7 @@ Compares two <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if <em class="parameter"><code>a</code></em> and <em class="parameter"><code>b</code></em> are the same address, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if they are different
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if <em class="parameter"><code>a</code></em> and <em class="parameter"><code>b</code></em> are the same address, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if they are different
 </td>
 </tr>
 </tbody>
@@ -406,7 +406,7 @@ Compares two <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="
 <div class="refsect2" title="nice_address_to_string ()">
 <a name="nice-address-to-string"></a><h3>nice_address_to_string ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                nice_address_to_string              (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>,
-                                                         <em class="parameter"><code><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *dst</code></em>);</pre>
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *dst</code></em>);</pre>
 <p>
 Transforms the address <em class="parameter"><code>addr</code></em> into a human readable string
 </p>
@@ -429,7 +429,7 @@ Transforms the address <em class="parameter"><code>addr</code></em> into a human
 <hr>
 <div class="refsect2" title="nice_address_is_private ()">
 <a name="nice-address-is-private"></a><h3>nice_address_is_private ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_address_is_private             (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_address_is_private             (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);</pre>
 <p>
 Verifies if the address in <em class="parameter"><code>addr</code></em> is a private address or not
 </p>
@@ -443,7 +443,7 @@ Verifies if the address in <em class="parameter"><code>addr</code></em> is a pri
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if <em class="parameter"><code>addr</code></em> is a private address, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if <em class="parameter"><code>addr</code></em> is a private address, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -452,7 +452,7 @@ Verifies if the address in <em class="parameter"><code>addr</code></em> is a pri
 <hr>
 <div class="refsect2" title="nice_address_is_valid ()">
 <a name="nice-address-is-valid"></a><h3>nice_address_is_valid ()</h3>
-<pre class="programlisting"><a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_address_is_valid               (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);</pre>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_address_is_valid               (<em class="parameter"><code>const <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);</pre>
 <p>
 Validate whether the <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> <em class="parameter"><code>addr</code></em> is a valid IPv4 or IPv6 address
 </p>
@@ -466,7 +466,7 @@ Validate whether the <a class="link" href="libnice-NiceAddress.html#NiceAddress"
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if <em class="parameter"><code>addr</code></em> is valid, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if <em class="parameter"><code>addr</code></em> is valid, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>

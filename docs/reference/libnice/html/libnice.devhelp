@@ -42,6 +42,7 @@
     <function name="nice_agent_new ()" link="NiceAgent.html#nice-agent-new"/>
     <function name="nice_agent_new_reliable ()" link="NiceAgent.html#nice-agent-new-reliable"/>
     <function name="nice_agent_add_local_address ()" link="NiceAgent.html#nice-agent-add-local-address"/>
+    <function name="nice_agent_set_port_range ()" link="NiceAgent.html#nice-agent-set-port-range"/>
     <function name="nice_agent_add_stream ()" link="NiceAgent.html#nice-agent-add-stream"/>
     <function name="nice_agent_remove_stream ()" link="NiceAgent.html#nice-agent-remove-stream"/>
     <function name="nice_agent_set_relay_info ()" link="NiceAgent.html#nice-agent-set-relay-info"/>
@@ -190,6 +191,9 @@
     <function name="stun_usage_turn_refresh_process ()" link="libnice-TURN.html#stun-usage-turn-refresh-process"/>
     <function name="StunTimer" link="libnice-Timer.html#StunTimer"/>
     <function name="enum StunUsageTimerReturn" link="libnice-Timer.html#StunUsageTimerReturn"/>
+    <function name="STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS" link="libnice-Timer.html#STUN-TIMER-DEFAULT-MAX-RETRANSMISSIONS:CAPS"/>
+    <function name="STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT" link="libnice-Timer.html#STUN-TIMER-DEFAULT-RELIABLE-TIMEOUT:CAPS"/>
+    <function name="STUN_TIMER_DEFAULT_TIMEOUT" link="libnice-Timer.html#STUN-TIMER-DEFAULT-TIMEOUT:CAPS"/>
     <function name="stun_timer_start ()" link="libnice-Timer.html#stun-timer-start"/>
     <function name="stun_timer_start_reliable ()" link="libnice-Timer.html#stun-timer-start-reliable"/>
     <function name="stun_timer_refresh ()" link="libnice-Timer.html#stun-timer-refresh"/>

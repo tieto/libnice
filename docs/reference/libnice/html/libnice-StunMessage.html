@@ -122,7 +122,8 @@ const <span class="returnvalue">void</span> *        <a class="link" href="libni
 <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-error" title="stun_message_append_error ()">stun_message_append_error</a>           (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunError" title="enum StunError"><span class="type">StunError</span></a> code</code></em>);
 <span class="returnvalue">int</span>                 <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()">stun_message_validate_buffer_length</a> (<em class="parameter"><code>const <span class="type">uint8_t</span> *msg</code></em>,
-                                                         <em class="parameter"><code><span class="type">size_t</span> length</code></em>);
+                                                         <em class="parameter"><code><span class="type">size_t</span> length</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> has_padding</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libnice-StunMessage.html#stun-message-id" title="stun_message_id ()">stun_message_id</a>                     (<em class="parameter"><code>const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId"><span class="type">StunTransactionId</span></a> id</code></em>);
 <a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass"><span class="returnvalue">StunClass</span></a>           <a class="link" href="libnice-StunMessage.html#stun-message-get-class" title="stun_message_get_class ()">stun_message_get_class</a>              (<em class="parameter"><code>const <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>);
@@ -364,7 +365,9 @@ the TURN draft 12
   STUN_ATTRIBUTE_REFLECTED_FROM=0x000B,    /* old RFC3489 */
   STUN_ATTRIBUTE_CHANNEL_NUMBER=0x000C,        /* TURN-12 */
   STUN_ATTRIBUTE_LIFETIME=0x000D,      /* TURN-12 */
-  /* 0x000E */        /* reserved (was ALTERNATE-SERVER from midcom-TURN 08 */
+  /* MS_ALTERNATE_SERVER is only used by Microsoft's dialect, probably should
+   * not to be placed in STUN_ALL_KNOWN_ATTRIBUTES */
+  STUN_ATTRIBUTE_MS_ALTERNATE_SERVER=0x000E, /* MS-TURN */
   STUN_ATTRIBUTE_MAGIC_COOKIE=0x000F,        /* midcom-TURN 08 */
   STUN_ATTRIBUTE_BANDWIDTH=0x0010,      /* TURN-04 */
   STUN_ATTRIBUTE_DESTINATION_ADDRESS=0x0011,        /* midcom-TURN 08 */
@@ -404,6 +407,7 @@ the TURN draft 12
   /* Optional attributes */
   /* 0x8000-0x8021 */      /* reserved */
   STUN_ATTRIBUTE_OPTIONS=0x8001, /* libjingle */
+  STUN_ATTRIBUTE_MS_VERSION=0x8008,    /* MS-TURN */
   STUN_ATTRIBUTE_SOFTWARE=0x8022,      /* RFC5389 */
   STUN_ATTRIBUTE_ALTERNATE_SERVER=0x8023,    /* RFC5389 */
   /* 0x8024 */        /* reserved */
@@ -413,7 +417,11 @@ the TURN draft 12
   STUN_ATTRIBUTE_FINGERPRINT=0x8028,    /* RFC5389 */
   STUN_ATTRIBUTE_ICE_CONTROLLED=0x8029,    /* ICE-19 */
   STUN_ATTRIBUTE_ICE_CONTROLLING=0x802A,    /* ICE-19 */
-  /* 0x802B-0xFFFF */      /* reserved */
+  /* 0x802B-0x804F */      /* reserved */
+  STUN_ATTRIBUTE_MS_SEQUENCE_NUMBER=0x8050,     /* MS-TURN */
+  /* 0x8051-0x8053 */      /* reserved */
+  STUN_ATTRIBUTE_CANDIDATE_IDENTIFIER=0x8054    /* MS-ICE2 */
+  /* 0x8055-0xFFFF */      /* reserved */
 } StunAttribute;
 </pre>
 <p>
@@ -495,6 +503,11 @@ TURN draft 09 and 12
 <td><p><a name="STUN-ATTRIBUTE-LIFETIME:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_LIFETIME</code></span></p></td>
 <td>The LIFETIME attribute as defined by TURN
 draft 04, 09 and 12
+</td>
+</tr>
+<tr>
+<td><p><a name="STUN-ATTRIBUTE-MS-ALTERNATE-SERVER:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MS_ALTERNATE_SERVER</code></span></p></td>
+<td>
 </td>
 </tr>
 <tr>
@@ -648,6 +661,12 @@ libjingle
 </td>
 </tr>
 <tr>
+<td><p><a name="STUN-ATTRIBUTE-MS-VERSION:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MS_VERSION</code></span></p></td>
+<td>The MS-VERSION optional attribute as defined
+by [MS-TURN]
+</td>
+</tr>
+<tr>
 <td><p><a name="STUN-ATTRIBUTE-SOFTWARE:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_SOFTWARE</code></span></p></td>
 <td>The SOFTWARE optional attribute as defined by RFC5389
 </td>
@@ -674,6 +693,18 @@ defined by ICE draft 19
 <td><p><a name="STUN-ATTRIBUTE-ICE-CONTROLLING:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_ICE_CONTROLLING</code></span></p></td>
 <td>The ICE-CONTROLLING optional attribute as
 defined by ICE draft 19
+</td>
+</tr>
+<tr>
+<td><p><a name="STUN-ATTRIBUTE-MS-SEQUENCE-NUMBER:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MS_SEQUENCE_NUMBER</code></span></p></td>
+<td>The MS-SEQUENCE NUMBER optional attribute
+as defined by [MS-TURN]
+</td>
+</tr>
+<tr>
+<td><p><a name="STUN-ATTRIBUTE-CANDIDATE-IDENTIFIER:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_CANDIDATE_IDENTIFIER</code></span></p></td>
+<td>The CANDIDATE-IDENTIFIER optional
+attribute as defined by [MS-ICE2]
 </td>
 </tr>
 </tbody>
@@ -950,7 +981,7 @@ Initializes a STUN message buffer, with no attributes.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the initialization was successful
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the initialization was successful
 </td>
 </tr>
 </tbody>
@@ -1727,7 +1758,8 @@ to <span class="type">code</span>
 <div class="refsect2" title="stun_message_validate_buffer_length ()">
 <a name="stun-message-validate-buffer-length"></a><h3>stun_message_validate_buffer_length ()</h3>
 <pre class="programlisting"><span class="returnvalue">int</span>                 stun_message_validate_buffer_length (<em class="parameter"><code>const <span class="type">uint8_t</span> *msg</code></em>,
-                                                         <em class="parameter"><code><span class="type">size_t</span> length</code></em>);</pre>
+                                                         <em class="parameter"><code><span class="type">size_t</span> length</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> has_padding</code></em>);</pre>
 <p>
 This function will take a data buffer and will try to validate whether it is
 a STUN message or if it's not or if it's an incomplete STUN message and will
@@ -1744,6 +1776,11 @@ provide us with the length of the STUN message.
 <tr>
 <td><p><span class="term"><em class="parameter"><code>length</code></em> :</span></p></td>
 <td>The length of the buffer
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>has_padding</code></em> :</span></p></td>
+<td>Set TRUE if attributes should be padded to multiple of 4 bytes
 </td>
 </tr>
 <tr>
@@ -1849,7 +1886,7 @@ Checks if an attribute is present within a STUN message.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is found, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is found, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -1872,7 +1909,7 @@ Checks if the STUN message has a RFC5389 compatible cookie
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the cookie is present, <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the cookie is present, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise
 </td>
 </tr>
 </tbody>
@@ -1896,7 +1933,7 @@ or an optional attribute
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is an optional one
+<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is an optional one
 </td>
 </tr>
 </tbody>

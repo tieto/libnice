@@ -46,8 +46,14 @@ Stable, unless otherwise indicated
 
 typedef             <a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer">StunTimer</a>;
 enum                <a class="link" href="libnice-Timer.html#StunUsageTimerReturn" title="enum StunUsageTimerReturn">StunUsageTimerReturn</a>;
-<span class="returnvalue">void</span>                <a class="link" href="libnice-Timer.html#stun-timer-start" title="stun_timer_start ()">stun_timer_start</a>                    (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libnice-Timer.html#stun-timer-start-reliable" title="stun_timer_start_reliable ()">stun_timer_start_reliable</a>           (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>);
+#define             <a class="link" href="libnice-Timer.html#STUN-TIMER-DEFAULT-MAX-RETRANSMISSIONS:CAPS" title="STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS">STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS</a>
+#define             <a class="link" href="libnice-Timer.html#STUN-TIMER-DEFAULT-RELIABLE-TIMEOUT:CAPS" title="STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT">STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT</a>
+#define             <a class="link" href="libnice-Timer.html#STUN-TIMER-DEFAULT-TIMEOUT:CAPS" title="STUN_TIMER_DEFAULT_TIMEOUT">STUN_TIMER_DEFAULT_TIMEOUT</a>
+<span class="returnvalue">void</span>                <a class="link" href="libnice-Timer.html#stun-timer-start" title="stun_timer_start ()">stun_timer_start</a>                    (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> initial_timeout</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> max_retransmissions</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libnice-Timer.html#stun-timer-start-reliable" title="stun_timer_start_reliable ()">stun_timer_start_reliable</a>           (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> initial_timeout</code></em>);
 <a class="link" href="libnice-Timer.html#StunUsageTimerReturn" title="enum StunUsageTimerReturn"><span class="returnvalue">StunUsageTimerReturn</span></a>  <a class="link" href="libnice-Timer.html#stun-timer-refresh" title="stun_timer_refresh ()">stun_timer_refresh</a>                (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>);
 <span class="returnvalue">unsigned</span>            <a class="link" href="libnice-Timer.html#stun-timer-remainder" title="stun_timer_remainder ()">stun_timer_remainder</a>                (<em class="parameter"><code>const <a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>);
 </pre>
@@ -62,7 +68,7 @@ as timed out.
 <p>
  </p>
 <div class="example">
-<a name="id2718831"></a><p class="title"><b>Example 3. Simple example on how to use the timer usage</b></p>
+<a name="id2982523"></a><p class="title"><b>Example 3. Simple example on how to use the timer usage</b></p>
 <div class="example-contents">
   <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
     <tbody>
@@ -109,50 +115,52 @@ as timed out.
 40
 41
 42
-43</pre></td>
-        <td class="listing_code"><pre class="programlisting">StunTimer timer<span class="symbol">;</span>
-<span class="gtkdoc kwb">unsigned</span> remainder<span class="symbol">;</span>
-StunUsageTimerReturn ret<span class="symbol">;</span>
+43
+44</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="usertype">StunTimer</span><span class="normal"> timer</span><span class="symbol">;</span>
+<span class="type">unsigned</span><span class="normal"> remainder</span><span class="symbol">;</span>
+<span class="usertype">StunUsageTimerReturn</span><span class="normal"> ret</span><span class="symbol">;</span>
 
-<span class="gtkdoc slc">// Build the message, etc..</span>
+<span class="comment">// Build the message, etc..</span>
 <span class="symbol">...</span>
 
-<span class="gtkdoc slc">// Send the message and start the timer</span>
-<span class="function">send</span><span class="symbol">(</span>socket<span class="symbol">,</span> request<span class="symbol">,</span> <span class="keyword">sizeof</span><span class="symbol">(</span>request<span class="symbol">));</span>
-<span class="function"><a href="libnice-Timer.html#stun-timer-start">stun_timer_start</a></span><span class="symbol">(&amp;</span>timer<span class="symbol">);</span>
+<span class="comment">// Send the message and start the timer</span>
+<span class="function">send</span><span class="symbol">(</span><span class="normal">socket</span><span class="symbol">,</span><span class="normal"> request</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">sizeof</span><span class="symbol">(</span><span class="normal">request</span><span class="symbol">));</span>
+<span class="function"><a href="libnice-Timer.html#stun-timer-start">stun_timer_start</a></span><span class="symbol">(&amp;</span><span class="normal">timer</span><span class="symbol">,</span><span class="normal"> <a href="libnice-Timer.html#STUN-TIMER-DEFAULT-TIMEOUT:CAPS">STUN_TIMER_DEFAULT_TIMEOUT</a></span><span class="symbol">,</span>
+<span class="normal">                 <a href="libnice-Timer.html#STUN-TIMER-DEFAULT-MAX-RETRANSMISSIONS:CAPS">STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS</a></span><span class="symbol">);</span>
 
-<span class="gtkdoc slc">// Loop until we get the response</span>
-<span class="keyword">for</span> <span class="symbol">(;;) {</span>
-  remainder <span class="symbol">=</span> <span class="function"><a href="libnice-Timer.html#stun-timer-remainder">stun_timer_remainder</a></span><span class="symbol">(&amp;</span>timer<span class="symbol">);</span>
+<span class="comment">// Loop until we get the response</span>
+<span class="keyword">for</span><span class="normal"> </span><span class="symbol">(;;)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">  remainder </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="libnice-Timer.html#stun-timer-remainder">stun_timer_remainder</a></span><span class="symbol">(&amp;</span><span class="normal">timer</span><span class="symbol">);</span>
 
-  <span class="gtkdoc slc">// Poll the socket until data is received or the timer expires</span>
-  <span class="keyword">if</span> <span class="symbol">(</span><span class="function">poll</span> <span class="symbol">(&amp;</span>pollfd<span class="symbol">,</span> <span class="number">1</span><span class="symbol">,</span> delay<span class="symbol">) &lt;=</span> <span class="number">0</span><span class="symbol">) {</span>
-    <span class="gtkdoc slc">// Time out and no response was received</span>
-    ret <span class="symbol">=</span> <span class="function"><a href="libnice-Timer.html#stun-timer-refresh">stun_timer_refresh</a></span> <span class="symbol">(&amp;</span>timer<span class="symbol">);</span>
-    <span class="keyword">if</span> <span class="symbol">(</span>ret <span class="symbol">==</span> STUN_USAGE_TIMER_RETURN_TIMEOUT<span class="symbol">) {</span>
-      <span class="gtkdoc slc">// Transaction timed out</span>
-      <span class="keyword">break</span><span class="symbol">;</span>
-    <span class="symbol">}</span> <span class="keyword">else if</span> <span class="symbol">(</span>ret <span class="symbol">==</span> STUN_USAGE_TIMER_RETURN_RETRANSMIT<span class="symbol">) {</span>
-      <span class="gtkdoc slc">// A retransmission is necessary</span>
-      <span class="function">send</span><span class="symbol">(</span>socket<span class="symbol">,</span> request<span class="symbol">,</span> <span class="keyword">sizeof</span><span class="symbol">(</span>request<span class="symbol">));</span>
-      <span class="keyword">continue</span><span class="symbol">;</span>
-    <span class="symbol">}</span> <span class="keyword">else if</span> <span class="symbol">(</span>ret <span class="symbol">==</span> STUN_USAGE_TIMER_RETURN_SUCCESS<span class="symbol">) {</span>
-      <span class="gtkdoc slc">// The refresh succeeded and nothing has to be done, continue polling</span>
-      <span class="keyword">continue</span><span class="symbol">;</span>
-    <span class="symbol">}</span>
-  <span class="symbol">}</span> <span class="keyword">else</span> <span class="symbol">{</span>
-    <span class="gtkdoc slc">// We received a response, read it</span>
-    <span class="function">recv</span><span class="symbol">(</span>socket<span class="symbol">,</span> response<span class="symbol">,</span> <span class="keyword">sizeof</span><span class="symbol">(</span>response<span class="symbol">));</span>
-    <span class="keyword">break</span><span class="symbol">;</span>
-  <span class="symbol">}</span>
-<span class="symbol">}</span>
+<span class="normal">  </span><span class="comment">// Poll the socket until data is received or the timer expires</span>
+<span class="normal">  </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">poll</span><span class="normal"> </span><span class="symbol">(&amp;</span><span class="normal">pollfd</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">,</span><span class="normal"> delay</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&lt;=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="comment">// Time out and no response was received</span>
+<span class="normal">    ret </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="libnice-Timer.html#stun-timer-refresh">stun_timer_refresh</a></span><span class="normal"> </span><span class="symbol">(&amp;</span><span class="normal">timer</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ret </span><span class="symbol">==</span><span class="normal"> <a href="libnice-Timer.html#STUN-USAGE-TIMER-RETURN-TIMEOUT:CAPS">STUN_USAGE_TIMER_RETURN_TIMEOUT</a></span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">      </span><span class="comment">// Transaction timed out</span>
+<span class="normal">      </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ret </span><span class="symbol">==</span><span class="normal"> <a href="libnice-Timer.html#STUN-USAGE-TIMER-RETURN-RETRANSMIT:CAPS">STUN_USAGE_TIMER_RETURN_RETRANSMIT</a></span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">      </span><span class="comment">// A retransmission is necessary</span>
+<span class="normal">      </span><span class="function">send</span><span class="symbol">(</span><span class="normal">socket</span><span class="symbol">,</span><span class="normal"> request</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">sizeof</span><span class="symbol">(</span><span class="normal">request</span><span class="symbol">));</span>
+<span class="normal">      </span><span class="keyword">continue</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ret </span><span class="symbol">==</span><span class="normal"> <a href="libnice-Timer.html#STUN-USAGE-TIMER-RETURN-SUCCESS:CAPS">STUN_USAGE_TIMER_RETURN_SUCCESS</a></span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">      </span><span class="comment">// The refresh succeeded and nothing has to be done, continue polling</span>
+<span class="normal">      </span><span class="keyword">continue</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="normal">  </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="comment">// We received a response, read it</span>
+<span class="normal">    </span><span class="function">recv</span><span class="symbol">(</span><span class="normal">socket</span><span class="symbol">,</span><span class="normal"> response</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">sizeof</span><span class="symbol">(</span><span class="normal">response</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="normal">  </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
 
-<span class="gtkdoc slc">// Check if the transaction timed out or not</span>
-<span class="keyword">if</span> <span class="symbol">(</span>ret <span class="symbol">==</span> STUN_USAGE_TIMER_RETURN_TIMEOUT<span class="symbol">) {</span>
-  <span class="gtkdoc slc">// do whatever needs to be done in that case</span>
-<span class="symbol">}</span> <span class="keyword">else</span> <span class="symbol">{</span>
-  <span class="gtkdoc slc">// Parse the response</span>
-<span class="symbol">}</span></pre></td>
+<span class="comment">// Check if the transaction timed out or not</span>
+<span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ret </span><span class="symbol">==</span><span class="normal"> <a href="libnice-Timer.html#STUN-USAGE-TIMER-RETURN-TIMEOUT:CAPS">STUN_USAGE_TIMER_RETURN_TIMEOUT</a></span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">  </span><span class="comment">// do whatever needs to be done in that case</span>
+<span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">  </span><span class="comment">// Parse the response</span>
+<span class="cbracket">}</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -210,27 +218,89 @@ retransmissions, the transaction timed out
 </table></div>
 </div>
 <hr>
+<div class="refsect2" title="STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS">
+<a name="STUN-TIMER-DEFAULT-MAX-RETRANSMISSIONS:CAPS"></a><h3>STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS</h3>
+<pre class="programlisting">#define STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS 3
+</pre>
+<p>
+The default maximum retransmissions allowed before a timer decides to timeout
+</p>
+</div>
+<hr>
+<div class="refsect2" title="STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT">
+<a name="STUN-TIMER-DEFAULT-RELIABLE-TIMEOUT:CAPS"></a><h3>STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT</h3>
+<pre class="programlisting">#define STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT 7900
+</pre>
+<p>
+The default intial timeout to use for a reliable timer
+</p>
+</div>
+<hr>
+<div class="refsect2" title="STUN_TIMER_DEFAULT_TIMEOUT">
+<a name="STUN-TIMER-DEFAULT-TIMEOUT:CAPS"></a><h3>STUN_TIMER_DEFAULT_TIMEOUT</h3>
+<pre class="programlisting">#define STUN_TIMER_DEFAULT_TIMEOUT 600
+</pre>
+<p>
+The default intial timeout to use for the timer
+</p>
+</div>
+<hr>
 <div class="refsect2" title="stun_timer_start ()">
 <a name="stun-timer-start"></a><h3>stun_timer_start ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                stun_timer_start                    (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                stun_timer_start                    (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> initial_timeout</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> max_retransmissions</code></em>);</pre>
 <p>
 Starts a STUN transaction retransmission timer.
 This should be called as soon as you send the message for the first time on
-a UDP socket
+a UDP socket.
+The timeout before the next retransmission is set to <em class="parameter"><code>initial_timeout</code></em>, then
+each time a packet is retransmited, that timeout will be doubled, until the
+<em class="parameter"><code>max_retransmissions</code></em> retransmissions limit is reached.
+</p>
+<p>
+To determine the total timeout value, one can use the following equation :
+ </p>
+<pre class="programlisting">
+ total_timeout =  initial_timeout * (2^(max_retransmissions + 1) - 1);
+ </pre>
+<p>
+</p>
+<p>
+</p>
+<p>
+See also: <a class="link" href="libnice-Timer.html#STUN-TIMER-DEFAULT-TIMEOUT:CAPS" title="STUN_TIMER_DEFAULT_TIMEOUT"><span class="type">STUN_TIMER_DEFAULT_TIMEOUT</span></a>
+</p>
+<p>
+See also: <a class="link" href="libnice-Timer.html#STUN-TIMER-DEFAULT-MAX-RETRANSMISSIONS:CAPS" title="STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS"><span class="type">STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS</span></a>
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
-<tbody><tr>
+<tbody>
+<tr>
 <td><p><span class="term"><em class="parameter"><code>timer</code></em> :</span></p></td>
 <td>The <a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> to start
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>initial_timeout</code></em> :</span></p></td>
+<td>The initial timeout to use before the first retransmission
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>max_retransmissions</code></em> :</span></p></td>
+<td>The maximum number of transmissions before the
+<a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> times out
+</td>
+</tr>
+</tbody>
 </table></div>
 </div>
 <hr>
 <div class="refsect2" title="stun_timer_start_reliable ()">
 <a name="stun-timer-start-reliable"></a><h3>stun_timer_start_reliable ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                stun_timer_start_reliable           (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                stun_timer_start_reliable           (<em class="parameter"><code><a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> *timer</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> initial_timeout</code></em>);</pre>
 <p>
 Starts a STUN transaction retransmission timer for a reliable transport.
 This should be called as soon as you send the message for the first time on
@@ -238,11 +308,18 @@ a TCP socket
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
-<tbody><tr>
+<tbody>
+<tr>
 <td><p><span class="term"><em class="parameter"><code>timer</code></em> :</span></p></td>
 <td>The <a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><span class="type">StunTimer</span></a> to start
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>initial_timeout</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+</tbody>
 </table></div>
 </div>
 <hr>
