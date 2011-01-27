@@ -19,7 +19,7 @@ Homepage: http://nice.freedesktop.org/
 Vcs-Git: git://git.debian.org/git/pkg-telepathy/libnice.git
 Vcs-Browser: http://git.debian.org/?p=pkg-telepathy/libnice.git
 
-Package: libnice0
+Package: libnice10
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: ICE library (shared library)
@@ -38,7 +38,7 @@ Description: ICE library (shared library)
 Package: libnice-dev
 Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnice0 (= ${binary:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnice10 (= ${binary:Version})
 Recommends: libglib2.0-dev
 Description: ICE library (development files)
  Nice is an implementation of the IETF's draft Interactive Connectivity
