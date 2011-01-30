@@ -1,11 +1,11 @@
-libnice (0.1.0-1) UNRELEASED; urgency=low
+libnice (0.1.0-1) experimental; urgency=low
 
   * New upstream release.
     - Bump soname
     - Update .symbols file
   * debian/control Add libnice-dbg package
 
- -- Laurent Bigonville <bigon@debian.org>  Thu, 27 Jan 2011 23:40:24 +0100
+ -- Laurent Bigonville <bigon@debian.org>  Sun, 30 Jan 2011 21:07:05 +0100
 
 libnice (0.0.13-1) experimental; urgency=low
 
