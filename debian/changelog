@@ -1,10 +1,10 @@
-libnice (0.1.0-2) UNRELEASED; urgency=low
+libnice (0.1.0-2) unstable; urgency=low
 
   * Add a Breaks: libgstfarsight0.10-0 (<< 0.22) for the gstreamer plugin as
     farsight uses one libnice ABI and the gstreamer element uses another
     libnice ABI things tend to go horribly wrong.
 
- -- Sjoerd Simons <sjoerd@debian.org>  Mon, 07 Feb 2011 11:41:19 +0100
+ -- Sjoerd Simons <sjoerd@debian.org>  Mon, 07 Feb 2011 13:02:37 +0100
 
 libnice (0.1.0-1) experimental; urgency=low
 
