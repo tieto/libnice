@@ -57,6 +57,7 @@ Package: gstreamer0.10-nice
 Section: net
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Breaks: libgstfarsight0.10-0 (<< 0.22)
 Description: ICE library (GStreamer plugin)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
