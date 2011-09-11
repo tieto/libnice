@@ -7,8 +7,8 @@ Uploaders: Dafydd Harries <daf@debian.org>,
            Sjoerd Simons <sjoerd@debian.org>,
            Laurent Bigonville <bigon@debian.org>,
            Jonny Lamb <jonny@debian.org>
-Build-Depends: cdbs,
-               debhelper (>= 7),
+Build-Depends: cdbs (>= 0.4.93~),
+               debhelper (>= 8.1.3~),
                libglib2.0-dev (>= 2.10),
                libgstreamer0.10-dev,
                libgstreamer-plugins-base0.10-dev,
@@ -22,6 +22,8 @@ Vcs-Browser: http://git.debian.org/?p=pkg-telepathy/libnice.git
 Package: libnice10
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Multi-Arch: same
 Description: ICE library (shared library)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
@@ -93,6 +95,7 @@ Section: debug
 Priority: extra
 Architecture: any
 Depends: ${misc:Depends}, libnice10 (= ${binary:Version})
+Multi-Arch: same
 Description: ICE library (debugging symbols)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
