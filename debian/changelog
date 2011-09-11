@@ -1,3 +1,9 @@
+libnice (0.1.1-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Laurent Bigonville <bigon@debian.org>  Sun, 11 Sep 2011 22:51:03 +0200
+
 libnice (0.1.0-2) unstable; urgency=low
 
   * Add a Breaks: libgstfarsight0.10-0 (<< 0.0.23) for the gstreamer plugin as
