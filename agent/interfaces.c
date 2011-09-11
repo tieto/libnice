@@ -42,6 +42,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#ifdef __sun
+#include <sys/sockio.h>
+#endif
+
 #ifdef HAVE_GETIFADDRS
  #include <ifaddrs.h>
 #endif
@@ -197,7 +201,7 @@ nice_interfaces_get_local_ips (gboolean include_loopback)
       struct sockaddr_in6 *sa6 = (struct sockaddr_in6 *)ifa->ifa_addr;
 
       /* Skip link-local addresses, they require a scope */
-      if (IN6_IS_ADDR_LINKLOCAL (sa6->sin6_addr.s6_addr))
+      if (IN6_IS_ADDR_LINKLOCAL (&sa6->sin6_addr))
         continue;
 
       if (inet_ntop (AF_INET6, &sa6->sin6_addr, addr_as_string,

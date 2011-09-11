@@ -1780,7 +1780,12 @@ nice_agent_gather_candidates (
 
     for (n = 0; n < stream->n_components; n++) {
       Component *component = stream_find_component_by_id (stream, n + 1);
-      guint current_port = component->min_port;
+      guint current_port;
+
+      if (component == NULL)
+        continue;
+
+      current_port = component->min_port;
 
       if (agent->reliable && component->tcp == NULL) {
         nice_debug ("Agent %p: not gathering candidates for s%d:%d because "
@@ -2807,14 +2812,13 @@ GSource* agent_timeout_add_with_context (NiceAgent *agent, guint interval,
     GSourceFunc function, gpointer data)
 {
   GSource *source;
-  guint id;
 
   g_return_val_if_fail (function != NULL, 0);
 
   source = g_timeout_source_new (interval);
 
   g_source_set_callback (source, function, data, NULL);
-  id = g_source_attach (source, agent->main_context);
+  g_source_attach (source, agent->main_context);
 
   return source;
 }

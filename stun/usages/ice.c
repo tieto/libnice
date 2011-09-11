@@ -102,19 +102,21 @@ stun_usage_ice_conncheck_create (StunAgent *agent, StunMessage *msg,
 
   if (compatibility == STUN_USAGE_ICE_COMPATIBILITY_WLM2009) {
     size_t identifier_len = strlen(candidate_identifier);
-    size_t buffer_len = identifier_len;
+    size_t attribute_len = identifier_len;
     int modulo4 = identifier_len % 4;
     uint8_t* buf;
 
     if (modulo4)
-        buffer_len += 4 - modulo4;
+        attribute_len += 4 - modulo4;
 
-    buf = malloc(buffer_len);
-    memset(buf, 0, buffer_len);
+    // Avoid a coverify false positive
+    assert (attribute_len >= identifier_len);
+    buf = malloc(attribute_len);
+    memset(buf, 0, attribute_len);
     memcpy(buf, candidate_identifier, identifier_len);
 
     val = stun_message_append_bytes (msg, STUN_ATTRIBUTE_CANDIDATE_IDENTIFIER,
-            buf, buffer_len);
+            buf, attribute_len);
 
     free(buf);
 
@@ -291,7 +293,8 @@ stun_usage_ice_conncheck_create_reply (StunAgent *agent, StunMessage *req,
 
     val = stun_message_append_xor_addr_full (msg, STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
         src, srclen, htonl (magic_cookie));
-  } else if (stun_message_has_cookie (msg)) {
+  } else if (stun_message_has_cookie (msg) &&
+      compatibility != STUN_USAGE_ICE_COMPATIBILITY_GOOGLE) {
     val = stun_message_append_xor_addr (msg, STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
         src, srclen);
   } else {

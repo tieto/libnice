@@ -969,8 +969,11 @@ process(PseudoTcpSocket *self, Segment *seg)
     //LOG(LS_INFO) << "PseudoTcp::process - priv->slen = " << priv->slen;
 
     for (nFree = nAcked; nFree > 0; ) {
-      SSegment *data = (SSegment *) (g_list_first (priv->slist)->data);
-      g_assert(g_list_length (priv->slist) > 0);
+      SSegment *data;
+
+      g_assert(priv->slist != NULL);
+      data = (SSegment *) (priv->slist->data);
+
       if (nFree < data->len) {
         data->len -= nFree;
         nFree = 0;
@@ -1279,7 +1282,8 @@ attempt_send(PseudoTcpSocket *self, SendFlags sflags)
     if (bFirst) {
       bFirst = FALSE;
       DEBUG (PSEUDO_TCP_DEBUG_VERBOSE, "[cwnd: %d  nWindow: %d  nInFlight: %d "
-          "nAvailable: %d nQueued: %d  nEmpty: %d  ssthresh: %d]",
+          "nAvailable: %d nQueued: %d  nEmpty: %" G_GSIZE_FORMAT
+          "  ssthresh: %d]",
           priv->cwnd, nWindow, nInFlight, nAvailable, priv->slen - nInFlight,
           sizeof(priv->sbuf) - priv->slen, priv->ssthresh);
     }

@@ -99,10 +99,10 @@
     <function name="nice_address_to_string ()" link="libnice-NiceAddress.html#nice-address-to-string"/>
     <function name="nice_address_is_private ()" link="libnice-NiceAddress.html#nice-address-is-private"/>
     <function name="nice_address_is_valid ()" link="libnice-NiceAddress.html#nice-address-is-valid"/>
-    <function name="NiceCandidate" link="libnice-NiceCandidate.html#NiceCandidate"/>
+    <function name="struct NiceCandidate" link="libnice-NiceCandidate.html#NiceCandidate"/>
     <function name="enum NiceCandidateType" link="libnice-NiceCandidate.html#NiceCandidateType"/>
     <function name="enum NiceCandidateTransport" link="libnice-NiceCandidate.html#NiceCandidateTransport"/>
-    <function name="TurnServer" link="libnice-NiceCandidate.html#TurnServer"/>
+    <function name="struct TurnServer" link="libnice-NiceCandidate.html#TurnServer"/>
     <function name="enum NiceRelayType" link="libnice-NiceCandidate.html#NiceRelayType"/>
     <function name="NICE_CANDIDATE_MAX_FOUNDATION" link="libnice-NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS"/>
     <function name="nice_candidate_new ()" link="libnice-NiceCandidate.html#nice-candidate-new"/>
@@ -132,7 +132,7 @@
     <function name="stun_agent_set_software ()" link="libnice-StunAgent.html#stun-agent-set-software"/>
     <function name="stun_debug_enable ()" link="libnice-StunAgent.html#stun-debug-enable"/>
     <function name="stun_debug_disable ()" link="libnice-StunAgent.html#stun-debug-disable"/>
-    <function name="StunMessage" link="libnice-StunMessage.html#StunMessage"/>
+    <function name="struct StunMessage" link="libnice-StunMessage.html#StunMessage"/>
     <function name="enum StunClass" link="libnice-StunMessage.html#StunClass"/>
     <function name="enum StunMethod" link="libnice-StunMessage.html#StunMethod"/>
     <function name="enum StunAttribute" link="libnice-StunMessage.html#StunAttribute"/>

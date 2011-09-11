@@ -137,6 +137,7 @@ CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -174,6 +175,7 @@ LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 NM = @NM@
 NMEDIT = @NMEDIT@
@@ -202,6 +204,7 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
@@ -310,12 +313,12 @@ libagent_la_SOURCES = \
 	$(BUILT_SOURCES)
 
 libagent_la_LIBADD = \
-	$(top_builddir)/random/librandom.la \
+	$(top_builddir)/random/libnice-random.la \
 	$(top_builddir)/socket/libsocket.la \
 	$(top_builddir)/stun/libstun.la
 
 libagent_la_DEPENDENCIES = \
-	$(top_builddir)/random/librandom.la \
+	$(top_builddir)/random/libnice-random.la \
 	$(top_builddir)/socket/libsocket.la \
 	$(top_builddir)/stun/libstun.la
 
@@ -647,12 +650,12 @@ check-valgrind:
 .PHONY: check-valgrind
 
 agent-signals-marshal.h: agent-signals-marshal.list
-	glib-genmarshal --header --prefix=agent_marshal $< > $@
+	glib-genmarshal --header --prefix=agent_marshal $? > $@
 
-agent-signals-marshal.c: agent-signals-marshal.list Makefile.am
-	glib-genmarshal --body --prefix=agent_marshal $< > $@
-	sed -i "1i#include \"agent-signals-marshal.h\"" $@
-	sed -i -e 's/^}$$/(void)return_value;(void)invocation_hint;}/' $@
+agent-signals-marshal.c: agent-signals-marshal.list
+	echo '#include "agent-signals-marshal.h"' > $@
+	glib-genmarshal --body --prefix=agent_marshal $? | \
+	sed -e 's/^}$$/(void)return_value;(void)invocation_hint;}/' >> $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
