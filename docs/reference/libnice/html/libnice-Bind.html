@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Bind</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch04.html" title="STUN usages">
 <link rel="prev" href="ch04.html" title="STUN usages">
 <link rel="next" href="libnice-ICE.html" title="ICE">
-<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -26,7 +26,7 @@
                   <a href="#libnice-Bind.description" class="shortcut">Description</a>
 </td></tr>
 </table>
-<div class="refentry" title="Bind">
+<div class="refentry">
 <a name="libnice-Bind"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -35,27 +35,27 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsect1" title="Stability Level">
+<div class="refsect1">
 <a name="libnice-Bind.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv" title="Synopsis">
+<div class="refsynopsisdiv">
 <a name="libnice-Bind.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
 #include &lt;stun/usages/bind.h&gt;
 
 enum                <a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn">StunUsageBindReturn</a>;
 <span class="returnvalue">size_t</span>              <a class="link" href="libnice-Bind.html#stun-usage-bind-create" title="stun_usage_bind_create ()">stun_usage_bind_create</a>              (<em class="parameter"><code><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> *agent</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *buffer</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> buffer_len</code></em>);
-<a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  <a class="link" href="libnice-Bind.html#stun-usage-bind-process" title="stun_usage_bind_process ()">stun_usage_bind_process</a>            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+<a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  <a class="link" href="libnice-Bind.html#stun-usage-bind-process" title="stun_usage_bind_process ()">stun_usage_bind_process</a>            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *alternate_server</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *alternate_server_len</code></em>);
 <span class="returnvalue">size_t</span>              <a class="link" href="libnice-Bind.html#stun-usage-bind-keepalive" title="stun_usage_bind_keepalive ()">stun_usage_bind_keepalive</a>           (<em class="parameter"><code><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> *agent</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *buf</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> len</code></em>);
 <a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  <a class="link" href="libnice-Bind.html#stun-usage-bind-run" title="stun_usage_bind_run ()">stun_usage_bind_run</a>                (<em class="parameter"><code>const <span class="type">struct sockaddr</span> *srv</code></em>,
@@ -64,7 +64,7 @@ enum                <a class="link" href="libnice-Bind.html#StunUsageBindReturn"
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>);
 </pre>
 </div>
-<div class="refsect1" title="Description">
+<div class="refsect1">
 <a name="libnice-Bind.description"></a><h2>Description</h2>
 <p>
 The STUN Binding usage allows for easily creating and parsing STUN Binding
@@ -72,9 +72,9 @@ requests and responses. It offers both an asynchronous and a synchronous API
 that uses the STUN timer usage.
 </p>
 </div>
-<div class="refsect1" title="Details">
+<div class="refsect1">
 <a name="libnice-Bind.details"></a><h2>Details</h2>
-<div class="refsect2" title="enum StunUsageBindReturn">
+<div class="refsect2">
 <a name="StunUsageBindReturn"></a><h3>enum StunUsageBindReturn</h3>
 <pre class="programlisting">typedef enum {
   STUN_USAGE_BIND_RETURN_SUCCESS,
@@ -122,10 +122,10 @@ timed out.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="stun_usage_bind_create ()">
+<div class="refsect2">
 <a name="stun-usage-bind-create"></a><h3>stun_usage_bind_create ()</h3>
 <pre class="programlisting"><span class="returnvalue">size_t</span>              stun_usage_bind_create              (<em class="parameter"><code><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> *agent</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *buffer</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> buffer_len</code></em>);</pre>
 <p>
@@ -136,17 +136,15 @@ Create a new STUN binding request to use with a STUN server.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> to use to create the binding request
-</td>
+<td>The <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> to use to create the binding request</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
-<td>The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> to build
-</td>
+<td>The <a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> to build</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>buffer</code></em> :</span></p></td>
-<td>The buffer to use for creating the <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a>
+<td>The buffer to use for creating the <a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a>
 </td>
 </tr>
 <tr>
@@ -156,16 +154,15 @@ Create a new STUN binding request to use with a STUN server.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The length of the built message.
-</td>
+<td>The length of the built message.</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="stun_usage_bind_process ()">
+<div class="refsect2">
 <a name="stun-usage-bind-process"></a><h3>stun_usage_bind_process ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  stun_usage_bind_process            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+<pre class="programlisting"><a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  stun_usage_bind_process            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *alternate_server</code></em>,
@@ -179,20 +176,17 @@ message. Also checks for the ALTERNATE-SERVER attribute.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
-<td>The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> to process
-</td>
+<td>The <a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> to process</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>addr</code></em> :</span></p></td>
 <td>A pointer to a <span class="type">sockaddr</span> structure to fill with the mapped address
-that the STUN server gives us
-</td>
+that the STUN server gives us</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>addrlen</code></em> :</span></p></td>
 <td>The length of <em class="parameter"><code>add</code></em>. rMust be set to the size of the <em class="parameter"><code>addr</code></em> socket
-address and will be set to the actual length of the socket address.
-</td>
+address and will be set to the actual length of the socket address.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>alternate_server</code></em> :</span></p></td>
@@ -207,23 +201,21 @@ of the function is <a class="link" href="libnice-Bind.html#STUN-USAGE-BIND-RETUR
 <td><p><span class="term"><em class="parameter"><code>alternate_server_len</code></em> :</span></p></td>
 <td>The length of <em class="parameter"><code>alternate_server</code></em>. Must be set to
 the size of the <em class="parameter"><code>alternate_server</code></em> socket address and will be set to the
-actual length of the socket address.
-</td>
+actual length of the socket address.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> A <a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="type">StunUsageBindReturn</span></a> value.
-Note that <a class="link" href="libnice-Bind.html#STUN-USAGE-BIND-RETURN-TIMEOUT:CAPS"><span class="type">STUN_USAGE_BIND_RETURN_TIMEOUT</span></a> cannot be returned by this function
-</td>
+<td>A <a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="type">StunUsageBindReturn</span></a> value.
+Note that <a class="link" href="libnice-Bind.html#STUN-USAGE-BIND-RETURN-TIMEOUT:CAPS"><span class="type">STUN_USAGE_BIND_RETURN_TIMEOUT</span></a> cannot be returned by this function</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="stun_usage_bind_keepalive ()">
+<div class="refsect2">
 <a name="stun-usage-bind-keepalive"></a><h3>stun_usage_bind_keepalive ()</h3>
 <pre class="programlisting"><span class="returnvalue">size_t</span>              stun_usage_bind_keepalive           (<em class="parameter"><code><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> *agent</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *buf</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> len</code></em>);</pre>
 <p>
@@ -236,17 +228,15 @@ and it can only be used as a keepalive message.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> to use to build the message
-</td>
+<td>The <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> to use to build the message</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
-<td>The <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a> to build
-</td>
+<td>The <a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> to build</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>buf</code></em> :</span></p></td>
-<td>The buffer to use for creating the <a class="link" href="libnice-StunMessage.html#StunMessage" title="StunMessage"><span class="type">StunMessage</span></a>
+<td>The buffer to use for creating the <a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a>
 </td>
 </tr>
 <tr>
@@ -256,14 +246,13 @@ and it can only be used as a keepalive message.
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The length of the message to send
-</td>
+<td>The length of the message to send</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="stun_usage_bind_run ()">
+<div class="refsect2">
 <a name="stun-usage-bind-run"></a><h3>stun_usage_bind_run ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  stun_usage_bind_run                (<em class="parameter"><code>const <span class="type">struct sockaddr</span> *srv</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> srvlen</code></em>,
@@ -280,8 +269,7 @@ use the <a class="link" href="libnice-Timer.html#StunTimer" title="StunTimer"><s
 <tr>
 <td><p><span class="term"><em class="parameter"><code>srv</code></em> :</span></p></td>
 <td>A pointer to the <span class="type">sockaddr</span> structure representing the STUN server's
-address
-</td>
+address</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>srvlen</code></em> :</span></p></td>
@@ -291,8 +279,7 @@ address
 <tr>
 <td><p><span class="term"><em class="parameter"><code>addr</code></em> :</span></p></td>
 <td>A pointer to a <span class="type">sockaddr</span> structure to fill with the mapped address
-that the STUN server gives us
-</td>
+that the STUN server gives us</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>addrlen</code></em> :</span></p></td>
@@ -301,7 +288,7 @@ that the STUN server gives us
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> A <a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="type">StunUsageBindReturn</span></a>.
+<td>A <a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="type">StunUsageBindReturn</span></a>.
 Possible return values are <a class="link" href="libnice-Bind.html#STUN-USAGE-BIND-RETURN-SUCCESS:CAPS"><span class="type">STUN_USAGE_BIND_RETURN_SUCCESS</span></a>,
 <a class="link" href="libnice-Bind.html#STUN-USAGE-BIND-RETURN-ERROR:CAPS"><span class="type">STUN_USAGE_BIND_RETURN_ERROR</span></a> and <a class="link" href="libnice-Bind.html#STUN-USAGE-BIND-RETURN-TIMEOUT:CAPS"><span class="type">STUN_USAGE_BIND_RETURN_TIMEOUT</span></a>
 </td>
@@ -313,6 +300,6 @@ Possible return values are <a class="link" href="libnice-Bind.html#STUN-USAGE-BI
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.15</div>
+          Generated by GTK-Doc V1.17</div>
 </body>
 </html>

@@ -3,7 +3,7 @@ AC_PREREQ(2.59c)
 
 dnl releases only do -Wall, cvs and prerelease does -Werror too
 dnl use a three digit version number for releases, and four for cvs/prerelease
-AC_INIT(libnice, 0.1.0)
+AC_INIT(libnice, 0.1.1)
 LIBNICE_RELEASE="yes"
 
 AC_CONFIG_SRCDIR([agent/agent.c])
@@ -34,7 +34,7 @@ AC_CONFIG_FILES([
 #    If there was an incompatible interface change:
 #      Increment CURRENT. Set AGE and REVISION to 0
 LIBNICE_CURRENT=10
-LIBNICE_REVISION=0
+LIBNICE_REVISION=1
 LIBNICE_AGE=0
 LIBNICE_LIBVERSION=${LIBNICE_CURRENT}:${LIBNICE_REVISION}:${LIBNICE_AGE}
 LIBNICE_LT_LDFLAGS="-version-info ${LIBNICE_LIBVERSION}"
@@ -153,6 +153,14 @@ AS_IF([test "${enable_coverage}" != "no"], [
 	CCACHE_DISABLE=1
 ])
 AC_SUBST(CCACHE_DISABLE)
+
+case $host_os in
+  solaris*)
+    LDFLAGS="$LDFLAGS -lsocket -lnls"
+    ;;
+  *)
+    ;;
+esac
 
 # check for gtk-doc
 GTK_DOC_CHECK(1.9)

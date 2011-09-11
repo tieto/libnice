@@ -430,7 +430,6 @@ static gboolean priv_conn_check_tick_unlocked (gpointer pointer)
         Component *component = j->data;
         priv_update_check_list_state_for_ready (agent, stream, component);
       }
-      stream->conncheck_state = NICE_CHECKLIST_COMPLETED;
     }
 
     /* Stopping the timer so destroy the source.. this will allow
@@ -502,13 +501,7 @@ static gboolean priv_conn_keepalive_retransmissions_tick (gpointer pointer)
               "but media was received. Suspecting keepalive lost because of "
               "network bottleneck", pair->keepalive.agent);
 
-          if (pair->keepalive.tick_source) {
-            g_source_destroy (pair->keepalive.tick_source);
-            g_source_unref (pair->keepalive.tick_source);
-            pair->keepalive.tick_source = NULL;
-          }
           pair->keepalive.stun_message.buffer = NULL;
-
         } else {
           nice_debug ("Agent %p : Keepalive conncheck timed out!! "
               "peer probably lost connection", pair->keepalive.agent);
@@ -1276,10 +1269,6 @@ static void priv_add_new_check_pair (NiceAgent *agent, guint stream_id, Componen
   pair->nominated = use_candidate;
   pair->controlling = agent->controlling_mode;
 
-  /* note: for the first added check */
-  if (!stream->conncheck_list)
-    stream->conncheck_state = NICE_CHECKLIST_RUNNING;
-
   nice_debug ("Agent %p : added a new conncheck %p with foundation of '%s' to list %u.", agent, pair, pair->foundation, stream_id);
 
   /* implement the hard upper limit for number of
@@ -1369,7 +1358,6 @@ void conn_check_free (NiceAgent *agent)
       g_slist_foreach (stream->conncheck_list, conn_check_free_item, NULL);
       g_slist_free (stream->conncheck_list),
 	stream->conncheck_list = NULL;
-      stream->conncheck_state = NICE_CHECKLIST_NOT_STARTED;
     }
   }
 
@@ -1405,10 +1393,8 @@ gboolean conn_check_prune_stream (NiceAgent *agent, Stream *stream)
       break;
   }
 
-  if (!stream->conncheck_list) {
-    stream->conncheck_state = NICE_CHECKLIST_NOT_STARTED;
+  if (!stream->conncheck_list)
     conn_check_free (agent);
-  }
 
   /* return FALSE if there was a memory allocation failure */
   if (stream->conncheck_list == NULL && i != NULL)
@@ -1666,12 +1652,18 @@ int conn_check_send (NiceAgent *agent, CandidateCheckPair *pair)
       g_get_current_time (&pair->next_tick);
       g_time_val_add (&pair->next_tick, timeout * 1000);
     } else {
+      nice_debug ("Agent %p: buffer is empty, cancelling conncheck", agent);
       pair->stun_message.buffer = NULL;
       pair->stun_message.buffer_len = 0;
       return -1;
     }
+  } else {
+      nice_debug ("Agent %p: no credentials found, cancelling conncheck", agent);
+      pair->stun_message.buffer = NULL;
+      pair->stun_message.buffer_len = 0;
+      return -1;
   }
-    
+
   return 0;
 }
 
@@ -1765,8 +1757,17 @@ static gboolean priv_schedule_triggered_check (NiceAgent *agent, Stream *stream,
 	  priv_conn_check_initiate (agent, p);
         else if (p->state == NICE_CHECK_IN_PROGRESS) {
 	  /* XXX: according to ICE 7.2.1.4 "Triggered Checks" (ID-19),
-	   * we should cancel the existing one, and send a new one...? :P */
-	  nice_debug ("Agent %p : Skipping triggered check, already in progress..", agent);
+	   * we should cancel the existing one, instead we reset our timer, so
+	   * we'll resend the exiting transactions faster if needed...? :P
+	   */
+	  nice_debug ("Agent %p : check already in progress, "
+	    "restarting the timer again?: %s ..", agent,
+            p->timer_restarted ? "no" : "yes");
+	  if (!p->timer_restarted) {
+	    stun_timer_start (&p->timer, STUN_TIMER_DEFAULT_TIMEOUT,
+	      STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS);
+	    p->timer_restarted = TRUE;
+	  }
 	}
 	else if (p->state == NICE_CHECK_SUCCEEDED ||
 		 p->state == NICE_CHECK_DISCOVERED) {

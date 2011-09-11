@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>NiceAgent</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch01.html" title="">
 <link rel="prev" href="ch01.html" title="">
 <link rel="next" href="libnice-NiceAddress.html" title="NiceAddress">
-<meta name="generator" content="GTK-Doc V1.15 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -32,7 +32,7 @@
                   <a href="#NiceAgent.signals" class="shortcut">Signals</a>
 </td></tr>
 </table>
-<div class="refentry" title="NiceAgent">
+<div class="refentry">
 <a name="NiceAgent"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
@@ -41,11 +41,11 @@
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsect1" title="Stability Level">
+<div class="refsect1">
 <a name="NiceAgent.stability-level"></a><h2>Stability Level</h2>
 Stable, unless otherwise indicated
 </div>
-<div class="refsynopsisdiv" title="Synopsis">
+<div class="refsynopsisdiv">
 <a name="NiceAgent.synopsis"></a><h2>Synopsis</h2>
 <pre class="synopsis">
 #include &lt;agent.h&gt;
@@ -125,7 +125,7 @@ enum                <a class="link" href="NiceAgent.html#NiceCompatibility" titl
                                                         (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> component_id</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> *candidate</code></em>);
+                                                         <em class="parameter"><code><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="struct NiceCandidate"><span class="type">NiceCandidate</span></a> *candidate</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="NiceAgent.html#nice-agent-set-stream-tos" title="nice_agent_set_stream_tos ()">nice_agent_set_stream_tos</a>           (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> tos</code></em>);
@@ -134,14 +134,14 @@ enum                <a class="link" href="NiceAgent.html#NiceCompatibility" titl
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="NiceAgent.html#nice-agent-restart" title="nice_agent_restart ()">nice_agent_restart</a>                  (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>);
 </pre>
 </div>
-<div class="refsect1" title="Object Hierarchy">
+<div class="refsect1">
 <a name="NiceAgent.object-hierarchy"></a><h2>Object Hierarchy</h2>
 <pre class="synopsis">
   <a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObject">GObject</a>
    +----NiceAgent
 </pre>
 </div>
-<div class="refsect1" title="Properties">
+<div class="refsect1">
 <a name="NiceAgent.properties"></a><h2>Properties</h2>
 <pre class="synopsis">
   "<a class="link" href="NiceAgent.html#NiceAgent--compatibility" title='The "compatibility" property'>compatibility</a>"            <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write / Construct Only
@@ -162,19 +162,19 @@ enum                <a class="link" href="NiceAgent.html#NiceCompatibility" titl
   "<a class="link" href="NiceAgent.html#NiceAgent--upnp-timeout" title='The "upnp-timeout" property'>upnp-timeout</a>"             <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write / Construct
 </pre>
 </div>
-<div class="refsect1" title="Signals">
+<div class="refsect1">
 <a name="NiceAgent.signals"></a><h2>Signals</h2>
 <pre class="synopsis">
-  "<a class="link" href="NiceAgent.html#NiceAgent-candidate-gathering-done" title='The "candidate-gathering-done" signal'>candidate-gathering-done</a>"                       : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-component-state-changed" title='The "component-state-changed" signal'>component-state-changed</a>"                        : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-initial-binding-request-received" title='The "initial-binding-request-received" signal'>initial-binding-request-received</a>"               : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-new-candidate" title='The "new-candidate" signal'>new-candidate</a>"                                  : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-new-remote-candidate" title='The "new-remote-candidate" signal'>new-remote-candidate</a>"                           : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-new-selected-pair" title='The "new-selected-pair" signal'>new-selected-pair</a>"                              : Run Last
-  "<a class="link" href="NiceAgent.html#NiceAgent-reliable-transport-writable" title='The "reliable-transport-writable" signal'>reliable-transport-writable</a>"                    : Run Last
+  "<a class="link" href="NiceAgent.html#NiceAgent-candidate-gathering-done" title='The "candidate-gathering-done" signal'>candidate-gathering-done</a>"                       : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a>
+  "<a class="link" href="NiceAgent.html#NiceAgent-component-state-changed" title='The "component-state-changed" signal'>component-state-changed</a>"                        : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a>
+  "<a class="link" href="NiceAgent.html#NiceAgent-initial-binding-request-received" title='The "initial-binding-request-received" signal'>initial-binding-request-received</a>"               : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a>
+  "<a class="link" href="NiceAgent.html#NiceAgent-new-candidate" title='The "new-candidate" signal'>new-candidate</a>"                                  : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a>
+  "<a class="link" href="NiceAgent.html#NiceAgent-new-remote-candidate" title='The "new-remote-candidate" signal'>new-remote-candidate</a>"                           : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a>
+  "<a class="link" href="NiceAgent.html#NiceAgent-new-selected-pair" title='The "new-selected-pair" signal'>new-selected-pair</a>"                              : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a>
+  "<a class="link" href="NiceAgent.html#NiceAgent-reliable-transport-writable" title='The "reliable-transport-writable" signal'>reliable-transport-writable</a>"                    : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a>
 </pre>
 </div>
-<div class="refsect1" title="Description">
+<div class="refsect1">
 <a name="NiceAgent.description"></a><h2>Description</h2>
 <p>
 The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> is your main object when using libnice.
@@ -185,7 +185,7 @@ It will take care of discovering your local candidates and do
 <p>
  </p>
 <div class="example">
-<a name="id3024316"></a><p class="title"><b>Example 1. Simple example on how to use libnice</b></p>
+<a name="id2682348"></a><p class="title"><b>Example 1. Simple example on how to use libnice</b></p>
 <div class="example-contents">
   <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
     <tbody>
@@ -273,9 +273,9 @@ It will take care of discovering your local candidates and do
 <p><br class="example-break">
 </p>
 </div>
-<div class="refsect1" title="Details">
+<div class="refsect1">
 <a name="NiceAgent.details"></a><h2>Details</h2>
-<div class="refsect2" title="NiceAgent">
+<div class="refsect2">
 <a name="NiceAgent-struct"></a><h3>NiceAgent</h3>
 <pre class="programlisting">typedef struct _NiceAgent NiceAgent;</pre>
 <p>
@@ -284,7 +284,7 @@ the ICE agent.
 </p>
 </div>
 <hr>
-<div class="refsect2" title="enum NiceComponentState">
+<div class="refsect2">
 <a name="NiceComponentState"></a><h3>enum NiceComponentState</h3>
 <pre class="programlisting">typedef enum
 {
@@ -347,7 +347,7 @@ but connectivity was not established
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="enum NiceComponentType">
+<div class="refsect2">
 <a name="NiceComponentType"></a><h3>enum NiceComponentType</h3>
 <pre class="programlisting">typedef enum
 {
@@ -360,7 +360,7 @@ Convenience enum representing the type of a component for use as the
 component_id for RTP/RTCP usages.
  </p>
 <div class="example">
-<a name="id3024641"></a><p class="title"><b>Example 2. Example of use.</b></p>
+<a name="id2682672"></a><p class="title"><b>Example 2. Example of use.</b></p>
 <div class="example-contents">
   <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
     <tbody>
@@ -392,7 +392,7 @@ component_id for RTP/RTCP usages.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="enum NiceProxyType">
+<div class="refsect2">
 <a name="NiceProxyType"></a><h3>enum NiceProxyType</h3>
 <pre class="programlisting">typedef enum
 {
@@ -437,7 +437,7 @@ Note that the proxies will only be used with TCP TURN relaying.
 <p class="since">Since 0.0.4</p>
 </div>
 <hr>
-<div class="refsect2" title="enum NiceCompatibility">
+<div class="refsect2">
 <a name="NiceCompatibility"></a><h3>enum NiceCompatibility</h3>
 <pre class="programlisting">typedef enum
 {
@@ -457,7 +457,7 @@ Use with <a class="link" href="NiceAgent.html#nice-agent-new" title="nice_agent_
 </p>
 <p>
 </p>
-<div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Warning</h3>
 <em class="parameter"><code>NICE_COMPATIBILITY_DRAFT19</code></em> is deprecated and should not be used
 in newly-written code. It is kept for compatibility reasons and
@@ -513,7 +513,7 @@ represents the same compatibility as <em class="parameter"><code>NICE_COMPATIBIL
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="NiceAgentRecvFunc ()">
+<div class="refsect2">
 <a name="NiceAgentRecvFunc"></a><h3>NiceAgentRecvFunc ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                (*NiceAgentRecvFunc)                (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -529,29 +529,24 @@ Callback function when data is received on a component
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The id of the stream
-</td>
+<td>The id of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
 <td>The id of the component of the stream
-       which received the data
-</td>
+which received the data</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>len</code></em> :</span></p></td>
-<td>The length of the data
-</td>
+<td>The length of the data</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>buf</code></em> :</span></p></td>
-<td>The buffer containing the data received
-</td>
+<td>The buffer containing the data received</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
@@ -562,7 +557,7 @@ Callback function when data is received on a component
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="NICE_AGENT_MAX_REMOTE_CANDIDATES">
+<div class="refsect2">
 <a name="NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS"></a><h3>NICE_AGENT_MAX_REMOTE_CANDIDATES</h3>
 <pre class="programlisting">#define NICE_AGENT_MAX_REMOTE_CANDIDATES    25
 </pre>
@@ -573,7 +568,7 @@ clients.
 </p>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_new ()">
+<div class="refsect2">
 <a name="nice-agent-new"></a><h3>nice_agent_new ()</h3>
 <pre class="programlisting"><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="returnvalue">NiceAgent</span></a> *         nice_agent_new                      (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-The-Main-Event-Loop.html#GMainContext"><span class="type">GMainContext</span></a> *ctx</code></em>,
                                                          <em class="parameter"><code><a class="link" href="NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility"><span class="type">NiceCompatibility</span></a> compat</code></em>);</pre>
@@ -586,24 +581,21 @@ The returned object must be freed with <a href="http://library.gnome.org/devel/g
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
-<td>The Glib Mainloop Context to use for timers
-</td>
+<td>The Glib Mainloop Context to use for timers</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>compat</code></em> :</span></p></td>
-<td>The compatibility mode of the agent
-</td>
+<td>The compatibility mode of the agent</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The new agent GObject
-</td>
+<td>The new agent GObject</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_new_reliable ()">
+<div class="refsect2">
 <a name="nice-agent-new-reliable"></a><h3>nice_agent_new_reliable ()</h3>
 <pre class="programlisting"><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="returnvalue">NiceAgent</span></a> *         nice_agent_new_reliable             (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-The-Main-Event-Loop.html#GMainContext"><span class="type">GMainContext</span></a> *ctx</code></em>,
                                                          <em class="parameter"><code><a class="link" href="NiceAgent.html#NiceCompatibility" title="enum NiceCompatibility"><span class="type">NiceCompatibility</span></a> compat</code></em>);</pre>
@@ -620,25 +612,22 @@ The returned object must be freed with <a href="http://library.gnome.org/devel/g
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
-<td>The Glib Mainloop Context to use for timers
-</td>
+<td>The Glib Mainloop Context to use for timers</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>compat</code></em> :</span></p></td>
-<td>The compatibility mode of the agent
-</td>
+<td>The compatibility mode of the agent</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The new agent GObject
-</td>
+<td>The new agent GObject</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.0.11</p>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_add_local_address ()">
+<div class="refsect2">
 <a name="nice-agent-add-local-address"></a><h3>nice_agent_add_local_address ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_add_local_address        (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> *addr</code></em>);</pre>
@@ -660,25 +649,23 @@ See also: <a class="link" href="NiceAgent.html#nice-agent-gather-candidates" tit
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>addr</code></em> :</span></p></td>
 <td>The address to listen to
-If the port is 0, then a random port will be chosen by the system
-</td>
+If the port is 0, then a random port will be chosen by the system</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on fatal (memory allocation) errors
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on fatal (memory allocation) errors</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_set_port_range ()">
+<div class="refsect2">
 <a name="nice-agent-set-port-range"></a><h3>nice_agent_set_port_range ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                nice_agent_set_port_range           (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -704,34 +691,29 @@ This MUST be called before <a class="link" href="NiceAgent.html#nice-agent-gathe
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>min_port</code></em> :</span></p></td>
-<td>The minimum port to use
-</td>
+<td>The minimum port to use</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>max_port</code></em> :</span></p></td>
-<td>The maximum port to use
-</td>
+<td>The maximum port to use</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_add_stream ()">
+<div class="refsect2">
 <a name="nice-agent-add-stream"></a><h3>nice_agent_add_stream ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               nice_agent_add_stream               (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> n_components</code></em>);</pre>
@@ -743,24 +725,21 @@ Adds a data stream to <em class="parameter"><code>agent</code></em> containing <
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>n_components</code></em> :</span></p></td>
-<td>The number of components to add to the stream
-</td>
+<td>The number of components to add to the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The ID of the new stream, 0 on failure
-</td>
+<td>The ID of the new stream, 0 on failure</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_remove_stream ()">
+<div class="refsect2">
 <a name="nice-agent-remove-stream"></a><h3>nice_agent_remove_stream ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                nice_agent_remove_stream            (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>);</pre>
@@ -772,19 +751,17 @@ Remove and free a previously created data stream from <em class="parameter"><cod
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream to remove
-</td>
+<td>The ID of the stream to remove</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_set_relay_info ()">
+<div class="refsect2">
 <a name="nice-agent-set-relay-info"></a><h3>nice_agent_set_relay_info ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_set_relay_info           (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -802,55 +779,47 @@ Sets the settings for using a relay server during the candidate discovery.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>server_ip</code></em> :</span></p></td>
-<td>The IP address of the TURN server
-</td>
+<td>The IP address of the TURN server</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>server_port</code></em> :</span></p></td>
-<td>The port of the TURN server
-</td>
+<td>The port of the TURN server</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>username</code></em> :</span></p></td>
-<td>The TURN username to use for the allocate
-</td>
+<td>The TURN username to use for the allocate</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>password</code></em> :</span></p></td>
-<td>The TURN password to use for the allocate
-</td>
+<td>The TURN password to use for the allocate</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
-<td>The type of relay to use
-</td>
+<td>The type of relay to use</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the TURN settings were accepted.
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the address was invalid.
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the TURN settings were accepted.
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the address was invalid.</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_gather_candidates ()">
+<div class="refsect2">
 <a name="nice-agent-gather-candidates"></a><h3>nice_agent_gather_candidates ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_gather_candidates        (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>);</pre>
@@ -871,29 +840,27 @@ Once done, <a class="link" href="NiceAgent.html#NiceAgent-candidate-gathering-do
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The id of the stream to start
-</td>
+<td>The id of the stream to start</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the stream id is invalid or if a host candidate couldn't be allocated
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the stream id is invalid or if a host candidate couldn't be allocated
 on the requested interfaces/ports.
-
- <div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
-    Local addresses can be previously set with <a class="link" href="NiceAgent.html#nice-agent-add-local-address" title="nice_agent_add_local_address ()"><code class="function">nice_agent_add_local_address()</code></a>
-  </p>
+Local addresses can be previously set with <a class="link" href="NiceAgent.html#nice-agent-add-local-address" title="nice_agent_add_local_address ()"><code class="function">nice_agent_add_local_address()</code></a>
+</p>
 <p>
-    Since 0.0.5, If no local address was previously added, then the nice agent
-    will automatically detect the local address using
-    <a class="link" href="libnice-Network-interfaces-discovery.html#nice-interfaces-get-local-ips" title="nice_interfaces_get_local_ips ()"><code class="function">nice_interfaces_get_local_ips()</code></a>
-   </p>
+Since 0.0.5, If no local address was previously added, then the nice agent
+will automatically detect the local address using
+<a class="link" href="libnice-Network-interfaces-discovery.html#nice-interfaces-get-local-ips" title="nice_interfaces_get_local_ips ()"><code class="function">nice_interfaces_get_local_ips()</code></a>
+</p>
 </div>
 </td>
 </tr>
@@ -901,7 +868,7 @@ on the requested interfaces/ports.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_set_remote_credentials ()">
+<div class="refsect2">
 <a name="nice-agent-set-remote-credentials"></a><h3>nice_agent_set_remote_credentials ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_set_remote_credentials   (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -912,7 +879,7 @@ Sets the remote credentials for stream <em class="parameter"><code>stream_id</co
 </p>
 <p>
  </p>
-<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
      Stream credentials do not override per-candidate credentials if set
@@ -925,36 +892,32 @@ Sets the remote credentials for stream <em class="parameter"><code>stream_id</co
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>ufrag</code></em> :</span></p></td>
 <td>NULL-terminated string containing an ICE username fragment
-   (length must be between 22 and 256 chars)
-</td>
+(length must be between 22 and 256 chars)</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>pwd</code></em> :</span></p></td>
 <td>NULL-terminated string containing an ICE password
-   (length must be between 4 and 256 chars)
-</td>
+(length must be between 4 and 256 chars)</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on error.
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on error.</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_get_local_credentials ()">
+<div class="refsect2">
 <a name="nice-agent-get-local-credentials"></a><h3>nice_agent_get_local_credentials ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_get_local_credentials    (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -968,13 +931,11 @@ Gets the local credentials for stream <em class="parameter"><code>stream_id</cod
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>ufrag</code></em> :</span></p></td>
@@ -992,14 +953,14 @@ This string must be freed with <a href="http://library.gnome.org/devel/glib/unst
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on error.
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on error.</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_set_remote_candidates ()">
+<div class="refsect2">
 <a name="nice-agent-set-remote-candidates"></a><h3>nice_agent_set_remote_candidates ()</h3>
 <pre class="programlisting"><span class="returnvalue">int</span>                 nice_agent_set_remote_candidates    (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -1010,7 +971,7 @@ Sets, adds or updates the remote candidates for a component of a stream.
 </p>
 <p>
  </p>
-<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
     NICE_AGENT_MAX_REMOTE_CANDIDATES is the absolute maximum limit
@@ -1029,35 +990,30 @@ Sets, adds or updates the remote candidates for a component of a stream.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream the candidates are for
-</td>
+<td>The ID of the stream the candidates are for</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component the candidates are for
-</td>
+<td>The ID of the component the candidates are for</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>candidates</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> of <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> items describing each candidate to add
-</td>
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> of <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="struct NiceCandidate"><span class="type">NiceCandidate</span></a> items describing each candidate to add</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The number of candidates added, negative on errors (memory allocation
-or if the local candidates are not done gathering yet)
-</td>
+<td>The number of candidates added, negative on errors (memory allocation
+or if the local candidates are not done gathering yet)</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_get_remote_candidates ()">
+<div class="refsect2">
 <a name="nice-agent-get-remote-candidates"></a><h3>nice_agent_get_remote_candidates ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"><span class="returnvalue">GSList</span></a> *            nice_agent_get_remote_candidates    (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -1067,7 +1023,7 @@ Get a list of the remote candidates set on a stream's component
 </p>
 <p>
  </p>
-<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
      The caller owns the returned GSList but not the candidates
@@ -1086,22 +1042,19 @@ Get a list of the remote candidates set on a stream's component
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> of <a href="libnice-NiceCandidate.html#NiceCandidate"><span class="type">NiceCandidates</span></a> objects representing
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> of <a href="libnice-NiceCandidate.html#NiceCandidate"><span class="type">NiceCandidates</span></a> objects representing
 the remote candidates set on the <em class="parameter"><code>agent</code></em>
 </td>
 </tr>
@@ -1109,7 +1062,7 @@ the remote candidates set on the <em class="parameter"><code>agent</code></em>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_get_local_candidates ()">
+<div class="refsect2">
 <a name="nice-agent-get-local-candidates"></a><h3>nice_agent_get_local_candidates ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"><span class="returnvalue">GSList</span></a> *            nice_agent_get_local_candidates     (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -1120,7 +1073,7 @@ for a stream's component
 </p>
 <p>
  </p>
-<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
      The caller owns the returned GSList as well as the candidates contained
@@ -1136,22 +1089,19 @@ for a stream's component
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> a <a href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> of <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> objects representing
+<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> of <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="struct NiceCandidate"><span class="type">NiceCandidate</span></a> objects representing
 the local candidates of <em class="parameter"><code>agent</code></em>
 </td>
 </tr>
@@ -1159,7 +1109,7 @@ the local candidates of <em class="parameter"><code>agent</code></em>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_send ()">
+<div class="refsect2">
 <a name="nice-agent-send"></a><h3>nice_agent_send ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                nice_agent_send                     (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -1171,7 +1121,7 @@ Sends a data payload over a stream's component.
 </p>
 <p>
  </p>
-<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
      Component state MUST be NICE_COMPONENT_STATE_READY, or as a special case,
@@ -1201,39 +1151,33 @@ Sends a data payload over a stream's component.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream to send to
-</td>
+<td>The ID of the stream to send to</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component to send to
-</td>
+<td>The ID of the component to send to</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>len</code></em> :</span></p></td>
-<td>The length of the buffer to send
-</td>
+<td>The length of the buffer to send</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>buf</code></em> :</span></p></td>
-<td>The buffer of data to send
-</td>
+<td>The buffer of data to send</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> The number of bytes sent, or negative error code
-</td>
+<td>The number of bytes sent, or negative error code</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_attach_recv ()">
+<div class="refsect2">
 <a name="nice-agent-attach-recv"></a><h3>nice_agent_attach_recv ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_attach_recv              (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -1250,45 +1194,39 @@ order to be notified whenever data becomes available for a component.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of stream
-</td>
+<td>The ID of stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>ctx</code></em> :</span></p></td>
-<td>The Glib Mainloop Context to use for listening on the component
-</td>
+<td>The Glib Mainloop Context to use for listening on the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>func</code></em> :</span></p></td>
 <td>The callback function to be called when data is received on
-the stream's component
-</td>
+the stream's component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>data</code></em> :</span></p></td>
-<td>user data associated with the callback
-</td>
+<td>user data associated with the callback</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the stream or component IDs are invalid.
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the stream or component IDs are invalid.</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_set_selected_pair ()">
+<div class="refsect2">
 <a name="nice-agent-set-selected-pair"></a><h3>nice_agent_set_selected_pair ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_set_selected_pair        (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -1307,45 +1245,40 @@ continue to be sent.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>lfoundation</code></em> :</span></p></td>
-<td>The local foundation of the candidate to use
-</td>
+<td>The local foundation of the candidate to use</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>rfoundation</code></em> :</span></p></td>
-<td>The remote foundation of the candidate to use
-</td>
+<td>The remote foundation of the candidate to use</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the candidate pair cannot be found
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the candidate pair cannot be found</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_set_selected_remote_candidate ()">
+<div class="refsect2">
 <a name="nice-agent-set-selected-remote-candidate"></a><h3>nice_agent_set_selected_remote_candidate ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_set_selected_remote_candidate
                                                         (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> component_id</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> *candidate</code></em>);</pre>
+                                                         <em class="parameter"><code><a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="struct NiceCandidate"><span class="type">NiceCandidate</span></a> *candidate</code></em>);</pre>
 <p>
 Sets the selected remote candidate for media transmission
 for a given stream's component. This is used to force the selection of
@@ -1360,34 +1293,30 @@ continue to be sent.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>candidate</code></em> :</span></p></td>
-<td>The <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="NiceCandidate"><span class="type">NiceCandidate</span></a> to select
-</td>
+<td>The <a class="link" href="libnice-NiceCandidate.html#NiceCandidate" title="struct NiceCandidate"><span class="type">NiceCandidate</span></a> to select</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on failure
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on failure</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_set_stream_tos ()">
+<div class="refsect2">
 <a name="nice-agent-set-stream-tos"></a><h3>nice_agent_set_stream_tos ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                nice_agent_set_stream_tos           (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> stream_id</code></em>,
@@ -1400,25 +1329,22 @@ Sets the IP_TOS and/or IPV6_TCLASS field on the stream's sockets' options
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>tos</code></em> :</span></p></td>
-<td>The ToS to set
-</td>
+<td>The ToS to set</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.0.9</p>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_set_software ()">
+<div class="refsect2">
 <a name="nice-agent-set-software"></a><h3>nice_agent_set_software ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                nice_agent_set_software             (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>,
                                                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *software</code></em>);</pre>
@@ -1436,7 +1362,7 @@ and <a class="link" href="NiceAgent.html#NICE-COMPATIBILITY-WLM2009:CAPS"><span 
 </p>
 <p>
 </p>
-<div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
        The <em class="parameter"><code>software</code></em> argument will be appended with the libnice version before
@@ -1454,20 +1380,18 @@ and <a class="link" href="NiceAgent.html#NICE-COMPATIBILITY-WLM2009:CAPS"><span 
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>software</code></em> :</span></p></td>
-<td>The value of the SOFTWARE attribute to add.
-</td>
+<td>The value of the SOFTWARE attribute to add.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="since">Since 0.0.10</p>
 </div>
 <hr>
-<div class="refsect2" title="nice_agent_restart ()">
+<div class="refsect2">
 <a name="nice-agent-restart"></a><h3>nice_agent_restart ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            nice_agent_restart                  (<em class="parameter"><code><a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent</code></em>);</pre>
 <p>
@@ -1481,21 +1405,20 @@ needs to be called both when initiating (ICE spec section 9.1.1.1.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> Object</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td> <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on error
-</td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> on success <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> on error</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 </div>
-<div class="refsect1" title="Property Details">
+<div class="refsect1">
 <a name="NiceAgent.property-details"></a><h2>Property Details</h2>
-<div class="refsect2" title='The "compatibility" property'>
+<div class="refsect2">
 <a name="NiceAgent--compatibility"></a><h3>The <code class="literal">"compatibility"</code> property</h3>
 <pre class="programlisting">  "compatibility"            <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write / Construct Only</pre>
 <p>
@@ -1509,21 +1432,21 @@ what the application/peer needs.
 <p>Default value: 0</p>
 </div>
 <hr>
-<div class="refsect2" title='The "controlling-mode" property'>
+<div class="refsect2">
 <a name="NiceAgent--controlling-mode"></a><h3>The <code class="literal">"controlling-mode"</code> property</h3>
 <pre class="programlisting">  "controlling-mode"         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write</pre>
 <p>Whether the agent is in controlling mode.</p>
 <p>Default value: FALSE</p>
 </div>
 <hr>
-<div class="refsect2" title='The "full-mode" property'>
+<div class="refsect2">
 <a name="NiceAgent--full-mode"></a><h3>The <code class="literal">"full-mode"</code> property</h3>
 <pre class="programlisting">  "full-mode"                <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct Only</pre>
 <p>Whether agent runs in ICE full mode.</p>
 <p>Default value: TRUE</p>
 </div>
 <hr>
-<div class="refsect2" title='The "main-context" property'>
+<div class="refsect2">
 <a name="NiceAgent--main-context"></a><h3>The <code class="literal">"main-context"</code> property</h3>
 <pre class="programlisting">  "main-context"             <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>              : Read / Write / Construct Only</pre>
 <p>
@@ -1532,14 +1455,14 @@ This is a property being set by the <a class="link" href="NiceAgent.html#nice-ag
 </p>
 </div>
 <hr>
-<div class="refsect2" title='The "max-connectivity-checks" property'>
+<div class="refsect2">
 <a name="NiceAgent--max-connectivity-checks"></a><h3>The <code class="literal">"max-connectivity-checks"</code> property</h3>
 <pre class="programlisting">  "max-connectivity-checks"  <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write</pre>
 <p>Upper limit for the total number of connectivity checks performed.</p>
 <p>Default value: 0</p>
 </div>
 <hr>
-<div class="refsect2" title='The "proxy-ip" property'>
+<div class="refsect2">
 <a name="NiceAgent--proxy-ip"></a><h3>The <code class="literal">"proxy-ip"</code> property</h3>
 <pre class="programlisting">  "proxy-ip"                 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write</pre>
 <p>
@@ -1549,7 +1472,7 @@ The proxy server IP used to bypass a proxy firewall
 <p class="since">Since 0.0.4</p>
 </div>
 <hr>
-<div class="refsect2" title='The "proxy-password" property'>
+<div class="refsect2">
 <a name="NiceAgent--proxy-password"></a><h3>The <code class="literal">"proxy-password"</code> property</h3>
 <pre class="programlisting">  "proxy-password"           <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write</pre>
 <p>
@@ -1559,7 +1482,7 @@ The password used to authenticate with the proxy
 <p class="since">Since 0.0.4</p>
 </div>
 <hr>
-<div class="refsect2" title='The "proxy-port" property'>
+<div class="refsect2">
 <a name="NiceAgent--proxy-port"></a><h3>The <code class="literal">"proxy-port"</code> property</h3>
 <pre class="programlisting">  "proxy-port"               <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write</pre>
 <p>
@@ -1570,7 +1493,7 @@ The proxy server port used to bypass a proxy firewall
 <p class="since">Since 0.0.4</p>
 </div>
 <hr>
-<div class="refsect2" title='The "proxy-type" property'>
+<div class="refsect2">
 <a name="NiceAgent--proxy-type"></a><h3>The <code class="literal">"proxy-type"</code> property</h3>
 <pre class="programlisting">  "proxy-type"               <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write</pre>
 <p>
@@ -1581,7 +1504,7 @@ The type of proxy set in the proxy-ip property
 <p class="since">Since 0.0.4</p>
 </div>
 <hr>
-<div class="refsect2" title='The "proxy-username" property'>
+<div class="refsect2">
 <a name="NiceAgent--proxy-username"></a><h3>The <code class="literal">"proxy-username"</code> property</h3>
 <pre class="programlisting">  "proxy-username"           <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write</pre>
 <p>
@@ -1591,7 +1514,7 @@ The username used to authenticate with the proxy
 <p class="since">Since 0.0.4</p>
 </div>
 <hr>
-<div class="refsect2" title='The "reliable" property'>
+<div class="refsect2">
 <a name="NiceAgent--reliable"></a><h3>The <code class="literal">"reliable"</code> property</h3>
 <pre class="programlisting">  "reliable"                 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct Only</pre>
 <p>
@@ -1602,7 +1525,7 @@ of messages
 <p class="since">Since 0.0.11</p>
 </div>
 <hr>
-<div class="refsect2" title='The "stun-pacing-timer" property'>
+<div class="refsect2">
 <a name="NiceAgent--stun-pacing-timer"></a><h3>The <code class="literal">"stun-pacing-timer"</code> property</h3>
 <pre class="programlisting">  "stun-pacing-timer"        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write / Construct Only</pre>
 <p>Timer 'Ta' (msecs) used in the IETF ICE specification for pacing candidate gathering and sending of connectivity checks.</p>
@@ -1610,14 +1533,14 @@ of messages
 <p>Default value: 20</p>
 </div>
 <hr>
-<div class="refsect2" title='The "stun-server" property'>
+<div class="refsect2">
 <a name="NiceAgent--stun-server"></a><h3>The <code class="literal">"stun-server"</code> property</h3>
 <pre class="programlisting">  "stun-server"              <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write</pre>
 <p>The IP address (not the hostname) of the STUN server to use.</p>
 <p>Default value: NULL</p>
 </div>
 <hr>
-<div class="refsect2" title='The "stun-server-port" property'>
+<div class="refsect2">
 <a name="NiceAgent--stun-server-port"></a><h3>The <code class="literal">"stun-server-port"</code> property</h3>
 <pre class="programlisting">  "stun-server-port"         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write</pre>
 <p>Port of the STUN server used to gather server-reflexive candidates.</p>
@@ -1625,7 +1548,7 @@ of messages
 <p>Default value: 1</p>
 </div>
 <hr>
-<div class="refsect2" title='The "upnp" property'>
+<div class="refsect2">
 <a name="NiceAgent--upnp"></a><h3>The <code class="literal">"upnp"</code> property</h3>
 <pre class="programlisting">  "upnp"                     <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write / Construct</pre>
 <p>
@@ -1636,7 +1559,7 @@ get the external IP
 <p class="since">Since 0.0.7</p>
 </div>
 <hr>
-<div class="refsect2" title='The "upnp-timeout" property'>
+<div class="refsect2">
 <a name="NiceAgent--upnp-timeout"></a><h3>The <code class="literal">"upnp-timeout"</code> property</h3>
 <pre class="programlisting">  "upnp-timeout"             <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write / Construct</pre>
 <p>
@@ -1648,13 +1571,13 @@ signaling the <a class="link" href="NiceAgent.html#NiceAgent-candidate-gathering
 <p class="since">Since 0.0.7</p>
 </div>
 </div>
-<div class="refsect1" title="Signal Details">
+<div class="refsect1">
 <a name="NiceAgent.signal-details"></a><h2>Signal Details</h2>
-<div class="refsect2" title='The "candidate-gathering-done" signal'>
+<div class="refsect2">
 <a name="NiceAgent-candidate-gathering-done"></a><h3>The <code class="literal">"candidate-gathering-done"</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      stream_id,
-                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)      : Run Last</pre>
+                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)      : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a></pre>
 <p>
 This signal is fired whenever a stream has finished gathering its
 candidates after a call to <a class="link" href="NiceAgent.html#nice-agent-gather-candidates" title="nice_agent_gather_candidates ()"><code class="function">nice_agent_gather_candidates()</code></a>
@@ -1664,13 +1587,11 @@ candidates after a call to <a class="link" href="NiceAgent.html#nice-agent-gathe
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
@@ -1680,13 +1601,13 @@ candidates after a call to <a class="link" href="NiceAgent.html#nice-agent-gathe
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title='The "component-state-changed" signal'>
+<div class="refsect2">
 <a name="NiceAgent-component-state-changed"></a><h3>The <code class="literal">"component-state-changed"</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      stream_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      component_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      state,
-                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : Run Last</pre>
+                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a></pre>
 <p>
 This signal is fired whenever a component's state changes
 </p>
@@ -1695,23 +1616,19 @@ This signal is fired whenever a component's state changes
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>state</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html#NiceComponentState" title="enum NiceComponentState"><span class="type">NiceComponentState</span></a> of the component
-</td>
+<td>The <a class="link" href="NiceAgent.html#NiceComponentState" title="enum NiceComponentState"><span class="type">NiceComponentState</span></a> of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
@@ -1721,11 +1638,11 @@ This signal is fired whenever a component's state changes
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title='The "initial-binding-request-received" signal'>
+<div class="refsect2">
 <a name="NiceAgent-initial-binding-request-received"></a><h3>The <code class="literal">"initial-binding-request-received"</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      stream_id,
-                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)      : Run Last</pre>
+                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)      : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a></pre>
 <p>
 This signal is fired when we received our first binding request from
 the peer.
@@ -1735,13 +1652,11 @@ the peer.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
@@ -1751,13 +1666,13 @@ the peer.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title='The "new-candidate" signal'>
+<div class="refsect2">
 <a name="NiceAgent-new-candidate"></a><h3>The <code class="literal">"new-candidate"</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      stream_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      component_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>     *foundation,
-                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : Run Last</pre>
+                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a></pre>
 <p>
 This signal is fired when the agent discovers a new candidate
 </p>
@@ -1769,23 +1684,19 @@ This signal is fired when the agent discovers a new candidate
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>foundation</code></em> :</span></p></td>
-<td>The foundation of the new candidate
-</td>
+<td>The foundation of the new candidate</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
@@ -1795,13 +1706,13 @@ This signal is fired when the agent discovers a new candidate
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title='The "new-remote-candidate" signal'>
+<div class="refsect2">
 <a name="NiceAgent-new-remote-candidate"></a><h3>The <code class="literal">"new-remote-candidate"</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      stream_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      component_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>     *foundation,
-                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : Run Last</pre>
+                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a></pre>
 <p>
 This signal is fired when the agent discovers a new remote candidate.
 This can happen with peer reflexive candidates.
@@ -1811,23 +1722,19 @@ This can happen with peer reflexive candidates.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>foundation</code></em> :</span></p></td>
-<td>The foundation of the new candidate
-</td>
+<td>The foundation of the new candidate</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
@@ -1837,14 +1744,14 @@ This can happen with peer reflexive candidates.
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title='The "new-selected-pair" signal'>
+<div class="refsect2">
 <a name="NiceAgent-new-selected-pair"></a><h3>The <code class="literal">"new-selected-pair"</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      stream_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      component_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>     *lfoundation,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>     *rfoundation,
-                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : Run Last</pre>
+                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a></pre>
 <p>
 This signal is fired once a candidate pair is selected for data transfer for
 a stream's component
@@ -1854,28 +1761,23 @@ a stream's component
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>lfoundation</code></em> :</span></p></td>
-<td>The local foundation of the selected candidate pair
-</td>
+<td>The local foundation of the selected candidate pair</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>rfoundation</code></em> :</span></p></td>
-<td>The remote foundation of the selected candidate pair
-</td>
+<td>The remote foundation of the selected candidate pair</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
@@ -1885,12 +1787,12 @@ a stream's component
 </table></div>
 </div>
 <hr>
-<div class="refsect2" title='The "reliable-transport-writable" signal'>
+<div class="refsect2">
 <a name="NiceAgent-reliable-transport-writable"></a><h3>The <code class="literal">"reliable-transport-writable"</code> signal</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> *agent,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      stream_id,
                                                         <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>      component_id,
-                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : Run Last</pre>
+                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>   user_data)         : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-RUN-LAST:CAPS"><code class="literal">Run Last</code></a></pre>
 <p>
 This signal is fired on the reliable <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> when the underlying reliable
 transport becomes writable.
@@ -1903,18 +1805,15 @@ is established.
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
-<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object
-</td>
+<td>The <a class="link" href="NiceAgent.html" title="NiceAgent"><span class="type">NiceAgent</span></a> object</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>stream_id</code></em> :</span></p></td>
-<td>The ID of the stream
-</td>
+<td>The ID of the stream</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>component_id</code></em> :</span></p></td>
-<td>The ID of the component
-</td>
+<td>The ID of the component</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
@@ -1925,13 +1824,13 @@ is established.
 <p class="since">Since 0.0.11</p>
 </div>
 </div>
-<div class="refsect1" title="See Also">
+<div class="refsect1">
 <a name="NiceAgent.see-also"></a><h2>See Also</h2>
 <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.15</div>
+          Generated by GTK-Doc V1.17</div>
 </body>
 </html>
