@@ -40,8 +40,7 @@ Description: ICE library (shared library)
 Package: libnice-dev
 Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnice10 (= ${binary:Version})
-Recommends: libglib2.0-dev
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnice10 (= ${binary:Version}), libglib2.0-dev (>= 2.10)
 Description: ICE library (development files)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to

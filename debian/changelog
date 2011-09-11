@@ -1,7 +1,10 @@
 libnice (0.1.1-1) UNRELEASED; urgency=low
 
   * New upstream release.
-  * debian/control: Bump Standards-Version to 3.9.2 (no further changes)
+  * debian/control:
+    - Bump Standards-Version to 3.9.2 (no further changes)
+    - Make libnice-dev Depends against libglib2.0-dev instead of just
+      Recommending it
   * Follow multi-arch specification
 
  -- Laurent Bigonville <bigon@debian.org>  Sun, 11 Sep 2011 23:02:36 +0200
