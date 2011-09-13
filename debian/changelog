@@ -1,4 +1,4 @@
-libnice (0.1.1-1) UNRELEASED; urgency=low
+libnice (0.1.1-1) unstable; urgency=low
 
   * New upstream release.
   * debian/control:
@@ -7,7 +7,7 @@ libnice (0.1.1-1) UNRELEASED; urgency=low
       Recommending it
   * Follow multi-arch specification
 
- -- Laurent Bigonville <bigon@debian.org>  Sun, 11 Sep 2011 23:02:36 +0200
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 13 Sep 2011 18:28:21 +0200
 
 libnice (0.1.0-2) unstable; urgency=low
 
