@@ -1,3 +1,9 @@
+libnice (0.1.1-2) UNRELEASED; urgency=low
+
+  * debian/control: Update Vcs-* URL
+
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 20 Dec 2011 11:34:46 +0100
+
 libnice (0.1.1-1) unstable; urgency=low
 
   * New upstream release.

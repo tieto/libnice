@@ -16,8 +16,8 @@ Build-Depends: cdbs (>= 0.4.93~),
                gtk-doc-tools
 Standards-Version: 3.9.2
 Homepage: http://nice.freedesktop.org/
-Vcs-Git: git://git.debian.org/git/pkg-telepathy/libnice.git
-Vcs-Browser: http://git.debian.org/?p=pkg-telepathy/libnice.git
+Vcs-Git: git://anonscm.debian.org/git/pkg-telepathy/libnice.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-telepathy/libnice.git
 
 Package: libnice10
 Architecture: any
