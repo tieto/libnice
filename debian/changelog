@@ -1,8 +1,10 @@
 libnice (0.1.1-2) UNRELEASED; urgency=low
 
   * debian/control: Update Vcs-* URL
+  * debian/rules: Do not make tests fatal has they seems to fail when the
+    machine is under load (Closes: #593023).
 
- -- Laurent Bigonville <bigon@debian.org>  Tue, 20 Dec 2011 11:34:46 +0100
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 20 Dec 2011 11:44:20 +0100
 
 libnice (0.1.1-1) unstable; urgency=low
 
