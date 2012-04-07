@@ -49,9 +49,7 @@
 #include <string.h>
 #include <errno.h>
 
-#ifdef G_OS_WIN32
-#include <winsock2.h>
-#else
+#ifndef G_OS_WIN32
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -120,7 +118,11 @@ enum
 
 static guint signals[N_SIGNALS];
 
-static GStaticRecMutex agent_mutex = G_STATIC_REC_MUTEX_INIT;    /* Mutex used for thread-safe lib */
+#if GLIB_CHECK_VERSION(2,31,8)
+static GRecMutex agent_mutex;    /* Mutex used for thread-safe lib */
+#else
+static GStaticRecMutex agent_mutex = G_STATIC_REC_MUTEX_INIT;
+#endif
 
 static gboolean priv_attach_stream_component (NiceAgent *agent,
     Stream *stream,
@@ -129,18 +131,29 @@ static void priv_detach_stream_component (Stream *stream, Component *component);
 
 static void priv_free_upnp (NiceAgent *agent);
 
-
+#if GLIB_CHECK_VERSION(2,31,8)
 void agent_lock (void)
 {
-  g_static_rec_mutex_lock (&agent_mutex);
+  g_rec_mutex_lock (&agent_mutex);
 }
 
 void agent_unlock (void)
 {
+  g_rec_mutex_unlock (&agent_mutex);
+}
+
+#else
+void agent_lock(void)
+{
+  g_static_rec_mutex_lock (&agent_mutex);
+}
+
+void agent_unlock(void)
+{
   g_static_rec_mutex_unlock (&agent_mutex);
 }
 
-
+#endif
 
 StunUsageIceCompatibility
 agent_to_ice_compatibility (NiceAgent *agent)
@@ -1210,7 +1223,8 @@ void agent_gathering_done (NiceAgent *agent)
     agent_signal_gathering_done (agent);
   }
 #else
-  agent_signal_gathering_done (agent);
+  if (agent->discovery_timer_source == NULL)
+    agent_signal_gathering_done (agent);
 #endif
 }
 
@@ -1392,7 +1406,7 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
         agent->proxy_ip != NULL &&
         nice_address_set_from_string (&proxy_server, agent->proxy_ip)) {
       nice_address_set_port (&proxy_server, agent->proxy_port);
-      socket = nice_tcp_bsd_socket_new (agent, component->ctx, &proxy_server);
+      socket = nice_tcp_bsd_socket_new (agent->main_context, &proxy_server);
 
       if (socket) {
         _priv_set_socket_tos (agent, socket, stream->tos);
@@ -1410,14 +1424,21 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
 
     }
     if (socket == NULL) {
-      socket = nice_tcp_bsd_socket_new (agent, component->ctx, &turn->server);
-      _priv_set_socket_tos (agent, socket, stream->tos);
+      socket = nice_tcp_bsd_socket_new (agent->main_context, &turn->server);
+
+      if (socket)
+        _priv_set_socket_tos (agent, socket, stream->tos);
     }
+
+    /* The TURN server may be invalid or not listening */
+    if (socket == NULL)
+      return;
+
     if (turn->type ==  NICE_RELAY_TYPE_TURN_TLS &&
         agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
-      socket = nice_pseudossl_socket_new (agent, socket);
+      socket = nice_pseudossl_socket_new (socket);
     }
-    cdisco->nicesock = nice_tcp_turn_socket_new (agent, socket,
+    cdisco->nicesock = nice_tcp_turn_socket_new (socket,
         agent_to_turn_socket_compatibility (agent));
 
     agent_attach_stream_component_socket (agent, stream,
@@ -1645,7 +1666,7 @@ static void _upnp_mapped_external_port (GUPnPSimpleIgd *self, gchar *proto,
   }
 
  end:
-  if (g_slist_length (agent->upnp_mapping)) {
+  if (g_slist_length (agent->upnp_mapping) == 0) {
     if (agent->upnp_timer_source != NULL) {
       g_source_destroy (agent->upnp_timer_source);
       g_source_unref (agent->upnp_timer_source);
@@ -1681,7 +1702,7 @@ static void _upnp_error_mapping_port (GUPnPSimpleIgd *self, GError *error,
       }
     }
 
-    if (g_slist_length (agent->upnp_mapping)) {
+    if (g_slist_length (agent->upnp_mapping) == 0) {
       if (agent->upnp_timer_source != NULL) {
         g_source_destroy (agent->upnp_timer_source);
         g_source_unref (agent->upnp_timer_source);
@@ -1872,12 +1893,16 @@ nice_agent_gather_candidates (
   }
 
   /* note: no async discoveries pending, signal that we are ready */
-  if (agent->discovery_unsched_items == 0) {
+  if (agent->discovery_unsched_items == 0 &&
+#ifdef HAVE_GUPNP
+      g_slist_length (agent->upnp_mapping) == 0) {
+#else
+      TRUE) {
+#endif
     nice_debug ("Agent %p: Candidate gathering FINISHED, no scheduled items.",
         agent);
     agent_gathering_done (agent);
-  } else {
-    g_assert (agent->discovery_list);
+  } else if (agent->discovery_unsched_items) {
     discovery_schedule (agent);
   }
 
@@ -2195,7 +2220,7 @@ nice_agent_set_remote_candidates (NiceAgent *agent, guint stream_id, guint compo
     goto done;
   }
 
-  if (agent->discovery_unsched_items > 0 || stream->gathering) {
+  if (stream->gathering) {
     nice_debug ("Agent %p: Remote candidates refused for stream %d because "
         "we are still gathering our own candidates", agent, stream_id);
     added = -1;
@@ -2267,7 +2292,7 @@ _nice_agent_recv (
     gchar tmpbuf[INET6_ADDRSTRLEN];
     nice_address_to_string (&from, tmpbuf);
     nice_debug ("Agent %p : Packet received on local socket %u from [%s]:%u (%u octets).", agent,
-        socket->fileno, tmpbuf, nice_address_get_port (&from), len);
+        g_socket_get_fd (socket->fileno), tmpbuf, nice_address_get_port (&from), len);
   }
 #endif
 
@@ -2524,7 +2549,6 @@ typedef struct _IOCtx IOCtx;
 
 struct _IOCtx
 {
-  GIOChannel *channel;
   GSource *source;
   NiceAgent *agent;
   Stream *stream;
@@ -2539,7 +2563,6 @@ io_ctx_new (
   Stream *stream,
   Component *component,
   NiceSocket *socket,
-  GIOChannel *channel,
   GSource *source)
 {
   IOCtx *ctx;
@@ -2549,7 +2572,6 @@ io_ctx_new (
   ctx->stream = stream;
   ctx->component = component;
   ctx->socket = socket;
-  ctx->channel = channel;
   ctx->source = source;
 
   return ctx;
@@ -2559,19 +2581,15 @@ io_ctx_new (
 static void
 io_ctx_free (IOCtx *ctx)
 {
-  g_io_channel_unref (ctx->channel);
   g_slice_free (IOCtx, ctx);
 }
 
 static gboolean
 nice_agent_g_source_cb (
-  GIOChannel *io,
-  G_GNUC_UNUSED
+  GSocket *gsocket,
   GIOCondition condition,
   gpointer data)
 {
-  /* return value is whether to keep the source */
-
   IOCtx *ctx = data;
   NiceAgent *agent = ctx->agent;
   Stream *stream = ctx->stream;
@@ -2585,9 +2603,6 @@ nice_agent_g_source_cb (
     agent_unlock ();
     return FALSE;
   }
-
-  /* note: dear compiler, these are for you: */
-  (void)io;
 
   len = _nice_agent_recv (agent, stream, component, ctx->socket,
 			  MAX_BUFFER_SIZE, buf);
@@ -2644,18 +2659,17 @@ agent_attach_stream_component_socket (NiceAgent *agent,
     Component *component,
     NiceSocket *socket)
 {
-  GIOChannel *io;
   GSource *source;
   IOCtx *ctx;
 
   if (!component->ctx)
     return;
 
-  io = g_io_channel_unix_new (socket->fileno);
   /* note: without G_IO_ERR the glib mainloop goes into
    *       busyloop if errors are encountered */
-  source = g_io_create_watch (io, G_IO_IN | G_IO_ERR);
-  ctx = io_ctx_new (agent, stream, component, socket, io, source);
+  source = g_socket_create_source(socket->fileno, G_IO_IN | G_IO_ERR, NULL);
+
+  ctx = io_ctx_new (agent, stream, component, socket, source);
   g_source_set_callback (source, (GSourceFunc) nice_agent_g_source_cb,
       ctx, (GDestroyNotify) io_ctx_free);
   nice_debug ("Agent %p : Attach source %p (stream %u).", agent, source, stream->id);
@@ -2731,10 +2745,18 @@ nice_agent_attach_recv (
 
   ret = TRUE;
 
+  component->g_source_io_cb = NULL;
+  component->data = NULL;
+  if (component->ctx)
+    g_main_context_unref (component->ctx);
+  component->ctx = NULL;
+
   if (func) {
     component->g_source_io_cb = func;
     component->data = data;
     component->ctx = ctx;
+    if (ctx)
+      g_main_context_ref (ctx);
 
     priv_attach_stream_component (agent, stream, component);
 
@@ -2747,12 +2769,7 @@ nice_agent_attach_recv (
     if (component->tcp && component->tcp_data && component->tcp_readable)
       pseudo_tcp_socket_readable (component->tcp, component->tcp_data);
 
-  } else {
-    component->g_source_io_cb = NULL;
-    component->data = NULL;
-    component->ctx = NULL;
   }
-
 
  done:
   agent_unlock();
@@ -2813,7 +2830,7 @@ GSource* agent_timeout_add_with_context (NiceAgent *agent, guint interval,
 {
   GSource *source;
 
-  g_return_val_if_fail (function != NULL, 0);
+  g_return_val_if_fail (function != NULL, NULL);
 
   source = g_timeout_source_new (interval);
 
@@ -2877,14 +2894,14 @@ nice_agent_set_selected_remote_candidate (
 void
 _priv_set_socket_tos (NiceAgent *agent, NiceSocket *sock, gint tos)
 {
-  if (setsockopt (sock->fileno, IPPROTO_IP,
-          IP_TOS, &tos, sizeof (tos)) < 0) {
+  if (setsockopt (g_socket_get_fd (sock->fileno), IPPROTO_IP,
+          IP_TOS, (const char *) &tos, sizeof (tos)) < 0) {
     nice_debug ("Agent %p: Could not set socket ToS", agent,
         g_strerror (errno));
   }
 #ifdef IPV6_TCLASS
-  if (setsockopt (sock->fileno, IPPROTO_IPV6,
-          IPV6_TCLASS, &tos, sizeof (tos)) < 0) {
+  if (setsockopt (g_socket_get_fd (sock->fileno), IPPROTO_IPV6,
+          IPV6_TCLASS, (const char *) &tos, sizeof (tos)) < 0) {
     nice_debug ("Agent %p: Could not set IPV6 socket ToS", agent,
         g_strerror (errno));
   }

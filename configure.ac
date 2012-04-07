@@ -3,12 +3,15 @@ AC_PREREQ(2.59c)
 
 dnl releases only do -Wall, cvs and prerelease does -Werror too
 dnl use a three digit version number for releases, and four for cvs/prerelease
-AC_INIT(libnice, 0.1.1)
+AC_INIT(libnice, 0.1.2)
 LIBNICE_RELEASE="yes"
+
+AC_CANONICAL_SYSTEM
 
 AC_CONFIG_SRCDIR([agent/agent.c])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([-Wall])
+
 AC_CONFIG_FILES([
 	Makefile
 	agent/Makefile
@@ -34,10 +37,10 @@ AC_CONFIG_FILES([
 #    If there was an incompatible interface change:
 #      Increment CURRENT. Set AGE and REVISION to 0
 LIBNICE_CURRENT=10
-LIBNICE_REVISION=1
+LIBNICE_REVISION=2
 LIBNICE_AGE=0
 LIBNICE_LIBVERSION=${LIBNICE_CURRENT}:${LIBNICE_REVISION}:${LIBNICE_AGE}
-LIBNICE_LT_LDFLAGS="-version-info ${LIBNICE_LIBVERSION}"
+LIBNICE_LT_LDFLAGS="-version-info ${LIBNICE_LIBVERSION} -no-undefined"
 AC_SUBST(LIBNICE_LT_LDFLAGS)
 
 
@@ -53,6 +56,20 @@ AC_PROG_CC
 AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_LIBTOOL
 
+# Check Operating System
+AC_MSG_CHECKING([operating system])
+case "$host" in
+	*-*-*mingw*|*-*-*cygwin*)
+		platform=win32
+		AC_MSG_RESULT($platform)
+		;;
+	*)
+		platform=linux/other
+		AC_MSG_RESULT($platform)
+		;;
+esac
+
+AM_CONDITIONAL([WINDOWS], [test "$platform" = "win32"])
 
 # Checks for compiler features
 
@@ -62,7 +79,8 @@ AC_HEADER_ASSERT
 AC_HEADER_STDBOOL
 AC_DEFINE([_FORTIFY_SOURCE], [2], [Define to `2' to get GNU/libc warnings.])
 AC_DEFINE([NICEAPI_EXPORT], [ ], [Public library function implementation])
-AC_CHECK_HEADERS([arpa/inet.h net/in.h ifaddrs.h], \
+AC_CHECK_HEADERS([arpa/inet.h net/in.h])
+AC_CHECK_HEADERS([ifaddrs.h], \
 		      [AC_DEFINE(HAVE_GETIFADDRS, [1], \
 		       [Whether getifaddrs() is available on the system])])
 
@@ -81,9 +99,10 @@ AC_CHECK_FUNCS([poll])
 AC_SUBST(LIBRT)
 
 PKG_CHECK_MODULES(GLIB, [dnl
-	glib-2.0 >= 2.10 dnl
-	gobject-2.0 >= 2.10 dnl
-	gthread-2.0 >= 2.10 dnl
+	glib-2.0 >= 2.13 dnl
+	gobject-2.0 >= 2.13 dnl
+	gthread-2.0 >= 2.13 dnl
+	gio-2.0 >= 2.13 dnl
 	])
 
 AC_ARG_WITH(gstreamer, 
@@ -163,7 +182,11 @@ case $host_os in
 esac
 
 # check for gtk-doc
+m4_ifdef([GTK_DOC_CHECK], [
 GTK_DOC_CHECK(1.9)
+],[
+AM_CONDITIONAL([ENABLE_GTK_DOC], false)
+])
 AC_CONFIG_MACRO_DIR(m4)
 
 AC_OUTPUT

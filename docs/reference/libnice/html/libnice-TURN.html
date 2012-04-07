@@ -8,7 +8,7 @@
 <link rel="up" href="ch04.html" title="STUN usages">
 <link rel="prev" href="libnice-ICE.html" title="ICE">
 <link rel="next" href="libnice-Timer.html" title="Timer">
-<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -71,7 +71,7 @@ enum                <a class="link" href="libnice-TURN.html#StunUsageTurnReturn"
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *password</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> password_len</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility"><span class="type">StunUsageTurnCompatibility</span></a> compatibility</code></em>);
-<a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a>  <a class="link" href="libnice-TURN.html#stun-usage-turn-process" title="stun_usage_turn_process ()">stun_usage_turn_process</a>            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+<a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a> <a class="link" href="libnice-TURN.html#stun-usage-turn-process" title="stun_usage_turn_process ()">stun_usage_turn_process</a>             (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *relay_addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *relay_addrlen</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
@@ -81,7 +81,7 @@ enum                <a class="link" href="libnice-TURN.html#StunUsageTurnReturn"
                                                          <em class="parameter"><code><span class="type">uint32_t</span> *bandwidth</code></em>,
                                                          <em class="parameter"><code><span class="type">uint32_t</span> *lifetime</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility"><span class="type">StunUsageTurnCompatibility</span></a> compatibility</code></em>);
-<a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a>  <a class="link" href="libnice-TURN.html#stun-usage-turn-refresh-process" title="stun_usage_turn_refresh_process ()">stun_usage_turn_refresh_process</a>    (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+<a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a> <a class="link" href="libnice-TURN.html#stun-usage-turn-refresh-process" title="stun_usage_turn_refresh_process ()">stun_usage_turn_refresh_process</a>     (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint32_t</span> *lifetime</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility"><span class="type">StunUsageTurnCompatibility</span></a> compatibility</code></em>);
 </pre>
@@ -418,7 +418,7 @@ request</td>
 <hr>
 <div class="refsect2">
 <a name="stun-usage-turn-process"></a><h3>stun_usage_turn_process ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a>  stun_usage_turn_process            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+<pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a> stun_usage_turn_process             (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *relay_addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *relay_addrlen</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
@@ -499,7 +499,7 @@ response</td>
 <hr>
 <div class="refsect2">
 <a name="stun-usage-turn-refresh-process"></a><h3>stun_usage_turn_refresh_process ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a>  stun_usage_turn_refresh_process    (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+<pre class="programlisting"><a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a> stun_usage_turn_refresh_process     (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint32_t</span> *lifetime</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility"><span class="type">StunUsageTurnCompatibility</span></a> compatibility</code></em>);</pre>
 <p>
@@ -535,6 +535,6 @@ as for the original allocation)</td>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.17</div>
+          Generated by GTK-Doc V1.18</div>
 </body>
 </html>

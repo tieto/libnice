@@ -42,7 +42,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#ifndef G_OS_WIN32
 #include <unistd.h>
+#endif
 
 GMainLoop *error_loop;
 
@@ -67,7 +69,7 @@ mainloop_thread (gpointer data)
 {
   GMainLoop *loop = data;
 
-  usleep (100000);
+  g_usleep (100000);
   g_main_loop_run (loop);
 
   return NULL;
@@ -82,7 +84,7 @@ cb_new_selected_pair(NiceAgent *agent,
     gchar* rfoundation,
     gpointer data)
 {
-  g_debug ("test-thread:%s: %p", __func__, data);
+  g_debug ("test-thread:%s: %p", G_STRFUNC, data);
 
   if (GPOINTER_TO_UINT (data) == 1)
     g_atomic_int_inc (&global_lagent_cands);
@@ -188,8 +190,14 @@ int main (void)
   GMainLoop *ldmainloop, *rdmainloop;
   GThread *ldthread, *rdthread;
 
+#ifdef G_OS_WIN32
+  WSADATA w;
+  WSAStartup(0x0202, &w);
+#endif
   g_type_init ();
-  g_thread_init (NULL);
+#if !GLIB_CHECK_VERSION(2,31,8)
+  g_thread_init(NULL);
+#endif
 
   lmainctx = g_main_context_new ();
   rmainctx = g_main_context_new ();
@@ -268,9 +276,15 @@ int main (void)
   /* step: run test the first time */
   g_debug ("test-thread: TEST STARTS / running test for the 1st time");
 
+#if !GLIB_CHECK_VERSION(2,31,8)
   lthread = g_thread_create (mainloop_thread, lmainloop, TRUE, NULL);
-  g_assert (lthread);
   rthread = g_thread_create (mainloop_thread, rmainloop, TRUE, NULL);
+#else
+  lthread = g_thread_new ("lthread libnice", mainloop_thread, lmainloop);
+  rthread = g_thread_new ("rthread libnice", mainloop_thread, rmainloop);
+#endif
+
+  g_assert (lthread);
   g_assert (rthread);
 
   ls_id = nice_agent_add_stream (lagent, 2);
@@ -289,9 +303,14 @@ int main (void)
   nice_agent_attach_recv (ragent, rs_id, 1, rdmainctx, cb_nice_recv,
       GUINT_TO_POINTER (2));
 
+#if !GLIB_CHECK_VERSION(2,31,8)
   ldthread = g_thread_create (mainloop_thread, ldmainloop, TRUE, NULL);
-  g_assert (ldthread);
   rdthread = g_thread_create (mainloop_thread, rdmainloop, TRUE, NULL);
+#else
+  ldthread = g_thread_new ("ldthread libnice", mainloop_thread, ldmainloop);
+  rdthread = g_thread_new ("rdthread libnice", mainloop_thread, rdmainloop);
+#endif
+  g_assert (ldthread);
   g_assert (rdthread);
 
   /* Run loop for error timer */
@@ -328,6 +347,8 @@ int main (void)
   g_main_loop_unref (rdmainloop);
 
   g_main_loop_unref (error_loop);
-
+#ifdef G_OS_WIN32
+  WSACleanup();
+#endif
   return 0;
 }

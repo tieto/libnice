@@ -49,10 +49,15 @@ main (void)
   NiceAgent *agent;
   NiceAddress addr;
 
+#ifdef G_OS_WIN32
+  WSADATA w;
+  WSAStartup(0x0202, &w);
+#endif
   nice_address_init (&addr);
   g_type_init ();
+#if !GLIB_CHECK_VERSION(2,31,8)
   g_thread_init (NULL);
-
+#endif
 
   if (!nice_address_set_from_string (&addr, "127.0.0.1"))
     g_assert_not_reached ();
@@ -73,7 +78,9 @@ main (void)
   g_assert (NULL == agent->streams);
 
   g_object_unref (agent);
-
+#ifdef G_OS_WIN32
+  WSACleanup();
+#endif
   return 0;
 }
 

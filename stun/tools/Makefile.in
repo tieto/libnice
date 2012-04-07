@@ -42,10 +42,13 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+target_triplet = @target@
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/common.mk
 bin_PROGRAMS = stunbdc$(EXEEXT) stund$(EXEEXT)
 check_PROGRAMS = stund$(EXEEXT)
+@WINDOWS_TRUE@am__append_1 = -DWINVER=0x0501 # _WIN32_WINNT_WINXP
+@WINDOWS_TRUE@am__append_2 = -lws2_32
 subdir = stun/tools
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -59,7 +62,9 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_stunbdc_OBJECTS = stunbdc.$(OBJEXT)
 stunbdc_OBJECTS = $(am_stunbdc_OBJECTS)
-stunbdc_DEPENDENCIES = $(top_builddir)/stun/libstun.la
+am__DEPENDENCIES_1 =
+stunbdc_DEPENDENCIES = $(top_builddir)/stun/libstun.la \
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -130,6 +135,8 @@ GREP = @GREP@
 GST_CFLAGS = @GST_CFLAGS@
 GST_LIBS = @GST_LIBS@
 GTKDOC_CHECK = @GTKDOC_CHECK@
+GTKDOC_DEPS_CFLAGS = @GTKDOC_DEPS_CFLAGS@
+GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
 GTKDOC_MKPDF = @GTKDOC_MKPDF@
 GTKDOC_REBASE = @GTKDOC_REBASE@
 GUPNP_CFLAGS = @GUPNP_CFLAGS@
@@ -227,7 +234,11 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
+target = @target@
 target_alias = @target_alias@
+target_cpu = @target_cpu@
+target_os = @target_os@
+target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
@@ -249,12 +260,12 @@ ERROR_CFLAGS = \
 
 # -Wold-style-definition -Winline -Wunreachable-code
 CLEANFILES = *.gcno *.gcda
-AM_CFLAGS = -std=gnu99 $(ERROR_CFLAGS)
+AM_CFLAGS = -std=gnu99 $(ERROR_CFLAGS) $(am__append_1)
 AM_CPPFLAGS = -I$(top_srcdir) 
 stund_SOURCES = stund.c stund.h
 stund_LDADD = $(top_builddir)/stun/libstun.la
 stunbdc_SOURCES = stunbdc.c 
-stunbdc_LDADD = $(top_builddir)/stun/libstun.la
+stunbdc_LDADD = $(top_builddir)/stun/libstun.la $(am__append_2)
 all: all-am
 
 .SUFFIXES:

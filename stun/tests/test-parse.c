@@ -38,6 +38,7 @@
 #endif
 
 #include "stun/stunagent.h"
+#include "stun/stunhmac.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -45,6 +46,7 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
+#include <io.h>
 #else
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -455,7 +457,7 @@ bool test_vector_validater (StunAgent *agent,
     StunMessage *message, uint8_t *username, uint16_t username_len,
     uint8_t **password, size_t *password_len, void *user_data)
 {
-  int callable = (int) user_data;
+  intptr_t callable = (intptr_t) user_data;
 
   if (!callable)
     fatal ("vector test : Validater should not be called!");

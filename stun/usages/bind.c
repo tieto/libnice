@@ -54,6 +54,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/time.h>
+#include <fcntl.h>
 #endif
 
 
@@ -70,7 +71,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <errno.h>
-#include <fcntl.h>
 #include "timer.h"
 
 
@@ -227,6 +227,10 @@ stun_trans_init (StunTransport *tr, int fd,
  */
 static int stun_socket (int family, int type, int proto)
 {
+#ifdef _WIN32
+  unsigned long set_nonblock=1;
+#endif
+
   int fd = socket (family, type, proto);
   if (fd == -1)
     return -1;
@@ -236,6 +240,8 @@ static int stun_socket (int family, int type, int proto)
 #endif
 #ifdef O_NONBLOCK
   fcntl (fd, F_SETFL, fcntl (fd, F_GETFL) | O_NONBLOCK);
+#elif defined _WIN32
+  ioctlsocket(fd, FIONBIO, &set_nonblock);
 #endif
 
 #ifdef MSG_ERRQUEUE
@@ -394,11 +400,13 @@ stun_trans_recv (StunTransport *tr, uint8_t *buf, size_t maxlen)
 }
 
 
+#ifdef HAVE_POLL
 static int stun_trans_fd (const StunTransport *tr)
 {
   assert (tr != NULL);
   return tr->fd;
 }
+#endif
 
 
 /*
