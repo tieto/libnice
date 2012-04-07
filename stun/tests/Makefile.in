@@ -39,10 +39,13 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+target_triplet = @target@
 DIST_COMMON = $(dist_check_SCRIPTS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/common.mk
 check_PROGRAMS = test-parse$(EXEEXT) test-format$(EXEEXT) \
 	test-bind$(EXEEXT) test-conncheck$(EXEEXT) test-hmac$(EXEEXT)
+@WINDOWS_TRUE@am__append_1 = -DWINVER=0x0501 # _WIN32_WINNT_WINXP
+@WINDOWS_TRUE@am__append_2 = -lws2_32
 subdir = stun/tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -55,26 +58,32 @@ CONFIG_CLEAN_VPATH_FILES =
 test_bind_SOURCES = test-bind.c
 test_bind_OBJECTS = test-bind.$(OBJEXT)
 test_bind_LDADD = $(LDADD)
-test_bind_DEPENDENCIES = $(top_builddir)/stun/libstun.la
+am__DEPENDENCIES_1 =
+test_bind_DEPENDENCIES = $(top_builddir)/stun/libstun.la \
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 test_conncheck_SOURCES = test-conncheck.c
 test_conncheck_OBJECTS = test-conncheck.$(OBJEXT)
 test_conncheck_LDADD = $(LDADD)
-test_conncheck_DEPENDENCIES = $(top_builddir)/stun/libstun.la
+test_conncheck_DEPENDENCIES = $(top_builddir)/stun/libstun.la \
+	$(am__DEPENDENCIES_1)
 test_format_SOURCES = test-format.c
 test_format_OBJECTS = test-format.$(OBJEXT)
 test_format_LDADD = $(LDADD)
-test_format_DEPENDENCIES = $(top_builddir)/stun/libstun.la
+test_format_DEPENDENCIES = $(top_builddir)/stun/libstun.la \
+	$(am__DEPENDENCIES_1)
 test_hmac_SOURCES = test-hmac.c
 test_hmac_OBJECTS = test-hmac.$(OBJEXT)
 test_hmac_LDADD = $(LDADD)
-test_hmac_DEPENDENCIES = $(top_builddir)/stun/libstun.la
+test_hmac_DEPENDENCIES = $(top_builddir)/stun/libstun.la \
+	$(am__DEPENDENCIES_1)
 test_parse_SOURCES = test-parse.c
 test_parse_OBJECTS = test-parse.$(OBJEXT)
 test_parse_LDADD = $(LDADD)
-test_parse_DEPENDENCIES = $(top_builddir)/stun/libstun.la
+test_parse_DEPENDENCIES = $(top_builddir)/stun/libstun.la \
+	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -143,6 +152,8 @@ GREP = @GREP@
 GST_CFLAGS = @GST_CFLAGS@
 GST_LIBS = @GST_LIBS@
 GTKDOC_CHECK = @GTKDOC_CHECK@
+GTKDOC_DEPS_CFLAGS = @GTKDOC_DEPS_CFLAGS@
+GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
 GTKDOC_MKPDF = @GTKDOC_MKPDF@
 GTKDOC_REBASE = @GTKDOC_REBASE@
 GUPNP_CFLAGS = @GUPNP_CFLAGS@
@@ -240,7 +251,11 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
+target = @target@
 target_alias = @target_alias@
+target_cpu = @target_cpu@
+target_os = @target_os@
+target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
@@ -263,8 +278,8 @@ ERROR_CFLAGS = \
 # -Wold-style-definition -Winline -Wunreachable-code
 CLEANFILES = *.gcno *.gcda
 AM_CPPFLAGS = -I$(top_srcdir)
-AM_CFLAGS = -std=gnu99
-LDADD = $(top_builddir)/stun/libstun.la
+AM_CFLAGS = -std=gnu99 $(am__append_1)
+LDADD = $(top_builddir)/stun/libstun.la $(am__append_2)
 dist_check_SCRIPTS = check-bind.sh
 TESTS = $(check_PROGRAMS)
 all: all-am

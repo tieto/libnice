@@ -43,9 +43,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+target_triplet = @target@
 DIST_COMMON = $(dist_noinst_DATA) $(pkginclude_HEADERS) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/common.mk
+@WINDOWS_TRUE@am__append_1 = -DWINVER=0x0501 # _WIN32_WINNT_WINXP
+@WINDOWS_TRUE@am__append_2 = -liphlpapi -lws2_32
 subdir = agent
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -56,6 +59,7 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
+am__DEPENDENCIES_1 =
 am__objects_1 = agent-signals-marshal.lo
 am_libagent_la_OBJECTS = address.lo debug.lo candidate.lo component.lo \
 	agent.lo stream.lo conncheck.lo discovery.lo interfaces.lo \
@@ -152,6 +156,8 @@ GREP = @GREP@
 GST_CFLAGS = @GST_CFLAGS@
 GST_LIBS = @GST_LIBS@
 GTKDOC_CHECK = @GTKDOC_CHECK@
+GTKDOC_DEPS_CFLAGS = @GTKDOC_DEPS_CFLAGS@
+GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
 GTKDOC_MKPDF = @GTKDOC_MKPDF@
 GTKDOC_REBASE = @GTKDOC_REBASE@
 GUPNP_CFLAGS = @GUPNP_CFLAGS@
@@ -249,7 +255,11 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
+target = @target@
 target_alias = @target_alias@
+target_cpu = @target_cpu@
+target_os = @target_os@
+target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
@@ -271,17 +281,9 @@ ERROR_CFLAGS = \
 
 # -Wold-style-definition -Winline -Wunreachable-code
 CLEANFILES = *.gcno *.gcda $(BUILT_SOURCES)
-AM_CFLAGS = \
-	-DG_LOG_DOMAIN=\"libnice\" \
-	$(ERROR_CFLAGS) \
-	$(GLIB_CFLAGS) \
-	$(GUPNP_CFLAGS) \
-	-I $(top_srcdir) \
-	-I $(top_srcdir)/random \
-	-I $(top_srcdir)/socket \
-	-I $(top_srcdir)/stun
-
-COMMON_LDADD = libagent.la $(GLIB_LIBS) (GUPNP_LIBS)
+AM_CFLAGS = -DG_LOG_DOMAIN=\"libnice\" $(ERROR_CFLAGS) $(GLIB_CFLAGS) \
+	$(GUPNP_CFLAGS) -I $(top_srcdir) -I $(top_srcdir)/random -I \
+	$(top_srcdir)/socket -I $(top_srcdir)/stun $(am__append_1)
 dist_noinst_DATA = agent-signals-marshal.list
 noinst_LTLIBRARIES = libagent.la
 BUILT_SOURCES = \
@@ -312,11 +314,9 @@ libagent_la_SOURCES = \
 	pseudotcp.c \
 	$(BUILT_SOURCES)
 
-libagent_la_LIBADD = \
-	$(top_builddir)/random/libnice-random.la \
+libagent_la_LIBADD = $(top_builddir)/random/libnice-random.la \
 	$(top_builddir)/socket/libsocket.la \
-	$(top_builddir)/stun/libstun.la
-
+	$(top_builddir)/stun/libstun.la $(am__append_2)
 libagent_la_DEPENDENCIES = \
 	$(top_builddir)/random/libnice-random.la \
 	$(top_builddir)/socket/libsocket.la \

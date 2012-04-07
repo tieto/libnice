@@ -52,11 +52,19 @@ main (void)
   GSList *candidates, *i;
   guint stream_id;
 
+#ifdef G_OS_WIN32
+  WSADATA w;
+
+  WSAStartup(0x0202, &w);
+#endif
+
   nice_address_init (&addr_local);
   nice_address_init (&addr_remote);
   g_type_init ();
-  g_thread_init (NULL);
 
+#if !GLIB_CHECK_VERSION(2,31,8)
+  g_thread_init(NULL);
+#endif
 
   g_assert (nice_address_set_from_string (&addr_local, "127.0.0.1"));
   g_assert (nice_address_set_from_string (&addr_remote, "127.0.0.1"));
@@ -92,6 +100,9 @@ main (void)
 
   /* clean up */
   g_object_unref (agent);
+#ifdef G_OS_WIN32
+  WSACleanup();
+#endif
   return 0;
 }
 

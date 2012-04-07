@@ -91,11 +91,11 @@ inet_pton_win32(int af, const char *src, void *dst)
   while (res)  {
     if( res->ai_addr->sa_family == AF_INET) {
       memcpy(dst, &((struct sockaddr_in *) res->ai_addr)->sin_addr,
-          res->ai_addrlen);
+          sizeof(struct in_addr));
       res = res->ai_next;
     } else if(res->ai_addr->sa_family == AF_INET6) {
       memcpy(dst, &((struct sockaddr_in6 *) res->ai_addr)->sin6_addr,
-          res->ai_addrlen);
+          sizeof(struct in_addr6));
       res = res->ai_next;
     }
   }
@@ -144,7 +144,8 @@ nice_address_set_ipv6 (NiceAddress *addr, const guchar *addr_ipv6)
   addr->s.ip6.sin6_len = sizeof (addr->sa.ip6);
 #endif
   memcpy (addr->s.ip6.sin6_addr.s6_addr, addr_ipv6, 16);
-  addr->s.ip6.sin6_port = addr->s.ip6.sin6_scope_id = 0;
+  addr->s.ip6.sin6_port = 0;
+  addr->s.ip6.sin6_scope_id = 0;
 }
 
 

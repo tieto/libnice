@@ -8,7 +8,7 @@
 <link rel="up" href="ch04.html" title="STUN usages">
 <link rel="prev" href="ch04.html" title="STUN usages">
 <link rel="next" href="libnice-ICE.html" title="ICE">
-<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -49,7 +49,7 @@ enum                <a class="link" href="libnice-Bind.html#StunUsageBindReturn"
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *buffer</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> buffer_len</code></em>);
-<a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  <a class="link" href="libnice-Bind.html#stun-usage-bind-process" title="stun_usage_bind_process ()">stun_usage_bind_process</a>            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+<a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a> <a class="link" href="libnice-Bind.html#stun-usage-bind-process" title="stun_usage_bind_process ()">stun_usage_bind_process</a>             (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *alternate_server</code></em>,
@@ -58,7 +58,7 @@ enum                <a class="link" href="libnice-Bind.html#StunUsageBindReturn"
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *buf</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> len</code></em>);
-<a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  <a class="link" href="libnice-Bind.html#stun-usage-bind-run" title="stun_usage_bind_run ()">stun_usage_bind_run</a>                (<em class="parameter"><code>const <span class="type">struct sockaddr</span> *srv</code></em>,
+<a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a> <a class="link" href="libnice-Bind.html#stun-usage-bind-run" title="stun_usage_bind_run ()">stun_usage_bind_run</a>                 (<em class="parameter"><code>const <span class="type">struct sockaddr</span> *srv</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> srvlen</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>);
@@ -162,7 +162,7 @@ Create a new STUN binding request to use with a STUN server.
 <hr>
 <div class="refsect2">
 <a name="stun-usage-bind-process"></a><h3>stun_usage_bind_process ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  stun_usage_bind_process            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+<pre class="programlisting"><a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a> stun_usage_bind_process             (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *alternate_server</code></em>,
@@ -254,7 +254,7 @@ and it can only be used as a keepalive message.
 <hr>
 <div class="refsect2">
 <a name="stun-usage-bind-run"></a><h3>stun_usage_bind_run ()</h3>
-<pre class="programlisting"><a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a>  stun_usage_bind_run                (<em class="parameter"><code>const <span class="type">struct sockaddr</span> *srv</code></em>,
+<pre class="programlisting"><a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a> stun_usage_bind_run                 (<em class="parameter"><code>const <span class="type">struct sockaddr</span> *srv</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> srvlen</code></em>,
                                                          <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>);</pre>
@@ -300,6 +300,6 @@ Possible return values are <a class="link" href="libnice-Bind.html#STUN-USAGE-BI
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.17</div>
+          Generated by GTK-Doc V1.18</div>
 </body>
 </html>
