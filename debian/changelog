@@ -2,9 +2,12 @@ libnice (0.1.2-1) UNRELEASED; urgency=low
 
   * New upstream release.
     - Bump libglib2.0-dev build-dependency
-  * debian/control: Bump Standards-Version to 3.9.3 (no further changes)
+  * debian/control:
+    - Bump Standards-Version to 3.9.3 (no further changes)
+    - Bump libgstreamer0.10-dev build-dependency to have multiarch support
+  * Install gstreamer0.10-nice into multiarch path
 
- -- Laurent Bigonville <bigon@debian.org>  Sat, 07 Apr 2012 23:39:50 +0200
+ -- Laurent Bigonville <bigon@debian.org>  Sun, 08 Apr 2012 00:09:35 +0200
 
 libnice (0.1.1-2) unstable; urgency=low
 
