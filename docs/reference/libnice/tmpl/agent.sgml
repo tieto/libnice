@@ -9,10 +9,12 @@ NiceAgent
 
 </para>
 
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -91,6 +93,298 @@ NiceAgent
 @niceagent: the object which received the signal.
 @arg1: 
 @arg2: 
+
+<!-- ##### SIGNAL NiceAgent::candidate-gathering-done ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL NiceAgent::component-state-changed ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL NiceAgent::initial-binding-request-received ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL NiceAgent::new-candidate ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL NiceAgent::new-remote-candidate ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL NiceAgent::new-selected-pair ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### SIGNAL NiceAgent::reliable-transport-writable ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL NiceAgent::candidate-gathering-done ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL NiceAgent::component-state-changed ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL NiceAgent::initial-binding-request-received ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL NiceAgent::new-candidate ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL NiceAgent::new-remote-candidate ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL NiceAgent::new-selected-pair ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### SIGNAL NiceAgent::reliable-transport-writable ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG NiceAgent:compatibility ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:controlling-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:full-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:main-context ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:max-connectivity-checks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-ip ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-password ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-port ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-username ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:reliable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:stun-pacing-timer ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:stun-server ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:stun-server-port ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:upnp ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:upnp-timeout ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:compatibility ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:controlling-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:full-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:main-context ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:max-connectivity-checks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-ip ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-password ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-port ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:proxy-username ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:reliable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:stun-pacing-timer ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:stun-server ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:stun-server-port ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:upnp ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:upnp-timeout ##### -->
+<para>
+
+</para>
 
 <!-- ##### ARG NiceAgent:compatibility ##### -->
 <para>

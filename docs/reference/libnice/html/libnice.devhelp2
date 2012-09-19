@@ -75,6 +75,52 @@
     <keyword type="property" name="The &quot;stun-server-port&quot; property" link="NiceAgent.html#NiceAgent--stun-server-port"/>
     <keyword type="property" name="The &quot;upnp&quot; property" link="NiceAgent.html#NiceAgent--upnp"/>
     <keyword type="property" name="The &quot;upnp-timeout&quot; property" link="NiceAgent.html#NiceAgent--upnp-timeout"/>
+    <keyword type="property" name="The &quot;compatibility&quot; property" link="NiceAgent.html#NiceAgent--compatibility"/>
+    <keyword type="property" name="The &quot;controlling-mode&quot; property" link="NiceAgent.html#NiceAgent--controlling-mode"/>
+    <keyword type="property" name="The &quot;full-mode&quot; property" link="NiceAgent.html#NiceAgent--full-mode"/>
+    <keyword type="property" name="The &quot;main-context&quot; property" link="NiceAgent.html#NiceAgent--main-context"/>
+    <keyword type="property" name="The &quot;max-connectivity-checks&quot; property" link="NiceAgent.html#NiceAgent--max-connectivity-checks"/>
+    <keyword type="property" name="The &quot;proxy-ip&quot; property" link="NiceAgent.html#NiceAgent--proxy-ip"/>
+    <keyword type="property" name="The &quot;proxy-password&quot; property" link="NiceAgent.html#NiceAgent--proxy-password"/>
+    <keyword type="property" name="The &quot;proxy-port&quot; property" link="NiceAgent.html#NiceAgent--proxy-port"/>
+    <keyword type="property" name="The &quot;proxy-type&quot; property" link="NiceAgent.html#NiceAgent--proxy-type"/>
+    <keyword type="property" name="The &quot;proxy-username&quot; property" link="NiceAgent.html#NiceAgent--proxy-username"/>
+    <keyword type="property" name="The &quot;reliable&quot; property" link="NiceAgent.html#NiceAgent--reliable"/>
+    <keyword type="property" name="The &quot;stun-pacing-timer&quot; property" link="NiceAgent.html#NiceAgent--stun-pacing-timer"/>
+    <keyword type="property" name="The &quot;stun-server&quot; property" link="NiceAgent.html#NiceAgent--stun-server"/>
+    <keyword type="property" name="The &quot;stun-server-port&quot; property" link="NiceAgent.html#NiceAgent--stun-server-port"/>
+    <keyword type="property" name="The &quot;upnp&quot; property" link="NiceAgent.html#NiceAgent--upnp"/>
+    <keyword type="property" name="The &quot;upnp-timeout&quot; property" link="NiceAgent.html#NiceAgent--upnp-timeout"/>
+    <keyword type="property" name="The &quot;compatibility&quot; property" link="NiceAgent.html#NiceAgent--compatibility"/>
+    <keyword type="property" name="The &quot;controlling-mode&quot; property" link="NiceAgent.html#NiceAgent--controlling-mode"/>
+    <keyword type="property" name="The &quot;full-mode&quot; property" link="NiceAgent.html#NiceAgent--full-mode"/>
+    <keyword type="property" name="The &quot;main-context&quot; property" link="NiceAgent.html#NiceAgent--main-context"/>
+    <keyword type="property" name="The &quot;max-connectivity-checks&quot; property" link="NiceAgent.html#NiceAgent--max-connectivity-checks"/>
+    <keyword type="property" name="The &quot;proxy-ip&quot; property" link="NiceAgent.html#NiceAgent--proxy-ip"/>
+    <keyword type="property" name="The &quot;proxy-password&quot; property" link="NiceAgent.html#NiceAgent--proxy-password"/>
+    <keyword type="property" name="The &quot;proxy-port&quot; property" link="NiceAgent.html#NiceAgent--proxy-port"/>
+    <keyword type="property" name="The &quot;proxy-type&quot; property" link="NiceAgent.html#NiceAgent--proxy-type"/>
+    <keyword type="property" name="The &quot;proxy-username&quot; property" link="NiceAgent.html#NiceAgent--proxy-username"/>
+    <keyword type="property" name="The &quot;reliable&quot; property" link="NiceAgent.html#NiceAgent--reliable"/>
+    <keyword type="property" name="The &quot;stun-pacing-timer&quot; property" link="NiceAgent.html#NiceAgent--stun-pacing-timer"/>
+    <keyword type="property" name="The &quot;stun-server&quot; property" link="NiceAgent.html#NiceAgent--stun-server"/>
+    <keyword type="property" name="The &quot;stun-server-port&quot; property" link="NiceAgent.html#NiceAgent--stun-server-port"/>
+    <keyword type="property" name="The &quot;upnp&quot; property" link="NiceAgent.html#NiceAgent--upnp"/>
+    <keyword type="property" name="The &quot;upnp-timeout&quot; property" link="NiceAgent.html#NiceAgent--upnp-timeout"/>
+    <keyword type="signal" name="The &quot;candidate-gathering-done&quot; signal" link="NiceAgent.html#NiceAgent-candidate-gathering-done"/>
+    <keyword type="signal" name="The &quot;component-state-changed&quot; signal" link="NiceAgent.html#NiceAgent-component-state-changed"/>
+    <keyword type="signal" name="The &quot;initial-binding-request-received&quot; signal" link="NiceAgent.html#NiceAgent-initial-binding-request-received"/>
+    <keyword type="signal" name="The &quot;new-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-candidate"/>
+    <keyword type="signal" name="The &quot;new-remote-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-remote-candidate"/>
+    <keyword type="signal" name="The &quot;new-selected-pair&quot; signal" link="NiceAgent.html#NiceAgent-new-selected-pair"/>
+    <keyword type="signal" name="The &quot;reliable-transport-writable&quot; signal" link="NiceAgent.html#NiceAgent-reliable-transport-writable"/>
+    <keyword type="signal" name="The &quot;candidate-gathering-done&quot; signal" link="NiceAgent.html#NiceAgent-candidate-gathering-done"/>
+    <keyword type="signal" name="The &quot;component-state-changed&quot; signal" link="NiceAgent.html#NiceAgent-component-state-changed"/>
+    <keyword type="signal" name="The &quot;initial-binding-request-received&quot; signal" link="NiceAgent.html#NiceAgent-initial-binding-request-received"/>
+    <keyword type="signal" name="The &quot;new-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-candidate"/>
+    <keyword type="signal" name="The &quot;new-remote-candidate&quot; signal" link="NiceAgent.html#NiceAgent-new-remote-candidate"/>
+    <keyword type="signal" name="The &quot;new-selected-pair&quot; signal" link="NiceAgent.html#NiceAgent-new-selected-pair"/>
+    <keyword type="signal" name="The &quot;reliable-transport-writable&quot; signal" link="NiceAgent.html#NiceAgent-reliable-transport-writable"/>
     <keyword type="signal" name="The &quot;candidate-gathering-done&quot; signal" link="NiceAgent.html#NiceAgent-candidate-gathering-done"/>
     <keyword type="signal" name="The &quot;component-state-changed&quot; signal" link="NiceAgent.html#NiceAgent-component-state-changed"/>
     <keyword type="signal" name="The &quot;initial-binding-request-received&quot; signal" link="NiceAgent.html#NiceAgent-initial-binding-request-received"/>
@@ -214,6 +260,12 @@
     <keyword type="function" name="pseudo_tcp_socket_notify_mtu ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-mtu" since="0.0.11"/>
     <keyword type="function" name="pseudo_tcp_socket_notify_packet ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-packet" since="0.0.11"/>
     <keyword type="function" name="pseudo_tcp_set_debug_level ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-set-debug-level" since="0.0.11"/>
+    <keyword type="property" name="The &quot;callbacks&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--callbacks"/>
+    <keyword type="property" name="The &quot;conversation&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--conversation"/>
+    <keyword type="property" name="The &quot;state&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--state"/>
+    <keyword type="property" name="The &quot;callbacks&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--callbacks"/>
+    <keyword type="property" name="The &quot;conversation&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--conversation"/>
+    <keyword type="property" name="The &quot;state&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--state"/>
     <keyword type="property" name="The &quot;callbacks&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--callbacks"/>
     <keyword type="property" name="The &quot;conversation&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--conversation"/>
     <keyword type="property" name="The &quot;state&quot; property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--state"/>
