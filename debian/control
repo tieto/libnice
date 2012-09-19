@@ -12,6 +12,7 @@ Build-Depends: cdbs (>= 0.4.93~),
                libglib2.0-dev (>= 2.13),
                libgstreamer0.10-dev (>= 0.10.35.2-2),
                libgstreamer-plugins-base0.10-dev,
+               libgstreamer1.0-dev,
                libgupnp-igd-1.0-dev (>= 0.1.2),
                gtk-doc-tools
 Standards-Version: 3.9.3
@@ -69,9 +70,27 @@ Description: ICE library (GStreamer plugin)
  Existing standards that use ICE include the Session Initiation Protocol (SIP)
  and the Jingle XMPP extension for audio/video calls.
  .
- Nice includes integration with GStreamer.
+ Nice includes integration with GStreamer. 0.10
  .
- This package provides a GStreamer plugin for nice.
+ This package provides a GStreamer 0.10 plugin for nice.
+
+Package: gstreamer1.0-nice
+Section: net
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Multi-Arch: same
+Description: ICE library (GStreamer plugin)
+ Nice is an implementation of the IETF's draft Interactive Connectivity
+ Establishment standard (ICE).  ICE is useful for applications that want to
+ establish peer-to-peer UDP data streams. It automates the process of
+ traversing NATs and provides security against some attacks.
+ .
+ Existing standards that use ICE include the Session Initiation Protocol (SIP)
+ and the Jingle XMPP extension for audio/video calls.
+ .
+ Nice includes integration with GStreamer1.0.
+ .
+ This package provides a GStreamer 1.0 plugin for nice.
 
 Package: libnice-doc
 Section: doc
