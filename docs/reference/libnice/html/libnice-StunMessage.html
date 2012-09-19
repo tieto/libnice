@@ -703,8 +703,6 @@ attribute as defined by [MS-ICE2]
 <hr>
 <div class="refsect2">
 <a name="StunTransactionId"></a><h3>StunTransactionId</h3>
-<pre class="programlisting">typedef uint8_t StunTransactionId[STUN_MESSAGE_TRANS_ID_LEN];
-</pre>
 <p>
 A type that holds a STUN transaction id.
 </p>
@@ -917,8 +915,7 @@ the STUN message is not supported.
 <hr>
 <div class="refsect2">
 <a name="STUN-MESSAGE-BUFFER-INCOMPLETE:CAPS"></a><h3>STUN_MESSAGE_BUFFER_INCOMPLETE</h3>
-<pre class="programlisting">#define STUN_MESSAGE_BUFFER_INCOMPLETE 0
-</pre>
+<pre class="programlisting">#define             STUN_MESSAGE_BUFFER_INCOMPLETE</pre>
 <p>
 Convenience macro for <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()"><code class="function">stun_message_validate_buffer_length()</code></a> meaning that the
 data to validate does not hold a complete STUN message
@@ -927,8 +924,7 @@ data to validate does not hold a complete STUN message
 <hr>
 <div class="refsect2">
 <a name="STUN-MESSAGE-BUFFER-INVALID:CAPS"></a><h3>STUN_MESSAGE_BUFFER_INVALID</h3>
-<pre class="programlisting">#define STUN_MESSAGE_BUFFER_INVALID -1
-</pre>
+<pre class="programlisting">#define             STUN_MESSAGE_BUFFER_INVALID</pre>
 <p>
 Convenience macro for <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()"><code class="function">stun_message_validate_buffer_length()</code></a> meaning that the
 data to validate is not a valid STUN message
@@ -966,7 +962,7 @@ Initializes a STUN message buffer, with no attributes.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the initialization was successful</td>
+<code class="literal">TRUE</code> if the initialization was successful</td>
 </tr>
 </tbody>
 </table></div>
@@ -1801,7 +1797,7 @@ Checks if an attribute is present within a STUN message.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is found, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the attribute is found, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -1824,7 +1820,7 @@ Checks if the STUN message has a RFC5389 compatible cookie
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the cookie is present, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the cookie is present, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -1847,7 +1843,7 @@ or an optional attribute
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is an optional one</td>
+<code class="literal">TRUE</code> if the attribute is an optional one</td>
 </tr>
 </tbody>
 </table></div>

@@ -50,9 +50,7 @@ GST_DEBUG_CATEGORY_STATIC (nicesrc_debug);
 
 static GstFlowReturn
 gst_nice_src_create (
-  GstBaseSrc *basesrc,
-  guint64 offset,
-  guint length,
+  GstPushSrc *basesrc,
   GstBuffer **buffer);
 
 static gboolean
@@ -86,13 +84,6 @@ gst_nice_src_change_state (
     GstElement * element,
     GstStateChange transition);
 
-static const GstElementDetails gst_nice_src_details =
-GST_ELEMENT_DETAILS (
-    "ICE source",
-    "Source",
-    "Interactive UDP connectivity establishment",
-    "Dafydd Harries <dafydd.harries@collabora.co.uk>");
-
 static GstStaticPadTemplate gst_nice_src_src_template =
 GST_STATIC_PAD_TEMPLATE (
     "src",
@@ -100,7 +91,7 @@ GST_STATIC_PAD_TEMPLATE (
     GST_PAD_ALWAYS,
     GST_STATIC_CAPS_ANY);
 
-GST_BOILERPLATE (GstNiceSrc, gst_nice_src, GstBaseSrc, GST_TYPE_BASE_SRC);
+G_DEFINE_TYPE (GstNiceSrc, gst_nice_src, GST_TYPE_PUSH_SRC);
 
 enum
 {
@@ -109,19 +100,11 @@ enum
   PROP_COMPONENT
 };
 
-static void
-gst_nice_src_base_init (gpointer g_class)
-{
-  GstElementClass *element_class = GST_ELEMENT_CLASS (g_class);
-
-  gst_element_class_add_pad_template (element_class,
-      gst_static_pad_template_get (&gst_nice_src_src_template));
-  gst_element_class_set_details (element_class, &gst_nice_src_details);
-}
 
 static void
 gst_nice_src_class_init (GstNiceSrcClass *klass)
 {
+  GstPushSrcClass *gstpushsrc_class;
   GstBaseSrcClass *gstbasesrc_class;
   GstElementClass *gstelement_class;
   GObjectClass *gobject_class;
@@ -129,8 +112,10 @@ gst_nice_src_class_init (GstNiceSrcClass *klass)
   GST_DEBUG_CATEGORY_INIT (nicesrc_debug, "nicesrc",
       0, "libnice source");
 
+  gstpushsrc_class = (GstPushSrcClass *) klass;
+  gstpushsrc_class->create = GST_DEBUG_FUNCPTR (gst_nice_src_create);
+
   gstbasesrc_class = (GstBaseSrcClass *) klass;
-  gstbasesrc_class->create = GST_DEBUG_FUNCPTR (gst_nice_src_create);
   gstbasesrc_class->unlock = GST_DEBUG_FUNCPTR (gst_nice_src_unlock);
   gstbasesrc_class->unlock_stop = GST_DEBUG_FUNCPTR (gst_nice_src_unlock_stop);
 
@@ -141,6 +126,18 @@ gst_nice_src_class_init (GstNiceSrcClass *klass)
 
   gstelement_class = (GstElementClass *) klass;
   gstelement_class->change_state = gst_nice_src_change_state;
+
+  gst_element_class_add_pad_template (gstelement_class,
+      gst_static_pad_template_get (&gst_nice_src_src_template));
+#if GST_CHECK_VERSION (1,0,0)
+  gst_element_class_set_metadata (gstelement_class,
+#else
+  gst_element_class_set_details_simple (gstelement_class,
+#endif
+      "ICE source",
+      "Source",
+      "Interactive UDP connectivity establishment",
+      "Dafydd Harries <dafydd.harries@collabora.co.uk>");
 
   g_object_class_install_property (gobject_class, PROP_AGENT,
       g_param_spec_object (
@@ -172,7 +169,7 @@ gst_nice_src_class_init (GstNiceSrcClass *klass)
 }
 
 static void
-gst_nice_src_init (GstNiceSrc *src, GstNiceSrcClass *g_class)
+gst_nice_src_init (GstNiceSrc *src)
 {
   gst_base_src_set_live (GST_BASE_SRC (src), TRUE);
   gst_base_src_set_format (GST_BASE_SRC (src), GST_FORMAT_TIME);
@@ -201,13 +198,14 @@ gst_nice_src_read_callback (NiceAgent *agent,
 
   GST_LOG_OBJECT (agent, "Got buffer, getting out of the main loop");
 
-  nicesrc->flow_ret = gst_pad_alloc_buffer (basesrc->srcpad, nicesrc->offset,
-      len, GST_PAD_CAPS (basesrc->srcpad), &buffer);
-  if (nicesrc->flow_ret == GST_FLOW_OK) {
-    memcpy (buffer->data, buf, len);
-    buffer->size = len;
-    g_queue_push_tail (nicesrc->outbufs, buffer);
-  }
+#if GST_CHECK_VERSION (1,0,0)
+  buffer = gst_buffer_new_allocate (NULL, len, NULL);
+  gst_buffer_fill (buffer, 0, buf, len);
+#else
+  buffer = gst_buffer_new_and_alloc (len);
+  memcpy (GST_BUFFER_DATA (buffer), buf, len);
+#endif
+  g_queue_push_tail (nicesrc->outbufs, buffer);
 
   g_main_loop_quit (nicesrc->mainloop);
 }
@@ -271,21 +269,21 @@ gst_nice_src_unlock_stop (GstBaseSrc *src)
 
 static GstFlowReturn
 gst_nice_src_create (
-  GstBaseSrc *basesrc,
-  guint64 offset,
-  guint length,
+  GstPushSrc *basesrc,
   GstBuffer **buffer)
 {
   GstNiceSrc *nicesrc = GST_NICE_SRC (basesrc);
 
   GST_LOG_OBJECT (nicesrc, "create called");
 
-  nicesrc->offset = offset;
-
   GST_OBJECT_LOCK (basesrc);
   if (nicesrc->unlocked) {
     GST_OBJECT_UNLOCK (basesrc);
+#if GST_CHECK_VERSION (1,0,0)
+    return GST_FLOW_FLUSHING;
+#else
     return GST_FLOW_WRONG_STATE;
+#endif
   }
   GST_OBJECT_UNLOCK (basesrc);
 
@@ -295,10 +293,14 @@ gst_nice_src_create (
   *buffer = g_queue_pop_head (nicesrc->outbufs);
   if (*buffer != NULL) {
     GST_LOG_OBJECT (nicesrc, "Got buffer, pushing");
-    return nicesrc->flow_ret;
+    return GST_FLOW_OK;
   } else {
     GST_LOG_OBJECT (nicesrc, "Got interrupting, returning wrong-state");
+#if GST_CHECK_VERSION (1,0,0)
+    return GST_FLOW_FLUSHING;
+#else
     return GST_FLOW_WRONG_STATE;
+#endif
   }
 
 }
@@ -324,7 +326,7 @@ gst_nice_src_dispose (GObject *object)
     g_queue_free (src->outbufs);
   src->outbufs = NULL;
 
-  GST_CALL_PARENT (G_OBJECT_CLASS, dispose, (object));
+  G_OBJECT_CLASS (gst_nice_src_parent_class)->dispose (object);
 }
 
 static void
@@ -419,7 +421,8 @@ gst_nice_src_change_state (GstElement * element, GstStateChange transition)
       break;
   }
 
-  ret = GST_ELEMENT_CLASS (parent_class)->change_state (element, transition);
+  ret = GST_ELEMENT_CLASS (gst_nice_src_parent_class)->change_state (element,
+      transition);
 
   return ret;
 }

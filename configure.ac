@@ -3,7 +3,7 @@ AC_PREREQ(2.59c)
 
 dnl releases only do -Wall, cvs and prerelease does -Werror too
 dnl use a three digit version number for releases, and four for cvs/prerelease
-AC_INIT(libnice, 0.1.2)
+AC_INIT(libnice, 0.1.3)
 LIBNICE_RELEASE="yes"
 
 AC_CANONICAL_SYSTEM
@@ -36,9 +36,9 @@ AC_CONFIG_FILES([
 #      Increment CURRENT and AGE. Set REVISION to 0
 #    If there was an incompatible interface change:
 #      Increment CURRENT. Set AGE and REVISION to 0
-LIBNICE_CURRENT=10
-LIBNICE_REVISION=2
-LIBNICE_AGE=0
+LIBNICE_CURRENT=11
+LIBNICE_REVISION=0
+LIBNICE_AGE=1
 LIBNICE_LIBVERSION=${LIBNICE_CURRENT}:${LIBNICE_REVISION}:${LIBNICE_AGE}
 LIBNICE_LT_LDFLAGS="-version-info ${LIBNICE_LIBVERSION} -no-undefined"
 AC_SUBST(LIBNICE_LT_LDFLAGS)
@@ -77,7 +77,12 @@ AC_C_RESTRICT
 AC_C_VARARRAYS
 AC_HEADER_ASSERT
 AC_HEADER_STDBOOL
-AC_DEFINE([_FORTIFY_SOURCE], [2], [Define to `2' to get GNU/libc warnings.])
+AH_VERBATIM([_FORTIFY_SOURCE], 
+[/* Define to `2' to get GNU/libc warnings. */
+/* Only define if -O1 or more is enabled */
+#if defined __OPTIMIZE__ && __OPTIMIZE__ > 0
+# define _FORTIFY_SOURCE 2
+#endif])
 AC_DEFINE([NICEAPI_EXPORT], [ ], [Public library function implementation])
 AC_CHECK_HEADERS([arpa/inet.h net/in.h])
 AC_CHECK_HEADERS([ifaddrs.h], \
@@ -106,33 +111,60 @@ PKG_CHECK_MODULES(GLIB, [dnl
 	])
 
 AC_ARG_WITH(gstreamer, 
-	AC_HELP_STRING([--with-gstreamer], [use GStreamer]),
+	AC_HELP_STRING([--with-gstreamer], [build GStreamer plugin]),
 	[with_gstreamer=${withval}],
 	[with_gstreamer=auto])
+
+AC_ARG_WITH(gstreamer-0.10, 
+	AC_HELP_STRING([--with-gstreamer-0.10], [build GStreamer 0.10 plugin]),
+	[with_gstreamer010=${withval}],
+	[with_gstreamer010=auto])
 
 AS_IF([test "$with_gstreamer" != no], [
   
 	PKG_CHECK_MODULES(GST, [
-		gstreamer-0.10 >= 0.10.0
-		gstreamer-base-0.10 >= 0.10.0
+		gstreamer-1.0 >= 0.11.91
+		gstreamer-base-1.0 >= 0.11.91
 		],
 		[
 		with_gstreamer=yes
-		GST_MAJORMINOR=0.10
+		GST_MAJORMINOR=1.0
 		gstplugindir="\$(libdir)/gstreamer-$GST_MAJORMINOR"
 		],
 		[
 		AS_IF([test "$with_gstreamer" = yes], [
-			AC_MSG_ERROR([GStreamer support was requested but GStreamer libraries are not available])
+			AC_MSG_ERROR([GStreamer 1.0 support was requested but GStreamer 1.0 libraries are not available])
 		])
 
 		with_gstreamer=no
 		])
 ])
 
+AS_IF([test "$with_gstreamer010" != no], [
+  
+	PKG_CHECK_MODULES(GST010, [
+		gstreamer-0.10 >= 0.10.10
+		gstreamer-base-0.10 >= 0.10.10
+		],
+		[
+		with_gstreamer010=yes
+		GST_MAJORMINOR=0.10
+		gstplugin010dir="\$(libdir)/gstreamer-$GST_MAJORMINOR"
+		],
+		[
+		AS_IF([test "$with_gstreamer010" = yes], [
+			AC_MSG_ERROR([GStreamer 0.10 support was requested but GStreamer 0.10 libraries are not available])
+		])
+
+		with_gstreamer010=no
+		])
+])
+
 AC_SUBST(gstplugindir)
+AC_SUBST(gstplugin010dir)
 
 AM_CONDITIONAL(WITH_GSTREAMER, test "$with_gstreamer" = yes)
+AM_CONDITIONAL(WITH_GSTREAMER010, test "$with_gstreamer010" = yes)
 
 GUPNP_IGD_REQUIRED=0.1.2
 

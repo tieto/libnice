@@ -117,7 +117,10 @@
 #undef VERSION
 
 /* Define to `2' to get GNU/libc warnings. */
-#undef _FORTIFY_SOURCE
+/* Only define if -O1 or more is enabled */
+#if defined __OPTIMIZE__ && __OPTIMIZE__ > 0
+# define _FORTIFY_SOURCE 2
+#endif
 
 /* Define to 1 if on MINIX. */
 #undef _MINIX
