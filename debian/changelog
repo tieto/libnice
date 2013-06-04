@@ -9,6 +9,7 @@ libnice (0.1.4-1) UNRELEASED; urgency=low
   * Add dependency on autotools-dev so our old config.* get updated
   * Use dh_autoreconf
   * Get verbose output from tests
+  * Standards-Version: 3.9.4 (no further changes)
 
  -- Simon McVittie <smcv@debian.org>  Tue, 04 Jun 2013 09:04:10 +0100
 

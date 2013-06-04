@@ -17,7 +17,7 @@ Build-Depends: autotools-dev,
                libgstreamer1.0-dev,
                libgupnp-igd-1.0-dev (>= 0.1.2),
                gtk-doc-tools
-Standards-Version: 3.9.3
+Standards-Version: 3.9.4
 Homepage: http://nice.freedesktop.org/
 Vcs-Git: git://anonscm.debian.org/pkg-telepathy/libnice.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-telepathy/libnice.git
