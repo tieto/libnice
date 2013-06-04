@@ -16,7 +16,8 @@ SUBDIRS = \
 	nice \
 	gst \
 	docs \
-	tests
+	tests \
+	examples
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-assert -enable-gtk-doc
 
@@ -27,7 +28,8 @@ EXTRA_DIST = \
 	common.mk \
 	scripts/lcov.mk \
 	scripts/lcov.sh \
-	scripts/valgrind.sh
+	scripts/valgrind.sh \
+	win32
 
 dist_check_SCRIPTS = \
 	scripts/check-symbols.sh \

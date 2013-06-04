@@ -96,6 +96,10 @@
 
    </programlisting>
  </example>
+ *
+ * Refer to the examples in the examples/ subdirectory of the libnice source for
+ * complete examples.
+ *
  */
 
 
@@ -513,8 +517,8 @@ nice_agent_get_local_credentials (
    </para>
  </note>
  *
- * Returns: The number of candidates added, negative on errors (memory allocation
- * or if the local candidates are not done gathering yet)
+ * Returns: The number of candidates added, negative on errors (memory
+ * allocation error or invalid component)
  **/
 int
 nice_agent_set_remote_candidates (
@@ -690,6 +694,27 @@ nice_agent_set_selected_pair (
   const gchar *rfoundation);
 
 /**
+ * nice_agent_get_selected_pair:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @component_id: The ID of the component
+ * @local: The local selected candidate
+ * @remote: The remote selected candidate
+ *
+ * Retreive the selected candidate pair for media transmission
+ * for a given stream's component.
+ *
+ * Returns: %TRUE on success, %FALSE if there is no selected candidate pair
+ */
+gboolean
+nice_agent_get_selected_pair (
+  NiceAgent *agent,
+  guint stream_id,
+  guint component_id,
+  NiceCandidate **local,
+  NiceCandidate **remote);
+
+/**
  * nice_agent_set_selected_remote_candidate:
  * @agent: The #NiceAgent Object
  * @stream_id: The ID of the stream
@@ -757,7 +782,264 @@ void nice_agent_set_stream_tos (
  * Since: 0.0.10
  *
  */
-void nice_agent_set_software (NiceAgent *agent, const gchar *software);
+void nice_agent_set_software (
+    NiceAgent *agent,
+    const gchar *software);
+
+/**
+ * nice_agent_set_stream_name:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream to change
+ * @name: The new name of the stream or %NULL
+ *
+ * This function will assign a unique name to a stream.
+ * This is only useful when parsing and generating an SDP of the candidates.
+ *
+ * <para>See also: nice_agent_generate_local_sdp()</para>
+ * <para>See also: nice_agent_parse_remote_sdp()</para>
+ * <para>See also: nice_agent_get_stream_name()</para>
+ *
+ * Returns: %TRUE if the name has been set. %FALSE in case of error
+ * (invalid stream or duplicate name).
+ * Since: 0.1.4
+ */
+gboolean nice_agent_set_stream_name (
+    NiceAgent *agent,
+    guint stream_id,
+    const gchar *name);
+
+/**
+ * nice_agent_get_stream_name:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream to change
+ *
+ * This function will return the name assigned to a stream.
+
+ * <para>See also: nice_agent_set_stream_name()</para>
+ *
+ * Returns: The name of the stream. The name is only valid while the stream
+ * exists or until it changes through a call to nice_agent_set_stream_name().
+ *
+ *
+ * Since: 0.1.4
+ */
+const gchar *nice_agent_get_stream_name (
+    NiceAgent *agent,
+    guint stream_id);
+
+/**
+ * nice_agent_get_default_local_candidate:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @component_id: The ID of the component
+ *
+ * This helper function will return the recommended default candidate to be
+ * used for non-ICE compatible clients. This will usually be the candidate
+ * with the lowest priority, since it will be the longest path but the one with
+ * the most chances of success.
+ * <note>
+     <para>
+     This function is only useful in order to manually generate the
+     local SDP
+     </para>
+ * </note>
+ *
+ * Returns: The candidate to be used as the default candidate, or %NULL in case
+ * of error. Must be freed with nice_candidate_free() once done.
+ *
+ */
+NiceCandidate *
+nice_agent_get_default_local_candidate (
+    NiceAgent *agent,
+    guint stream_id,
+    guint component_id);
+
+/**
+ * nice_agent_generate_local_sdp:
+ * @agent: The #NiceAgent Object
+ *
+ * Generate an SDP string containing the local candidates and credentials for
+ * all streams and components in the agent.
+ *
+ <note>
+   <para>
+     The SDP will not contain any codec lines and the 'm' line will not list
+     any payload types.
+   </para>
+   <para>
+    It is highly recommended to set names on the streams prior to calling this
+    function. Unnamed streams will show up as '-' in the 'm' line, but the SDP
+    will not be parseable with nice_agent_parse_remote_sdp() if a stream is
+    unnamed.
+   </para>
+   <para>
+     The default candidate in the SDP will be selected based on the lowest
+     priority candidate for the first component.
+   </para>
+ </note>
+ *
+ * <para>See also: nice_agent_set_stream_name() </para>
+ * <para>See also: nice_agent_parse_remote_sdp() </para>
+ * <para>See also: nice_agent_generate_local_stream_sdp() </para>
+ * <para>See also: nice_agent_generate_local_candidate_sdp() </para>
+ * <para>See also: nice_agent_get_default_local_candidate() </para>
+ *
+ * Returns: A string representing the local SDP. Must be freed with g_free()
+ * once done.
+ *
+ * Since: 0.1.4
+ **/
+gchar *
+nice_agent_generate_local_sdp (
+  NiceAgent *agent);
+
+/**
+ * nice_agent_generate_local_stream_sdp:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @include_non_ice: Whether or not to include non ICE specific lines
+ * (m=, c= and a=rtcp: lines)
+ *
+ * Generate an SDP string containing the local candidates and credentials
+ * for a stream.
+ *
+ <note>
+   <para>
+     The SDP will not contain any codec lines and the 'm' line will not list
+     any payload types.
+   </para>
+   <para>
+    It is highly recommended to set the name of the stream prior to calling this
+    function. Unnamed streams will show up as '-' in the 'm' line.
+   </para>
+   <para>
+     The default candidate in the SDP will be selected based on the lowest
+     priority candidate.
+   </para>
+ </note>
+ *
+ * <para>See also: nice_agent_set_stream_name() </para>
+ * <para>See also: nice_agent_parse_remote_stream_sdp() </para>
+ * <para>See also: nice_agent_generate_local_sdp() </para>
+ * <para>See also: nice_agent_generate_local_candidate_sdp() </para>
+ * <para>See also: nice_agent_get_default_local_candidate() </para>
+ *
+ * Returns: A string representing the local SDP for the stream. Must be freed
+ * with g_free() once done.
+ *
+ * Since: 0.1.4
+ **/
+gchar *
+nice_agent_generate_local_stream_sdp (
+    NiceAgent *agent,
+    guint stream_id,
+    gboolean include_non_ice);
+
+/**
+ * nice_agent_generate_local_candidate_sdp:
+ * @agent: The #NiceAgent Object
+ * @candidate: The candidate to generate
+ *
+ * Generate an SDP string representing a local candidate.
+ *
+ * <para>See also: nice_agent_parse_remote_candidate_sdp() </para>
+ * <para>See also: nice_agent_generate_local_sdp() </para>
+ * <para>See also: nice_agent_generate_local_stream_sdp() </para>
+ *
+ * Returns: A string representing the SDP for the candidate. Must be freed
+ * with g_free() once done.
+ *
+ * Since: 0.1.4
+ **/
+gchar *
+nice_agent_generate_local_candidate_sdp (
+    NiceAgent *agent,
+    NiceCandidate *candidate);
+
+/**
+ * nice_agent_parse_remote_sdp:
+ * @agent: The #NiceAgent Object
+ * @sdp: The remote SDP to parse
+ *
+ * Parse an SDP string and extracts candidates and credentials from it and sets
+ * them on the agent.
+ *
+ <note>
+   <para>
+    This function will return an error if a stream has not been assigned a name
+    with nice_agent_set_stream_name() as it becomes troublesome to assign the
+    streams from the agent to the streams in the SDP.
+   </para>
+ </note>
+ *
+ *
+ * <para>See also: nice_agent_set_stream_name() </para>
+ * <para>See also: nice_agent_generate_local_sdp() </para>
+ * <para>See also: nice_agent_parse_remote_stream_sdp() </para>
+ * <para>See also: nice_agent_parse_remote_candidate_sdp() </para>
+ *
+ * Returns: The number of candidates added, negative on errors
+ *
+ * Since: 0.1.4
+ **/
+int
+nice_agent_parse_remote_sdp (
+    NiceAgent *agent,
+    const gchar *sdp);
+
+
+/**
+ * nice_agent_parse_remote_stream_sdp:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream to parse
+ * @sdp: The remote SDP to parse
+ * @ufrag: Pointer to store the ice ufrag if non %NULL. Must be freed with
+ * g_free() after use
+ * @pwd: Pointer to store the ice password if non %NULL. Must be freed with
+ * g_free() after use
+ *
+ * Parse an SDP string representing a single stream and extracts candidates
+ * and credentials from it.
+ *
+ * <para>See also: nice_agent_generate_local_stream_sdp() </para>
+ * <para>See also: nice_agent_parse_remote_sdp() </para>
+ * <para>See also: nice_agent_parse_remote_candidate_sdp() </para>
+ *
+ * Returns: A #GSList of candidates parsed from the SDP, or %NULL in case of
+ * errors
+ *
+ * Since: 0.1.4
+ **/
+GSList *
+nice_agent_parse_remote_stream_sdp (
+    NiceAgent *agent,
+    guint stream_id,
+    const gchar *sdp,
+    gchar **ufrag,
+    gchar **pwd);
+
+
+/**
+ * nice_agent_parse_remote_candidate_sdp:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream the candidate belongs to
+ * @sdp: The remote SDP to parse
+ *
+ * Parse an SDP string and extracts the candidate from it.
+ *
+ * <para>See also: nice_agent_generate_local_candidate_sdp() </para>
+ * <para>See also: nice_agent_parse_remote_sdp() </para>
+ * <para>See also: nice_agent_parse_remote_stream_sdp() </para>
+ *
+ * Returns: The parsed candidate or %NULL if there was an error.
+ *
+ * Since: 0.1.4
+ **/
+NiceCandidate *
+nice_agent_parse_remote_candidate_sdp (
+    NiceAgent *agent,
+    guint stream_id,
+    const gchar *sdp);
 
 G_END_DECLS
 

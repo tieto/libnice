@@ -9,12 +9,10 @@ Pseudo TCP Socket
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -27,36 +25,6 @@ Pseudo TCP Socket
 
 </para>
 
-
-<!-- ##### ARG PseudoTcpSocket:callbacks ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG PseudoTcpSocket:conversation ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG PseudoTcpSocket:state ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG PseudoTcpSocket:callbacks ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG PseudoTcpSocket:conversation ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG PseudoTcpSocket:state ##### -->
-<para>
-
-</para>
 
 <!-- ##### ARG PseudoTcpSocket:callbacks ##### -->
 <para>
