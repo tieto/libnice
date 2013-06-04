@@ -1,6 +1,6 @@
 libnice (0.1.4-1) UNRELEASED; urgency=low
 
-  * New upstream release
+  * New upstream release (Closes: #705101)
     - update debian/copyright
     - update symbols
 
