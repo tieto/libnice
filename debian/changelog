@@ -3,6 +3,9 @@ libnice (0.1.4-1) UNRELEASED; urgency=low
   * New upstream release (Closes: #705101)
     - update debian/copyright
     - update symbols
+  * Fix some Lintian warnings
+    - duplicate short description
+    - non-canonical Vcs-Git
 
  -- Simon McVittie <smcv@debian.org>  Tue, 04 Jun 2013 09:04:10 +0100
 
