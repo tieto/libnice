@@ -6,6 +6,7 @@ libnice (0.1.4-1) UNRELEASED; urgency=low
   * Fix some Lintian warnings
     - duplicate short description
     - non-canonical Vcs-Git
+  * Add dependency on autotools-dev so our old config.* get updated
   * Use dh_autoreconf
   * Get verbose output from tests
 
