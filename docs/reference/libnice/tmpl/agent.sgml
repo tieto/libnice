@@ -9,12 +9,10 @@ NiceAgent
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -93,298 +91,6 @@ NiceAgent
 @niceagent: the object which received the signal.
 @arg1: 
 @arg2: 
-
-<!-- ##### SIGNAL NiceAgent::candidate-gathering-done ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL NiceAgent::component-state-changed ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL NiceAgent::initial-binding-request-received ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL NiceAgent::new-candidate ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL NiceAgent::new-remote-candidate ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL NiceAgent::new-selected-pair ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@arg4: 
-
-<!-- ##### SIGNAL NiceAgent::reliable-transport-writable ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL NiceAgent::candidate-gathering-done ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL NiceAgent::component-state-changed ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL NiceAgent::initial-binding-request-received ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL NiceAgent::new-candidate ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL NiceAgent::new-remote-candidate ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL NiceAgent::new-selected-pair ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@arg4: 
-
-<!-- ##### SIGNAL NiceAgent::reliable-transport-writable ##### -->
-<para>
-
-</para>
-
-@niceagent: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### ARG NiceAgent:compatibility ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:controlling-mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:full-mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:main-context ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:max-connectivity-checks ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-ip ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-password ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-port ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-username ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:reliable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:stun-pacing-timer ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:stun-server ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:stun-server-port ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:upnp ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:upnp-timeout ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:compatibility ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:controlling-mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:full-mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:main-context ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:max-connectivity-checks ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-ip ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-password ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-port ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:proxy-username ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:reliable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:stun-pacing-timer ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:stun-server ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:stun-server-port ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:upnp ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG NiceAgent:upnp-timeout ##### -->
-<para>
-
-</para>
 
 <!-- ##### ARG NiceAgent:compatibility ##### -->
 <para>
@@ -676,6 +382,19 @@ NiceAgent
 @Returns: 
 
 
+<!-- ##### FUNCTION nice_agent_get_selected_pair ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@local: 
+@remote: 
+@Returns: 
+
+
 <!-- ##### FUNCTION nice_agent_send ##### -->
 <para>
 
@@ -753,6 +472,102 @@ NiceAgent
 </para>
 
 @agent: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_set_stream_name ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_get_stream_name ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_get_default_local_candidate ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_generate_local_sdp ##### -->
+<para>
+
+</para>
+
+@agent: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_generate_local_stream_sdp ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@include_non_ice: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_generate_local_candidate_sdp ##### -->
+<para>
+
+</para>
+
+@agent: 
+@candidate: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_parse_remote_sdp ##### -->
+<para>
+
+</para>
+
+@agent: 
+@sdp: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_parse_remote_stream_sdp ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@sdp: 
+@ufrag: 
+@pwd: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_parse_remote_candidate_sdp ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@sdp: 
 @Returns: 
 
 

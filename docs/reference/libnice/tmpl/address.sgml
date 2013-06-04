@@ -9,12 +9,10 @@ NiceAddress
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -162,6 +160,15 @@ NiceAddress
 
 
 <!-- ##### FUNCTION nice_address_is_valid ##### -->
+<para>
+
+</para>
+
+@addr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_address_ip_version ##### -->
 <para>
 
 </para>

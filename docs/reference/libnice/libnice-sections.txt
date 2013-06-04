@@ -21,6 +21,7 @@ nice_agent_get_local_credentials
 nice_agent_set_remote_candidates
 nice_agent_get_remote_candidates
 nice_agent_get_local_candidates
+nice_agent_get_selected_pair
 nice_agent_send
 nice_agent_attach_recv
 nice_agent_set_selected_pair
@@ -28,6 +29,15 @@ nice_agent_set_selected_remote_candidate
 nice_agent_set_stream_tos
 nice_agent_set_software
 nice_agent_restart
+nice_agent_set_stream_name
+nice_agent_get_stream_name
+nice_agent_get_default_local_candidate
+nice_agent_generate_local_sdp
+nice_agent_generate_local_stream_sdp
+nice_agent_generate_local_candidate_sdp
+nice_agent_parse_remote_sdp
+nice_agent_parse_remote_stream_sdp
+nice_agent_parse_remote_candidate_sdp
 <SUBSECTION Standard>
 NICE_AGENT
 NICE_IS_AGENT
@@ -84,6 +94,7 @@ nice_address_equal
 nice_address_to_string
 nice_address_is_private
 nice_address_is_valid
+nice_address_ip_version
 </SECTION>
 
 

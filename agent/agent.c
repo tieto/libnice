@@ -1300,6 +1300,30 @@ void agent_signal_new_remote_candidate (NiceAgent *agent, NiceCandidate *candida
 		 candidate->foundation);
 }
 
+static const gchar *
+component_state_to_string (NiceComponentState state)
+{
+  switch (state)
+    {
+      case NICE_COMPONENT_STATE_DISCONNECTED:
+        return "disconnected";
+      case NICE_COMPONENT_STATE_GATHERING:
+        return "gathering";
+      case NICE_COMPONENT_STATE_CONNECTING:
+        return "connecting";
+      case NICE_COMPONENT_STATE_CONNECTED:
+        return "connected";
+      case NICE_COMPONENT_STATE_READY:
+        return "ready";
+      case NICE_COMPONENT_STATE_FAILED:
+        return "failed";
+      case NICE_COMPONENT_STATE_LAST:
+        break;
+    }
+
+  return "invalid";
+}
+
 void agent_signal_component_state_change (NiceAgent *agent, guint stream_id, guint component_id, NiceComponentState state)
 {
   Component *component;
@@ -1318,8 +1342,9 @@ void agent_signal_component_state_change (NiceAgent *agent, guint stream_id, gui
   }
 
   if (component->state != state && state < NICE_COMPONENT_STATE_LAST) {
-    nice_debug ("Agent %p : stream %u component %u STATE-CHANGE %u -> %u.", agent,
-	     stream_id, component_id, component->state, state);
+    nice_debug ("Agent %p : stream %u component %u STATE-CHANGE %s -> %s.", agent,
+        stream_id, component_id, component_state_to_string (component->state),
+        component_state_to_string (state));
 
     component->state = state;
 
@@ -2200,26 +2225,12 @@ nice_agent_get_local_credentials (
   return ret;
 }
 
-NICEAPI_EXPORT int
-nice_agent_set_remote_candidates (NiceAgent *agent, guint stream_id, guint component_id, const GSList *candidates)
+static int
+_set_remote_candidates_locked (NiceAgent *agent, Stream *stream,
+    Component *component, const GSList *candidates)
 {
-  const GSList *i; 
+  const GSList *i;
   int added = 0;
-  Stream *stream;
-  Component *component;
-
-  nice_debug ("Agent %p: set_remote_candidates %d %d", agent, stream_id, component_id);
-
-  agent_lock();
-
-  if (!agent_find_component (agent, stream_id, component_id,
-          &stream, &component)) {
-    g_warning ("Could not find component %u in stream %u", component_id,
-        stream_id);
-    added = -1;
-    goto done;
-  }
-
 
   if (agent->reliable && component->tcp == NULL) {
     nice_debug ("Agent %p: not setting remote candidate for s%d:%d because "
@@ -2234,8 +2245,8 @@ nice_agent_set_remote_candidates (NiceAgent *agent, guint stream_id, guint compo
    if (nice_address_is_valid (&d->addr) == TRUE) {
      gboolean res =
          priv_add_remote_candidate (agent,
-             stream_id,
-             component_id,
+             stream->id,
+             component->id,
              d->type,
              &d->addr,
              &d->base_addr,
@@ -2258,8 +2269,35 @@ nice_agent_set_remote_candidates (NiceAgent *agent, guint stream_id, guint compo
  }
 
  done:
- agent_unlock();
  return added;
+}
+
+
+NICEAPI_EXPORT int
+nice_agent_set_remote_candidates (NiceAgent *agent, guint stream_id, guint component_id, const GSList *candidates)
+{
+  int added = 0;
+  Stream *stream;
+  Component *component;
+
+  nice_debug ("Agent %p: set_remote_candidates %d %d", agent, stream_id, component_id);
+
+  agent_lock();
+
+  if (!agent_find_component (agent, stream_id, component_id,
+          &stream, &component)) {
+    g_warning ("Could not find component %u in stream %u", component_id,
+        stream_id);
+    added = -1;
+    goto done;
+  }
+
+  added = _set_remote_candidates_locked (agent, stream, component, candidates);
+
+ done:
+  agent_unlock();
+
+  return added;
 }
 
 
@@ -2818,6 +2856,32 @@ nice_agent_set_selected_pair (
   return ret;
 }
 
+NICEAPI_EXPORT gboolean
+nice_agent_get_selected_pair (NiceAgent *agent, guint stream_id,
+    guint component_id, NiceCandidate **local, NiceCandidate **remote)
+{
+  Component *component;
+  Stream *stream;
+  gboolean ret = FALSE;
+
+  agent_lock();
+
+  /* step: check that params specify an existing pair */
+  if (!agent_find_component (agent, stream_id, component_id,
+          &stream, &component))
+    goto done;
+
+  if (component->selected_pair.local && component->selected_pair.remote) {
+    *local = component->selected_pair.local;
+    *remote = component->selected_pair.remote;
+    ret = TRUE;
+  }
+
+ done:
+  agent_unlock();
+
+  return ret;
+}
 
 GSource* agent_timeout_add_with_context (NiceAgent *agent, guint interval,
     GSourceFunc function, gpointer data)
@@ -2903,33 +2967,36 @@ _priv_set_socket_tos (NiceAgent *agent, NiceSocket *sock, gint tos)
 }
 
 
-void nice_agent_set_stream_tos (NiceAgent *agent,
+NICEAPI_EXPORT void
+nice_agent_set_stream_tos (NiceAgent *agent,
   guint stream_id, gint tos)
 {
-
-  GSList *i, *j, *k;
+  GSList *i, *j;
+  Stream *stream;
 
   agent_lock();
 
-  for (i = agent->streams; i; i = i->next) {
-    Stream *stream = i->data;
-    if (stream->id == stream_id) {
-      stream->tos = tos;
-      for (j = stream->components; j; j = j->next) {
-        Component *component = j->data;
+  stream = agent_find_stream (agent, stream_id);
+  if (stream == NULL)
+    goto done;
 
-        for (k = component->local_candidates; k; k = k->next) {
-          NiceCandidate *local_candidate = k->data;
-          _priv_set_socket_tos (agent, local_candidate->sockptr, tos);
-        }
-      }
+  stream->tos = tos;
+  for (i = stream->components; i; i = i->next) {
+    Component *component = i->data;
+
+    for (j = component->local_candidates; j; j = j->next) {
+      NiceCandidate *local_candidate = j->data;
+
+      _priv_set_socket_tos (agent, local_candidate->sockptr, tos);
     }
   }
 
+ done:
   agent_unlock();
 }
 
-void nice_agent_set_software (NiceAgent *agent, const gchar *software)
+NICEAPI_EXPORT void
+nice_agent_set_software (NiceAgent *agent, const gchar *software)
 {
   agent_lock();
 
@@ -2941,4 +3008,526 @@ void nice_agent_set_software (NiceAgent *agent, const gchar *software)
   stun_agent_set_software (&agent->stun_agent, agent->software_attribute);
 
   agent_unlock ();
+}
+
+NICEAPI_EXPORT gboolean
+nice_agent_set_stream_name (NiceAgent *agent, guint stream_id,
+    const gchar *name)
+{
+  Stream *stream_to_name = NULL;
+  GSList *i;
+  gboolean ret = FALSE;
+
+  agent_lock();
+
+  if (name != NULL) {
+    for (i = agent->streams; i; i = i->next) {
+      Stream *stream = i->data;
+
+      if (stream->id != stream_id &&
+          g_strcmp0 (stream->name, name) == 0)
+        goto done;
+      else if (stream->id == stream_id)
+        stream_to_name = stream;
+    }
+  }
+
+  if (stream_to_name == NULL)
+    goto done;
+
+  if (stream_to_name->name)
+    g_free (stream_to_name->name);
+  stream_to_name->name = g_strdup (name);
+  ret = TRUE;
+
+ done:
+  agent_unlock();
+
+  return ret;
+}
+
+NICEAPI_EXPORT const gchar *
+nice_agent_get_stream_name (NiceAgent *agent, guint stream_id)
+{
+  Stream *stream;
+  gchar *name = NULL;
+
+  agent_lock();
+
+  stream = agent_find_stream (agent, stream_id);
+  if (stream == NULL)
+    goto done;
+
+  name = stream->name;
+
+ done:
+  agent_unlock();
+  return name;
+}
+
+static NiceCandidate *
+_get_default_local_candidate_locked (NiceAgent *agent,
+    Stream *stream,  Component *component)
+{
+  GSList *i;
+  NiceCandidate *default_candidate = NULL;
+  NiceCandidate *default_rtp_candidate = NULL;
+
+  if (component->id != NICE_COMPONENT_TYPE_RTP) {
+    Component *rtp_component;
+
+    if (!agent_find_component (agent, stream->id, NICE_COMPONENT_TYPE_RTP,
+            NULL, &rtp_component))
+      goto done;
+
+    default_rtp_candidate = _get_default_local_candidate_locked (agent, stream,
+        rtp_component);
+    if (default_rtp_candidate == NULL)
+      goto done;
+  }
+
+
+  for (i = component->local_candidates; i; i = i->next) {
+    NiceCandidate *local_candidate = i->data;
+
+    /* Only check for ipv4 candidates */
+    if (nice_address_ip_version (&local_candidate->addr) != 4)
+      continue;
+    if (component->id == NICE_COMPONENT_TYPE_RTP) {
+      if (default_candidate == NULL ||
+          local_candidate->priority < default_candidate->priority) {
+        default_candidate = local_candidate;
+      }
+    } else if (strncmp (local_candidate->foundation,
+            default_rtp_candidate->foundation,
+            NICE_CANDIDATE_MAX_FOUNDATION) == 0) {
+      default_candidate = local_candidate;
+      break;
+    }
+  }
+
+ done:
+  return default_candidate;
+}
+
+NICEAPI_EXPORT NiceCandidate *
+nice_agent_get_default_local_candidate (NiceAgent *agent,
+    guint stream_id,  guint component_id)
+{
+  Stream *stream = NULL;
+  Component *component = NULL;
+  NiceCandidate *default_candidate = NULL;
+
+  agent_lock ();
+
+  /* step: check if the component exists*/
+  if (!agent_find_component (agent, stream_id, component_id,
+          &stream, &component))
+    goto done;
+
+  default_candidate = _get_default_local_candidate_locked (agent, stream,
+      component);
+  if (default_candidate)
+    default_candidate = nice_candidate_copy (default_candidate);
+
+ done:
+  agent_unlock ();
+
+  return default_candidate;
+}
+
+static const gchar *
+_cand_type_to_sdp (NiceCandidateType type) {
+  switch(type) {
+    case NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE:
+      return "srflx";
+    case NICE_CANDIDATE_TYPE_PEER_REFLEXIVE:
+      return "prflx";
+    case NICE_CANDIDATE_TYPE_RELAYED:
+      return "relay";
+    case NICE_CANDIDATE_TYPE_HOST:
+    default:
+      return "host";
+  }
+}
+
+static void
+_generate_candidate_sdp (NiceAgent *agent,
+    NiceCandidate *candidate, GString *sdp)
+{
+  gchar ip4[INET6_ADDRSTRLEN];
+
+  nice_address_to_string (&candidate->addr, ip4);
+  g_string_append_printf (sdp, "a=candidate:%.*s %d %s %d %s %d",
+      NICE_CANDIDATE_MAX_FOUNDATION, candidate->foundation,
+      candidate->component_id,
+      candidate->transport == NICE_CANDIDATE_TRANSPORT_UDP ? "UDP" : "???",
+      candidate->priority, ip4, nice_address_get_port (&candidate->addr));
+  g_string_append_printf (sdp, " typ %s", _cand_type_to_sdp (candidate->type));
+  if (nice_address_is_valid (&candidate->base_addr) &&
+      !nice_address_equal (&candidate->addr, &candidate->base_addr)) {
+    nice_address_to_string (&candidate->base_addr, ip4);
+    g_string_append_printf (sdp, " raddr %s rport %d", ip4,
+        nice_address_get_port (&candidate->base_addr));
+  }
+}
+
+static void
+_generate_stream_sdp (NiceAgent *agent, Stream *stream,
+    GString *sdp, gboolean include_non_ice)
+{
+  GSList *i, *j;
+
+  if (include_non_ice) {
+    NiceAddress rtp, rtcp;
+    gchar ip4[INET6_ADDRSTRLEN];
+
+    nice_address_init (&rtp);
+    nice_address_set_ipv4 (&rtp, 0);
+    nice_address_init (&rtcp);
+    nice_address_set_ipv4 (&rtcp, 0);
+
+    /* Find default candidates */
+    for (i = stream->components; i; i = i->next) {
+      Component *component = i->data;
+      NiceCandidate *default_candidate;
+
+      if (component->id == NICE_COMPONENT_TYPE_RTP) {
+        default_candidate = _get_default_local_candidate_locked (agent, stream,
+            component);
+        if (default_candidate)
+          rtp = default_candidate->addr;
+      } else if (component->id == NICE_COMPONENT_TYPE_RTCP) {
+        default_candidate = _get_default_local_candidate_locked (agent, stream,
+            component);
+        if (default_candidate)
+          rtcp = default_candidate->addr;
+      }
+    }
+
+    nice_address_to_string (&rtp, ip4);
+    g_string_append_printf (sdp, "m=%s %d ICE/SDP\n",
+        stream->name ? stream->name : "-", nice_address_get_port (&rtp));
+    g_string_append_printf (sdp, "c=IN IP4 %s\n", ip4);
+    if (nice_address_get_port (&rtcp) != 0)
+      g_string_append_printf (sdp, "a=rtcp:%d\n",
+          nice_address_get_port (&rtcp));
+  }
+
+  g_string_append_printf (sdp, "a=ice-ufrag:%s\n", stream->local_ufrag);
+  g_string_append_printf (sdp, "a=ice-pwd:%s\n", stream->local_password);
+
+  for (i = stream->components; i; i = i->next) {
+    Component *component = i->data;
+
+    for (j = component->local_candidates; j; j = j->next) {
+      NiceCandidate *candidate = j->data;
+
+      _generate_candidate_sdp (agent, candidate, sdp);
+      g_string_append (sdp, "\n");
+    }
+  }
+}
+
+NICEAPI_EXPORT gchar *
+nice_agent_generate_local_sdp (NiceAgent *agent)
+{
+  GString * sdp = g_string_new (NULL);
+  GSList *i;
+
+  agent_lock();
+
+  for (i = agent->streams; i; i = i->next) {
+    Stream *stream = i->data;
+
+    _generate_stream_sdp (agent, stream, sdp, TRUE);
+  }
+
+  agent_unlock();
+
+  return g_string_free (sdp, FALSE);
+}
+
+NICEAPI_EXPORT gchar *
+nice_agent_generate_local_stream_sdp (NiceAgent *agent, guint stream_id,
+    gboolean include_non_ice)
+{
+  GString *sdp = NULL;
+  gchar *ret = NULL;
+  Stream *stream;
+
+  agent_lock();
+
+  stream = agent_find_stream (agent, stream_id);
+  if (stream == NULL)
+    goto done;
+
+  sdp = g_string_new (NULL);
+  _generate_stream_sdp (agent, stream, sdp, include_non_ice);
+  ret = g_string_free (sdp, FALSE);
+
+ done:
+  agent_unlock();
+
+  return ret;
+}
+
+NICEAPI_EXPORT gchar *
+nice_agent_generate_local_candidate_sdp (NiceAgent *agent,
+    NiceCandidate *candidate)
+{
+  GString *sdp = NULL;
+
+  g_return_val_if_fail(candidate, NULL);
+
+  agent_lock();
+
+  sdp = g_string_new (NULL);
+  _generate_candidate_sdp (agent, candidate, sdp);
+
+  agent_unlock();
+
+  return g_string_free (sdp, FALSE);
+}
+
+NICEAPI_EXPORT gint
+nice_agent_parse_remote_sdp (NiceAgent *agent, const gchar *sdp)
+{
+  Stream *current_stream = NULL;
+  gchar **sdp_lines = NULL;
+  GSList *l;
+  gint i;
+  gint ret = 0;
+
+  agent_lock();
+
+  for (l = agent->streams; l; l = l->next) {
+    Stream *stream = l->data;
+
+    if (stream->name == NULL) {
+      ret = -1;
+      goto done;
+    }
+  }
+
+  sdp_lines = g_strsplit (sdp, "\n", 0);
+  for (i = 0; sdp_lines && sdp_lines[i]; i++) {
+    if (g_str_has_prefix (sdp_lines[i], "m=")) {
+      gchar *name = g_strdup (sdp_lines[i] + 2);
+      gchar *ptr = name;
+
+      while (*ptr != ' ' && *ptr != '\0') ptr++;
+      *ptr = 0;
+
+      current_stream = NULL;
+      for (l = agent->streams; l; l = l->next) {
+        Stream *stream = l->data;
+
+        if (g_strcmp0 (stream->name, name) == 0) {
+          current_stream = stream;
+          break;
+        }
+      }
+      g_free (name);
+    } else if (g_str_has_prefix (sdp_lines[i], "a=ice-ufrag:")) {
+      if (current_stream == NULL) {
+        ret = -1;
+        goto done;
+      }
+      g_strlcpy (current_stream->remote_ufrag, sdp_lines[i] + 12,
+          NICE_STREAM_MAX_UFRAG);
+    } else if (g_str_has_prefix (sdp_lines[i], "a=ice-pwd:")) {
+      if (current_stream == NULL) {
+        ret = -1;
+        goto done;
+      }
+      g_strlcpy (current_stream->remote_password, sdp_lines[i] + 10,
+          NICE_STREAM_MAX_PWD);
+    } else if (g_str_has_prefix (sdp_lines[i], "a=candidate:")) {
+      NiceCandidate *candidate = NULL;
+      Component *component = NULL;
+      GSList *cands = NULL;
+      gint added;
+
+      if (current_stream == NULL) {
+        ret = -1;
+        goto done;
+      }
+      candidate = nice_agent_parse_remote_candidate_sdp (agent,
+          current_stream->id, sdp_lines[i]);
+      if (candidate == NULL) {
+        ret = -1;
+        goto done;
+      }
+
+      if (!agent_find_component (agent, candidate->stream_id,
+              candidate->component_id, NULL, &component)) {
+        nice_candidate_free (candidate);
+        ret = -1;
+        goto done;
+      }
+      cands = g_slist_prepend (cands, candidate);
+      added = _set_remote_candidates_locked (agent, current_stream,
+          component, cands);
+      g_slist_free_full(cands, (GDestroyNotify)&nice_candidate_free);
+      if (added > 0)
+        ret++;
+    }
+  }
+
+ done:
+  if (sdp_lines)
+    g_strfreev(sdp_lines);
+
+  agent_unlock();
+
+  return ret;
+}
+
+NICEAPI_EXPORT GSList *
+nice_agent_parse_remote_stream_sdp (NiceAgent *agent, guint stream_id,
+    const gchar *sdp, gchar **ufrag, gchar **pwd)
+{
+  Stream *stream = NULL;
+  gchar **sdp_lines = NULL;
+  GSList *candidates = NULL;
+  gint i;
+
+  agent_lock();
+
+  stream = agent_find_stream (agent, stream_id);
+  if (stream == NULL) {
+    goto done;
+  }
+
+  sdp_lines = g_strsplit (sdp, "\n", 0);
+  for (i = 0; sdp_lines && sdp_lines[i]; i++) {
+    if (ufrag && g_str_has_prefix (sdp_lines[i], "a=ice-ufrag:")) {
+      *ufrag = g_strdup (sdp_lines[i] + 12);
+    } else if (pwd && g_str_has_prefix (sdp_lines[i], "a=ice-pwd:")) {
+      *pwd = g_strdup (sdp_lines[i] + 10);
+    } else if (g_str_has_prefix (sdp_lines[i], "a=candidate:")) {
+      NiceCandidate *candidate = NULL;
+
+      candidate = nice_agent_parse_remote_candidate_sdp (agent, stream->id,
+          sdp_lines[i]);
+      if (candidate == NULL) {
+        g_slist_free_full(candidates, (GDestroyNotify)&nice_candidate_free);
+        candidates = NULL;
+        break;
+      }
+      candidates = g_slist_prepend (candidates, candidate);
+    }
+  }
+
+ done:
+  if (sdp_lines)
+    g_strfreev(sdp_lines);
+
+  agent_unlock();
+
+  return candidates;
+}
+
+NICEAPI_EXPORT NiceCandidate *
+nice_agent_parse_remote_candidate_sdp (NiceAgent *agent, guint stream_id,
+    const gchar *sdp)
+{
+  NiceCandidate *candidate = NULL;
+  int ntype = -1;
+  gchar **tokens = NULL;
+  const gchar *foundation = NULL;
+  guint component_id;
+  const gchar *transport = NULL;
+  guint32 priority;
+  const gchar *addr = NULL;
+  guint16 port;
+  const gchar *type = NULL;
+  const gchar *raddr = NULL;
+  guint16 rport;
+  static const gchar *type_names[] = {"host", "srflx", "prflx", "relay"};
+  guint i;
+
+  if (!g_str_has_prefix (sdp, "a=candidate:"))
+    goto done;
+
+  tokens = g_strsplit (sdp + 12, " ", 0);
+  for (i = 0; tokens && tokens[i]; i++) {
+    switch (i) {
+      case 0:
+        foundation = tokens[i];
+        break;
+      case 1:
+        component_id = (guint) g_ascii_strtoull (tokens[i], NULL, 10);
+        break;
+      case 2:
+        transport = tokens[i];
+        break;
+      case 3:
+        priority = (guint32) g_ascii_strtoull (tokens[i], NULL, 10);
+        break;
+      case 4:
+        addr = tokens[i];
+        break;
+      case 5:
+        port = (guint16) g_ascii_strtoull (tokens[i], NULL, 10);
+        break;
+      default:
+        if (tokens[i + 1] == NULL)
+          goto done;
+
+        if (g_strcmp0 (tokens[i], "typ") == 0) {
+          type = tokens[i + 1];
+        } else if (g_strcmp0 (tokens[i], "raddr") == 0) {
+          raddr = tokens[i + 1];
+        } else if (g_strcmp0 (tokens[i], "rport") == 0) {
+          rport = (guint16) g_ascii_strtoull (tokens[i + 1], NULL, 10);
+        }
+        i++;
+        break;
+    }
+  }
+  if (type == NULL)
+    goto done;
+
+  ntype = -1;
+  for (i = 0; i < G_N_ELEMENTS (type_names); i++) {
+    if (g_strcmp0 (type, type_names[i]) == 0) {
+      ntype = i;
+      break;
+    }
+  }
+  if (ntype == -1)
+    goto done;
+
+  if (g_strcmp0 (transport, "UDP") == 0) {
+    candidate = nice_candidate_new(ntype);
+    candidate->component_id = component_id;
+    candidate->stream_id = stream_id;
+    candidate->transport = NICE_CANDIDATE_TRANSPORT_UDP;
+    g_strlcpy(candidate->foundation, foundation, NICE_CANDIDATE_MAX_FOUNDATION);
+    candidate->priority = priority;
+
+    if (!nice_address_set_from_string (&candidate->addr, addr)) {
+      nice_candidate_free (candidate);
+      candidate = NULL;
+      goto done;
+    }
+    nice_address_set_port (&candidate->addr, port);
+
+    if (raddr && rport) {
+      if (!nice_address_set_from_string (&candidate->base_addr, raddr)) {
+        nice_candidate_free (candidate);
+        candidate = NULL;
+        goto done;
+      }
+      nice_address_set_port (&candidate->base_addr, rport);
+    }
+  }
+
+ done:
+  if (tokens)
+    g_strfreev(tokens);
+
+  return candidate;
 }
