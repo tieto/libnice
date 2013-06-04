@@ -13,8 +13,13 @@ Upstream Authors:
 Copyright:
 
     Copyright © 1986 Gary S. Brown
-    Copyright © 2006-2008 Collabora Ltd.
-    Copyright © 2006-2008 Nokia Corporation.
+    Copyright © 2003-2005 Jouni Malinen
+    Copyright © 2004-2005 Google Inc.
+    Copyright © 2006-2013 Collabora Ltd.
+    Copyright © 2006-2010 Nokia Corporation.
+    Copyright © 2006 Youness Alaoui
+    Copyright © 2008 Haakon Sporsheim
+    Copyright © 2013 University of Chicago
 
 License:
   The Nice Glib ICE library is licensed under both the Mozilla Public License
