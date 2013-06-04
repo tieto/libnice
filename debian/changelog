@@ -7,6 +7,7 @@ libnice (0.1.4-1) UNRELEASED; urgency=low
     - duplicate short description
     - non-canonical Vcs-Git
   * Use dh_autoreconf
+  * Get verbose output from tests
 
  -- Simon McVittie <smcv@debian.org>  Tue, 04 Jun 2013 09:04:10 +0100
 
