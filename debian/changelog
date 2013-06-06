@@ -1,4 +1,4 @@
-libnice (0.1.4-1) UNRELEASED; urgency=low
+libnice (0.1.4-1) unstable; urgency=low
 
   * New upstream release (Closes: #705101)
     - update debian/copyright
@@ -10,8 +10,9 @@ libnice (0.1.4-1) UNRELEASED; urgency=low
   * Use dh_autoreconf
   * Get verbose output from tests
   * Standards-Version: 3.9.4 (no further changes)
+  * Release to unstable
 
- -- Simon McVittie <smcv@debian.org>  Tue, 04 Jun 2013 09:04:10 +0100
+ -- Simon McVittie <smcv@debian.org>  Thu, 06 Jun 2013 10:41:08 +0100
 
 libnice (0.1.3-1) experimental; urgency=low
 
