@@ -23,10 +23,12 @@ libnice.so.10 libnice10 #MINVER#
  nice_agent_generate_local_sdp@Base 0.1.4
  nice_agent_generate_local_stream_sdp@Base 0.1.4
  nice_agent_get_default_local_candidate@Base 0.1.4
+ nice_agent_get_io_stream@Base 0.1.5
  nice_agent_get_local_candidates@Base 0.1.0
  nice_agent_get_local_credentials@Base 0.1.0
  nice_agent_get_remote_candidates@Base 0.1.0
  nice_agent_get_selected_pair@Base 0.1.4
+ nice_agent_get_selected_socket@Base 0.1.5
  nice_agent_get_stream_name@Base 0.1.4
  nice_agent_get_type@Base 0.1.0
  nice_agent_new@Base 0.1.0
@@ -34,9 +36,14 @@ libnice.so.10 libnice10 #MINVER#
  nice_agent_parse_remote_candidate_sdp@Base 0.1.4
  nice_agent_parse_remote_sdp@Base 0.1.4
  nice_agent_parse_remote_stream_sdp@Base 0.1.4
+ nice_agent_recv@Base 0.1.5
+ nice_agent_recv_messages@Base 0.1.5
+ nice_agent_recv_messages_nonblocking@Base 0.1.5
+ nice_agent_recv_nonblocking@Base 0.1.5
  nice_agent_remove_stream@Base 0.1.0
  nice_agent_restart@Base 0.1.0
  nice_agent_send@Base 0.1.0
+ nice_agent_send_messages_nonblocking@Base 0.1.5
  nice_agent_set_port_range@Base 0.1.4
  nice_agent_set_relay_info@Base 0.1.0
  nice_agent_set_remote_candidates@Base 0.1.0
@@ -51,9 +58,12 @@ libnice.so.10 libnice10 #MINVER#
  nice_candidate_new@Base 0.1.0
  nice_debug_disable@Base 0.1.0
  nice_debug_enable@Base 0.1.0
+ nice_input_stream_new@Base 0.1.5
  nice_interfaces_get_ip_for_interface@Base 0.1.0
  nice_interfaces_get_local_interfaces@Base 0.1.0
  nice_interfaces_get_local_ips@Base 0.1.0
+ nice_io_stream_new@Base 0.1.5
+ nice_output_stream_new@Base 0.1.5
  pseudo_tcp_set_debug_level@Base 0.1.0
  pseudo_tcp_socket_close@Base 0.1.0
  pseudo_tcp_socket_connect@Base 0.1.0

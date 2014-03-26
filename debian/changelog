@@ -1,6 +1,7 @@
 libnice (0.1.5-1) UNRELEASED; urgency=low
 
   * New upstream release
+    - update symbols
 
  -- Simon McVittie <smcv@debian.org>  Wed, 26 Mar 2014 15:05:29 +0000
 
