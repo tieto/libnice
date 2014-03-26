@@ -92,6 +92,14 @@ NiceAgent
 @arg1: 
 @arg2: 
 
+<!-- ##### SIGNAL NiceAgent::streams-removed ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+
 <!-- ##### ARG NiceAgent:compatibility ##### -->
 <para>
 
@@ -229,6 +237,24 @@ NiceAgent
 @buf: 
 @user_data: 
 
+
+<!-- ##### STRUCT NiceInputMessage ##### -->
+<para>
+
+</para>
+
+@buffers: 
+@n_buffers: 
+@from: 
+@length: 
+
+<!-- ##### STRUCT NiceOutputMessage ##### -->
+<para>
+
+</para>
+
+@buffers: 
+@n_buffers: 
 
 <!-- ##### MACRO NICE_AGENT_MAX_REMOTE_CANDIDATES ##### -->
 <para>
@@ -408,6 +434,81 @@ NiceAgent
 @Returns: 
 
 
+<!-- ##### FUNCTION nice_agent_send_messages_nonblocking ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@messages: 
+@n_messages: 
+@cancellable: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_recv ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@buf: 
+@buf_len: 
+@cancellable: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_recv_messages ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@messages: 
+@n_messages: 
+@cancellable: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_recv_nonblocking ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@buf: 
+@buf_len: 
+@cancellable: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_recv_messages_nonblocking ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@messages: 
+@n_messages: 
+@cancellable: 
+@error: 
+@Returns: 
+
+
 <!-- ##### FUNCTION nice_agent_attach_recv ##### -->
 <para>
 
@@ -568,6 +669,28 @@ NiceAgent
 @agent: 
 @stream_id: 
 @sdp: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_get_io_stream ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_get_selected_socket ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
 @Returns: 
 
 

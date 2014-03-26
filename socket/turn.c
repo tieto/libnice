@@ -114,10 +114,10 @@ typedef struct {
 } SendData;
 
 static void socket_close (NiceSocket *sock);
-static gint socket_recv (NiceSocket *sock, NiceAddress *from,
-    guint len, gchar *buf);
-static gboolean socket_send (NiceSocket *sock, const NiceAddress *to,
-    guint len, const gchar *buf);
+static gint socket_recv_messages (NiceSocket *sock,
+    NiceInputMessage *recv_messages, guint n_recv_messages);
+static gint socket_send_messages (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *messages, guint n_messages);
 static gboolean socket_is_reliable (NiceSocket *sock);
 
 static void priv_process_pending_bindings (TurnPriv *priv);
@@ -146,9 +146,9 @@ priv_nice_address_hash (gconstpointer data)
 }
 
 static void
-priv_send_data_queue_destroy (gpointer data)
+priv_send_data_queue_destroy (gpointer user_data)
 {
-  GQueue *send_queue = (GQueue *) data;
+  GQueue *send_queue = (GQueue *) user_data;
   GList *i;
 
   for (i = g_queue_peek_head_link (send_queue); i; i = i->next) {
@@ -193,7 +193,6 @@ nice_turn_socket_new (GMainContext *ctx, NiceAddress *addr,
   } else if (compatibility == NICE_TURN_SOCKET_COMPATIBILITY_OC2007) {
     stun_agent_init (&priv->agent, STUN_ALL_KNOWN_ATTRIBUTES,
         STUN_COMPATIBILITY_OC2007,
-        STUN_AGENT_USAGE_NO_INDICATION_AUTH |
         STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS |
         STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES);
   }
@@ -230,8 +229,8 @@ nice_turn_socket_new (GMainContext *ctx, NiceAddress *addr,
           priv_send_data_queue_destroy);
   sock->addr = *addr;
   sock->fileno = base_socket->fileno;
-  sock->send = socket_send;
-  sock->recv = socket_recv;
+  sock->send_messages = socket_send_messages;
+  sock->recv_messages = socket_recv_messages;
   sock->is_reliable = socket_is_reliable;
   sock->close = socket_close;
   sock->priv = (void *) priv;
@@ -305,25 +304,89 @@ socket_close (NiceSocket *sock)
 }
 
 static gint
-socket_recv (NiceSocket *sock, NiceAddress *from, guint len, gchar *buf)
+socket_recv_messages (NiceSocket *sock,
+    NiceInputMessage *recv_messages, guint n_recv_messages)
 {
   TurnPriv *priv = (TurnPriv *) sock->priv;
-  uint8_t recv_buf[STUN_MAX_MESSAGE_SIZE];
-  gint recv_len;
-  NiceAddress recv_from;
-  NiceSocket *dummy;
+  gint n_messages;
+  guint i;
+  gboolean error = FALSE;
+  guint n_valid_messages;
 
   nice_debug ("received message on TURN socket");
 
-  recv_len = nice_socket_recv (priv->base_socket, &recv_from,
-      sizeof(recv_buf), (gchar *) recv_buf);
+  n_messages = nice_socket_recv_messages (priv->base_socket,
+      recv_messages, n_recv_messages);
 
-  if (recv_len > 0)
-    return nice_turn_socket_parse_recv (sock, &dummy, from, len, buf,
-        &recv_from, (gchar *) recv_buf,
-        (guint) recv_len);
-  else
-    return recv_len;
+  if (n_messages < 0)
+    return n_messages;
+
+  /* Process all the messages. Those which fail parsing are re-used for the next
+   * message.
+   *
+   * FIXME: This needs a fast path which avoids allocations or memcpy()s.
+   * Implementing such a path means rewriting the TURN parser (and hence the
+   * STUN message code) to operate on vectors of buffers, rather than a
+   * monolithic buffer. */
+  for (i = 0; i < (guint) n_messages; i += n_valid_messages) {
+    NiceInputMessage *message = &recv_messages[i];
+    NiceSocket *dummy;
+    NiceAddress from;
+    guint8 *buffer;
+    gsize buffer_length;
+    gint parsed_buffer_length;
+    gboolean allocated_buffer = FALSE;
+
+    n_valid_messages = 1;
+
+    /* Compact the message’s buffers into a single one for parsing. Avoid this
+     * in the (hopefully) common case of a single-element buffer vector. */
+    if (message->n_buffers == 1 ||
+        (message->n_buffers == -1 &&
+         message->buffers[0].buffer != NULL &&
+         message->buffers[1].buffer == NULL)) {
+      buffer = message->buffers[0].buffer;
+      buffer_length = message->buffers[0].size;
+    } else {
+      nice_debug ("%s: **WARNING: SLOW PATH**", G_STRFUNC);
+
+      buffer = compact_input_message (message, &buffer_length);
+      allocated_buffer = TRUE;
+    }
+
+    /* Parse in-place. */
+    parsed_buffer_length = nice_turn_socket_parse_recv (sock, &dummy,
+        &from, buffer_length, buffer,
+        message->from, buffer, buffer_length);
+    message->length = MAX (parsed_buffer_length, 0);
+
+    if (parsed_buffer_length < 0) {
+      error = TRUE;
+    } else if (parsed_buffer_length == 0) {
+      /* A TURN control message which needs ignoring. Re-use this
+       * NiceInputMessage in the next loop iteration. */
+      n_valid_messages = 0;
+    }
+
+    /* Split up the monolithic buffer again into the caller-provided buffers. */
+    if (parsed_buffer_length > 0 && allocated_buffer) {
+      parsed_buffer_length =
+          memcpy_buffer_to_input_message (message, buffer,
+              parsed_buffer_length);
+    }
+
+    if (allocated_buffer)
+      g_free (buffer);
+
+    if (error)
+      break;
+  }
+
+  /* Was there an error processing the first message? */
+  if (error && i == 0)
+    return -1;
+
+  return i;
 }
 
 static GSource *
@@ -471,7 +534,8 @@ socket_dequeue_all_data (TurnPriv *priv, const NiceAddress *to)
           (SendData *) g_queue_pop_head(send_queue);
 
       nice_debug ("dequeuing data");
-      nice_socket_send (priv->base_socket, to, data->data_len, data->data);
+      nice_socket_send (priv->base_socket, &priv->server_addr, data->data_len,
+          data->data);
 
       g_free (data->data);
       g_slice_free (SendData, data);
@@ -483,17 +547,21 @@ socket_dequeue_all_data (TurnPriv *priv, const NiceAddress *to)
 }
 
 
-static gboolean
-socket_send (NiceSocket *sock, const NiceAddress *to,
-    guint len, const gchar *buf)
+static gssize
+socket_send_message (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *message)
 {
   TurnPriv *priv = (TurnPriv *) sock->priv;
   StunMessage msg;
   uint8_t buffer[STUN_MAX_MESSAGE_SIZE];
   size_t msg_len;
-  struct sockaddr_storage sa;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } sa;
   GList *i = priv->channels;
   ChannelBinding *binding = NULL;
+  gint ret;
 
   for (; i; i = i->next) {
     ChannelBinding *b = i->data;
@@ -503,32 +571,62 @@ socket_send (NiceSocket *sock, const NiceAddress *to,
     }
   }
 
-  nice_address_copy_to_sockaddr (to, (struct sockaddr *)&sa);
+  nice_address_copy_to_sockaddr (to, &sa.addr);
 
   if (binding) {
     if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 ||
         priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766) {
-      if (len + sizeof(uint32_t) <= sizeof(buffer)) {
-        uint16_t len16 = htons ((uint16_t) len);
-        uint16_t channel16 = htons (binding->channel);
+      gsize message_len = output_message_get_size (message);
+
+      if (message_len + sizeof(uint32_t) <= sizeof(buffer)) {
+        guint j;
+        uint16_t len16, channel16;
+        gsize message_offset = 0;
+
+        len16 = htons ((uint16_t) message_len);
+        channel16 = htons (binding->channel);
+
         memcpy (buffer, &channel16, sizeof(uint16_t));
-        memcpy (buffer + sizeof(uint16_t), &len16,sizeof(uint16_t));
-        memcpy (buffer + sizeof(uint32_t), buf, len);
-        msg_len = len + sizeof(uint32_t);
+        memcpy (buffer + sizeof(uint16_t), &len16, sizeof(uint16_t));
+
+        /* FIXME: Slow path! This should be replaced by code which manipulates
+         * the GOutputVector array, rather than the buffer contents
+         * themselves. */
+        for (j = 0;
+             (message->n_buffers >= 0 && j < (guint) message->n_buffers) ||
+             (message->n_buffers < 0 && message->buffers[j].buffer != NULL);
+             j++) {
+          const GOutputVector *out_buf = &message->buffers[j];
+          gsize out_len;
+
+          out_len = MIN (message_len - message_offset, out_buf->size);
+          memcpy (buffer + sizeof (uint32_t) + message_offset,
+              out_buf->buffer, out_len);
+          message_offset += out_len;
+        }
+
+        msg_len = message_len + sizeof(uint32_t);
       } else {
         return 0;
       }
     } else {
-      return nice_socket_send (priv->base_socket, &priv->server_addr, len, buf);
+      ret = nice_socket_send_messages (priv->base_socket, &priv->server_addr,
+          message, 1);
+      if (ret == 1)
+        return output_message_get_size (message);
+      return ret;
     }
   } else {
+    guint8 *compacted_buf;
+    gsize compacted_buf_len;
+
     if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 ||
         priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766) {
       if (!stun_agent_init_indication (&priv->agent, &msg,
               buffer, sizeof(buffer), STUN_IND_SEND))
         goto send;
       if (stun_message_append_xor_addr (&msg, STUN_ATTRIBUTE_PEER_ADDRESS,
-              (struct sockaddr *)&sa, sizeof(sa)) !=
+              &sa.addr, sizeof(sa)) !=
           STUN_MESSAGE_RETURN_SUCCESS)
         goto send;
     } else {
@@ -546,7 +644,7 @@ socket_send (NiceSocket *sock, const NiceAddress *to,
           goto send;
       }
       if (stun_message_append_addr (&msg, STUN_ATTRIBUTE_DESTINATION_ADDRESS,
-              (struct sockaddr *)&sa, sizeof(sa)) !=
+              &sa.addr, sizeof(sa)) !=
           STUN_MESSAGE_RETURN_SUCCESS)
         goto send;
 
@@ -567,10 +665,20 @@ socket_send (NiceSocket *sock, const NiceAddress *to,
       stun_message_ensure_ms_realm(&msg, priv->ms_realm);
     }
 
-    if (stun_message_append_bytes (&msg, STUN_ATTRIBUTE_DATA,
-            buf, len) != STUN_MESSAGE_RETURN_SUCCESS)
-      goto send;
+    /* Slow path! We have to compact the buffers to append them to the message.
+     * FIXME: This could be improved by adding vectored I/O support to
+      * stun_message_append_bytes(). */
+    compacted_buf = compact_output_message (message, &compacted_buf_len);
 
+    if (stun_message_append_bytes (&msg, STUN_ATTRIBUTE_DATA,
+            compacted_buf, compacted_buf_len) != STUN_MESSAGE_RETURN_SUCCESS) {
+      g_free (compacted_buf);
+      goto send;
+    }
+
+    g_free (compacted_buf);
+
+    /* Finish the message. */
     msg_len = stun_agent_finish_message (&priv->agent, &msg,
         priv->password, priv->password_len);
     if (msg_len > 0 && stun_message_get_class (&msg) == STUN_REQUEST) {
@@ -594,14 +702,50 @@ socket_send (NiceSocket *sock, const NiceAddress *to,
       /* enque data */
       nice_debug ("enqueuing data");
       socket_enqueue_data(priv, to, msg_len, (gchar *)buffer);
-      return TRUE;
+
+      return msg_len;
     } else {
-      return nice_socket_send (priv->base_socket, &priv->server_addr,
-          msg_len, (gchar *)buffer);
+      GOutputVector local_buf = { buffer, msg_len };
+      NiceOutputMessage local_message = {&local_buf, 1};
+
+      ret = nice_socket_send_messages (priv->base_socket, &priv->server_addr,
+          &local_message, 1);
+      if (ret == 1)
+        return msg_len;
+      return ret;
     }
   }
- send:
-  return nice_socket_send (priv->base_socket, to, len, buf);
+
+send:
+  /* Error condition pass through to the base socket. */
+  ret = nice_socket_send_messages (priv->base_socket, to, message, 1);
+  if (ret == 1)
+    return output_message_get_size (message);
+  return ret;
+}
+
+static gint
+socket_send_messages (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *messages, guint n_messages)
+{
+  guint i;
+
+  for (i = 0; i < n_messages; i++) {
+    const NiceOutputMessage *message = &messages[i];
+    gssize len;
+
+    len = socket_send_message (sock, to, message);
+
+    if (len < 0) {
+      /* Error. */
+      return len;
+    } else if (len == 0) {
+      /* EWOULDBLOCK. */
+      break;
+    }
+  }
+
+  return i;
 }
 
 static gboolean
@@ -682,16 +826,18 @@ priv_binding_expired_timeout (gpointer data)
       priv->channels = g_list_remove (priv->channels, b);
       /* Make sure we don't free a currently being-refreshed binding */
       if (priv->current_binding_msg && !priv->current_binding) {
-        struct sockaddr_storage sa;
+        union {
+          struct sockaddr_storage storage;
+          struct sockaddr addr;
+        } sa;
         socklen_t sa_len = sizeof(sa);
         NiceAddress to;
 
         /* look up binding associated with peer */
         stun_message_find_xor_addr (
             &priv->current_binding_msg->message,
-            STUN_ATTRIBUTE_XOR_PEER_ADDRESS, (struct sockaddr *) &sa,
-            &sa_len);
-        nice_address_set_from_sockaddr (&to, (struct sockaddr *) &sa);
+            STUN_ATTRIBUTE_XOR_PEER_ADDRESS, &sa.addr, &sa_len);
+        nice_address_set_from_sockaddr (&to, &sa.addr);
 
         /* If the binding is being refreshed, then move it to
            priv->current_binding so it counts as a 'new' binding and
@@ -753,23 +899,65 @@ priv_binding_timeout (gpointer data)
   return FALSE;
 }
 
-gint
+guint
+nice_turn_socket_parse_recv_message (NiceSocket *sock, NiceSocket **from_sock,
+    NiceInputMessage *message)
+{
+  /* TODO: Speed this up in the common reliable case of having a 24-byte header
+   * buffer to begin with, followed by one or more massive buffers. */
+  guint8 *buf;
+  gsize buf_len, len;
+
+  if (message->n_buffers == 1 ||
+      (message->n_buffers == -1 &&
+       message->buffers[0].buffer != NULL &&
+       message->buffers[1].buffer == NULL)) {
+    /* Fast path. Single massive buffer. */
+    len = nice_turn_socket_parse_recv (sock, from_sock,
+        message->from, message->length, message->buffers[0].buffer,
+        message->from, message->buffers[0].buffer, message->length);
+
+    g_assert_cmpuint (len, <=, message->length);
+
+    message->length = len;
+
+    return (len > 0) ? 1 : 0;
+  }
+
+  /* Slow path. */
+  nice_debug ("%s: **WARNING: SLOW PATH**", G_STRFUNC);
+
+  buf = compact_input_message (message, &buf_len);
+  len = nice_turn_socket_parse_recv (sock, from_sock,
+      message->from, buf_len, buf,
+      message->from, buf, buf_len);
+  len = memcpy_buffer_to_input_message (message, buf, len);
+
+  return (len > 0) ? 1 : 0;
+}
+
+gsize
 nice_turn_socket_parse_recv (NiceSocket *sock, NiceSocket **from_sock,
-    NiceAddress *from, guint len, gchar *buf,
-    NiceAddress *recv_from, gchar *recv_buf, guint recv_len)
+    NiceAddress *from, gsize len, guint8 *buf,
+    NiceAddress *recv_from, guint8 *_recv_buf, gsize recv_len)
 {
 
   TurnPriv *priv = (TurnPriv *) sock->priv;
   StunValidationStatus valid;
   StunMessage msg;
-  struct sockaddr_storage sa;
-  socklen_t from_len = sizeof (sa);
-  GList *i = priv->channels;
+  GList *l;
   ChannelBinding *binding = NULL;
+
+  union {
+    guint8 *u8;
+    guint16 *u16;
+  } recv_buf;
+
+  recv_buf.u8 = (guint8 *) _recv_buf;
 
   if (nice_address_equal (&priv->server_addr, recv_from)) {
     valid = stun_agent_validate (&priv->agent, &msg,
-        (uint8_t *) recv_buf, (size_t) recv_len, NULL, NULL);
+        recv_buf.u8, recv_len, NULL, NULL);
 
     if (valid == STUN_VALIDATION_SUCCESS) {
       if (priv->compatibility != NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 &&
@@ -856,16 +1044,18 @@ nice_turn_socket_parse_recv (NiceSocket *sock, NiceSocket **from_sock,
             } else {
               /* Existing binding refresh */
               GList *i;
-              struct sockaddr_storage sa;
+              union {
+                struct sockaddr_storage storage;
+                struct sockaddr addr;
+              } sa;
               socklen_t sa_len = sizeof(sa);
               NiceAddress to;
 
               /* look up binding associated with peer */
               stun_message_find_xor_addr (
                   &priv->current_binding_msg->message,
-                  STUN_ATTRIBUTE_XOR_PEER_ADDRESS, (struct sockaddr *) &sa,
-                  &sa_len);
-              nice_address_set_from_sockaddr (&to, (struct sockaddr *) &sa);
+                  STUN_ATTRIBUTE_XOR_PEER_ADDRESS, &sa.addr, &sa_len);
+              nice_address_set_from_sockaddr (&to, &sa.addr);
 
               for (i = priv->channels; i; i = i->next) {
                 ChannelBinding *b = i->data;
@@ -955,16 +1145,18 @@ nice_turn_socket_parse_recv (NiceSocket *sock, NiceSocket **from_sock,
 
           if (memcmp (request_id, response_id,
                   sizeof(StunTransactionId)) == 0) {
-            struct sockaddr_storage peer;
+            union {
+              struct sockaddr_storage storage;
+              struct sockaddr addr;
+            } peer;
             socklen_t peer_len = sizeof(peer);
             NiceAddress to;
 
             nice_debug ("got response for CreatePermission");
             stun_message_find_xor_addr (
                 &current_create_permission_msg->message,
-                STUN_ATTRIBUTE_XOR_PEER_ADDRESS, (struct sockaddr *) &peer,
-                &peer_len);
-            nice_address_set_from_sockaddr (&to, (struct sockaddr *) &peer);
+                STUN_ATTRIBUTE_XOR_PEER_ADDRESS, &peer.addr, &peer_len);
+            nice_address_set_from_sockaddr (&to, &peer.addr);
 
             /* unathorized => resend with realm and nonce */
             if (stun_message_get_class (&msg) == STUN_ERROR) {
@@ -1035,16 +1227,21 @@ nice_turn_socket_parse_recv (NiceSocket *sock, NiceSocket **from_sock,
           stun_message_get_method (&msg) == STUN_IND_DATA) {
         uint16_t data_len;
         uint8_t *data;
+        union {
+          struct sockaddr_storage storage;
+          struct sockaddr addr;
+        } sa;
+        socklen_t from_len = sizeof (sa);
 
         if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 ||
             priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766) {
           if (stun_message_find_xor_addr (&msg, STUN_ATTRIBUTE_REMOTE_ADDRESS,
-                  (struct sockaddr *)&sa, &from_len) !=
+                  &sa.addr, &from_len) !=
               STUN_MESSAGE_RETURN_SUCCESS)
             goto recv;
         } else {
           if (stun_message_find_addr (&msg, STUN_ATTRIBUTE_REMOTE_ADDRESS,
-                  (struct sockaddr *)&sa, &from_len) !=
+                  &sa.addr, &from_len) !=
               STUN_MESSAGE_RETURN_SUCCESS)
             goto recv;
         }
@@ -1055,7 +1252,14 @@ nice_turn_socket_parse_recv (NiceSocket *sock, NiceSocket **from_sock,
         if (data == NULL)
           goto recv;
 
-        nice_address_set_from_sockaddr (from, (struct sockaddr *) &sa);
+        nice_address_set_from_sockaddr (from, &sa.addr);
+
+        if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766 &&
+                !priv_has_permission_for_peer (priv, from)) {
+          if (!priv_has_sent_permission_for_peer (priv, from)) {
+            priv_send_create_permission (priv, NULL, from);
+          }
+        }
 
         *from_sock = sock;
         memmove (buf, data, len > data_len ? data_len : len);
@@ -1067,13 +1271,13 @@ nice_turn_socket_parse_recv (NiceSocket *sock, NiceSocket **from_sock,
   }
 
  recv:
-  for (i = priv->channels; i; i = i->next) {
-    ChannelBinding *b = i->data;
+  for (l = priv->channels; l; l = l->next) {
+    ChannelBinding *b = l->data;
     if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 ||
         priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766) {
-      if (b->channel == ntohs(((uint16_t *)recv_buf)[0])) {
-        recv_len = ntohs (((uint16_t *)recv_buf)[1]);
-        recv_buf += sizeof(uint32_t);
+      if (b->channel == ntohs(recv_buf.u16[0])) {
+        recv_len = ntohs (recv_buf.u16[1]);
+        recv_buf.u8 += sizeof(uint32_t);
         binding = b;
         break;
       }
@@ -1090,7 +1294,7 @@ nice_turn_socket_parse_recv (NiceSocket *sock, NiceSocket **from_sock,
     *from = *recv_from;
   }
 
-  memmove (buf, recv_buf, len > recv_len ? recv_len : len);
+  memmove (buf, recv_buf.u8, len > recv_len ? recv_len : len);
   return len > recv_len ? recv_len : len;
 
  msn_google_lock:
@@ -1181,6 +1385,9 @@ priv_retransmissions_tick_unlocked (TurnPriv *priv)
       case STUN_USAGE_TIMER_RETURN_SUCCESS:
         ret = TRUE;
         break;
+      default:
+        /* Nothing to do. */
+        break;
     }
   }
 
@@ -1204,16 +1411,18 @@ priv_retransmissions_create_permission_tick_unlocked (TurnPriv *priv, GList *lis
           /* Time out */
           StunTransactionId id;
           NiceAddress to;
-          struct sockaddr_storage addr;
+          union {
+            struct sockaddr_storage storage;
+            struct sockaddr addr;
+          } addr;
           socklen_t addr_len = sizeof(addr);
 
           stun_message_id (&current_create_permission_msg->message, id);
           stun_agent_forget_transaction (&priv->agent, id);
           stun_message_find_xor_addr (
               &current_create_permission_msg->message,
-              STUN_ATTRIBUTE_XOR_PEER_ADDRESS, (struct sockaddr *) &addr,
-              &addr_len);
-          nice_address_set_from_sockaddr (&to, (struct sockaddr *) &addr);
+              STUN_ATTRIBUTE_XOR_PEER_ADDRESS, &addr.addr, &addr_len);
+          nice_address_set_from_sockaddr (&to, &addr.addr);
 
           priv_remove_sent_permission_for_peer (priv, &to);
           priv->pending_permissions = g_list_delete_link (
@@ -1240,6 +1449,9 @@ priv_retransmissions_create_permission_tick_unlocked (TurnPriv *priv, GList *lis
         break;
       case STUN_USAGE_TIMER_RETURN_SUCCESS:
         ret = TRUE;
+        break;
+      default:
+        /* Nothing to do. */
         break;
     }
   }
@@ -1379,7 +1591,10 @@ priv_send_create_permission(TurnPriv *priv, StunMessage *resp,
   guint msg_buf_len;
   gboolean res = FALSE;
   TURNMessage *msg = g_new0 (TURNMessage, 1);
-  struct sockaddr_storage addr;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } addr;
   uint8_t *realm = NULL;
   uint16_t realm_len = 0;
   uint8_t *nonce = NULL;
@@ -1397,7 +1612,7 @@ priv_send_create_permission(TurnPriv *priv, StunMessage *resp,
     priv_add_sent_permission_for_peer (priv, peer);
   }
 
-  nice_address_copy_to_sockaddr (peer, (struct sockaddr *) &addr);
+  nice_address_copy_to_sockaddr (peer, &addr.addr);
 
   /* send CreatePermission */
   msg_buf_len = stun_usage_turn_create_permission(&priv->agent, &msg->message,
@@ -1409,7 +1624,7 @@ priv_send_create_permission(TurnPriv *priv, StunMessage *resp,
       priv->password_len,
       realm, realm_len,
       nonce, nonce_len,
-      (struct sockaddr *) &addr,
+      &addr.addr,
       STUN_USAGE_TURN_COMPATIBILITY_RFC5766);
 
   if (msg_buf_len > 0) {
@@ -1439,10 +1654,13 @@ priv_send_channel_bind (TurnPriv *priv,  StunMessage *resp,
 {
   uint32_t channel_attr = channel << 16;
   size_t stun_len;
-  struct sockaddr_storage sa;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } sa;
   TURNMessage *msg = g_new0 (TURNMessage, 1);
 
-  nice_address_copy_to_sockaddr (peer, (struct sockaddr *)&sa);
+  nice_address_copy_to_sockaddr (peer, &sa.addr);
 
   if (!stun_agent_init_request (&priv->agent, &msg->message,
           msg->buffer, sizeof(msg->buffer),
@@ -1458,7 +1676,7 @@ priv_send_channel_bind (TurnPriv *priv,  StunMessage *resp,
   }
 
   if (stun_message_append_xor_addr (&msg->message, STUN_ATTRIBUTE_PEER_ADDRESS,
-          (struct sockaddr *)&sa,
+          &sa.addr,
           sizeof(sa))
       != STUN_MESSAGE_RETURN_SUCCESS) {
     g_free (msg);
@@ -1515,9 +1733,12 @@ static gboolean
 priv_add_channel_binding (TurnPriv *priv, const NiceAddress *peer)
 {
   size_t stun_len;
-  struct sockaddr_storage sa;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } sa;
 
-  nice_address_copy_to_sockaddr (peer, (struct sockaddr *)&sa);
+  nice_address_copy_to_sockaddr (peer, &sa.addr);
 
   if (priv->current_binding) {
     NiceAddress * pending= nice_address_new ();
@@ -1585,7 +1806,7 @@ priv_add_channel_binding (TurnPriv *priv, const NiceAddress *peer)
 
     if (stun_message_append_addr (&msg->message,
             STUN_ATTRIBUTE_DESTINATION_ADDRESS,
-            (struct sockaddr *)&sa, sizeof(sa))
+            &sa.addr, sizeof(sa))
         != STUN_MESSAGE_RETURN_SUCCESS) {
       g_free (msg);
       return FALSE;

@@ -313,6 +313,9 @@ static gboolean priv_conn_check_tick_stream (Stream *stream, NiceAgent *agent, G
               keep_timer_going = TRUE;
               break;
             }
+          default:
+            /* Nothing to do. */
+            break;
         }
       }
     }
@@ -385,10 +388,9 @@ static gboolean priv_conn_check_tick_stream (Stream *stream, NiceAgent *agent, G
  *
  * @return will return FALSE when no more pending timers.
  */
-static gboolean priv_conn_check_tick_unlocked (gpointer pointer)
+static gboolean priv_conn_check_tick_unlocked (NiceAgent *agent)
 {
   CandidateCheckPair *pair = NULL;
-  NiceAgent *agent = pointer;
   gboolean keep_timer_going = FALSE;
   GSList *i, *j;
   GTimeVal now;
@@ -451,6 +453,7 @@ static gboolean priv_conn_check_tick_unlocked (gpointer pointer)
 static gboolean priv_conn_check_tick (gpointer pointer)
 {
   gboolean ret;
+  NiceAgent *agent = pointer;
 
   agent_lock();
   if (g_source_is_destroyed (g_main_current_source ())) {
@@ -459,8 +462,9 @@ static gboolean priv_conn_check_tick (gpointer pointer)
     agent_unlock ();
     return FALSE;
   }
-  ret = priv_conn_check_tick_unlocked (pointer);
-  agent_unlock();
+
+  ret = priv_conn_check_tick_unlocked (agent);
+  agent_unlock_and_emit (agent);
 
   return ret;
 }
@@ -530,10 +534,13 @@ static gboolean priv_conn_keepalive_retransmissions_tick (gpointer pointer)
           stun_timer_remainder (&pair->keepalive.timer),
           priv_conn_keepalive_retransmissions_tick, pair);
       break;
+    default:
+      /* Nothing to do. */
+      break;
   }
 
 
-  agent_unlock ();
+  agent_unlock_and_emit (pair->keepalive.agent);
   return FALSE;
 }
 
@@ -575,16 +582,18 @@ static gboolean priv_conn_keepalive_tick_unlocked (NiceAgent *agent)
           uint8_t *password = NULL;
           size_t password_len = priv_get_password (agent,
               agent_find_stream (agent, stream->id), p->remote, &password);
-          gchar tmpbuf[INET6_ADDRSTRLEN];
 
-          nice_address_to_string (&p->remote->addr, tmpbuf);
-          nice_debug ("Agent %p : Keepalive STUN-CC REQ to '%s:%u', "
-              "socket=%u (c-id:%u), username='%s' (%d), "
-              "password='%s' (%d), priority=%u.", agent,
-              tmpbuf, nice_address_get_port (&p->remote->addr),
-              g_socket_get_fd(((NiceSocket *)p->local->sockptr)->fileno), component->id,
-              uname, uname_len, password, password_len, priority);
-
+          if (nice_debug_is_enabled ()) {
+            gchar tmpbuf[INET6_ADDRSTRLEN];
+            nice_address_to_string (&p->remote->addr, tmpbuf);
+            nice_debug ("Agent %p : Keepalive STUN-CC REQ to '%s:%u', "
+                "socket=%u (c-id:%u), username='%s' (%" G_GSIZE_FORMAT "), "
+                "password='%s' (%" G_GSIZE_FORMAT "), priority=%u.", agent,
+                tmpbuf, nice_address_get_port (&p->remote->addr),
+                g_socket_get_fd(((NiceSocket *)p->local->sockptr)->fileno),
+                component->id, uname, uname_len, password, password_len,
+                priority);
+          }
           if (uname_len > 0) {
             buf_len = stun_usage_ice_conncheck_create (&agent->stun_agent,
                 &p->keepalive.stun_message, p->keepalive.stun_buffer,
@@ -595,7 +604,7 @@ static gboolean priv_conn_keepalive_tick_unlocked (NiceAgent *agent)
                 NULL,
                 agent_to_ice_compatibility (agent));
 
-            nice_debug ("Agent %p: conncheck created %d - %p",
+            nice_debug ("Agent %p: conncheck created %" G_GSIZE_FORMAT " - %p",
                 agent, buf_len, p->keepalive.stun_message.buffer);
 
             if (buf_len > 0) {
@@ -715,7 +724,7 @@ static gboolean priv_conn_keepalive_tick (gpointer pointer)
       agent->keepalive_timer_source = NULL;
     }
   }
-  agent_unlock();
+  agent_unlock_and_emit (agent);
   return ret;
 }
 
@@ -768,10 +777,13 @@ static gboolean priv_turn_allocate_refresh_retransmissions_tick (gpointer pointe
           stun_timer_remainder (&cand->timer),
           priv_turn_allocate_refresh_retransmissions_tick, cand);
       break;
+    default:
+      /* Nothing to do. */
+      break;
   }
 
 
-  agent_unlock ();
+  agent_unlock_and_emit (cand->agent);
   return FALSE;
 }
 
@@ -811,7 +823,8 @@ static void priv_turn_allocate_refresh_tick_unlocked (CandidateRefresh *cand)
     cand->msn_turn_password = password;
   }
 
-  nice_debug ("Agent %p : Sending allocate Refresh %d", cand->agent, buffer_len);
+  nice_debug ("Agent %p : Sending allocate Refresh %" G_GSIZE_FORMAT,
+      cand->agent, buffer_len);
 
   if (cand->tick_source != NULL) {
     g_source_destroy (cand->tick_source);
@@ -855,7 +868,7 @@ static gboolean priv_turn_allocate_refresh_tick (gpointer pointer)
   }
 
   priv_turn_allocate_refresh_tick_unlocked (cand);
-  agent_unlock ();
+  agent_unlock_and_emit (cand->agent);
 
   return FALSE;
 }
@@ -875,7 +888,7 @@ gboolean conn_check_schedule_next (NiceAgent *agent)
     nice_debug ("Agent %p : WARN: starting conn checks before local candidate gathering is finished.", agent);
 
   /* step: call once imediately */
-  res = priv_conn_check_tick_unlocked ((gpointer) agent);
+  res = priv_conn_check_tick_unlocked (agent);
   nice_debug ("Agent %p : priv_conn_check_tick_unlocked returned %d", agent, res);
 
   /* step: schedule timer if not running yet */
@@ -1650,15 +1663,18 @@ int conn_check_send (NiceAgent *agent, CandidateCheckPair *pair)
   size_t buffer_len;
   unsigned int timeout;
 
-  if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
-      agent->compatibility == NICE_COMPATIBILITY_OC2007) {
+  if (password != NULL &&
+      (agent->compatibility == NICE_COMPATIBILITY_MSN ||
+       agent->compatibility == NICE_COMPATIBILITY_OC2007)) {
     password = g_base64_decode ((gchar *) password, &password_len);
   }
 
-  {
+  if (nice_debug_is_enabled ()) {
     gchar tmpbuf[INET6_ADDRSTRLEN];
     nice_address_to_string (&pair->remote->addr, tmpbuf);
-    nice_debug ("Agent %p : STUN-CC REQ to '%s:%u', socket=%u, pair=%s (c-id:%u), tie=%llu, username='%s' (%d), password='%s' (%d), priority=%u.", agent,
+    nice_debug ("Agent %p : STUN-CC REQ to '%s:%u', socket=%u, "
+        "pair=%s (c-id:%u), tie=%llu, username='%s' (%" G_GSIZE_FORMAT "), "
+        "password='%s' (%" G_GSIZE_FORMAT "), priority=%u.", agent,
 	     tmpbuf,
              nice_address_get_port (&pair->remote->addr),
              g_socket_get_fd(((NiceSocket *)pair->local->sockptr)->fileno),
@@ -1681,7 +1697,8 @@ int conn_check_send (NiceAgent *agent, CandidateCheckPair *pair)
         pair->foundation,
         agent_to_ice_compatibility (agent));
 
-    nice_debug ("Agent %p: conncheck created %d - %p", agent, buffer_len, pair->stun_message.buffer);
+    nice_debug ("Agent %p: conncheck created %" G_GSIZE_FORMAT " - %p",
+        agent, buffer_len, pair->stun_message.buffer);
 
     if (agent->compatibility == NICE_COMPATIBILITY_MSN ||
         agent->compatibility == NICE_COMPATIBILITY_OC2007) {
@@ -1890,7 +1907,7 @@ static void priv_reply_to_conn_check (NiceAgent *agent, Stream *stream, Componen
 {
   g_assert (rcand == NULL || nice_address_equal(&rcand->addr, toaddr) == TRUE);
 
-  {
+  if (nice_debug_is_enabled ()) {
     gchar tmpbuf[INET6_ADDRSTRLEN];
     nice_address_to_string (toaddr, tmpbuf);
     nice_debug ("Agent %p : STUN-CC RESP to '%s:%u', socket=%u, len=%u, cand=%p (c-id:%u), use-cand=%d.", agent,
@@ -1903,7 +1920,7 @@ static void priv_reply_to_conn_check (NiceAgent *agent, Stream *stream, Componen
   }
 
   nice_socket_send (socket, toaddr, rbuf_len, (const gchar*)rbuf);
-  
+
   if (rcand) {
     /* note: upon successful check, make the reserve check immediately */
     priv_schedule_triggered_check (agent, stream, component, socket, rcand, use_candidate);
@@ -2087,7 +2104,10 @@ static CandidateCheckPair *priv_process_response_check_for_peer_reflexive(NiceAg
  */
 static gboolean priv_map_reply_to_conn_check_request (NiceAgent *agent, Stream *stream, Component *component, NiceSocket *sockptr, const NiceAddress *from, NiceCandidate *local_candidate, NiceCandidate *remote_candidate, StunMessage *resp)
 {
-  struct sockaddr_storage sockaddr;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } sockaddr;
   socklen_t socklen = sizeof (sockaddr);
   GSList *i;
   StunUsageIceReturn res;
@@ -2104,7 +2124,7 @@ static gboolean priv_map_reply_to_conn_check_request (NiceAgent *agent, Stream *
 
       if (memcmp (discovery_id, response_id, sizeof(StunTransactionId)) == 0) {
         res = stun_usage_ice_conncheck_process (resp,
-            (struct sockaddr *) &sockaddr, &socklen,
+            &sockaddr.addr, &socklen,
             agent_to_ice_compatibility (agent));
         nice_debug ("Agent %p : stun_bind_process/conncheck for %p res %d "
             "(controlling=%d).", agent, p, (int)res, agent->controlling_mode);
@@ -2123,18 +2143,19 @@ static gboolean priv_map_reply_to_conn_check_request (NiceAgent *agent, Stream *
            *       sent the original request to (see 7.1.2.1. "Failure
            *       Cases") */
           if (nice_address_equal (from, &p->remote->addr) != TRUE) {
-            gchar tmpbuf[INET6_ADDRSTRLEN];
-            gchar tmpbuf2[INET6_ADDRSTRLEN];
 
             p->state = NICE_CHECK_FAILED;
-            nice_debug ("Agent %p : conncheck %p FAILED"
-                " (mismatch of source address).", agent, p);
-            nice_address_to_string (&p->remote->addr, tmpbuf);
-            nice_address_to_string (from, tmpbuf2);
-            nice_debug ("Agent %p : '%s:%u' != '%s:%u'", agent,
-                tmpbuf, nice_address_get_port (&p->remote->addr),
-                tmpbuf2, nice_address_get_port (from));
-
+            if (nice_debug_is_enabled ()) {
+              gchar tmpbuf[INET6_ADDRSTRLEN];
+              gchar tmpbuf2[INET6_ADDRSTRLEN];
+              nice_debug ("Agent %p : conncheck %p FAILED"
+                  " (mismatch of source address).", agent, p);
+              nice_address_to_string (&p->remote->addr, tmpbuf);
+              nice_address_to_string (from, tmpbuf2);
+              nice_debug ("Agent %p : '%s:%u' != '%s:%u'", agent,
+                  tmpbuf, nice_address_get_port (&p->remote->addr),
+                  tmpbuf2, nice_address_get_port (from));
+            }
             trans_found = TRUE;
             break;
           }
@@ -2155,7 +2176,7 @@ static gboolean priv_map_reply_to_conn_check_request (NiceAgent *agent, Stream *
             priv_conn_check_unfreeze_related (agent, stream, p);
           } else {
             ok_pair = priv_process_response_check_for_peer_reflexive(agent,
-                stream, component, p, sockptr, (struct sockaddr *) &sockaddr,
+                stream, component, p, sockptr, &sockaddr.addr,
                 local_candidate, remote_candidate);
           }
 
@@ -2217,10 +2238,18 @@ static gboolean priv_map_reply_to_conn_check_request (NiceAgent *agent, Stream *
  */
 static gboolean priv_map_reply_to_discovery_request (NiceAgent *agent, StunMessage *resp)
 {
-  struct sockaddr_storage sockaddr;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } sockaddr;
   socklen_t socklen = sizeof (sockaddr);
-  struct sockaddr_storage alternate;
+
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } alternate;
   socklen_t alternatelen = sizeof (sockaddr);
+
   GSList *i;
   StunUsageBindReturn res;
   gboolean trans_found = FALSE;
@@ -2236,24 +2265,22 @@ static gboolean priv_map_reply_to_discovery_request (NiceAgent *agent, StunMessa
       stun_message_id (&d->stun_message, discovery_id);
 
       if (memcmp (discovery_id, response_id, sizeof(StunTransactionId)) == 0) {
-        res = stun_usage_bind_process (resp, (struct sockaddr *) &sockaddr,
-            &socklen, (struct sockaddr *) &alternate, &alternatelen);
+        res = stun_usage_bind_process (resp, &sockaddr.addr,
+            &socklen, &alternate.addr, &alternatelen);
         nice_debug ("Agent %p : stun_bind_process/disc for %p res %d.",
             agent, d, (int)res);
 
         if (res == STUN_USAGE_BIND_RETURN_ALTERNATE_SERVER) {
           /* handle alternate server */
           NiceAddress niceaddr;
-          nice_address_set_from_sockaddr (&niceaddr,
-              (struct sockaddr *) &alternate);
+          nice_address_set_from_sockaddr (&niceaddr, &alternate.addr);
           d->server = niceaddr;
 
           d->pending = FALSE;
         } else if (res == STUN_USAGE_BIND_RETURN_SUCCESS) {
           /* case: successful binding discovery, create a new local candidate */
           NiceAddress niceaddr;
-          nice_address_set_from_sockaddr (&niceaddr,
-              (struct sockaddr *) &sockaddr);
+          nice_address_set_from_sockaddr (&niceaddr, &sockaddr.addr);
 
           discovery_add_server_reflexive_candidate (
               d->agent,
@@ -2319,7 +2346,7 @@ priv_add_new_turn_refresh (CandidateDiscovery *cdisco, NiceCandidate *relay_cand
       agent_timeout_add_with_context (agent, (lifetime - 60) * 1000,
           priv_turn_allocate_refresh_tick, cand);
 
-  nice_debug ("timer source is : %d", cand->timer_source);
+  nice_debug ("timer source is : %p", cand->timer_source);
 
   return cand;
 }
@@ -2332,12 +2359,24 @@ priv_add_new_turn_refresh (CandidateDiscovery *cdisco, NiceCandidate *relay_cand
  */
 static gboolean priv_map_reply_to_relay_request (NiceAgent *agent, StunMessage *resp)
 {
-  struct sockaddr_storage sockaddr;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } sockaddr;
   socklen_t socklen = sizeof (sockaddr);
-  struct sockaddr_storage alternate;
+
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } alternate;
   socklen_t alternatelen = sizeof (alternate);
-  struct sockaddr_storage relayaddr;
+
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } relayaddr;
   socklen_t relayaddrlen = sizeof (relayaddr);
+
   uint32_t lifetime;
   uint32_t bandwidth;
   GSList *i;
@@ -2356,19 +2395,17 @@ static gboolean priv_map_reply_to_relay_request (NiceAgent *agent, StunMessage *
 
       if (memcmp (discovery_id, response_id, sizeof(StunTransactionId)) == 0) {
         res = stun_usage_turn_process (resp,
-            (struct sockaddr *) &relayaddr, &relayaddrlen,
-            (struct sockaddr *) &sockaddr, &socklen,
-            (struct sockaddr *) &alternate, &alternatelen,
+            &relayaddr.addr, &relayaddrlen,
+            &sockaddr.addr, &socklen,
+            &alternate.addr, &alternatelen,
             &bandwidth, &lifetime, agent_to_turn_compatibility (agent));
         nice_debug ("Agent %p : stun_turn_process/disc for %p res %d.",
             agent, d, (int)res);
 
         if (res == STUN_USAGE_TURN_RETURN_ALTERNATE_SERVER) {
           /* handle alternate server */
-          nice_address_set_from_sockaddr (&d->server,
-              (struct sockaddr *) &alternate);
-          nice_address_set_from_sockaddr (&d->turn->server,
-              (struct sockaddr *) &alternate);
+          nice_address_set_from_sockaddr (&d->server, &alternate.addr);
+          nice_address_set_from_sockaddr (&d->turn->server, &alternate.addr);
 
           d->pending = FALSE;
         } else if (res == STUN_USAGE_TURN_RETURN_RELAY_SUCCESS ||
@@ -2381,8 +2418,7 @@ static gboolean priv_map_reply_to_relay_request (NiceAgent *agent, StunMessage *
           if (res == STUN_USAGE_TURN_RETURN_MAPPED_SUCCESS &&
               !nice_socket_is_reliable (d->nicesock)) {
             /* We also received our mapped address */
-            nice_address_set_from_sockaddr (&niceaddr,
-                (struct sockaddr *) &sockaddr);
+            nice_address_set_from_sockaddr (&niceaddr, &sockaddr.addr);
 
             discovery_add_server_reflexive_candidate (
                 d->agent,
@@ -2392,8 +2428,7 @@ static gboolean priv_map_reply_to_relay_request (NiceAgent *agent, StunMessage *
                 d->nicesock);
           }
 
-          nice_address_set_from_sockaddr (&niceaddr,
-              (struct sockaddr *) &relayaddr);
+          nice_address_set_from_sockaddr (&niceaddr, &relayaddr.addr);
           relay_cand = discovery_add_relay_candidate (
              d->agent,
              d->stream->id,
@@ -2632,8 +2667,9 @@ static bool conncheck_stun_validater (StunAgent *agent,
     stun_debug_bytes (username, username_len);
     stun_debug ("' (%d) with '", username_len);
     stun_debug_bytes (ufrag, ufrag_len);
-    stun_debug ("' (%d) : %d\n",
-        ufrag_len, memcmp (username, ufrag, ufrag_len));
+    stun_debug ("' (%" G_GSIZE_FORMAT ") : %d\n",
+        ufrag_len, username_len >= ufrag_len ?
+        memcmp (username, ufrag, ufrag_len) : 0);
     if (ufrag_len > 0 && username_len >= ufrag_len &&
         memcmp (username, ufrag, ufrag_len) == 0) {
       gchar *pass = NULL;
@@ -2687,7 +2723,10 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
     Component *component, NiceSocket *socket, const NiceAddress *from,
     gchar *buf, guint len)
 {
-  struct sockaddr_storage sockaddr;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } sockaddr;
   uint8_t rbuf[MAX_STUN_DATAGRAM_PAYLOAD];
   ssize_t res;
   size_t rbuf_len = sizeof (rbuf);
@@ -2706,19 +2745,17 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
   NiceCandidate *local_candidate = NULL;
   gboolean discovery_msg = FALSE;
 
-  nice_address_copy_to_sockaddr (from, (struct sockaddr *) &sockaddr);
+  nice_address_copy_to_sockaddr (from, &sockaddr.addr);
 
   /* note: contents of 'buf' already validated, so it is
    *       a valid and fully received STUN message */
 
-#ifndef NDEBUG
-  {
+  if (nice_debug_is_enabled ()) {
     gchar tmpbuf[INET6_ADDRSTRLEN];
     nice_address_to_string (from, tmpbuf);
     nice_debug ("Agent %p: inbound STUN packet for %u/%u (stream/component) from [%s]:%u (%u octets) :",
         agent, stream->id, component->id, tmpbuf, nice_address_get_port (from), len);
   }
-#endif
 
   /* note: ICE  7.2. "STUN Server Procedures" (ID-19) */
 
@@ -2895,7 +2932,7 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
 	  uname_len = priv_create_username (agent, stream,
               component->id,  remote_candidate2, local_candidate,
 	      uname, sizeof (uname), FALSE);
-	  memcpy (username, uname, username_len);
+	  memcpy (username, uname, MIN (uname_len, username_len));
 
 	  req.key = g_base64_decode ((gchar *) remote_candidate2->password,
               &req.key_len);
@@ -2912,7 +2949,7 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, Stream *stream,
 
     rbuf_len = sizeof (rbuf);
     res = stun_usage_ice_conncheck_create_reply (&agent->stun_agent, &req,
-        &msg, rbuf, &rbuf_len, (struct sockaddr *) &sockaddr, sizeof (sockaddr),
+        &msg, rbuf, &rbuf_len, &sockaddr.addr, sizeof (sockaddr),
         &control, agent->tie_breaker,
         agent_to_ice_compatibility (agent));
 

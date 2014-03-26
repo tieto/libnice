@@ -34,6 +34,8 @@
 <ANCHOR id="NICE-COMPATIBILITY-DRAFT19:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-DRAFT19:CAPS">
 <ANCHOR id="NICE-COMPATIBILITY-LAST:CAPS" href="libnice/NiceAgent.html#NICE-COMPATIBILITY-LAST:CAPS">
 <ANCHOR id="NiceAgentRecvFunc" href="libnice/NiceAgent.html#NiceAgentRecvFunc">
+<ANCHOR id="NiceInputMessage" href="libnice/NiceAgent.html#NiceInputMessage">
+<ANCHOR id="NiceOutputMessage" href="libnice/NiceAgent.html#NiceOutputMessage">
 <ANCHOR id="NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS" href="libnice/NiceAgent.html#NICE-AGENT-MAX-REMOTE-CANDIDATES:CAPS">
 <ANCHOR id="nice-agent-new" href="libnice/NiceAgent.html#nice-agent-new">
 <ANCHOR id="nice-agent-new-reliable" href="libnice/NiceAgent.html#nice-agent-new-reliable">
@@ -50,6 +52,11 @@
 <ANCHOR id="nice-agent-get-local-candidates" href="libnice/NiceAgent.html#nice-agent-get-local-candidates">
 <ANCHOR id="nice-agent-get-selected-pair" href="libnice/NiceAgent.html#nice-agent-get-selected-pair">
 <ANCHOR id="nice-agent-send" href="libnice/NiceAgent.html#nice-agent-send">
+<ANCHOR id="nice-agent-send-messages-nonblocking" href="libnice/NiceAgent.html#nice-agent-send-messages-nonblocking">
+<ANCHOR id="nice-agent-recv" href="libnice/NiceAgent.html#nice-agent-recv">
+<ANCHOR id="nice-agent-recv-messages" href="libnice/NiceAgent.html#nice-agent-recv-messages">
+<ANCHOR id="nice-agent-recv-nonblocking" href="libnice/NiceAgent.html#nice-agent-recv-nonblocking">
+<ANCHOR id="nice-agent-recv-messages-nonblocking" href="libnice/NiceAgent.html#nice-agent-recv-messages-nonblocking">
 <ANCHOR id="nice-agent-attach-recv" href="libnice/NiceAgent.html#nice-agent-attach-recv">
 <ANCHOR id="nice-agent-set-selected-pair" href="libnice/NiceAgent.html#nice-agent-set-selected-pair">
 <ANCHOR id="nice-agent-set-selected-remote-candidate" href="libnice/NiceAgent.html#nice-agent-set-selected-remote-candidate">
@@ -65,6 +72,8 @@
 <ANCHOR id="nice-agent-parse-remote-sdp" href="libnice/NiceAgent.html#nice-agent-parse-remote-sdp">
 <ANCHOR id="nice-agent-parse-remote-stream-sdp" href="libnice/NiceAgent.html#nice-agent-parse-remote-stream-sdp">
 <ANCHOR id="nice-agent-parse-remote-candidate-sdp" href="libnice/NiceAgent.html#nice-agent-parse-remote-candidate-sdp">
+<ANCHOR id="nice-agent-get-io-stream" href="libnice/NiceAgent.html#nice-agent-get-io-stream">
+<ANCHOR id="nice-agent-get-selected-socket" href="libnice/NiceAgent.html#nice-agent-get-selected-socket">
 <ANCHOR id="NiceAgent.property-details" href="libnice/NiceAgent.html#NiceAgent.property-details">
 <ANCHOR id="NiceAgent--compatibility" href="libnice/NiceAgent.html#NiceAgent--compatibility">
 <ANCHOR id="NiceAgent--controlling-mode" href="libnice/NiceAgent.html#NiceAgent--controlling-mode">
@@ -90,6 +99,7 @@
 <ANCHOR id="NiceAgent-new-remote-candidate" href="libnice/NiceAgent.html#NiceAgent-new-remote-candidate">
 <ANCHOR id="NiceAgent-new-selected-pair" href="libnice/NiceAgent.html#NiceAgent-new-selected-pair">
 <ANCHOR id="NiceAgent-reliable-transport-writable" href="libnice/NiceAgent.html#NiceAgent-reliable-transport-writable">
+<ANCHOR id="NiceAgent-streams-removed" href="libnice/NiceAgent.html#NiceAgent-streams-removed">
 <ANCHOR id="NiceAgent.see-also" href="libnice/NiceAgent.html#NiceAgent.see-also">
 <ANCHOR id="libnice-NiceAddress" href="libnice/libnice-NiceAddress.html">
 <ANCHOR id="libnice-NiceAddress.stability-level" href="libnice/libnice-NiceAddress.html#libnice-NiceAddress.stability-level">
@@ -325,6 +335,8 @@
 <ANCHOR id="stun-message-append-xor-addr-full" href="libnice/libnice-StunMessage.html#stun-message-append-xor-addr-full">
 <ANCHOR id="stun-message-append-error" href="libnice/libnice-StunMessage.html#stun-message-append-error">
 <ANCHOR id="stun-message-validate-buffer-length" href="libnice/libnice-StunMessage.html#stun-message-validate-buffer-length">
+<ANCHOR id="StunInputVector" href="libnice/libnice-StunMessage.html#StunInputVector">
+<ANCHOR id="stun-message-validate-buffer-length-fast" href="libnice/libnice-StunMessage.html#stun-message-validate-buffer-length-fast">
 <ANCHOR id="stun-message-id" href="libnice/libnice-StunMessage.html#stun-message-id">
 <ANCHOR id="stun-message-get-class" href="libnice/libnice-StunMessage.html#stun-message-get-class">
 <ANCHOR id="stun-message-get-method" href="libnice/libnice-StunMessage.html#stun-message-get-method">
@@ -333,6 +345,32 @@
 <ANCHOR id="stun-optional" href="libnice/libnice-StunMessage.html#stun-optional">
 <ANCHOR id="stun-strerror" href="libnice/libnice-StunMessage.html#stun-strerror">
 <ANCHOR id="libnice-StunMessage.see-also" href="libnice/libnice-StunMessage.html#libnice-StunMessage.see-also">
+<ANCHOR id="libnice-STUN-Constants" href="libnice/libnice-STUN-Constants.html">
+<ANCHOR id="libnice-STUN-Constants.synopsis" href="libnice/libnice-STUN-Constants.html#libnice-STUN-Constants.synopsis">
+<ANCHOR id="libnice-STUN-Constants.description" href="libnice/libnice-STUN-Constants.html#libnice-STUN-Constants.description">
+<ANCHOR id="libnice-STUN-Constants.details" href="libnice/libnice-STUN-Constants.html#libnice-STUN-Constants.details">
+<ANCHOR id="STUN-AGENT-MAX-SAVED-IDS:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-AGENT-MAX-SAVED-IDS:CAPS">
+<ANCHOR id="STUN-AGENT-MAX-UNKNOWN-ATTRIBUTES:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-AGENT-MAX-UNKNOWN-ATTRIBUTES:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-HEADER-LENGTH:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-ATTRIBUTE-HEADER-LENGTH:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-LENGTH-LEN:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-ATTRIBUTE-LENGTH-LEN:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-LENGTH-POS:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-ATTRIBUTE-LENGTH-POS:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-TYPE-LEN:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-ATTRIBUTE-TYPE-LEN:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-TYPE-POS:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-ATTRIBUTE-TYPE-POS:CAPS">
+<ANCHOR id="STUN-ATTRIBUTE-VALUE-POS:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-ATTRIBUTE-VALUE-POS:CAPS">
+<ANCHOR id="STUN-ID-LEN:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-ID-LEN:CAPS">
+<ANCHOR id="STUN-MAGIC-COOKIE:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MAGIC-COOKIE:CAPS">
+<ANCHOR id="STUN-MAX-MESSAGE-SIZE:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MAX-MESSAGE-SIZE:CAPS">
+<ANCHOR id="STUN-MAX-MESSAGE-SIZE-IPV4:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MAX-MESSAGE-SIZE-IPV4:CAPS">
+<ANCHOR id="STUN-MAX-MESSAGE-SIZE-IPV6:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MAX-MESSAGE-SIZE-IPV6:CAPS">
+<ANCHOR id="STUN-MESSAGE-ATTRIBUTES-POS:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MESSAGE-ATTRIBUTES-POS:CAPS">
+<ANCHOR id="STUN-MESSAGE-HEADER-LENGTH:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MESSAGE-HEADER-LENGTH:CAPS">
+<ANCHOR id="STUN-MESSAGE-LENGTH-LEN:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MESSAGE-LENGTH-LEN:CAPS">
+<ANCHOR id="STUN-MESSAGE-LENGTH-POS:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MESSAGE-LENGTH-POS:CAPS">
+<ANCHOR id="STUN-MESSAGE-TRANS-ID-LEN:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MESSAGE-TRANS-ID-LEN:CAPS">
+<ANCHOR id="STUN-MESSAGE-TRANS-ID-POS:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MESSAGE-TRANS-ID-POS:CAPS">
+<ANCHOR id="STUN-MESSAGE-TYPE-LEN:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MESSAGE-TYPE-LEN:CAPS">
+<ANCHOR id="STUN-MESSAGE-TYPE-POS:CAPS" href="libnice/libnice-STUN-Constants.html#STUN-MESSAGE-TYPE-POS:CAPS">
+<ANCHOR id="TURN-MAGIC-COOKIE:CAPS" href="libnice/libnice-STUN-Constants.html#TURN-MAGIC-COOKIE:CAPS">
 <ANCHOR id="libnice-Bind" href="libnice/libnice-Bind.html">
 <ANCHOR id="libnice-Bind.stability-level" href="libnice/libnice-Bind.html#libnice-Bind.stability-level">
 <ANCHOR id="libnice-Bind.synopsis" href="libnice/libnice-Bind.html#libnice-Bind.synopsis">
@@ -399,6 +437,7 @@
 <ANCHOR id="stun-usage-turn-create-refresh" href="libnice/libnice-TURN.html#stun-usage-turn-create-refresh">
 <ANCHOR id="stun-usage-turn-process" href="libnice/libnice-TURN.html#stun-usage-turn-process">
 <ANCHOR id="stun-usage-turn-refresh-process" href="libnice/libnice-TURN.html#stun-usage-turn-refresh-process">
+<ANCHOR id="stun-usage-turn-create-permission" href="libnice/libnice-TURN.html#stun-usage-turn-create-permission">
 <ANCHOR id="libnice-Timer" href="libnice/libnice-Timer.html">
 <ANCHOR id="libnice-Timer.stability-level" href="libnice/libnice-Timer.html#libnice-Timer.stability-level">
 <ANCHOR id="libnice-Timer.synopsis" href="libnice/libnice-Timer.html#libnice-Timer.synopsis">
@@ -451,7 +490,23 @@
 <ANCHOR id="pseudo-tcp-socket-notify-mtu" href="libnice/libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-mtu">
 <ANCHOR id="pseudo-tcp-socket-notify-packet" href="libnice/libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-packet">
 <ANCHOR id="pseudo-tcp-set-debug-level" href="libnice/libnice-Pseudo-TCP-Socket.html#pseudo-tcp-set-debug-level">
+<ANCHOR id="pseudo-tcp-socket-get-available-bytes" href="libnice/libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-get-available-bytes">
+<ANCHOR id="pseudo-tcp-socket-can-send" href="libnice/libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-can-send">
+<ANCHOR id="pseudo-tcp-socket-get-available-send-space" href="libnice/libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-get-available-send-space">
+<ANCHOR id="pseudo-tcp-socket-notify-message" href="libnice/libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-message">
 <ANCHOR id="libnice-Pseudo-TCP-Socket.property-details" href="libnice/libnice-Pseudo-TCP-Socket.html#libnice-Pseudo-TCP-Socket.property-details">
+<ANCHOR id="PseudoTcpSocket--ack-delay" href="libnice/libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--ack-delay">
 <ANCHOR id="PseudoTcpSocket--callbacks" href="libnice/libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--callbacks">
 <ANCHOR id="PseudoTcpSocket--conversation" href="libnice/libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--conversation">
+<ANCHOR id="PseudoTcpSocket--no-delay" href="libnice/libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--no-delay">
+<ANCHOR id="PseudoTcpSocket--rcv-buf" href="libnice/libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--rcv-buf">
+<ANCHOR id="PseudoTcpSocket--snd-buf" href="libnice/libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--snd-buf">
 <ANCHOR id="PseudoTcpSocket--state" href="libnice/libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--state">
+<ANCHOR id="annotation-glossterm-allow-none" href="libnice/annotation-glossary.html#annotation-glossterm-allow-none">
+<ANCHOR id="annotation-glossterm-array" href="libnice/annotation-glossary.html#annotation-glossterm-array">
+<ANCHOR id="annotation-glossterm-element-type" href="libnice/annotation-glossary.html#annotation-glossterm-element-type">
+<ANCHOR id="annotation-glossterm-in" href="libnice/annotation-glossary.html#annotation-glossterm-in">
+<ANCHOR id="annotation-glossterm-out callee-allocates" href="libnice/annotation-glossary.html#annotation-glossterm-out callee-allocates">
+<ANCHOR id="annotation-glossterm-out caller-allocates" href="libnice/annotation-glossary.html#annotation-glossterm-out caller-allocates">
+<ANCHOR id="annotation-glossterm-transfer full" href="libnice/annotation-glossary.html#annotation-glossterm-transfer full">
+<ANCHOR id="annotation-glossterm-transfer none" href="libnice/annotation-glossary.html#annotation-glossterm-transfer none">

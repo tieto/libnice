@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>StunMessage</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch03.html" title="">
 <link rel="prev" href="libnice-StunAgent.html" title="StunAgent">
-<link rel="next" href="ch04.html" title="STUN usages">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="next" href="libnice-STUN-Constants.html" title="STUN Constants">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -18,7 +18,7 @@
 <td><a accesskey="u" href="ch03.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">libnice Reference Manual</th>
-<td><a accesskey="n" href="ch04.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="libnice-STUN-Constants.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#libnice-StunMessage.synopsis" class="shortcut">Top</a>
@@ -124,6 +124,12 @@ const <span class="returnvalue">void</span> *        <a class="link" href="libni
 <span class="returnvalue">int</span>                 <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()">stun_message_validate_buffer_length</a> (<em class="parameter"><code>const <span class="type">uint8_t</span> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> length</code></em>,
                                                          <em class="parameter"><code><span class="type">bool</span> has_padding</code></em>);
+                    <a class="link" href="libnice-StunMessage.html#StunInputVector" title="StunInputVector">StunInputVector</a>;
+<span class="returnvalue">ssize_t</span>             <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length-fast" title="stun_message_validate_buffer_length_fast ()">stun_message_validate_buffer_length_fast</a>
+                                                        (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunInputVector" title="StunInputVector"><span class="type">StunInputVector</span></a> *buffers</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> n_buffers</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> total_length</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> has_padding</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libnice-StunMessage.html#stun-message-id" title="stun_message_id ()">stun_message_id</a>                     (<em class="parameter"><code>const <a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId"><span class="type">StunTransactionId</span></a> id</code></em>);
 <a class="link" href="libnice-StunMessage.html#StunClass" title="enum StunClass"><span class="returnvalue">StunClass</span></a>           <a class="link" href="libnice-StunMessage.html#stun-message-get-class" title="stun_message_get_class ()">stun_message_get_class</a>              (<em class="parameter"><code>const <a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>);
@@ -159,8 +165,11 @@ parse existing messages.
 <p>
 This structure represents a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> *<em class="structfield"><code><a name="StunMessage.agent"></a>agent</code></em>;</span></p></td>
@@ -210,8 +219,11 @@ data</td>
 This enum is used to represent the class of
 a STUN message, as defined in RFC5389
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-REQUEST:CAPS"></a><span class="term"><code class="literal">STUN_REQUEST</code></span></p></td>
@@ -259,8 +271,11 @@ a STUN message, as defined in RFC5389
 This enum is used to represent the method of
 a STUN message, as defined by various RFCs
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-BINDING:CAPS"></a><span class="term"><code class="literal">STUN_BINDING</code></span></p></td>
@@ -417,8 +432,11 @@ the TURN draft 12
 <p>
 Known STUN attribute types as defined by various RFCs and drafts
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-ATTRIBUTE-MAPPED-ADDRESS:CAPS"></a><span class="term"><code class="literal">STUN_ATTRIBUTE_MAPPED_ADDRESS</code></span></p></td>
@@ -738,8 +756,11 @@ A type that holds a STUN transaction id.
 <p>
 STUN error codes as defined by various RFCs and drafts
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-ERROR-TRY-ALTERNATE:CAPS"></a><span class="term"><code class="literal">STUN_ERROR_TRY_ALTERNATE</code></span></p></td>
@@ -880,8 +901,11 @@ The return value of most stun_message_* functions.
 This enum will report on whether an operation was successful or not
 and what error occured if any.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-MESSAGE-RETURN-SUCCESS:CAPS"></a><span class="term"><code class="literal">STUN_MESSAGE_RETURN_SUCCESS</code></span></p></td>
@@ -944,8 +968,11 @@ data to validate is not a valid STUN message
 <p>
 Initializes a STUN message buffer, with no attributes.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -966,7 +993,7 @@ Initializes a STUN message buffer, with no attributes.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the initialization was successful</td>
+<code class="literal">TRUE</code> if the initialization was successful</td>
 </tr>
 </tbody>
 </table></div>
@@ -978,8 +1005,11 @@ Initializes a STUN message buffer, with no attributes.
 <p>
 Get the length of the message (including the header)
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1002,8 +1032,11 @@ Get the length of the message (including the header)
 <p>
 Finds an attribute in a STUN message and fetches its content
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1034,8 +1067,11 @@ otherwise NULL.</td>
 <p>
 Looks for a flag attribute within a valid STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1063,8 +1099,11 @@ Looks for a flag attribute within a valid STUN message.
 <p>
 Extracts a 32-bits attribute from a STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1097,8 +1136,11 @@ Extracts a 32-bits attribute from a STUN message.
 <p>
 Extracts a 64-bits attribute from a STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1132,8 +1174,11 @@ Extracts a 64-bits attribute from a STUN message.
 <p>
 Extracts an UTF-8 string from a valid STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1180,8 +1225,11 @@ The string will be NULL-terminated.
 <p>
 Extracts a network address attribute from a STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1222,8 +1270,11 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 <p>
 Extracts an obfuscated network address attribute from a STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1265,8 +1316,11 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 <p>
 Extracts an obfuscated network address attribute from a STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1309,8 +1363,11 @@ wrong or if the <em class="parameter"><code>addrlen</code></em> is too small
 <p>
 Extract the error response code from a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1338,8 +1395,11 @@ Extract the error response code from a STUN message
 <p>
 Reserves room for appending an attribute to an unfinished STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1373,8 +1433,11 @@ enough room in the STUN message buffer.</td>
 <p>
 Appends a binary value to a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1408,8 +1471,11 @@ Appends a binary value to a STUN message
 <p>
 Appends an empty flag attribute to a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1436,8 +1502,11 @@ Appends an empty flag attribute to a STUN message
 <p>
 Appends a 32-bits value attribute to a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1468,8 +1537,11 @@ Appends a 32-bits value attribute to a STUN message
 <p>
 Appends a 64-bits value attribute to a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1500,8 +1572,11 @@ Appends a 64-bits value attribute to a STUN message
 <p>
 Adds an attribute from a NULL-terminated string to a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1533,8 +1608,11 @@ Adds an attribute from a NULL-terminated string to a STUN message
 <p>
 Append a network address attribute to a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1572,8 +1650,11 @@ Append a network address attribute to a STUN message
 <p>
 Append an obfuscated network address attribute to a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1612,8 +1693,11 @@ Append an obfuscated network address attribute to a STUN message
 <p>
 Append an obfuscated network address attribute from a STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1654,8 +1738,11 @@ Append an obfuscated network address attribute from a STUN message.
 Appends the ERROR-CODE attribute to the STUN message and fills it according
 to <span class="type">code</span>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1684,8 +1771,11 @@ This function will take a data buffer and will try to validate whether it is
 a STUN message or if it's not or if it's an incomplete STUN message and will
 provide us with the length of the STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1711,14 +1801,111 @@ provide us with the length of the STUN message.
 </div>
 <hr>
 <div class="refsect2">
+<a name="StunInputVector"></a><h3>StunInputVector</h3>
+<pre class="programlisting">typedef struct {
+  const uint8_t *buffer;
+  size_t size;
+} StunInputVector;
+</pre>
+<p>
+Container for a single buffer which also stores its length. This is designed
+for vectored I/O: typically an array of <a href="libnice-StunMessage.html#StunInputVector"><span class="type">StunInputVectors</span></a> is passed to
+functions, providing multiple buffers which store logically contiguous
+received data.
+</p>
+<p>
+This is guaranteed to be layed out identically in memory to <span class="type">GInputVector</span>.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">const <span class="type">uint8_t</span> *<em class="structfield"><code><a name="StunInputVector.buffer"></a>buffer</code></em>;</span></p></td>
+<td>a buffer containing already-received binary data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">size_t</span> <em class="structfield"><code><a name="StunInputVector.size"></a>size</code></em>;</span></p></td>
+<td>length of <em class="parameter"><code>buffer</code></em>, in bytes</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.1.5</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="stun-message-validate-buffer-length-fast"></a><h3>stun_message_validate_buffer_length_fast ()</h3>
+<pre class="programlisting"><span class="returnvalue">ssize_t</span>             stun_message_validate_buffer_length_fast
+                                                        (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunInputVector" title="StunInputVector"><span class="type">StunInputVector</span></a> *buffers</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> n_buffers</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> total_length</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> has_padding</code></em>);</pre>
+<p>
+Quickly validate whether the message in the given <em class="parameter"><code>buffers</code></em> is potentially a
+valid STUN message, an incomplete STUN message, or if it’s definitely not one
+at all.
+</p>
+<p>
+This is designed as a first-pass validation only, and does not check the
+message’s attributes for validity. If this function returns success, the
+buffers can be compacted and a more thorough validation can be performed
+using <a class="link" href="libnice-StunMessage.html#stun-message-validate-buffer-length" title="stun_message_validate_buffer_length ()"><code class="function">stun_message_validate_buffer_length()</code></a>. If it fails, the buffers
+definitely do not contain a complete, valid STUN message.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>buffers</code></em> :</span></p></td>
+<td>array of contiguous
+<a href="libnice-StunMessage.html#StunInputVector"><span class="type">StunInputVectors</span></a> containing already-received message data. <span class="annotation">[<acronym title="Parameter points to an array of items."><span class="acronym">array</span></acronym> length=n_buffers][<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym> caller-allocated]</span>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>n_buffers</code></em> :</span></p></td>
+<td>number of entries in <em class="parameter"><code>buffers</code></em>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>total_length</code></em> :</span></p></td>
+<td>total number of valid bytes stored consecutively in <em class="parameter"><code>buffers</code></em>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>has_padding</code></em> :</span></p></td>
+<td>
+<code class="literal">TRUE</code> if attributes should be padded to 4-byte boundaries</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>The length of the valid STUN message in the buffer, or zero or -1 on
+failure
+<p> See also: <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INCOMPLETE:CAPS" title="STUN_MESSAGE_BUFFER_INCOMPLETE"><span class="type">STUN_MESSAGE_BUFFER_INCOMPLETE</span></a> </p>
+<p> See also: <a class="link" href="libnice-StunMessage.html#STUN-MESSAGE-BUFFER-INVALID:CAPS" title="STUN_MESSAGE_BUFFER_INVALID"><span class="type">STUN_MESSAGE_BUFFER_INVALID</span></a> </p>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p class="since">Since 0.1.5</p>
+</div>
+<hr>
+<div class="refsect2">
 <a name="stun-message-id"></a><h3>stun_message_id ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>                stun_message_id                     (<em class="parameter"><code>const <a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunTransactionId" title="StunTransactionId"><span class="type">StunTransactionId</span></a> id</code></em>);</pre>
 <p>
 Retreive the STUN transaction id from a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1739,8 +1926,11 @@ Retreive the STUN transaction id from a STUN message
 <p>
 Retreive the STUN class from a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1762,8 +1952,11 @@ Retreive the STUN class from a STUN message
 <p>
 Retreive the STUN method from a STUN message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1786,8 +1979,11 @@ Retreive the STUN method from a STUN message
 <p>
 Checks if an attribute is present within a STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1801,7 +1997,7 @@ Checks if an attribute is present within a STUN message.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is found, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the attribute is found, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -1813,8 +2009,11 @@ Checks if an attribute is present within a STUN message.
 <p>
 Checks if the STUN message has a RFC5389 compatible cookie
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -1824,7 +2023,7 @@ Checks if the STUN message has a RFC5389 compatible cookie
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the cookie is present, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the cookie is present, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -1837,8 +2036,11 @@ Checks if the STUN message has a RFC5389 compatible cookie
 Helper function that checks whether a STUN attribute is a mandatory
 or an optional attribute
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>t</code></em> :</span></p></td>
@@ -1847,7 +2049,7 @@ or an optional attribute
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is an optional one</td>
+<code class="literal">TRUE</code> if the attribute is an optional one</td>
 </tr>
 </tbody>
 </table></div>
@@ -1859,8 +2061,11 @@ or an optional attribute
 <p>
 Transforms a STUN error-code into a human readable string
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>code</code></em> :</span></p></td>
@@ -1881,6 +2086,6 @@ Transforms a STUN error-code into a human readable string
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

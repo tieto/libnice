@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>StunAgent</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch03.html" title="">
 <link rel="prev" href="ch03.html" title="">
 <link rel="next" href="libnice-StunMessage.html" title="StunMessage">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -146,8 +146,11 @@ An opaque structure representing the STUN agent.
 <p>
 Enum that specifies the STUN compatibility mode of the <a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-COMPATIBILITY-RFC3489:CAPS"></a><span class="term"><code class="literal">STUN_COMPATIBILITY_RFC3489</code></span></p></td>
@@ -207,8 +210,11 @@ the agent should behave, independently of the compatibility mode it uses.
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a> </p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS:CAPS"></a><span class="term"><code class="literal">STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS</code></span></p></td>
@@ -291,8 +297,11 @@ do not add padding when creating messages.
 This enum is used as the return value of <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a> and represents
 the status result of the validation of a STUN message.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-VALIDATION-SUCCESS:CAPS"></a><span class="term"><code class="literal">STUN_VALIDATION_SUCCESS</code></span></p></td>
@@ -369,8 +378,11 @@ function.
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a> </p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -408,8 +420,8 @@ validater function.</td>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the authentication was successful,
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the authentication failed</td>
+<code class="literal">TRUE</code> if the authentication was successful,
+<code class="literal">FALSE</code> if the authentication failed</td>
 </tr>
 </tbody>
 </table></div>
@@ -432,8 +444,11 @@ message during validationg.
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-default-validater" title="stun_agent_default_validater ()"><code class="function">stun_agent_default_validater()</code></a> </p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><span class="type">uint8_t</span> *<em class="structfield"><code><a name="StunDefaultValidaterData.username"></a>username</code></em>;</span></p></td>
@@ -486,8 +501,11 @@ This function must be called to initialize an agent before it is being used.
 </div>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -533,8 +551,11 @@ authenticated.
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-default-validater" title="stun_agent_default_validater ()"><code class="function">stun_agent_default_validater()</code></a> </p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -613,8 +634,11 @@ password
 <p> See also: <a class="link" href="libnice-StunAgent.html#stun-agent-validate" title="stun_agent_validate ()"><code class="function">stun_agent_validate()</code></a> </p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -653,8 +677,8 @@ The last element in the array must have a username set to NULL</td>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the authentication was successful,
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if the authentication failed</td>
+<code class="literal">TRUE</code> if the authentication was successful,
+<code class="literal">FALSE</code> if the authentication failed</td>
 </tr>
 </tbody>
 </table></div>
@@ -670,8 +694,11 @@ The last element in the array must have a username set to NULL</td>
 <p>
 Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-REQUEST:CAPS"><span class="type">STUN_REQUEST</span></a> and with the method <em class="parameter"><code>m</code></em>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -698,7 +725,7 @@ Creates a new STUN message of class <a class="link" href="libnice-StunMessage.ht
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the message was initialized correctly, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -714,8 +741,11 @@ Creates a new STUN message of class <a class="link" href="libnice-StunMessage.ht
 <p>
 Creates a new STUN message of class <a class="link" href="libnice-StunMessage.html#STUN-INDICATION:CAPS"><span class="type">STUN_INDICATION</span></a> and with the method <em class="parameter"><code>m</code></em>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -742,7 +772,7 @@ Creates a new STUN message of class <a class="link" href="libnice-StunMessage.ht
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the message was initialized correctly, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -761,8 +791,11 @@ and transaction ID as the message <em class="parameter"><code>request</code></em
 to the key that was used to authenticate the request, so you won't need to
 specify the key with <a class="link" href="libnice-StunAgent.html#stun-agent-finish-message" title="stun_agent_finish_message ()"><code class="function">stun_agent_finish_message()</code></a>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -789,7 +822,7 @@ specify the key with <a class="link" href="libnice-StunAgent.html#stun-agent-fin
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the message was initialized correctly, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -811,8 +844,11 @@ so you won't need to specify the key with <a class="link" href="libnice-StunAgen
 It will then add the ERROR-CODE attribute with code <em class="parameter"><code>err</code></em> and the associated
 string.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -844,7 +880,7 @@ is for</td>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the message was initialized correctly, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the message was initialized correctly, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -866,8 +902,11 @@ mandatory attributes from the <em class="parameter"><code>request</code></em> ST
 <a class="link" href="libnice-StunMessage.html#STUN-ATTRIBUTE-UNKNOWN-ATTRIBUTES:CAPS"><span class="type">STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES</span></a> attribute, it will then finish the message
 by calling <a class="link" href="libnice-StunAgent.html#stun-agent-finish-message" title="stun_agent_finish_message ()"><code class="function">stun_agent_finish_message()</code></a>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -914,8 +953,11 @@ the message in the agent for future matching of the response.
 <p>See also: <a class="link" href="libnice-StunAgent.html#stun-agent-forget-transaction" title="stun_agent_forget_transaction ()"><code class="function">stun_agent_forget_transaction()</code></a></p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -978,8 +1020,11 @@ free its slot for future transactions.
 </p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -993,7 +1038,7 @@ free its slot for future transactions.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the transaction was found, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the transaction was found, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -1031,8 +1076,11 @@ attribute for RFC5389 and WLM2009 compatibility modes.
 </div>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -1071,6 +1119,6 @@ Disable debug messages to stderr
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

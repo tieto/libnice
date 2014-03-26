@@ -43,6 +43,7 @@
 #endif
 
 #include "tcp-turn.h"
+#include "agent-priv.h"
 
 #include <string.h>
 #include <errno.h>
@@ -54,8 +55,11 @@
 
 typedef struct {
   NiceTurnSocketCompatibility compatibility;
-  gchar recv_buf[65536];
-  guint recv_buf_len;
+  union {
+    guint8 u8[65536];
+    guint16 u16[32768];
+  } recv_buf;
+  gsize recv_buf_len;  /* in bytes */
   guint expecting_len;
   NiceSocket *base_socket;
 } TurnTcpPriv;
@@ -63,10 +67,10 @@ typedef struct {
 #define MAX_UDP_MESSAGE_SIZE 65535
 
 static void socket_close (NiceSocket *sock);
-static gint socket_recv (NiceSocket *sock, NiceAddress *from,
-    guint len, gchar *buf);
-static gboolean socket_send (NiceSocket *sock, const NiceAddress *to,
-    guint len, const gchar *buf);
+static gint socket_recv_messages (NiceSocket *sock,
+    NiceInputMessage *recv_messages, guint n_recv_messages);
+static gint socket_send_messages (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *messages, guint n_messages);
 static gboolean socket_is_reliable (NiceSocket *sock);
 
 NiceSocket *
@@ -82,8 +86,8 @@ nice_tcp_turn_socket_new (NiceSocket *base_socket,
 
   sock->fileno = priv->base_socket->fileno;
   sock->addr = priv->base_socket->addr;
-  sock->send = socket_send;
-  sock->recv = socket_recv;
+  sock->send_messages = socket_send_messages;
+  sock->recv_messages = socket_recv_messages;
   sock->is_reliable = socket_is_reliable;
   sock->close = socket_close;
 
@@ -102,13 +106,14 @@ socket_close (NiceSocket *sock)
   g_slice_free(TurnTcpPriv, sock->priv);
 }
 
-
-static gint
-socket_recv (NiceSocket *sock, NiceAddress *from, guint len, gchar *buf)
+static gssize
+socket_recv_message (NiceSocket *sock, NiceInputMessage *recv_message)
 {
   TurnTcpPriv *priv = sock->priv;
-  int ret;
+  gssize ret;
   guint padlen;
+  GInputVector local_recv_buf;
+  NiceInputMessage local_recv_message;
 
   if (priv->expecting_len == 0) {
     guint headerlen = 0;
@@ -121,20 +126,26 @@ socket_recv (NiceSocket *sock, NiceAddress *from, guint len, gchar *buf)
     else
       return -1;
 
-    ret = nice_socket_recv (priv->base_socket, from,
-        headerlen - priv->recv_buf_len, priv->recv_buf + priv->recv_buf_len);
+    local_recv_buf.buffer = priv->recv_buf.u8 + priv->recv_buf_len;
+    local_recv_buf.size = headerlen - priv->recv_buf_len;
+    local_recv_message.buffers = &local_recv_buf;
+    local_recv_message.n_buffers = 1;
+    local_recv_message.from = recv_message->from;
+    local_recv_message.length = 0;
+
+    ret = nice_socket_recv_messages (priv->base_socket, &local_recv_message, 1);
     if (ret < 0)
         return ret;
 
-    priv->recv_buf_len += ret;
+    priv->recv_buf_len += local_recv_message.length;
 
     if (priv->recv_buf_len < headerlen)
       return 0;
 
     if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 ||
         priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766) {
-      guint16 magic = ntohs (*(guint16*)priv->recv_buf);
-      guint16 packetlen = ntohs (*(guint16*)(priv->recv_buf + 2));
+      guint16 magic = ntohs (*priv->recv_buf.u16);
+      guint16 packetlen = ntohs (*(priv->recv_buf.u16 + 1));
 
       if (magic < 0x4000) {
         /* Its STUN */
@@ -145,8 +156,8 @@ socket_recv (NiceSocket *sock, NiceAddress *from, guint len, gchar *buf)
       }
     }
     else if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_GOOGLE) {
-      guint len = ntohs (*(guint16*)priv->recv_buf);
-      priv->expecting_len = len;
+      guint compat_len = ntohs (*priv->recv_buf.u16);
+      priv->expecting_len = compat_len;
       priv->recv_buf_len = 0;
     }
   }
@@ -157,57 +168,151 @@ socket_recv (NiceSocket *sock, NiceAddress *from, guint len, gchar *buf)
   else
     padlen = 0;
 
-  ret = nice_socket_recv (priv->base_socket, from,
-      priv->expecting_len + padlen - priv->recv_buf_len,
-      priv->recv_buf + priv->recv_buf_len);
+  local_recv_buf.buffer = priv->recv_buf.u8 + priv->recv_buf_len;
+  local_recv_buf.size = priv->expecting_len + padlen - priv->recv_buf_len;
+  local_recv_message.buffers = &local_recv_buf;
+  local_recv_message.n_buffers = 1;
+  local_recv_message.from = recv_message->from;
+  local_recv_message.length = 0;
 
+  ret = nice_socket_recv_messages (priv->base_socket, &local_recv_message, 1);
   if (ret < 0)
       return ret;
 
-  priv->recv_buf_len += ret;
+  priv->recv_buf_len += local_recv_message.length;
 
   if (priv->recv_buf_len == priv->expecting_len + padlen) {
-    guint copy_len = MIN (len, priv->recv_buf_len);
-    memcpy (buf, priv->recv_buf, copy_len);
+    /* FIXME: Eliminate this memcpy(). */
+    ret = memcpy_buffer_to_input_message (recv_message,
+        priv->recv_buf.u8, priv->recv_buf_len);
+
     priv->expecting_len = 0;
     priv->recv_buf_len = 0;
 
-    return copy_len;
+    return ret;
   }
 
   return 0;
 }
 
-static gboolean
-socket_send (NiceSocket *sock, const NiceAddress *to,
-    guint len, const gchar *buf)
+static gint
+socket_recv_messages (NiceSocket *socket,
+    NiceInputMessage *recv_messages, guint n_recv_messages)
+{
+  guint i;
+  gboolean error = FALSE;
+
+  for (i = 0; i < n_recv_messages; i++) {
+    gssize len;
+
+    len = socket_recv_message (socket, &recv_messages[i]);
+    recv_messages[i].length = MAX (len, 0);
+
+    if (len < 0)
+      error = TRUE;
+
+    if (len <= 0)
+      break;
+  }
+
+  /* Was there an error processing the first message? */
+  if (error && i == 0)
+    return -1;
+
+  return i;
+}
+
+static gssize
+socket_send_message (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *message)
 {
   TurnTcpPriv *priv = sock->priv;
-  gchar padbuf[3] = {0, 0, 0};
-  int padlen = (len%4) ? 4 - (len%4) : 0;
-  gchar buffer[MAX_UDP_MESSAGE_SIZE + sizeof(guint16) + sizeof(padbuf)];
-  guint buffer_len = 0;
+  guint8 padbuf[3] = {0, 0, 0};
+  GOutputVector *local_bufs;
+  NiceOutputMessage local_message;
+  guint j;
+  gint ret;
+  guint n_bufs;
+  guint16 header_buf;
 
-  if (priv->compatibility != NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 &&
-      priv->compatibility != NICE_TURN_SOCKET_COMPATIBILITY_RFC5766)
-    padlen = 0;
+  /* Count the number of buffers. */
+  if (message->n_buffers == -1) {
+    n_bufs = 0;
 
-  if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_GOOGLE) {
-    guint16 tmpbuf = htons (len);
-    memcpy (buffer + buffer_len, (gchar *)&tmpbuf, sizeof(guint16));
-    buffer_len += sizeof(guint16);
+    for (j = 0; message->buffers[j].buffer != NULL; j++)
+      n_bufs++;
+  } else {
+    n_bufs = message->n_buffers;
   }
 
-  memcpy (buffer + buffer_len, buf, len);
-  buffer_len += len;
+  /* Allocate a new array of buffers, covering all the buffers in the input
+   * @message, but with an additional one for a header and one for a footer. */
+  local_bufs = g_malloc_n (n_bufs + 2, sizeof (GOutputVector));
+  local_message.buffers = local_bufs;
+  local_message.n_buffers = n_bufs + 2;
 
+  /* Copy the existing buffers across. */
+  for (j = 0; j < n_bufs; j++) {
+    local_bufs[j + 1].buffer = message->buffers[j].buffer;
+    local_bufs[j + 1].size = message->buffers[j].size;
+  }
+
+  /* Header buffer. */
+  if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_GOOGLE) {
+    header_buf = htons (output_message_get_size (message));
+
+    local_bufs[0].buffer = &header_buf;
+    local_bufs[0].size = sizeof (header_buf);
+  } else {
+    /* Skip over the allocated header buffer. */
+    local_message.buffers++;
+    local_message.n_buffers--;
+  }
+
+  /* Tail buffer. */
   if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 ||
       priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766) {
-    memcpy (buffer + buffer_len, padbuf, padlen);
-    buffer_len += padlen;
-  }
-  return nice_socket_send (priv->base_socket, to, buffer_len, buffer);
+    gsize message_len = output_message_get_size (message);
+    gsize padlen = (message_len % 4) ? 4 - (message_len % 4) : 0;
 
+    local_bufs[n_bufs].buffer = &padbuf;
+    local_bufs[n_bufs].size = padlen;
+  } else {
+    /* Skip over the allocated tail buffer. */
+    local_message.n_buffers--;
+  }
+
+  ret = nice_socket_send_messages (priv->base_socket, to, &local_message, 1);
+
+  g_free (local_bufs);
+
+  if (ret == 1)
+    return output_message_get_size (&local_message);
+  return ret;
+}
+
+static gint
+socket_send_messages (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *messages, guint n_messages)
+{
+  guint i;
+
+  for (i = 0; i < n_messages; i++) {
+    const NiceOutputMessage *message = &messages[i];
+    gssize len;
+
+    len = socket_send_message (sock, to, message);
+
+    if (len < 0) {
+      /* Error. */
+      return len;
+    } else if (len == 0) {
+      /* EWOULDBLOCK. */
+      break;
+    }
+  }
+
+  return i;
 }
 
 

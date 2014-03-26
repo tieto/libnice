@@ -52,11 +52,47 @@
 #include <glib.h>
 
 #include "agent.h"
+
+/**
+ * NiceInputMessageIter:
+ * @message: index of the message currently being written into
+ * @buffer: index of the buffer currently being written into
+ * @offset: byte offset into the buffer
+ *
+ * Iterator for sequentially writing into an array of #NiceInputMessages,
+ * tracking the current write position (i.e. the index of the next byte to be
+ * written).
+ *
+ * If @message is equal to the number of messages in the associated
+ * #NiceInputMessage array, and @buffer and @offset are zero, the iterator is at
+ * the end of the messages array, and the array is (presumably) full.
+ *
+ * Since: 0.1.5
+ */
+typedef struct {
+  guint message;
+  guint buffer;
+  gsize offset;
+} NiceInputMessageIter;
+
+void
+nice_input_message_iter_reset (NiceInputMessageIter *iter);
+gboolean
+nice_input_message_iter_is_at_end (NiceInputMessageIter *iter,
+    NiceInputMessage *messages, guint n_messages);
+guint
+nice_input_message_iter_get_n_valid_messages (NiceInputMessageIter *iter);
+gboolean
+nice_input_message_iter_compare (const NiceInputMessageIter *a,
+    const NiceInputMessageIter *b);
+
+
 #include "socket.h"
 #include "candidate.h"
 #include "stream.h"
 #include "conncheck.h"
 #include "component.h"
+#include "random.h"
 #include "stun/stunagent.h"
 #include "stun/usages/turn.h"
 #include "stun/usages/ice.h"
@@ -122,6 +158,8 @@ struct _NiceAgent
 #endif
   gchar *software_attribute;       /* SOFTWARE attribute */
   gboolean reliable;               /* property: reliable */
+
+  GQueue pending_signals;
   /* XXX: add pointer to internal data struct for ABI-safe extensions */
 };
 
@@ -140,6 +178,7 @@ void agent_signal_gathering_done (NiceAgent *agent);
 
 void agent_lock (void);
 void agent_unlock (void);
+void agent_unlock_and_emit (NiceAgent *agent);
 
 void agent_signal_new_selected_pair (
   NiceAgent *agent,
@@ -166,15 +205,45 @@ guint64 agent_candidate_pair_priority (NiceAgent *agent, NiceCandidate *local, N
 
 GSource *agent_timeout_add_with_context (NiceAgent *agent, guint interval, GSourceFunc function, gpointer data);
 
-void agent_attach_stream_component_socket (NiceAgent *agent,
-    Stream *stream,
-    Component *component,
-    NiceSocket *socket);
-
 StunUsageIceCompatibility agent_to_ice_compatibility (NiceAgent *agent);
 StunUsageTurnCompatibility agent_to_turn_compatibility (NiceAgent *agent);
 NiceTurnSocketCompatibility agent_to_turn_socket_compatibility (NiceAgent *agent);
 
 void _priv_set_socket_tos (NiceAgent *agent, NiceSocket *sock, gint tos);
+
+gboolean
+component_io_cb (
+  GSocket *gsocket,
+  GIOCondition condition,
+  gpointer data);
+
+gsize
+memcpy_buffer_to_input_message (NiceInputMessage *message,
+    const guint8 *buffer, gsize buffer_length);
+guint8 *
+compact_input_message (const NiceInputMessage *message, gsize *buffer_length);
+
+guint8 *
+compact_output_message (const NiceOutputMessage *message, gsize *buffer_length);
+
+gsize
+output_message_get_size (const NiceOutputMessage *message);
+
+/*
+ * nice_debug_init:
+ *
+ * Initialize the debugging system. Uses the NICE_DEBUG environment variable
+ * to set the appropriate debugging flags
+ */
+void nice_debug_init (void);
+
+
+#ifdef NDEBUG
+static inline gboolean nice_debug_is_enabled (void) { return FALSE; }
+static inline void nice_debug (const char *fmt, ...) { }
+#else
+gboolean nice_debug_is_enabled (void);
+void nice_debug (const char *fmt, ...) G_GNUC_PRINTF (1, 2);
+#endif
 
 #endif /*_NICE_AGENT_PRIV_H */

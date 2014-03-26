@@ -9,7 +9,7 @@
 include $(top_srcdir)/common.mk
 
 AM_CFLAGS = \
-	$(ERROR_CFLAGS) \
+	$(LIBNICE_CFLAGS) \
 	$(GLIB_CFLAGS) \
         $(GUPNP_CFLAGS) \
 	-I $(top_srcdir) \
@@ -26,6 +26,13 @@ check_PROGRAMS = \
 	test \
 	test-address \
 	test-add-remove-stream \
+	test-build-io-stream \
+	test-io-stream-thread \
+	test-io-stream-closing-write \
+	test-io-stream-closing-read \
+	test-io-stream-cancelling \
+	test-io-stream-pollable \
+	test-send-recv \
 	test-priority \
 	test-mainloop \
 	test-fullmode \
@@ -41,6 +48,8 @@ dist_check_SCRIPTS = \
 
 TESTS = $(check_PROGRAMS) $(dist_check_SCRIPTS)
 
+noinst_HEADERS = test-io-stream-common.h
+
 test_pseudotcp_LDADD = $(COMMON_LDADD)
 
 test_bsd_LDADD = $(COMMON_LDADD)
@@ -52,6 +61,26 @@ test_thread_LDADD = $(COMMON_LDADD)
 test_address_LDADD = $(COMMON_LDADD)
 
 test_add_remove_stream_LDADD = $(COMMON_LDADD)
+
+test_build_io_stream_LDADD = $(COMMON_LDADD)
+
+test_io_stream_thread_SOURCES = test-io-stream-thread.c test-io-stream-common.c
+test_io_stream_thread_LDADD = $(COMMON_LDADD)
+
+test_io_stream_closing_write_SOURCES = test-io-stream-closing-write.c test-io-stream-common.c
+test_io_stream_closing_write_LDADD = $(COMMON_LDADD)
+
+test_io_stream_closing_read_SOURCES = test-io-stream-closing-read.c test-io-stream-common.c
+test_io_stream_closing_read_LDADD = $(COMMON_LDADD)
+
+test_io_stream_cancelling_SOURCES = test-io-stream-cancelling.c test-io-stream-common.c
+test_io_stream_cancelling_LDADD = $(COMMON_LDADD)
+
+test_io_stream_pollable_SOURCES = test-io-stream-pollable.c test-io-stream-common.c
+test_io_stream_pollable_LDADD = $(COMMON_LDADD)
+
+test_send_recv_SOURCES = test-send-recv.c test-io-stream-common.c
+test_send_recv_LDADD = $(COMMON_LDADD)
 
 test_priority_LDADD = $(COMMON_LDADD)
 

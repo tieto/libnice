@@ -420,6 +420,26 @@ StunMessage
 @Returns: 
 
 
+<!-- ##### STRUCT StunInputVector ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@size: 
+
+<!-- ##### FUNCTION stun_message_validate_buffer_length_fast ##### -->
+<para>
+
+</para>
+
+@buffers: 
+@n_buffers: 
+@total_length: 
+@has_padding: 
+@Returns: 
+
+
 <!-- ##### FUNCTION stun_message_id ##### -->
 <para>
 

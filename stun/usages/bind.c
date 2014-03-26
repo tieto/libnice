@@ -143,6 +143,10 @@ StunUsageBindReturn stun_usage_bind_process (StunMessage *msg,
 
       }
       return STUN_USAGE_BIND_RETURN_ERROR;
+
+    default:
+      /* Fall through. */
+      break;
   }
 
   stun_debug ("Received %u-bytes STUN message\n", stun_message_length (msg));
@@ -256,6 +260,9 @@ static int stun_socket (int family, int type, int proto)
         break;
       case AF_INET6:
         setsockopt (fd, SOL_IPV6, IPV6_RECVERR, &yes, sizeof (yes));
+        break;
+      default:
+        /* Nothing to do. */
         break;
     }
   }
@@ -389,8 +396,14 @@ stun_trans_recvfrom (StunTransport *tr, uint8_t *buf, size_t maxlen,
 static ssize_t
 stun_trans_send (StunTransport *tr, const uint8_t *buf, size_t len)
 {
-  return stun_trans_sendto (tr, buf, len,
-      (struct sockaddr *)&tr->dst, tr->dstlen);
+  union {
+    struct sockaddr_storage *storage;
+    struct sockaddr *addr;
+  } conv;
+
+  conv.storage = &tr->dst;
+
+  return stun_trans_sendto (tr, buf, len, conv.addr, tr->dstlen);
 }
 
 static ssize_t
@@ -454,7 +467,10 @@ StunUsageBindReturn stun_usage_bind_run (const struct sockaddr *srv,
   size_t len;
   StunUsageTransReturn ret;
   int val;
-  struct sockaddr_storage alternate_server;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } alternate_server;
   socklen_t alternate_server_len = sizeof (alternate_server);
   StunUsageBindReturn bind_ret;
 
@@ -500,6 +516,8 @@ StunUsageBindReturn stun_usage_bind_run (const struct sockaddr *srv,
             }
             continue;
           case STUN_USAGE_TIMER_RETURN_SUCCESS:
+          default:
+            /* Fall through. */
             break;
         }
       }
@@ -517,12 +535,12 @@ StunUsageBindReturn stun_usage_bind_run (const struct sockaddr *srv,
       ret = STUN_USAGE_TRANS_RETURN_RETRY;
     } else {
       bind_ret = stun_usage_bind_process (&msg, addr, addrlen,
-          (struct sockaddr *) &alternate_server, &alternate_server_len);
+          &alternate_server.addr, &alternate_server_len);
       if (bind_ret == STUN_USAGE_BIND_RETURN_ALTERNATE_SERVER) {
         stun_trans_deinit (&trans);
 
         ret = stun_trans_create (&trans, SOCK_DGRAM, 0,
-            (struct sockaddr *) &alternate_server, alternate_server_len);
+            &alternate_server.addr, alternate_server_len);
 
         if (ret != STUN_USAGE_TRANS_RETURN_SUCCESS) {
           return STUN_USAGE_BIND_RETURN_ERROR;

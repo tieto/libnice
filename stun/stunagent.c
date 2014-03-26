@@ -46,6 +46,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 
 static bool stun_agent_is_unknown (StunAgent *agent, uint16_t type);
@@ -80,7 +81,7 @@ bool stun_agent_default_validater (StunAgent *agent,
     stun_debug_bytes (username, username_len);
     stun_debug ("' (%d) with '", username_len);
     stun_debug_bytes (val[i].username, val[i].username_len);
-    stun_debug ("' (%d) : %d\n",
+    stun_debug ("' (%" PRIuPTR ") : %d\n",
         val[i].username_len, memcmp (username, val[i].username, username_len));
     if (username_len == val[i].username_len &&
         memcmp (username, val[i].username, username_len) == 0) {
@@ -193,7 +194,8 @@ StunValidationStatus stun_agent_validate (StunAgent *agent, StunMessage *msg,
           STUN_MESSAGE_RETURN_SUCCESS &&
        (error_code == 400 || error_code == 401)) ||
       (stun_message_get_class (msg) == STUN_INDICATION &&
-       (agent->usage_flags & STUN_AGENT_USAGE_NO_INDICATION_AUTH));
+          (agent->usage_flags & STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS ||
+              agent->usage_flags & STUN_AGENT_USAGE_NO_INDICATION_AUTH));
 
   if (key == NULL &&
       ignore_credentials == 0 &&
@@ -236,9 +238,7 @@ StunValidationStatus stun_agent_validate (StunAgent *agent, StunMessage *msg,
          because you might have a FINGERPRINT attribute after it... */
       if (agent->usage_flags & STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS) {
         uint8_t *realm = NULL;
-        uint8_t *username = NULL;
         uint16_t realm_len;
-        uint16_t username_len;
         uint8_t md5[16];
 
         if (long_term_key_valid) {
