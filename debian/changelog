@@ -1,3 +1,9 @@
+libnice (0.1.5-1) UNRELEASED; urgency=low
+
+  * New upstream release
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 26 Mar 2014 15:05:29 +0000
+
 libnice (0.1.4-1) unstable; urgency=low
 
   * New upstream release (Closes: #705101)
