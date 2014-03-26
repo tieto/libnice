@@ -52,7 +52,6 @@
 #include "agent-priv.h"
 #include "agent.h"
 
-#define IPPORT_STUN 3456
 #define USE_UPNP 0
 #define LEFT_AGENT GINT_TO_POINTER(1)
 #define RIGHT_AGENT GINT_TO_POINTER(2)
@@ -73,15 +72,18 @@
   static GCond *stun_thread_signal_ptr = &stun_thread_signal;
 #endif
 
-static GMainLoop *global_mainloop;
 static NiceComponentState global_lagent_state = NICE_COMPONENT_STATE_LAST;
 static NiceComponentState global_ragent_state = NICE_COMPONENT_STATE_LAST;
+static GCancellable *global_cancellable;
 static gboolean exit_stun_thread = FALSE;
 static gboolean lagent_candidate_gathering_done = FALSE;
 static gboolean ragent_candidate_gathering_done = FALSE;
 static guint global_ls_id, global_rs_id;
 static gboolean data_received = FALSE;
 static gboolean drop_stun_packets = FALSE;
+static gboolean got_stun_packet = FALSE;
+static gboolean send_stun = FALSE;
+static guint stun_port;
 
 static const uint16_t known_attributes[] =  {
   0
@@ -90,9 +92,12 @@ static const uint16_t known_attributes[] =  {
 /*
  * Creates a listening socket
  */
-static int listen_socket (unsigned int port)
+static int listen_socket (unsigned int *port)
 {
-  struct sockaddr_in addr;
+  union {
+    struct sockaddr_in in;
+    struct sockaddr addr;
+  } addr;
   int fd = socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
   if (fd == -1) {
@@ -101,13 +106,24 @@ static int listen_socket (unsigned int port)
   }
 
   memset (&addr, 0, sizeof (addr));
-  addr.sin_family = AF_INET;
-  inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
-  addr.sin_port = htons(port);
+  addr.in.sin_family = AF_INET;
+  inet_pton(AF_INET, "127.0.0.1", &addr.in.sin_addr);
+  addr.in.sin_port = 0;
 
-  if (bind (fd, (struct sockaddr *)&addr, sizeof (struct sockaddr_in))) {
+  if (bind (fd, &addr.addr, sizeof (struct sockaddr_in))) {
     perror ("Error opening IP port");
     goto error;
+  }
+
+  if (port) {
+    socklen_t socklen = sizeof(addr);
+
+    if (getsockname (fd, &addr.addr, &socklen) < 0)
+      g_error ("getsockname failed: %s", strerror (errno));
+
+    g_assert (socklen == sizeof(struct sockaddr_in));
+    *port = ntohs (addr.in.sin_port);
+    g_assert (*port != 0);
   }
 
   return fd;
@@ -119,7 +135,10 @@ error:
 
 static int dgram_process (int sock, StunAgent *oldagent, StunAgent *newagent)
 {
-  struct sockaddr_storage addr;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } addr;
   socklen_t addr_len;
   uint8_t buf[STUN_MAX_MESSAGE_SIZE];
   size_t buf_len = 0;
@@ -134,7 +153,7 @@ static int dgram_process (int sock, StunAgent *oldagent, StunAgent *newagent)
 
 recv_packet:
   len = recvfrom (sock, buf, sizeof(buf), 0,
-      (struct sockaddr *)&addr, &addr_len);
+      &addr.addr, &addr_len);
 
   if (drop_stun_packets) {
     g_debug ("Dropping STUN packet as requested");
@@ -173,12 +192,20 @@ recv_packet:
       if (stun_message_has_cookie (&request))
         stun_message_append_xor_addr (&response,
             STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS,
-            (struct sockaddr *)&addr, addr_len);
+            &addr.addr, addr_len);
       else
          stun_message_append_addr (&response, STUN_ATTRIBUTE_MAPPED_ADDRESS,
-             (struct sockaddr *)&addr, addr_len);
+             &addr.addr, addr_len);
       break;
 
+    case STUN_SHARED_SECRET:
+    case STUN_ALLOCATE:
+    case STUN_SET_ACTIVE_DST:
+    case STUN_CONNECT:
+    case STUN_OLD_SET_ACTIVE_DST:
+    case STUN_IND_DATA:
+    case STUN_IND_CONNECT_STATUS:
+    case STUN_CHANNELBIND:
     default:
       if (!stun_agent_init_error (agent, &response, buf, sizeof (buf),
               &request, STUN_ERROR_BAD_REQUEST)) {
@@ -190,16 +217,17 @@ recv_packet:
   buf_len = stun_agent_finish_message (agent, &response, NULL, 0);
 
 send_buf:
-  g_main_loop_quit (global_mainloop);
+  g_cancellable_cancel (global_cancellable);
   g_debug ("Ready to send a STUN response");
   g_assert (g_mutex_trylock (stun_mutex_ptr));
-  while (global_lagent_state < NICE_COMPONENT_STATE_CONNECTING) {
+  got_stun_packet = TRUE;
+  while (send_stun) {
     g_debug ("Waiting for signal. State is %d", global_lagent_state);
     g_cond_wait (stun_signal_ptr, stun_mutex_ptr);
   }
   g_mutex_unlock (stun_mutex_ptr);
   len = sendto (sock, buf, buf_len, 0,
-      (struct sockaddr *)&addr, addr_len);
+      &addr.addr, addr_len);
   g_debug ("STUN response sent");
   drop_stun_packets = TRUE;
   ret = (len < buf_len) ? -1 : 0;
@@ -211,14 +239,8 @@ static gpointer stun_thread_func (const gpointer user_data)
 {
   StunAgent oldagent;
   StunAgent newagent;
-  int sock;
+  int sock = GPOINTER_TO_INT (user_data);
   int exit_code = -1;
-
-  sock = listen_socket (IPPORT_STUN);
-
-  if (sock == -1) {
-    g_assert_not_reached ();
-  }
 
   g_mutex_lock (stun_thread_mutex_ptr);
   g_cond_signal (stun_thread_signal_ptr);
@@ -268,7 +290,7 @@ static void cb_candidate_gathering_done(NiceAgent *agent, guint stream_id, gpoin
     g_debug ("ragent finished gathering candidates");
     ragent_candidate_gathering_done = TRUE;
   }
-  g_main_loop_quit(global_mainloop);
+  g_cancellable_cancel (global_cancellable);
 }
 
 static void cb_nice_recv (NiceAgent *agent, guint stream_id, guint component_id, guint len, gchar *buf, gpointer user_data)
@@ -285,7 +307,7 @@ static void cb_nice_recv (NiceAgent *agent, guint stream_id, guint component_id,
     g_debug ("test-dribblemode:%s: ragent recieved %d bytes : quit mainloop",
              G_STRFUNC, len);
     data_received = TRUE;
-    g_main_loop_quit (global_mainloop);
+    g_cancellable_cancel (global_cancellable);
   }
 }
 
@@ -306,9 +328,10 @@ static void cb_component_state_changed (NiceAgent *agent, guint stream_id, guint
   if (GPOINTER_TO_UINT(data) == 1 && state == NICE_COMPONENT_STATE_FAILED) {
     g_debug ("Signalling STUN response since connchecks failed");
     g_mutex_lock (stun_mutex_ptr);
+    send_stun = TRUE;
     g_cond_signal (stun_signal_ptr);
     g_mutex_unlock (stun_mutex_ptr);
-    g_main_loop_quit (global_mainloop);
+    g_cancellable_cancel (global_cancellable);
   }
 
   if(GPOINTER_TO_UINT(data) == 1 && state == NICE_COMPONENT_STATE_READY) {
@@ -332,6 +355,7 @@ static void swap_candidates(NiceAgent *local, guint local_id, NiceAgent *remote,
 
   if (signal_stun_reply) {
     g_mutex_lock (stun_mutex_ptr);
+    send_stun = TRUE;
     g_cond_signal (stun_signal_ptr);
     g_mutex_unlock (stun_mutex_ptr);
   }
@@ -430,12 +454,14 @@ static void init_test(NiceAgent *lagent, NiceAgent *ragent, gboolean connect_new
   }
 
   data_received = FALSE;
+  got_stun_packet = FALSE;
+  send_stun = FALSE;
 
   nice_agent_attach_recv (lagent, global_ls_id, NICE_COMPONENT_TYPE_RTP,
-                   g_main_loop_get_context(global_mainloop),
+                   g_main_context_default (),
                    cb_nice_recv, LEFT_AGENT);
   nice_agent_attach_recv (ragent, global_rs_id, NICE_COMPONENT_TYPE_RTP,
-                   g_main_loop_get_context(global_mainloop),
+                   g_main_context_default (),
                    cb_nice_recv, RIGHT_AGENT);
 }
 
@@ -451,18 +477,20 @@ static void standard_test(NiceAgent *lagent, NiceAgent *ragent)
 {
   g_debug ("test-dribblemode:%s", G_STRFUNC);
 
+  got_stun_packet = FALSE;
   init_test (lagent, ragent, FALSE);
 
   nice_agent_gather_candidates (lagent, global_ls_id);
-  g_main_loop_run (global_mainloop);
+  while (!got_stun_packet)
+    g_main_context_iteration (NULL, TRUE);
   g_assert (global_lagent_state == NICE_COMPONENT_STATE_GATHERING &&
             !lagent_candidate_gathering_done);
 
   nice_agent_gather_candidates (ragent, global_rs_id);
-  if (!ragent_candidate_gathering_done) {
-    g_main_loop_run (global_mainloop);
-    g_assert (ragent_candidate_gathering_done);
-  }
+  while (!ragent_candidate_gathering_done)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
+  g_assert (ragent_candidate_gathering_done);
 
   set_credentials (lagent, global_ls_id, ragent, global_rs_id);
 
@@ -471,7 +499,9 @@ static void standard_test(NiceAgent *lagent, NiceAgent *ragent)
                    lagent, global_ls_id,
                    TRUE);
 
-  g_main_loop_run (global_mainloop);
+  while (!data_received)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
   g_assert (global_lagent_state >= NICE_COMPONENT_STATE_CONNECTED &&
             data_received);
 
@@ -479,7 +509,9 @@ static void standard_test(NiceAgent *lagent, NiceAgent *ragent)
   swap_candidates (lagent, global_ls_id,
                    ragent, global_rs_id,
                    FALSE);
-  g_main_loop_run (global_mainloop);
+  while (!lagent_candidate_gathering_done)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
 
   g_assert (lagent_candidate_gathering_done);
 
@@ -501,21 +533,24 @@ static void bad_credentials_test(NiceAgent *lagent, NiceAgent *ragent)
                                      "wrong2", "wrong2");
 
   nice_agent_gather_candidates (lagent, global_ls_id);
-  g_main_loop_run (global_mainloop);
+  while (!got_stun_packet)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
   g_assert (global_lagent_state == NICE_COMPONENT_STATE_GATHERING &&
             !lagent_candidate_gathering_done);
 
   nice_agent_gather_candidates (ragent, global_rs_id);
-  if (!ragent_candidate_gathering_done) {
-    g_main_loop_run (global_mainloop);
-    g_assert (ragent_candidate_gathering_done);
-  }
+  while (!ragent_candidate_gathering_done)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
+  g_assert (ragent_candidate_gathering_done);
 
   swap_candidates (ragent, global_rs_id,
                    lagent, global_ls_id,
                    FALSE);
-  g_main_loop_run (global_mainloop);
-  g_assert (global_lagent_state == NICE_COMPONENT_STATE_FAILED);
+  while (global_lagent_state != NICE_COMPONENT_STATE_FAILED)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
 
   // Set the correct credentials and swap candidates
   set_credentials (lagent, global_ls_id, ragent, global_rs_id);
@@ -527,14 +562,19 @@ static void bad_credentials_test(NiceAgent *lagent, NiceAgent *ragent)
                    ragent, global_rs_id,
                    FALSE);
 
-  g_main_loop_run (global_mainloop);
+  while (!data_received)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
 
   g_assert (data_received);
   g_assert (global_lagent_state == NICE_COMPONENT_STATE_READY);
   g_assert (global_ragent_state >= NICE_COMPONENT_STATE_CONNECTED);
 
   // Wait for lagent to finish gathering candidates
-  g_main_loop_run (global_mainloop);
+  while (!lagent_candidate_gathering_done)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
+
   g_assert (lagent_candidate_gathering_done);
 
   cleanup (lagent, ragent);
@@ -549,23 +589,30 @@ static void bad_candidate_test(NiceAgent *lagent,NiceAgent *ragent)
   init_test (lagent, ragent, FALSE);
 
   nice_agent_gather_candidates (lagent, global_ls_id);
-  g_main_loop_run (global_mainloop);
+  while (!got_stun_packet)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
   g_assert (global_lagent_state == NICE_COMPONENT_STATE_GATHERING &&
             !lagent_candidate_gathering_done);
 
   nice_agent_gather_candidates (ragent, global_rs_id);
-  if (!ragent_candidate_gathering_done) {
-    g_main_loop_run (global_mainloop);
-    g_assert (ragent_candidate_gathering_done);
-  }
+  while (!ragent_candidate_gathering_done)
+      g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
+
+  g_assert (ragent_candidate_gathering_done);
 
   add_bad_candidate (lagent, global_ls_id, cand);
 
   // lagent will finish candidate gathering causing this mainloop to quit
-  g_main_loop_run (global_mainloop);
+  while (!lagent_candidate_gathering_done)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
 
   // connchecks will fail causing this mainloop to quit
-  g_main_loop_run (global_mainloop);
+  while (global_lagent_state != NICE_COMPONENT_STATE_FAILED)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
 
   g_assert (global_lagent_state == NICE_COMPONENT_STATE_FAILED &&
             !data_received);
@@ -579,11 +626,13 @@ static void bad_candidate_test(NiceAgent *lagent,NiceAgent *ragent)
                    ragent, global_rs_id,
                    FALSE);
 
-  g_main_loop_run (global_mainloop);
+  while (!data_received)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
 
   g_assert (lagent_candidate_gathering_done);
 
-  g_assert (global_lagent_state == NICE_COMPONENT_STATE_READY);
+  g_assert (global_lagent_state >= NICE_COMPONENT_STATE_CONNECTED);
   g_assert (global_ragent_state >= NICE_COMPONENT_STATE_CONNECTED);
 
   cleanup (lagent, ragent);
@@ -597,26 +646,34 @@ static void new_candidate_test(NiceAgent *lagent, NiceAgent *ragent)
   set_credentials (lagent, global_ls_id, ragent, global_rs_id);
 
   nice_agent_gather_candidates (lagent, global_ls_id);
-  g_main_loop_run (global_mainloop);
+  while (!got_stun_packet)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
   g_assert (global_lagent_state == NICE_COMPONENT_STATE_GATHERING &&
             !lagent_candidate_gathering_done);
 
   nice_agent_gather_candidates (ragent, global_rs_id);
-  if (!ragent_candidate_gathering_done) {
-    g_main_loop_run (global_mainloop);
-  }
+  while (!ragent_candidate_gathering_done)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
 
   // Wait for data
-  g_main_loop_run (global_mainloop);
+  while (!data_received)
+      g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
   g_assert (data_received);
 
   // Data arrived, signal STUN thread to send STUN response
   g_mutex_lock (stun_mutex_ptr);
+  send_stun = TRUE;
   g_cond_signal (stun_signal_ptr);
   g_mutex_unlock (stun_mutex_ptr);
 
   // Wait for lagent to finish gathering candidates
-  g_main_loop_run (global_mainloop);
+  while (!lagent_candidate_gathering_done ||
+      !lagent_candidate_gathering_done)
+    g_main_context_iteration (NULL, TRUE);
+  g_cancellable_reset (global_cancellable);
 
   g_assert (lagent_candidate_gathering_done);
   g_assert (ragent_candidate_gathering_done);
@@ -629,17 +686,20 @@ static void new_candidate_test(NiceAgent *lagent, NiceAgent *ragent)
 
 static void send_dummy_data(void)
 {
-  int sockfd = listen_socket (4567);
-  struct sockaddr_in addr;
+  int sockfd = listen_socket (NULL);
+  union {
+    struct sockaddr_in in;
+    struct sockaddr addr;
+  } addr;
 
   memset (&addr, 0, sizeof (addr));
-  addr.sin_family = AF_INET;
-  inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
-  addr.sin_port = htons (IPPORT_STUN);
+  addr.in.sin_family = AF_INET;
+  inet_pton(AF_INET, "127.0.0.1", &addr.in.sin_addr);
+  addr.in.sin_port = htons (stun_port);
 
   g_debug ("Sending dummy data to close STUN thread");
   sendto (sockfd, "close socket", 12, 0,
-          (struct sockaddr *)&addr, sizeof (addr));
+          &addr.addr, sizeof (addr));
 }
 
 int main(void)
@@ -647,21 +707,33 @@ int main(void)
   NiceAgent *lagent = NULL, *ragent = NULL;
   GThread *stun_thread = NULL;
   NiceAddress baseaddr;
+  GSource *src;
+  int sock;
 
   g_type_init();
 
-  global_mainloop = g_main_loop_new (NULL, FALSE);
+  global_cancellable = g_cancellable_new ();
+  src = g_cancellable_source_new (global_cancellable);
+  g_source_set_dummy_callback (src);
+  g_source_attach (src, NULL);
+  g_source_unref (src);
+
+  sock = listen_socket (&stun_port);
+
+  if (sock == -1) {
+    g_assert_not_reached ();
+  }
+
 
 #if !GLIB_CHECK_VERSION(2,31,8)
   g_thread_init (NULL);
-  stun_thread = g_thread_create (stun_thread_func,
-                                 global_mainloop,
-                                 TRUE, NULL);
+  stun_thread = g_thread_create (stun_thread_func, GINT_TO_POINTER (sock),
+      TRUE, NULL);
  stun_mutex_ptr = g_mutex_new ();
  stun_signal_ptr = g_cond_new ();
 #else
   stun_thread = g_thread_new ("listen for STUN requests",
-                              stun_thread_func, NULL);
+      stun_thread_func, GINT_TO_POINTER (sock));
 #endif
 
   // Once the the thread is forked, we want to listen for a signal 
@@ -669,10 +741,8 @@ int main(void)
   g_mutex_lock (stun_thread_mutex_ptr);
   g_cond_wait (stun_thread_signal_ptr, stun_thread_mutex_ptr); 
 
-  lagent = nice_agent_new (g_main_loop_get_context (global_mainloop),
-      NICE_COMPATIBILITY_RFC5245);
-  ragent = nice_agent_new (g_main_loop_get_context (global_mainloop),
-      NICE_COMPATIBILITY_RFC5245);
+  lagent = nice_agent_new (NULL, NICE_COMPATIBILITY_RFC5245);
+  ragent = nice_agent_new (NULL, NICE_COMPATIBILITY_RFC5245);
 
   g_object_set (G_OBJECT (lagent), "controlling-mode", TRUE, NULL);
   g_object_set (G_OBJECT (ragent), "controlling-mode", FALSE, NULL);
@@ -681,7 +751,7 @@ int main(void)
   g_object_set (G_OBJECT (ragent), "upnp", USE_UPNP, NULL);
 
   g_object_set (G_OBJECT (lagent), "stun-server", "127.0.0.1", NULL);
-  g_object_set (G_OBJECT (lagent), "stun-server-port", IPPORT_STUN, NULL);
+  g_object_set (G_OBJECT (lagent), "stun-server-port", stun_port, NULL);
 
   g_object_set_data (G_OBJECT (lagent), "other-agent", ragent);
   g_object_set_data (G_OBJECT (ragent), "other-agent", lagent);
@@ -717,7 +787,7 @@ int main(void)
   g_mutex_free (stun_mutex_ptr);
   g_cond_free (stun_signal_ptr);
 #endif
-  g_main_loop_unref (global_mainloop);
+  g_object_unref (global_cancellable);
 
   return 0;
 }

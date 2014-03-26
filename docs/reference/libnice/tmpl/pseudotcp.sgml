@@ -26,12 +26,32 @@ Pseudo TCP Socket
 </para>
 
 
+<!-- ##### ARG PseudoTcpSocket:ack-delay ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG PseudoTcpSocket:callbacks ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG PseudoTcpSocket:conversation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG PseudoTcpSocket:no-delay ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG PseudoTcpSocket:rcv-buf ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG PseudoTcpSocket:snd-buf ##### -->
 <para>
 
 </para>
@@ -185,5 +205,42 @@ Pseudo TCP Socket
 </para>
 
 @level: 
+
+
+<!-- ##### FUNCTION pseudo_tcp_socket_get_available_bytes ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
+
+
+<!-- ##### FUNCTION pseudo_tcp_socket_can_send ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
+
+
+<!-- ##### FUNCTION pseudo_tcp_socket_get_available_send_space ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
+
+
+<!-- ##### FUNCTION pseudo_tcp_socket_notify_message ##### -->
+<para>
+
+</para>
+
+@self: 
+@message: 
+@Returns: 
 
 

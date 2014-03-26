@@ -69,7 +69,9 @@ mainloop_thread (gpointer data)
 {
   GMainLoop *loop = data;
 
-  g_usleep (100000);
+  /* Synchronise thread starting. */
+  while (!g_main_loop_is_running (error_loop));
+
   g_main_loop_run (loop);
 
   return NULL;
@@ -195,9 +197,7 @@ int main (void)
   WSAStartup(0x0202, &w);
 #endif
   g_type_init ();
-#if !GLIB_CHECK_VERSION(2,31,8)
   g_thread_init(NULL);
-#endif
 
   lmainctx = g_main_context_new ();
   rmainctx = g_main_context_new ();

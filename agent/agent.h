@@ -53,6 +53,22 @@
  * It will take care of discovering your local candidates and do
  *  connectivity checks to create a stream of data between you and your peer.
  *
+ * Streams and their components are referenced by integer IDs (with respect to a
+ * given #NiceAgent). These IDs are guaranteed to be positive (i.e. non-zero)
+ * for valid streams/components.
+ *
+ * Each stream can receive data in one of two ways: using
+ * nice_agent_attach_recv() or nice_agent_recv_messages() (and the derived
+ * #NiceInputStream and #NiceIOStream classes accessible using
+ * nice_agent_get_io_stream()). nice_agent_attach_recv() is non-blocking: it
+ * takes a user-provided callback function and attaches the stream’s socket to
+ * the provided #GMainContext, invoking the callback in that context for every
+ * packet received. nice_agent_recv_messages() instead blocks on receiving a
+ * packet, and writes it directly into a user-provided buffer. This reduces the
+ * number of callback invokations and (potentially) buffer copies required to
+ * receive packets. nice_agent_recv_messages() (or #NiceInputStream) is designed
+ * to be used in a blocking loop in a separate thread.
+ *
  <example>
    <title>Simple example on how to use libnice</title>
    <programlisting>
@@ -104,6 +120,7 @@
 
 
 #include <glib-object.h>
+#include <gio/gio.h>
 
 /**
  * NiceAgent:
@@ -119,6 +136,68 @@ typedef struct _NiceAgent NiceAgent;
 
 
 G_BEGIN_DECLS
+
+/**
+ * NiceInputMessage:
+ * @buffers: (array length=n_buffers): unowned array of #GInputVector buffers to
+ * store data in for this message
+ * @n_buffers: number of #GInputVectors in @buffers, or -1 to indicate @buffers
+ * is %NULL-terminated
+ * @from: (allow-none): return location to store the address of the peer who
+ * transmitted the message, or %NULL
+ * @length: total number of valid bytes contiguously stored in @buffers
+ *
+ * Represents a single message received off the network. For reliable
+ * connections, this is essentially just an array of buffers (specifically,
+ * @from can be ignored). for non-reliable connections, it represents a single
+ * packet as received from the OS.
+ *
+ * @n_buffers may be -1 to indicate that @buffers is terminated by a
+ * #GInputVector with a %NULL buffer pointer.
+ *
+ * By providing arrays of #NiceInputMessages to functions like
+ * nice_agent_recv_messages(), multiple messages may be received with a single
+ * call, which is more efficient than making multiple calls in a loop. In this
+ * manner, nice_agent_recv_messages() is analogous to recvmmsg(); and
+ * #NiceInputMessage to struct mmsghdr.
+ *
+ * Since: 0.1.5
+ */
+typedef struct {
+  GInputVector *buffers;
+  gint n_buffers;  /* may be -1 to indicate @buffers is NULL-terminated */
+  NiceAddress *from;  /* return location for address of message sender */
+  gsize length;  /* sum of the lengths of @buffers */
+} NiceInputMessage;
+
+/**
+ * NiceOutputMessage:
+ * @buffers: (array length=n_buffers): unowned array of #GOutputVector buffers
+ * which contain data to transmit for this message
+ * @n_buffers: number of #GOutputVectors in @buffers, or -1 to indicate @buffers
+ * is %NULL-terminated
+ *
+ * Represents a single message to transmit on the network. For
+ * reliable connections, this is essentially just an array of
+ * buffer. for non-reliable connections, it represents a single packet
+ * to send to the OS.
+ *
+ * @n_buffers may be -1 to indicate that @buffers is terminated by a
+ * #GOutputVector with a %NULL buffer pointer.
+ *
+ * By providing arrays of #NiceOutputMessages to functions like
+ * nice_agent_send_messages_nonblocking(), multiple messages may be transmitted
+ * with a single call, which is more efficient than making multiple calls in a
+ * loop. In this manner, nice_agent_send_messages_nonblocking() is analogous to
+ * sendmmsg(); and #NiceOutputMessage to struct mmsghdr.
+ *
+ * Since: 0.1.5
+ */
+typedef struct {
+  GOutputVector *buffers;
+  gint n_buffers;
+} NiceOutputMessage;
+
 
 #define NICE_TYPE_AGENT nice_agent_get_type()
 
@@ -337,7 +416,8 @@ nice_agent_add_local_address (NiceAgent *agent, NiceAddress *addr);
  * @agent: The #NiceAgent Object
  * @n_components: The number of components to add to the stream
  *
- * Adds a data stream to @agent containing @n_components components.
+ * Adds a data stream to @agent containing @n_components components. The
+ * returned stream ID is guaranteed to be positive on success.
  *
  * Returns: The ID of the new stream, 0 on failure
  **/
@@ -398,6 +478,8 @@ nice_agent_set_port_range (
  * @type: The type of relay to use
  *
  * Sets the settings for using a relay server during the candidate discovery.
+ * This may be called multiple times to add multiple relay servers to the
+ * discovery process; one TCP and one UDP, for example.
  *
  * Returns: %TRUE if the TURN settings were accepted.
  * %FALSE if the address was invalid.
@@ -414,17 +496,23 @@ gboolean nice_agent_set_relay_info(
 
 /**
  * nice_agent_gather_candidates:
- * @agent: The #NiceAgent Object
- * @stream_id: The id of the stream to start
+ * @agent: The #NiceAgent object
+ * @stream_id: The ID of the stream to start
  *
- * Start the candidate gathering process.
- * Once done, #NiceAgent::candidate-gathering-done is called for the stream
+ * Allocate and start listening on local candidate ports and start the remote
+ * candidate gathering process.
+ * Once done, #NiceAgent::candidate-gathering-done is called for the stream.
+ * As soon as this function is called, #NiceAgent::new-candidate signals may be
+ * emitted, even before this function returns.
+ *
+ * nice_agent_get_local_candidates() will only return non-empty results after
+ * calling this function.
  *
  * <para>See also: nice_agent_add_local_address()</para>
  * <para>See also: nice_agent_set_port_range()</para>
  *
- * Returns: %FALSE if the stream id is invalid or if a host candidate couldn't be allocated
- * on the requested interfaces/ports.
+ * Returns: %FALSE if the stream ID is invalid or if a host candidate couldn't
+ * be allocated on the requested interfaces/ports; %TRUE otherwise
  *
  <note>
    <para>
@@ -473,14 +561,16 @@ nice_agent_set_remote_credentials (
  * nice_agent_get_local_credentials:
  * @agent: The #NiceAgent Object
  * @stream_id: The ID of the stream
- * @ufrag: a pointer to a NULL-terminated string containing
- * an ICE username fragment [OUT].
- * This string must be freed with g_free()
- * @pwd: a pointer to a NULL-terminated string containing an ICE
- * password [OUT]
- * This string must be freed with g_free()
+ * @ufrag: (out callee-allocates): return location for a nul-terminated string
+ * containing an ICE username fragment; must be freed with g_free()
+ * @pwd: (out callee-allocates): return location for a nul-terminated string
+ * containing an ICE password; must be freed with g_free()
  *
- * Gets the local credentials for stream @stream_id.
+ * Gets the local credentials for stream @stream_id. This may be called any time
+ * after creating a stream using nice_agent_add_stream().
+ *
+ * An error will be returned if this is called for a non-existent stream, or if
+ * either of @ufrag or @pwd are %NULL.
  *
  * Returns: %TRUE on success, %FALSE on error.
  */
@@ -572,6 +662,60 @@ nice_agent_send (
   const gchar *buf);
 
 /**
+ * nice_agent_send_messages_nonblocking:
+ * @agent: a #NiceAgent
+ * @stream_id: the ID of the stream to send to
+ * @component_id: the ID of the component to send to
+ * @messages: (array length=n_messages): array of messages to send, of at least
+ * @n_messages entries in length
+ * @n_messages: number of entries in @messages
+ * @cancellable: (allow-none): a #GCancellable to cancel the operation from
+ * another thread, or %NULL
+ * @error: (allow-none): return location for a #GError, or %NULL
+ *
+ * Sends multiple messages on the socket identified by the given
+ * stream/component pair. Transmission is non-blocking, so a
+ * %G_IO_ERROR_WOULD_BLOCK error may be returned if the send buffer is full.
+ *
+ * As with nice_agent_send(), the given component must be in
+ * %NICE_COMPONENT_STATE_READY or, as a special case, in any state if it was
+ * previously ready and was then restarted.
+ *
+ * On success, the number of messages written to the socket will be returned,
+ * which may be less than @n_messages if transmission would have blocked
+ * part-way through. Zero will be returned if @n_messages is zero, or if
+ * transmission would have blocked on the first message.
+ *
+ * In reliable mode, it is instead recommended to use
+ * nice_agent_send().  The return value can be less than @n_messages
+ * or 0 even if it is still possible to send a partial message. In
+ * this case, "nice-agent-writable" will never be triggered, so the
+ * application would have to use nice_agent_sent() to fill the buffer or have
+ * to retry sending at a later point.
+ *
+ * On failure, -1 will be returned and @error will be set. If the #NiceAgent is
+ * reliable and the socket is not yet connected, %G_IO_ERROR_BROKEN_PIPE will be
+ * returned; if the write buffer is full, %G_IO_ERROR_WOULD_BLOCK will be
+ * returned. In both cases, wait for the #NiceAgent::reliable-transport-writable
+ * signal before trying again. If the given @stream_id or @component_id are
+ * invalid or not yet connected, %G_IO_ERROR_BROKEN_PIPE will be returned.
+ * %G_IO_ERROR_FAILED will be returned for other errors.
+ *
+ * Returns: the number of messages sent (may be zero), or -1 on error
+ *
+ * Since: 0.1.5
+ */
+gint
+nice_agent_send_messages_nonblocking (
+    NiceAgent *agent,
+    guint stream_id,
+    guint component_id,
+    const NiceOutputMessage *messages,
+    guint n_messages,
+    GCancellable *cancellable,
+    GError **error);
+
+/**
  * nice_agent_get_local_candidates:
  * @agent: The #NiceAgent Object
  * @stream_id: The ID of the stream
@@ -609,8 +753,8 @@ nice_agent_get_local_candidates (
  *
  <note>
    <para>
-     The caller owns the returned GSList but not the candidates
-     contained within it.
+     The caller owns the returned GSList as well as the candidates contained
+     within it.
    </para>
    <para>
      The list of remote candidates can change during processing.
@@ -657,6 +801,15 @@ nice_agent_restart (
  * Attaches the stream's component's sockets to the Glib Mainloop Context in
  * order to be notified whenever data becomes available for a component.
  *
+ * This must not be used in combination with nice_agent_recv_messages() (or
+ * #NiceIOStream or #NiceInputStream) on the same stream/component pair.
+ *
+ * Calling nice_agent_attach_recv() with a %NULL @func will detach any existing
+ * callback and cause reception to be paused for the given stream/component
+ * pair. You must iterate the previously specified #GMainContext sufficiently to
+ * ensure all pending I/O callbacks have been received before calling this
+ * function to unset @func, otherwise data loss of received packets may occur.
+ *
  * Returns: %TRUE on success, %FALSE if the stream or component IDs are invalid.
  */
 gboolean
@@ -668,6 +821,169 @@ nice_agent_attach_recv (
   NiceAgentRecvFunc func,
   gpointer data);
 
+/**
+ * nice_agent_recv:
+ * @agent: a #NiceAgent
+ * @stream_id: the ID of the stream to receive on
+ * @component_id: the ID of the component to receive on
+ * @buf: (array length=buf_len) (out caller-allocates): caller-allocated buffer
+ * to write the received data into, of length at least @buf_len
+ * @buf_len: length of @buf
+ * @cancellable: (allow-none): a #GCancellable to allow the operation to be
+ * cancelled from another thread, or %NULL
+ * @error: (allow-none): return location for a #GError, or %NULL
+ *
+ * A single-message version of nice_agent_recv_messages().
+ *
+ * Returns: the number of bytes written to @buf on success (guaranteed to be
+ * greater than 0 unless @buf_len is 0), or -1 on error
+ *
+ * Since: 0.1.5
+ */
+gssize
+nice_agent_recv (
+    NiceAgent *agent,
+    guint stream_id,
+    guint component_id,
+    guint8 *buf,
+    gsize buf_len,
+    GCancellable *cancellable,
+    GError **error);
+
+/**
+ * nice_agent_recv_messages:
+ * @agent: a #NiceAgent
+ * @stream_id: the ID of the stream to receive on
+ * @component_id: the ID of the component to receive on
+ * @messages: (array length=n_messages) (out caller-allocates): caller-allocated
+ * array of #NiceInputMessages to write the received messages into, of length at
+ * least @n_messages
+ * @n_messages: number of entries in @messages
+ * @cancellable: (allow-none): a #GCancellable to allow the operation to be
+ * cancelled from another thread, or %NULL
+ * @error: (allow-none): return location for a #GError, or %NULL
+ *
+ * Block on receiving data from the given stream/component combination on
+ * @agent, returning only once exactly @n_messages messages have been received
+ * and written into @messages, the stream is closed by the other end or by
+ * calling nice_agent_remove_stream(), or @cancellable is cancelled.
+ *
+ * In the non-error case, in reliable mode, this will block until all buffers in
+ * all @n_messages have been filled with received data (i.e. @messages is
+ * treated as a large, flat array of buffers). In non-reliable mode, it will
+ * block until @n_messages messages have been received, each of which does not
+ * have to fill all the buffers in its #NiceInputMessage. In the non-reliable
+ * case, each #NiceInputMessage must have enough buffers to contain an entire
+ * message (65536 bytes), or any excess data may be silently dropped.
+ *
+ * For each received message, #NiceInputMessage::length will be set to the
+ * number of valid bytes stored in the message’s buffers. The bytes are stored
+ * sequentially in the buffers; there are no gaps apart from at the end of the
+ * buffer array (in non-reliable mode). If non-%NULL on input,
+ * #NiceInputMessage::from will have the address of the sending peer stored in
+ * it. The base addresses, sizes, and number of buffers in each message will not
+ * be modified in any case.
+ *
+ * This must not be used in combination with nice_agent_attach_recv() on the
+ * same stream/component pair.
+ *
+ * If the stream/component pair doesn’t exist, or if a suitable candidate socket
+ * hasn’t yet been selected for it, a %G_IO_ERROR_BROKEN_PIPE error will be
+ * returned. A %G_IO_ERROR_CANCELLED error will be returned if the operation was
+ * cancelled. %G_IO_ERROR_FAILED will be returned for other errors.
+ *
+ * Returns: the number of valid messages written to @messages on success
+ * (guaranteed to be greater than 0 unless @n_messages is 0), or -1 on error
+ *
+ * Since: 0.1.5
+ */
+gint
+nice_agent_recv_messages (
+    NiceAgent *agent,
+    guint stream_id,
+    guint component_id,
+    NiceInputMessage *messages,
+    guint n_messages,
+    GCancellable *cancellable,
+    GError **error);
+
+/**
+ * nice_agent_recv_nonblocking:
+ * @agent: a #NiceAgent
+ * @stream_id: the ID of the stream to receive on
+ * @component_id: the ID of the component to receive on
+ * @buf: (array length=buf_len) (out caller-allocates): caller-allocated buffer
+ * to write the received data into, of length at least @buf_len
+ * @buf_len: length of @buf
+ * @cancellable: (allow-none): a #GCancellable to allow the operation to be
+ * cancelled from another thread, or %NULL
+ * @error: (allow-none): return location for a #GError, or %NULL
+ *
+ * A single-message version of nice_agent_recv_messages_nonblocking().
+ *
+ * Returns: the number of bytes received into @buf on success (guaranteed to be
+ * greater than 0 unless @buf_len is 0), or -1 on error
+ *
+ * Since: 0.1.5
+ */
+gssize
+nice_agent_recv_nonblocking (
+    NiceAgent *agent,
+    guint stream_id,
+    guint component_id,
+    guint8 *buf,
+    gsize buf_len,
+    GCancellable *cancellable,
+    GError **error);
+
+/**
+ * nice_agent_recv_messages_nonblocking:
+ * @agent: a #NiceAgent
+ * @stream_id: the ID of the stream to receive on
+ * @component_id: the ID of the component to receive on
+ * @messages: (array length=n_messages) (out caller-allocates): caller-allocated
+ * array of #NiceInputMessages to write the received messages into, of length at
+ * least @n_messages
+ * @n_messages: number of entries in @messages
+ * @cancellable: (allow-none): a #GCancellable to allow the operation to be
+ * cancelled from another thread, or %NULL
+ * @error: (allow-none): return location for a #GError, or %NULL
+ *
+ * Try to receive data from the given stream/component combination on @agent,
+ * without blocking. If receiving data would block, -1 is returned and
+ * %G_IO_ERROR_WOULD_BLOCK is set in @error. If any other error occurs, -1 is
+ * returned and @error is set accordingly. Otherwise, 0 is returned if (and only
+ * if) @n_messages is 0. In all other cases, the number of valid messages stored
+ * in @messages is returned, and will be greater than 0.
+ *
+ * This function behaves similarly to nice_agent_recv_messages(), except that it
+ * will not block on filling (in reliable mode) or receiving (in non-reliable
+ * mode) exactly @n_messages messages. In reliable mode, it will receive bytes
+ * into @messages until it would block; in non-reliable mode, it will receive
+ * messages until it would block.
+ *
+ * As this function is non-blocking, @cancellable is included only for parity
+ * with nice_agent_recv_messages(). If @cancellable is cancelled before this
+ * function is called, a %G_IO_ERROR_CANCELLED error will be returned
+ * immediately.
+ *
+ * This must not be used in combination with nice_agent_attach_recv() on the
+ * same stream/component pair.
+ *
+ * Returns: the number of valid messages written to @messages on success
+ * (guaranteed to be greater than 0 unless @n_messages is 0), or -1 on error
+ *
+ * Since: 0.1.5
+ */
+gint
+nice_agent_recv_messages_nonblocking (
+    NiceAgent *agent,
+    guint stream_id,
+    guint component_id,
+    NiceInputMessage *messages,
+    guint n_messages,
+    GCancellable *cancellable,
+    GError **error);
 
 /**
  * nice_agent_set_selected_pair:
@@ -713,6 +1029,36 @@ nice_agent_get_selected_pair (
   guint component_id,
   NiceCandidate **local,
   NiceCandidate **remote);
+
+/**
+ * nice_agent_get_selected_socket:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @component_id: The ID of the component
+ *
+ * Retreive the local socket associated with the selected candidate pair
+ * for media transmission for a given stream's component.
+ *
+ * This is useful for adding ICE support to legacy applications that already
+ * have a protocol that maintains a connection. If the socket is duplicated
+ * before unrefing the agent, the application can take over and continue to use
+ * it. New applications are encouraged to use the built in libnice stream
+ * handling instead and let libnice handle the connection maintenance.
+ *
+ * Users of this method are encouraged to not use a TURN relay or any kind
+ * of proxy, as in this case, the socket will not be available to the
+ * application because the packets are encapsulated.
+ *
+ * Returns: (transfer full) pointer to the #GSocket, or NULL if there is no
+ * selected candidate or if the selected candidate is a relayed candidate.
+ *
+ * Since: 0.1.5
+ */
+GSocket *
+nice_agent_get_selected_socket (
+  NiceAgent *agent,
+  guint stream_id,
+  guint component_id);
 
 /**
  * nice_agent_set_selected_remote_candidate:
@@ -1040,6 +1386,31 @@ nice_agent_parse_remote_candidate_sdp (
     NiceAgent *agent,
     guint stream_id,
     const gchar *sdp);
+
+/**
+ * nice_agent_get_io_stream:
+ * @agent: A #NiceAgent
+ * @stream_id: The ID of the stream to wrap
+ * @component_id: The ID of the component to wrap
+ *
+ * Gets a #GIOStream wrapper around the given stream and component in
+ * @agent. The I/O stream will be valid for as long as @stream_id is valid.
+ * The #GInputStream and #GOutputStream implement #GPollableInputStream and
+ * #GPollableOutputStream.
+ *
+ * This function may only be called on reliable #NiceAgents. It is a
+ * programming error to try and create an I/O stream wrapper for an
+ * unreliable stream.
+ *
+ * Returns: (transfer full): A #GIOStream.
+ *
+ * Since: 0.1.5
+ */
+GIOStream *
+nice_agent_get_io_stream (
+    NiceAgent *agent,
+    guint stream_id,
+    guint component_id);
 
 G_END_DECLS
 

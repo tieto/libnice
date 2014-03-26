@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>TURN</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch04.html" title="STUN usages">
 <link rel="prev" href="libnice-ICE.html" title="ICE">
 <link rel="next" href="libnice-Timer.html" title="Timer">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.19 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -84,6 +84,20 @@ enum                <a class="link" href="libnice-TURN.html#StunUsageTurnReturn"
 <a class="link" href="libnice-TURN.html#StunUsageTurnReturn" title="enum StunUsageTurnReturn"><span class="returnvalue">StunUsageTurnReturn</span></a> <a class="link" href="libnice-TURN.html#stun-usage-turn-refresh-process" title="stun_usage_turn_refresh_process ()">stun_usage_turn_refresh_process</a>     (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint32_t</span> *lifetime</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility"><span class="type">StunUsageTurnCompatibility</span></a> compatibility</code></em>);
+<span class="returnvalue">size_t</span>              <a class="link" href="libnice-TURN.html#stun-usage-turn-create-permission" title="stun_usage_turn_create_permission ()">stun_usage_turn_create_permission</a>   (<em class="parameter"><code><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> *agent</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *buffer</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> buffer_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *username</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> username_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *password</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> password_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *realm</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> realm_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *nonce</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> nonce_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">struct sockaddr</span> *peer</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility"><span class="type">StunUsageTurnCompatibility</span></a> compatibility</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -110,8 +124,11 @@ an allocate or refresh request.
 <p>
 Specifies which TURN specification compatibility to use
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_COMPATIBILITY_DRAFT9</code></span></p></td>
@@ -157,8 +174,11 @@ MSN TURN servers
 This enum is used to specify which port configuration you want when creating
 a new Allocation
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-USAGE-TURN-REQUEST-PORT-NORMAL:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_REQUEST_PORT_NORMAL</code></span></p></td>
@@ -195,8 +215,11 @@ Return value of <a class="link" href="libnice-TURN.html#stun-usage-turn-process"
 <a class="link" href="libnice-TURN.html#stun-usage-turn-refresh-process" title="stun_usage_turn_refresh_process ()"><code class="function">stun_usage_turn_refresh_process()</code></a> which allows you to see what status the
 function call returned.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><a name="STUN-USAGE-TURN-RETURN-RELAY-SUCCESS:CAPS"></a><span class="term"><code class="literal">STUN_USAGE_TURN_RETURN_RELAY_SUCCESS</code></span></p></td>
@@ -248,8 +271,11 @@ to be sent to an alternate server
 <p>
 Create a new TURN Allocation request
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -349,8 +375,11 @@ request</td>
 <p>
 Create a new TURN Refresh request
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>agent</code></em> :</span></p></td>
@@ -432,8 +461,11 @@ request</td>
 Process a TURN Allocate response and extract the necessary information from
 the message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -506,8 +538,11 @@ response</td>
 Process a TURN Refresh response and extract the necessary information from
 the message
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>msg</code></em> :</span></p></td>
@@ -531,10 +566,30 @@ as for the original allocation)</td>
 </tbody>
 </table></div>
 </div>
+<hr>
+<div class="refsect2">
+<a name="stun-usage-turn-create-permission"></a><h3>stun_usage_turn_create_permission ()</h3>
+<pre class="programlisting"><span class="returnvalue">size_t</span>              stun_usage_turn_create_permission   (<em class="parameter"><code><a class="link" href="libnice-StunAgent.html#StunAgent" title="StunAgent"><span class="type">StunAgent</span></a> *agent</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *buffer</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> buffer_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *username</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> username_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *password</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> password_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *realm</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> realm_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">uint8_t</span> *nonce</code></em>,
+                                                         <em class="parameter"><code><span class="type">size_t</span> nonce_len</code></em>,
+                                                         <em class="parameter"><code><span class="type">struct sockaddr</span> *peer</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libnice-TURN.html#StunUsageTurnCompatibility" title="enum StunUsageTurnCompatibility"><span class="type">StunUsageTurnCompatibility</span></a> compatibility</code></em>);</pre>
+<p>
+</p>
+</div>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.19</div>
 </body>
 </html>

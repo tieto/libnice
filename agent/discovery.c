@@ -481,11 +481,6 @@ NiceCandidate *discovery_add_local_host_candidate (
   if (!udp_socket)
     goto errors;
 
-
-  _priv_set_socket_tos (agent, udp_socket, stream->tos);
-  agent_attach_stream_component_socket (agent, stream,
-      component, udp_socket);
-
   candidate->sockptr = udp_socket;
   candidate->addr = udp_socket->addr;
   candidate->base_addr = udp_socket->addr;
@@ -493,7 +488,8 @@ NiceCandidate *discovery_add_local_host_candidate (
   if (!priv_add_local_candidate_pruned (agent, stream_id, component, candidate))
     goto errors;
 
-  component->sockets = g_slist_append (component->sockets, udp_socket);
+  _priv_set_socket_tos (agent, udp_socket, stream->tos);
+  component_attach_socket (component, udp_socket);
 
   return candidate;
 
@@ -624,7 +620,7 @@ discovery_add_relay_candidate (
   if (!priv_add_local_candidate_pruned (agent, stream_id, component, candidate))
     goto errors;
 
-  component->sockets = g_slist_append (component->sockets, relay_socket);
+  component_attach_socket (component, relay_socket);
   agent_signal_new_candidate (agent, candidate);
 
   return candidate;
@@ -850,7 +846,7 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
       if (agent->discovery_unsched_items)
 	--agent->discovery_unsched_items;
 
-      {
+      if (nice_debug_is_enabled ()) {
         gchar tmpbuf[INET6_ADDRSTRLEN];
         nice_address_to_string (&cand->server, tmpbuf);
         nice_debug ("Agent %p : discovery - scheduling cand type %u addr %s.\n",
@@ -987,6 +983,9 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
               ++not_done; /* note: retry later */
               break;
             }
+          default:
+            /* Nothing to do. */
+            break;
 	}
 
       } else {
@@ -1030,7 +1029,7 @@ static gboolean priv_discovery_tick (gpointer pointer)
       agent->discovery_timer_source = NULL;
     }
   }
-  agent_unlock();
+  agent_unlock_and_emit (agent);
 
   return ret;
 }
@@ -1046,7 +1045,7 @@ void discovery_schedule (NiceAgent *agent)
   g_assert (agent->discovery_list != NULL);
 
   if (agent->discovery_unsched_items > 0) {
-    
+
     if (agent->discovery_timer_source == NULL) {
       /* step: run first iteration immediately */
       gboolean res = priv_discovery_tick_unlocked (agent);

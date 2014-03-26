@@ -124,6 +124,10 @@ stun_message_find (const StunMessage *msg, StunAttribute type,
       case STUN_ATTRIBUTE_FINGERPRINT:
         /* Nothing may come after FPR */
         return NULL;
+
+      default:
+        /* Nothing misordered. */
+        break;
     }
 
     if (!(msg->agent &&
@@ -272,9 +276,10 @@ stun_message_find_addr (const StunMessage *msg, StunAttribute type,
         memcpy (&ip6->sin6_addr, ptr + 4, 16);
         return STUN_MESSAGE_RETURN_SUCCESS;
       }
-  }
 
-  return STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS;
+    default:
+      return STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS;
+  }
 }
 
 StunMessageReturn
@@ -352,9 +357,11 @@ stun_message_append (StunMessage *msg, StunAttribute type, size_t length)
      * to a multiple of 4 for compatibility with old RFC3489 */
     a = stun_setw (a, stun_message_has_cookie (msg) ? length : stun_align (length));
 
-    /* Add padding if needed */
-    memset (a + length, ' ', stun_padding (length));
-    mlen += stun_padding (length);
+    /* Add padding if needed. Avoid a zero-length memset() call. */
+    if (stun_padding (length) > 0) {
+      memset (a + length, ' ', stun_padding (length));
+      mlen += stun_padding (length);
+    }
   }
 
   mlen +=  4 + length;
@@ -372,7 +379,9 @@ stun_message_append_bytes (StunMessage *msg, StunAttribute type,
   if (ptr == NULL)
     return STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE;
 
-  memcpy (ptr, data, len);
+  if (len > 0)
+    memcpy (ptr, data, len);
+
   return STUN_MESSAGE_RETURN_SUCCESS;
 }
 
@@ -470,19 +479,21 @@ stun_message_append_xor_addr (StunMessage *msg, StunAttribute type,
 {
   StunMessageReturn val;
   /* Must be big enough to hold any supported address: */
-  struct sockaddr_storage xor;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } xor;
 
   if ((size_t) addrlen > sizeof (xor))
     addrlen = sizeof (xor);
-  memcpy (&xor, addr, addrlen);
+  memcpy (&xor.storage, addr, addrlen);
 
-  val = stun_xor_address (msg, (struct sockaddr *)&xor, addrlen,
+  val = stun_xor_address (msg, &xor.addr, addrlen,
       STUN_MAGIC_COOKIE);
   if (val)
     return val;
 
-  return stun_message_append_addr (msg, type, (struct sockaddr *)&xor,
-      addrlen);
+  return stun_message_append_addr (msg, type, &xor.addr, addrlen);
 }
 
 StunMessageReturn
@@ -492,18 +503,20 @@ stun_message_append_xor_addr_full (StunMessage *msg, StunAttribute type,
 {
   StunMessageReturn val;
   /* Must be big enough to hold any supported address: */
-  struct sockaddr_storage xor;
+  union {
+    struct sockaddr_storage storage;
+    struct sockaddr addr;
+  } xor;
 
   if ((size_t) addrlen > sizeof (xor))
     addrlen = sizeof (xor);
-  memcpy (&xor, addr, addrlen);
+  memcpy (&xor.storage, addr, addrlen);
 
-  val = stun_xor_address (msg, (struct sockaddr *)&xor, addrlen, magic_cookie);
+  val = stun_xor_address (msg, &xor.addr, addrlen, magic_cookie);
   if (val)
     return val;
 
-  return stun_message_append_addr (msg, type, (struct sockaddr *)&xor,
-      addrlen);
+  return stun_message_append_addr (msg, type, &xor.addr, addrlen);
 }
 
 
@@ -513,59 +526,105 @@ stun_message_append_error (StunMessage *msg, StunError code)
 {
   const char *str = stun_strerror (code);
   size_t len = strlen (str);
-  div_t d = div (code, 100);
 
   uint8_t *ptr = stun_message_append (msg, STUN_ATTRIBUTE_ERROR_CODE, 4 + len);
   if (ptr == NULL)
     return STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE;
 
   memset (ptr, 0, 2);
-  ptr[2] = d.quot;
-  ptr[3] = d.rem;
+  ptr[2] = code / 100;
+  ptr[3] = code % 100;
   memcpy (ptr + 4, str, len);
   return STUN_MESSAGE_RETURN_SUCCESS;
 }
 
-int stun_message_validate_buffer_length (const uint8_t *msg, size_t length,
-    bool has_padding)
+/* Fast validity check for a potential STUN packet. Examines the type and
+ * length, but none of the attributes. Designed to allow vectored I/O on all
+ * incoming packets, filtering packets for closer inspection as to whether
+ * they’re STUN packets. If they look like they might be, their buffers are
+ * compacted to allow a more thorough check. */
+ssize_t stun_message_validate_buffer_length_fast (StunInputVector *buffers,
+    unsigned int n_buffers, size_t total_length, bool has_padding)
 {
   size_t mlen;
-  size_t len;
 
-  if (length < 1)
+  if (total_length < 1 || n_buffers < 1)
   {
     stun_debug ("STUN error: No data!\n");
     return STUN_MESSAGE_BUFFER_INVALID;
   }
 
-  if (msg[0] >> 6)
+  if (buffers[0].buffer[0] >> 6)
   {
     stun_debug ("STUN error: RTP or other non-protocol packet!\n");
     return STUN_MESSAGE_BUFFER_INVALID; // RTP or other non-STUN packet
   }
 
-  if (length < 4)
+  if (total_length < STUN_MESSAGE_LENGTH_POS + STUN_MESSAGE_LENGTH_LEN)
   {
     stun_debug ("STUN error: Incomplete STUN message header!\n");
     return STUN_MESSAGE_BUFFER_INCOMPLETE;
   }
 
-  mlen = stun_getw (msg + STUN_MESSAGE_LENGTH_POS) +
-      STUN_MESSAGE_HEADER_LENGTH;
+  if (buffers[0].size >= STUN_MESSAGE_LENGTH_POS + STUN_MESSAGE_LENGTH_LEN) {
+    /* Fast path. */
+    mlen = stun_getw (buffers[0].buffer + STUN_MESSAGE_LENGTH_POS);
+  } else {
+    /* Slow path. Tiny buffers abound. */
+    size_t skip_remaining = STUN_MESSAGE_LENGTH_POS;
+    unsigned int i;
 
-  if (has_padding && stun_padding (mlen))
-  {
+    /* Skip bytes. */
+    for (i = 0; i < n_buffers; i++) {
+      if (buffers[i].size <= skip_remaining)
+        skip_remaining -= buffers[i].size;
+      else
+        break;
+    }
+
+    /* Read bytes. May be split over two buffers. We’ve already checked that
+     * @total_length is long enough, so @n_buffers should be too. */
+    if (buffers[i].size - skip_remaining > 1) {
+      mlen = stun_getw (buffers[i].buffer + skip_remaining);
+    } else {
+      mlen = (*(buffers[i].buffer + skip_remaining) << 8) |
+             (*(buffers[i + 1].buffer));
+    }
+  }
+
+  mlen += STUN_MESSAGE_HEADER_LENGTH;
+
+  if (has_padding && stun_padding (mlen)) {
     stun_debug ("STUN error: Invalid message length: %u!\n", (unsigned)mlen);
     return STUN_MESSAGE_BUFFER_INVALID; // wrong padding
   }
 
-  if (length < mlen)
-  {
+  if (total_length < mlen) {
     stun_debug ("STUN error: Incomplete message: %u of %u bytes!\n",
-        (unsigned)length, (unsigned)mlen);
+        (unsigned) total_length, (unsigned) mlen);
     return STUN_MESSAGE_BUFFER_INCOMPLETE; // partial message
   }
 
+  return mlen;
+}
+
+int stun_message_validate_buffer_length (const uint8_t *msg, size_t length,
+    bool has_padding)
+{
+  ssize_t fast_retval;
+  size_t mlen;
+  size_t len;
+  StunInputVector input_buffer = { msg, length };
+
+  /* Fast pre-check first. */
+  fast_retval = stun_message_validate_buffer_length_fast (&input_buffer, 1,
+      length, has_padding);
+  if (fast_retval <= 0)
+    return fast_retval;
+
+  mlen = fast_retval;
+
+  /* Skip past the header (validated above). */
   msg += 20;
   len = mlen - 20;
 

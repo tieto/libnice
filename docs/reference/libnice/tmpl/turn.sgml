@@ -120,3 +120,25 @@ TURN
 @Returns: 
 
 
+<!-- ##### FUNCTION stun_usage_turn_create_permission ##### -->
+<para>
+
+</para>
+
+@agent: 
+@msg: 
+@buffer: 
+@buffer_len: 
+@username: 
+@username_len: 
+@password: 
+@password_len: 
+@realm: 
+@realm_len: 
+@nonce: 
+@nonce_len: 
+@peer: 
+@compatibility: 
+@Returns: 
+
+

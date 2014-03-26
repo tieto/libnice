@@ -66,6 +66,8 @@
 #  define ECONNRESET WSAECONNRESET
 #endif
 
+#include "agent.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -403,6 +405,22 @@ gboolean pseudo_tcp_socket_notify_packet(PseudoTcpSocket *self,
 
 
 /**
+ * pseudo_tcp_socket_notify_message:
+ * @self: The #PseudoTcpSocket object.
+ * @message: A #NiceInputMessage containing the received data.
+ *
+ * Notify the #PseudoTcpSocket that a new message has arrived, and enqueue the
+ * data in its buffers to the #PseudoTcpSocket’s receive buffer.
+ *
+ * Returns: %TRUE if the packet was processed successfully, %FALSE otherwise
+ *
+ * Since: 0.1.5
+ */
+gboolean pseudo_tcp_socket_notify_message (PseudoTcpSocket *self,
+    NiceInputMessage *message);
+
+
+/**
  * pseudo_tcp_set_debug_level:
  * @level: The level of debug to set
  *
@@ -411,6 +429,46 @@ gboolean pseudo_tcp_socket_notify_packet(PseudoTcpSocket *self,
  * Since: 0.0.11
  */
 void pseudo_tcp_set_debug_level (PseudoTcpDebugLevel level);
+
+
+/**
+ * pseudo_tcp_socket_get_available_bytes:
+ * @self: The #PseudoTcpSocket object.
+ *
+ * Gets the number of bytes of data in the buffer that can be read without
+ * receiving more packets from the network.
+ *
+ * Returns: The number of bytes or -1 if the connection is not established
+ *
+ * Since: 0.1.5
+ */
+
+gint pseudo_tcp_socket_get_available_bytes (PseudoTcpSocket *self);
+
+/**
+ * pseudo_tcp_socket_can_send:
+ * @self: The #PseudoTcpSocket object.
+ *
+ * Returns if there is space in the send buffer to send any data.
+ *
+ * Returns: %TRUE if data can be sent, %FALSE otherwise
+ *
+ * Since: 0.1.5
+ */
+
+gboolean pseudo_tcp_socket_can_send (PseudoTcpSocket *self);
+
+/**
+ * pseudo_tcp_socket_get_available_send_space:
+ * @self: The #PseudoTcpSocket object.
+ *
+ * Gets the number of bytes of space available in the transmission buffer.
+ *
+ * Returns: The numbero f bytes, or 0 if the connection is not established.
+ *
+ * Since: 0.1.5
+ */
+gsize pseudo_tcp_socket_get_available_send_space (PseudoTcpSocket *self);
 
 G_END_DECLS
 

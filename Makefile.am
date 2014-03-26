@@ -8,6 +8,8 @@
 
 include common.mk
 
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+
 SUBDIRS = \
 	stun \
 	socket \
@@ -30,6 +32,8 @@ EXTRA_DIST = \
 	scripts/lcov.sh \
 	scripts/valgrind.sh \
 	win32
+
+MAINTAINERCLEANFILES = ar-lib
 
 dist_check_SCRIPTS = \
 	scripts/check-symbols.sh \

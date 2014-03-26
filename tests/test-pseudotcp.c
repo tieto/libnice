@@ -52,29 +52,37 @@ int total_read = 0;
 int total_wrote = 0;
 guint left_clock = 0;
 guint right_clock = 0;
+gboolean left_closed;
+gboolean right_closed;
+
+gboolean reading_done = FALSE;
 
 static void adjust_clock (PseudoTcpSocket *sock);
 
 static void write_to_sock (PseudoTcpSocket *sock)
 {
   gchar buf[1024];
-  guint len;
-  guint wlen;
+  gsize len;
+  gint wlen;
   guint total = 0;
 
   while (TRUE) {
     len = fread (buf, 1, sizeof(buf), in);
     if (len == 0) {
       g_debug ("Done reading data from file");
+      g_assert (feof (in));
+      reading_done = TRUE;
       pseudo_tcp_socket_close (sock, FALSE);
       break;
     } else {
       wlen = pseudo_tcp_socket_send (sock, buf, len);
-      g_debug ("Sending %d bytes : %d", len, wlen);
+      g_debug ("Sending %" G_GSIZE_FORMAT " bytes : %d", len, wlen);
       total += wlen;
       total_read += wlen;
-      if (wlen < len) {
+      if (wlen < (gint) len) {
+        g_debug ("seeking  %ld from %lu", wlen - len, ftell (in));
         fseek (in, wlen - len, SEEK_CUR);
+        g_assert (!feof (in));
         g_debug ("Socket queue full after %d bytes written", total);
         break;
       }
@@ -91,6 +99,7 @@ static void opened (PseudoTcpSocket *sock, gpointer data)
       write_to_sock (sock);
     else {
       pseudo_tcp_socket_send (sock, "abcdefghijklmnopqrstuvwxyz", 26);
+      reading_done = TRUE;
       pseudo_tcp_socket_close (sock, FALSE);
     }
   }
@@ -113,16 +122,16 @@ static void readable (PseudoTcpSocket *sock, gpointer data)
         else {
           total_wrote += len;
 
+          g_assert (total_wrote <= total_read);
           g_debug ("Written %d bytes, need %d bytes", total_wrote, total_read);
-          if (total_wrote >= total_read && feof (in)) {
-            pseudo_tcp_socket_close (left, FALSE);
-            pseudo_tcp_socket_close (right, FALSE);
+          if (total_wrote == total_read && feof (in)) {
+            g_assert (reading_done);
+            pseudo_tcp_socket_close (sock, FALSE);
           }
         }
       } else {
         if (len == 26 && strncmp (buf, "abcdefghijklmnopqrstuvwxyz", len) == 0) {
-          pseudo_tcp_socket_close (left, FALSE);
-          pseudo_tcp_socket_close (right, FALSE);
+          pseudo_tcp_socket_close (sock, FALSE);
         } else {
           g_debug ("Error reading data.. read %d bytes : %s", len, buf);
           exit (-1);
@@ -137,41 +146,38 @@ static void readable (PseudoTcpSocket *sock, gpointer data)
         pseudo_tcp_socket_get_error (sock));
     exit (-1);
   }
-
-  adjust_clock (sock);
 }
 
 static void writable (PseudoTcpSocket *sock, gpointer data)
 {
   g_debug ("Socket %p Writable", sock);
-  if (in)
+  if (in && sock == left)
     write_to_sock (sock);
 }
 
 static void closed (PseudoTcpSocket *sock, guint32 err, gpointer data)
 {
-  g_debug ("Socket %p Closed : %d", sock, err);
+  g_error ("Socket %p Closed : %d", sock, err);
 }
 
 struct notify_data {
   PseudoTcpSocket *sock;
-  gchar *buffer;
   guint32 len;
+  gchar buffer[];
 };
 
 static gboolean notify_packet (gpointer user_data)
 {
   struct notify_data *data = (struct notify_data*) user_data;
-  if (!data->sock || (data->sock != left && data->sock != right))
-    return FALSE;
+
   pseudo_tcp_socket_notify_packet (data->sock, data->buffer, data->len);
   adjust_clock (data->sock);
-  g_free (data->buffer);
+
   g_free (data);
   return FALSE;
 }
 
-static PseudoTcpWriteResult write (PseudoTcpSocket *sock,
+static PseudoTcpWriteResult write_packet (PseudoTcpSocket *sock,
     const gchar *buffer, guint32 len, gpointer user_data)
 {
   struct notify_data *data;
@@ -180,23 +186,22 @@ static PseudoTcpWriteResult write (PseudoTcpSocket *sock,
   g_object_get (sock, "state", &state, NULL);
 
   if (drop_rate < 5) {
-    g_debug ("*********************Dropping packet (%d)", drop_rate);
+    g_debug ("*********************Dropping packet (%d) from %p", drop_rate,
+        sock);
     return WR_SUCCESS;
   }
 
-  data = g_new0 (struct notify_data,1);
+  data = g_malloc (sizeof(struct notify_data) + len);
 
   g_debug ("Socket %p(%d) Writing : %d bytes", sock, state, len);
 
-  data->buffer = g_malloc (len);
   memcpy (data->buffer, buffer, len);
   data->len = len;
 
-  if (sock == left) {
+  if (sock == left)
     data->sock = right;
-  } else {
+  else
     data->sock = left;
-  }
 
   g_idle_add (notify_packet, data);
 
@@ -207,8 +212,6 @@ static PseudoTcpWriteResult write (PseudoTcpSocket *sock,
 static gboolean notify_clock (gpointer data)
 {
   PseudoTcpSocket *sock = (PseudoTcpSocket *)data;
-  if (sock != left && sock != right)
-    return FALSE;
   //g_debug ("Socket %p: Notifying clock", sock);
   pseudo_tcp_socket_notify_clock (sock);
   adjust_clock (sock);
@@ -219,7 +222,8 @@ static void adjust_clock (PseudoTcpSocket *sock)
 {
   long timeout = 0;
   if (pseudo_tcp_socket_get_next_clock (sock, &timeout)) {
-    //g_debug ("Socket %p: Adjuting clock to %ld ms", sock, timeout);
+    timeout -= g_get_monotonic_time () / 1000;
+    g_debug ("Socket %p: Adjuting clock to %ld ms", sock, timeout);
     if (sock == left) {
       if (left_clock != 0)
          g_source_remove (left_clock);
@@ -230,13 +234,12 @@ static void adjust_clock (PseudoTcpSocket *sock)
       right_clock = g_timeout_add (timeout, notify_clock, sock);
     }
   } else {
-    g_debug ("Socket %p should be destroyed", sock);
-    g_object_unref (sock);
+    g_debug ("Socket %p should be destroyed, it's done", sock);
     if (sock == left)
-      left = NULL;
+      left_closed = TRUE;
     else
-      right = NULL;
-    if (left == right)
+      right_closed = TRUE;
+    if (left_closed && right_closed)
       g_main_loop_quit (mainloop);
   }
 }
@@ -244,13 +247,17 @@ static void adjust_clock (PseudoTcpSocket *sock)
 
 int main (int argc, char *argv[])
 {
-  PseudoTcpCallbacks cbs = {NULL, opened, readable, writable, closed, write};
+  PseudoTcpCallbacks cbs = {
+    NULL, opened, readable, writable, closed, write_packet
+  };
 
   mainloop = g_main_loop_new (NULL, FALSE);
 
   g_type_init ();
 
   pseudo_tcp_set_debug_level (PSEUDO_TCP_DEBUG_VERBOSE);
+
+  left_closed = right_closed = FALSE;
 
   left = pseudo_tcp_socket_new (0, &cbs);
   right = pseudo_tcp_socket_new (0, &cbs);
@@ -269,6 +276,9 @@ int main (int argc, char *argv[])
   }
 
   g_main_loop_run (mainloop);
+
+  g_object_unref (left);
+  g_object_unref (right);
 
   if (in)
     fclose (in);
