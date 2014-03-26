@@ -1,10 +1,10 @@
-libnice (0.1.5-1) UNRELEASED; urgency=low
+libnice (0.1.5-1) unstable; urgency=low
 
   * New upstream release
     - update symbols
   * Standards-Version: 3.9.5 (no changes required)
 
- -- Simon McVittie <smcv@debian.org>  Wed, 26 Mar 2014 15:05:29 +0000
+ -- Simon McVittie <smcv@debian.org>  Wed, 26 Mar 2014 15:15:33 +0000
 
 libnice (0.1.4-1) unstable; urgency=low
 
