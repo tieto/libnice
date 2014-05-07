@@ -108,7 +108,7 @@ const <span class="returnvalue">void</span> *        <a class="link" href="libni
                                                          <em class="parameter"><code>const <span class="type">char</span> *str</code></em>);
 <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-addr" title="stun_message_append_addr ()">stun_message_append_addr</a>            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="type">StunAttribute</span></a> type</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">struct sockaddr_storage</span> *addr</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">struct sockaddr</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> addrlen</code></em>);
 <a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   <a class="link" href="libnice-StunMessage.html#stun-message-append-xor-addr" title="stun_message_append_xor_addr ()">stun_message_append_xor_addr</a>        (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="type">StunAttribute</span></a> type</code></em>,
@@ -993,7 +993,7 @@ Initializes a STUN message buffer, with no attributes.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the initialization was successful</td>
+<code class="literal">TRUE</code> if the initialization was successful</td>
 </tr>
 </tbody>
 </table></div>
@@ -1603,7 +1603,7 @@ Adds an attribute from a NULL-terminated string to a STUN message
 <a name="stun-message-append-addr"></a><h3>stun_message_append_addr ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-StunMessage.html#StunMessageReturn" title="enum StunMessageReturn"><span class="returnvalue">StunMessageReturn</span></a>   stun_message_append_addr            (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunAttribute" title="enum StunAttribute"><span class="type">StunAttribute</span></a> type</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">struct sockaddr_storage</span> *addr</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">struct sockaddr</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> addrlen</code></em>);</pre>
 <p>
 Append a network address attribute to a STUN message
@@ -1814,7 +1814,7 @@ functions, providing multiple buffers which store logically contiguous
 received data.
 </p>
 <p>
-This is guaranteed to be layed out identically in memory to <a href="http://library.gnome.org/devel/gio/unstable/GSocket.html#GInputVector"><span class="type">GInputVector</span></a>.
+This is guaranteed to be layed out identically in memory to <span class="type">GInputVector</span>.
 </p>
 <div class="variablelist"><table border="0" class="variablelist">
 <colgroup>
@@ -1879,7 +1879,7 @@ definitely do not contain a complete, valid STUN message.
 <tr>
 <td><p><span class="term"><em class="parameter"><code>has_padding</code></em> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if attributes should be padded to 4-byte boundaries</td>
+<code class="literal">TRUE</code> if attributes should be padded to 4-byte boundaries</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
@@ -1997,7 +1997,7 @@ Checks if an attribute is present within a STUN message.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is found, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the attribute is found, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -2023,7 +2023,7 @@ Checks if the STUN message has a RFC5389 compatible cookie
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the cookie is present, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> otherwise</td>
+<code class="literal">TRUE</code> if the cookie is present, <code class="literal">FALSE</code> otherwise</td>
 </tr>
 </tbody>
 </table></div>
@@ -2049,7 +2049,7 @@ or an optional attribute
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the attribute is an optional one</td>
+<code class="literal">TRUE</code> if the attribute is an optional one</td>
 </tr>
 </tbody>
 </table></div>
