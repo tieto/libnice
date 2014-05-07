@@ -11,6 +11,10 @@ common-binary-post-install-arch:: list-missing
 DEB_DBG_PACKAGE_libnice10 := libnice-dbg
 
 DEB_CONFIGURE_EXTRA_FLAGS := --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
-	--enable-gupnp --with-gstreamer-0.10 --with-gstreamer
+	--enable-compile-warnings=yes \
+	--enable-gupnp \
+	--with-gstreamer-0.10 \
+	--with-gstreamer \
+	$(NULL)
 
 include $(CURDIR)/debian/update-patches.mk

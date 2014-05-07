@@ -1,11 +1,15 @@
-libnice (0.1.5-2) UNRELEASED; urgency=medium
+libnice (0.1.7-1) unstable; urgency=low
 
+  * New upstream release 0.1.6, 0.1.7
+    - fixes various compiler warnings that were mistakenly fatal in 0.1.5
+      (Closes: #743232, #743233)
+  * Explicitly disable -Werror, even if we package a non-release in future
   * Don't run tests during the build. We were ignoring failures already,
     and they sometimes hang until the buildd terminates them.
     Upstream (Olivier Crête) says they are stable enough to be useful
     for developers, but not for integration testing.
 
- -- Simon McVittie <smcv@debian.org>  Wed, 02 Apr 2014 20:12:34 +0100
+ -- Simon McVittie <smcv@debian.org>  Wed, 07 May 2014 09:28:42 +0100
 
 libnice (0.1.5-1) unstable; urgency=low
 
