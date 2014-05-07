@@ -80,6 +80,9 @@ nice_candidate_free (NiceCandidate *candidate)
   if (candidate->password)
     g_free (candidate->password);
 
+  if (candidate->turn)
+    turn_server_unref (candidate->turn);
+
   g_slice_free (NiceCandidate, candidate);
 }
 
@@ -163,8 +166,11 @@ nice_candidate_pair_priority (guint32 o_prio, guint32 a_prio)
 {
   guint32 max = o_prio > a_prio ? o_prio : a_prio;
   guint32 min = o_prio < a_prio ? o_prio : a_prio;
+  /* These two constants are here explictly to make some version of GCC happy */
+  const guint64 one = 1;
+  const guint64 thirtytwo = 32;
 
-  return ((guint64)1 << 32) * min + 2 * max + (o_prio > a_prio ? 1 : 0);
+  return (one << thirtytwo) * min + 2 * max + (o_prio > a_prio ? 1 : 0);
 }
 
 /*
@@ -177,6 +183,7 @@ nice_candidate_copy (const NiceCandidate *candidate)
 
   memcpy (copy, candidate, sizeof(NiceCandidate));
 
+  copy->turn = NULL;
   copy->username = g_strdup (copy->username);
   copy->password = g_strdup (copy->password);
 

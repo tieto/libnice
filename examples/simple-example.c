@@ -77,7 +77,7 @@ main(int argc, char *argv[])
 {
   NiceAgent *agent;
   gchar *stun_addr = NULL;
-  guint stun_port;
+  guint stun_port = 0;
   gboolean controlling;
 
   // Parse arguments
@@ -308,6 +308,7 @@ parse_candidate(char *scand, guint _stream_id)
   cand->stream_id = _stream_id;
   cand->transport = NICE_CANDIDATE_TRANSPORT_UDP;
   strncpy(cand->foundation, tokens[0], NICE_CANDIDATE_MAX_FOUNDATION);
+  cand->foundation[NICE_CANDIDATE_MAX_FOUNDATION - 1] = 0;
   cand->priority = atoi (tokens[1]);
 
   if (!nice_address_set_from_string(&cand->addr, tokens[2])) {

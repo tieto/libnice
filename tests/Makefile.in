@@ -90,8 +90,8 @@ DIST_COMMON = $(top_srcdir)/common.mk $(srcdir)/Makefile.in \
 	$(srcdir)/Makefile.am $(dist_check_SCRIPTS) \
 	$(top_srcdir)/depcomp $(noinst_HEADERS) \
 	$(top_srcdir)/test-driver
-check_PROGRAMS = test-pseudotcp$(EXEEXT) test-bsd$(EXEEXT) \
-	test$(EXEEXT) test-address$(EXEEXT) \
+check_PROGRAMS = test-pseudotcp$(EXEEXT) test-pseudotcp-fuzzy$(EXEEXT) \
+	test-bsd$(EXEEXT) test$(EXEEXT) test-address$(EXEEXT) \
 	test-add-remove-stream$(EXEEXT) test-build-io-stream$(EXEEXT) \
 	test-io-stream-thread$(EXEEXT) \
 	test-io-stream-closing-write$(EXEEXT) \
@@ -184,6 +184,9 @@ test_priority_DEPENDENCIES = $(am__DEPENDENCIES_2)
 test_pseudotcp_SOURCES = test-pseudotcp.c
 test_pseudotcp_OBJECTS = test-pseudotcp.$(OBJEXT)
 test_pseudotcp_DEPENDENCIES = $(am__DEPENDENCIES_2)
+test_pseudotcp_fuzzy_SOURCES = test-pseudotcp-fuzzy.c
+test_pseudotcp_fuzzy_OBJECTS = test-pseudotcp-fuzzy.$(OBJEXT)
+test_pseudotcp_fuzzy_DEPENDENCIES = $(am__DEPENDENCIES_2)
 test_restart_SOURCES = test-restart.c
 test_restart_OBJECTS = test-restart.$(OBJEXT)
 test_restart_DEPENDENCIES = $(am__DEPENDENCIES_2)
@@ -236,7 +239,8 @@ SOURCES = test.c test-add-remove-stream.c test-address.c test-bsd.c \
 	$(test_io_stream_pollable_SOURCES) \
 	$(test_io_stream_thread_SOURCES) test-mainloop.c \
 	test-new-dribble.c test-priority.c test-pseudotcp.c \
-	test-restart.c $(test_send_recv_SOURCES) test-thread.c
+	test-pseudotcp-fuzzy.c test-restart.c \
+	$(test_send_recv_SOURCES) test-thread.c
 DIST_SOURCES = test.c test-add-remove-stream.c test-address.c \
 	test-bsd.c test-build-io-stream.c test-dribble.c \
 	test-fallback.c test-fullmode.c \
@@ -246,7 +250,8 @@ DIST_SOURCES = test.c test-add-remove-stream.c test-address.c \
 	$(test_io_stream_pollable_SOURCES) \
 	$(test_io_stream_thread_SOURCES) test-mainloop.c \
 	test-new-dribble.c test-priority.c test-pseudotcp.c \
-	test-restart.c $(test_send_recv_SOURCES) test-thread.c
+	test-pseudotcp-fuzzy.c test-restart.c \
+	$(test_send_recv_SOURCES) test-thread.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -639,6 +644,7 @@ dist_check_SCRIPTS = \
 TESTS = $(check_PROGRAMS) $(dist_check_SCRIPTS)
 noinst_HEADERS = test-io-stream-common.h
 test_pseudotcp_LDADD = $(COMMON_LDADD)
+test_pseudotcp_fuzzy_LDADD = $(COMMON_LDADD) -lm
 test_bsd_LDADD = $(COMMON_LDADD)
 test_LDADD = $(COMMON_LDADD)
 test_thread_LDADD = $(COMMON_LDADD)
@@ -777,6 +783,10 @@ test-pseudotcp$(EXEEXT): $(test_pseudotcp_OBJECTS) $(test_pseudotcp_DEPENDENCIES
 	@rm -f test-pseudotcp$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_pseudotcp_OBJECTS) $(test_pseudotcp_LDADD) $(LIBS)
 
+test-pseudotcp-fuzzy$(EXEEXT): $(test_pseudotcp_fuzzy_OBJECTS) $(test_pseudotcp_fuzzy_DEPENDENCIES) $(EXTRA_test_pseudotcp_fuzzy_DEPENDENCIES) 
+	@rm -f test-pseudotcp-fuzzy$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_pseudotcp_fuzzy_OBJECTS) $(test_pseudotcp_fuzzy_LDADD) $(LIBS)
+
 test-restart$(EXEEXT): $(test_restart_OBJECTS) $(test_restart_DEPENDENCIES) $(EXTRA_test_restart_DEPENDENCIES) 
 	@rm -f test-restart$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_restart_OBJECTS) $(test_restart_LDADD) $(LIBS)
@@ -811,6 +821,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-mainloop.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-new-dribble.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-priority.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pseudotcp-fuzzy.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pseudotcp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-restart.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-send-recv.Po@am__quote@
@@ -1040,6 +1051,13 @@ recheck: all $(check_PROGRAMS) $(dist_check_SCRIPTS)
 test-pseudotcp.log: test-pseudotcp$(EXEEXT)
 	@p='test-pseudotcp$(EXEEXT)'; \
 	b='test-pseudotcp'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-pseudotcp-fuzzy.log: test-pseudotcp-fuzzy$(EXEEXT)
+	@p='test-pseudotcp-fuzzy$(EXEEXT)'; \
+	b='test-pseudotcp-fuzzy'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

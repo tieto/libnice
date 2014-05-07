@@ -106,23 +106,21 @@ nice_tcp_bsd_socket_new (GMainContext *ctx, NiceAddress *addr)
 
   nice_address_copy_to_sockaddr (addr, &name.addr);
 
-  if (gsock == NULL) {
-    if (name.storage.ss_family == AF_UNSPEC || name.storage.ss_family == AF_INET) {
-      gsock = g_socket_new (G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM,
-          G_SOCKET_PROTOCOL_TCP, NULL);
+  if (name.storage.ss_family == AF_UNSPEC || name.storage.ss_family == AF_INET) {
+    gsock = g_socket_new (G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM,
+        G_SOCKET_PROTOCOL_TCP, NULL);
 
-      name.storage.ss_family = AF_INET;
+    name.storage.ss_family = AF_INET;
 #ifdef HAVE_SA_LEN
-      name.storage.ss_len = sizeof (struct sockaddr_in);
+    name.storage.ss_len = sizeof (struct sockaddr_in);
 #endif
-    } else if (name.storage.ss_family == AF_INET6) {
-      gsock = g_socket_new (G_SOCKET_FAMILY_IPV6, G_SOCKET_TYPE_STREAM,
-          G_SOCKET_PROTOCOL_TCP, NULL);
-      name.storage.ss_family = AF_INET6;
+  } else if (name.storage.ss_family == AF_INET6) {
+    gsock = g_socket_new (G_SOCKET_FAMILY_IPV6, G_SOCKET_TYPE_STREAM,
+        G_SOCKET_PROTOCOL_TCP, NULL);
+    name.storage.ss_family = AF_INET6;
 #ifdef HAVE_SA_LEN
-      name.storage.ss_len = sizeof (struct sockaddr_in6);
+    name.storage.ss_len = sizeof (struct sockaddr_in6);
 #endif
-    }
   }
 
   if (gsock == NULL) {
@@ -130,24 +128,28 @@ nice_tcp_bsd_socket_new (GMainContext *ctx, NiceAddress *addr)
     return NULL;
   }
 
+  gaddr = g_socket_address_new_from_native (&name.addr, sizeof (name));
+  if (gaddr == NULL) {
+    g_object_unref (gsock);
+    g_slice_free (NiceSocket, sock);
+    return NULL;
+  }
+
   /* GSocket: All socket file descriptors are set to be close-on-exec. */
   g_socket_set_blocking (gsock, false);
 
-  gaddr = g_socket_address_new_from_native (&name.addr, sizeof (name));
-
-  if (gaddr != NULL) {
-    gret = g_socket_connect (gsock, gaddr, NULL, &gerr);
-    g_object_unref (gaddr);
-  }
+  gret = g_socket_connect (gsock, gaddr, NULL, &gerr);
+  g_object_unref (gaddr);
 
   if (gret == FALSE) {
     if (g_error_matches (gerr, G_IO_ERROR, G_IO_ERROR_PENDING) == FALSE) {
+      g_error_free (gerr);
       g_socket_close (gsock, NULL);
       g_object_unref (gsock);
       g_slice_free (NiceSocket, sock);
       return NULL;
     }
-    g_error_free(gerr);
+    g_error_free (gerr);
   }
 
   gaddr = g_socket_get_local_address (gsock, NULL);
@@ -164,6 +166,8 @@ nice_tcp_bsd_socket_new (GMainContext *ctx, NiceAddress *addr)
 
   sock->priv = priv = g_slice_new0 (TcpPriv);
 
+  if (ctx == NULL)
+    ctx = g_main_context_default ();
   priv->context = g_main_context_ref (ctx);
   priv->server_addr = *addr;
   priv->error = FALSE;
@@ -389,8 +393,7 @@ socket_send_more (
     }
 
     if (ret < 0) {
-      if (gerr != NULL &&
-          g_error_matches (gerr, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK)) {
+      if (g_error_matches (gerr, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK)) {
         GOutputVector local_buf = { tbs->buf, tbs->length };
         NiceOutputMessage local_message = {&local_buf, 1};
 
@@ -399,7 +402,7 @@ socket_send_more (
         g_error_free (gerr);
         break;
       }
-      g_error_free (gerr);
+      g_clear_error (&gerr);
     } else if (ret < (int) tbs->length) {
       GOutputVector local_buf = { tbs->buf + ret, tbs->length - ret };
       NiceOutputMessage local_message = {&local_buf, 1};

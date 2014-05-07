@@ -156,7 +156,7 @@ size_t stun_usage_bind_keepalive (StunAgent *agent, StunMessage *msg,
  * #STUN_USAGE_BIND_RETURN_ERROR and #STUN_USAGE_BIND_RETURN_TIMEOUT
  */
 StunUsageBindReturn stun_usage_bind_run (const struct sockaddr *srv,
-    socklen_t srvlen, struct sockaddr *addr, socklen_t *addrlen);
+    socklen_t srvlen, struct sockaddr_storage *addr, socklen_t *addrlen);
 
 # ifdef __cplusplus
 }

@@ -21,6 +21,7 @@ nice_agent_recv_messages
 nice_agent_recv_nonblocking
 nice_agent_recv_messages_nonblocking
 nice_agent_attach_recv
+nice_agent_forget_relays
 nice_agent_gather_candidates
 nice_agent_generate_local_candidate_sdp
 nice_agent_generate_local_sdp
@@ -41,6 +42,7 @@ nice_agent_parse_remote_sdp
 nice_agent_parse_remote_stream_sdp
 nice_agent_remove_stream
 nice_agent_restart
+nice_agent_restart_stream
 nice_agent_send
 nice_agent_send_messages_nonblocking
 nice_agent_set_port_range
@@ -55,6 +57,7 @@ nice_agent_set_stream_tos
 nice_candidate_copy
 nice_candidate_free
 nice_candidate_new
+nice_component_state_to_string
 nice_debug_disable
 nice_debug_enable
 nice_interfaces_get_ip_for_interface

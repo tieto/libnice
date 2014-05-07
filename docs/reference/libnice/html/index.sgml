@@ -44,6 +44,7 @@
 <ANCHOR id="nice-agent-add-stream" href="libnice/NiceAgent.html#nice-agent-add-stream">
 <ANCHOR id="nice-agent-remove-stream" href="libnice/NiceAgent.html#nice-agent-remove-stream">
 <ANCHOR id="nice-agent-set-relay-info" href="libnice/NiceAgent.html#nice-agent-set-relay-info">
+<ANCHOR id="nice-agent-forget-relays" href="libnice/NiceAgent.html#nice-agent-forget-relays">
 <ANCHOR id="nice-agent-gather-candidates" href="libnice/NiceAgent.html#nice-agent-gather-candidates">
 <ANCHOR id="nice-agent-set-remote-credentials" href="libnice/NiceAgent.html#nice-agent-set-remote-credentials">
 <ANCHOR id="nice-agent-get-local-credentials" href="libnice/NiceAgent.html#nice-agent-get-local-credentials">
@@ -63,6 +64,7 @@
 <ANCHOR id="nice-agent-set-stream-tos" href="libnice/NiceAgent.html#nice-agent-set-stream-tos">
 <ANCHOR id="nice-agent-set-software" href="libnice/NiceAgent.html#nice-agent-set-software">
 <ANCHOR id="nice-agent-restart" href="libnice/NiceAgent.html#nice-agent-restart">
+<ANCHOR id="nice-agent-restart-stream" href="libnice/NiceAgent.html#nice-agent-restart-stream">
 <ANCHOR id="nice-agent-set-stream-name" href="libnice/NiceAgent.html#nice-agent-set-stream-name">
 <ANCHOR id="nice-agent-get-stream-name" href="libnice/NiceAgent.html#nice-agent-get-stream-name">
 <ANCHOR id="nice-agent-get-default-local-candidate" href="libnice/NiceAgent.html#nice-agent-get-default-local-candidate">
@@ -74,6 +76,7 @@
 <ANCHOR id="nice-agent-parse-remote-candidate-sdp" href="libnice/NiceAgent.html#nice-agent-parse-remote-candidate-sdp">
 <ANCHOR id="nice-agent-get-io-stream" href="libnice/NiceAgent.html#nice-agent-get-io-stream">
 <ANCHOR id="nice-agent-get-selected-socket" href="libnice/NiceAgent.html#nice-agent-get-selected-socket">
+<ANCHOR id="nice-component-state-to-string" href="libnice/NiceAgent.html#nice-component-state-to-string">
 <ANCHOR id="NiceAgent.property-details" href="libnice/NiceAgent.html#NiceAgent.property-details">
 <ANCHOR id="NiceAgent--compatibility" href="libnice/NiceAgent.html#NiceAgent--compatibility">
 <ANCHOR id="NiceAgent--controlling-mode" href="libnice/NiceAgent.html#NiceAgent--controlling-mode">

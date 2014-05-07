@@ -51,6 +51,7 @@
 #include "debug.h"
 
 #include "component.h"
+#include "discovery.h"
 #include "agent-priv.h"
 
 
@@ -129,6 +130,7 @@ component_new (guint id, NiceAgent *agent, Stream *stream)
   component->own_ctx = g_main_context_new ();
   component->stop_cancellable = g_cancellable_new ();
   src = g_cancellable_source_new (component->stop_cancellable);
+  g_source_set_dummy_callback (src);
   g_source_attach (src, component->own_ctx);
   g_source_unref (src);
   component->ctx = g_main_context_ref (component->own_ctx);
@@ -145,10 +147,56 @@ component_new (guint id, NiceAgent *agent, Stream *stream)
 }
 
 void
+component_clean_turn_servers (Component *cmp)
+{
+  GSList *i;
+
+  g_list_free_full (cmp->turn_servers, (GDestroyNotify) turn_server_unref);
+  cmp->turn_servers = NULL;
+
+  for (i = cmp->local_candidates; i;) {
+    NiceCandidate *candidate = i->data;
+    GSList *next = i->next;
+
+    if (candidate->type != NICE_CANDIDATE_TYPE_RELAYED) {
+      i = next;
+      continue;
+    }
+
+    /* note: do not remove the remote candidate that is
+     *       currently part of the 'selected pair', see ICE
+     *       9.1.1.1. "ICE Restarts" (ID-19)
+     *
+     * So what we do instead is that we put the selected candidate
+     * in a special location and keep it "alive" that way. This is
+     * especially important for TURN, because refresh requests to the
+     * server need to keep happening.
+     */
+    if (candidate == cmp->selected_pair.local) {
+      if (cmp->turn_candidate) {
+        refresh_prune_candidate (cmp->agent, cmp->turn_candidate);
+        component_detach_socket (cmp, cmp->turn_candidate->sockptr);
+	nice_candidate_free (cmp->turn_candidate);
+      }
+      /* Bring the priority down to 0, so that it will be replaced
+       * on the new run.
+       */
+      cmp->selected_pair.priority = 0;
+      cmp->turn_candidate = candidate;
+    } else {
+      refresh_prune_candidate (cmp->agent, candidate);
+      component_detach_socket (cmp, candidate->sockptr);
+      nice_candidate_free (candidate);
+    }
+    cmp->local_candidates = g_slist_delete_link (cmp->local_candidates, i);
+    i = next;
+  }
+}
+
+void
 component_free (Component *cmp)
 {
   GSList *i;
-  GList *item;
   IOCallbackData *data;
   GOutputVector *vec;
 
@@ -166,6 +214,10 @@ component_free (Component *cmp)
     nice_candidate_free (cmp->restart_candidate),
       cmp->restart_candidate = NULL;
 
+  if (cmp->turn_candidate)
+    nice_candidate_free (cmp->turn_candidate),
+        cmp->turn_candidate = NULL;
+
   for (i = cmp->incoming_checks; i; i = i->next) {
     IncomingCheck *icheck = i->data;
     g_free (icheck->username);
@@ -173,17 +225,14 @@ component_free (Component *cmp)
   }
 
   g_slist_free (cmp->local_candidates);
+  cmp->local_candidates = NULL;
   g_slist_free (cmp->remote_candidates);
+  cmp->remote_candidates = NULL;
   component_free_socket_sources (cmp);
   g_slist_free (cmp->incoming_checks);
+  cmp->incoming_checks = NULL;
 
-  for (item = cmp->turn_servers; item; item = g_list_next (item)) {
-    TurnServer *turn = item->data;
-    g_free (turn->username);
-    g_free (turn->password);
-    g_slice_free (TurnServer, turn);
-  }
-  g_list_free (cmp->turn_servers);
+  component_clean_turn_servers (cmp);
 
   if (cmp->selected_pair.keepalive.tick_source != NULL) {
     g_source_destroy (cmp->selected_pair.keepalive.tick_source);
@@ -275,7 +324,7 @@ component_find_pair (Component *cmp, NiceAgent *agent, const gchar *lfoundation,
  * Resets the component state to that of a ICE restarted
  * session.
  */
-gboolean
+void
 component_restart (Component *cmp)
 {
   GSList *i;
@@ -283,7 +332,7 @@ component_restart (Component *cmp)
   for (i = cmp->remote_candidates; i; i = i->next) {
     NiceCandidate *candidate = i->data;
 
-    /* note: do not remove the remote candidate that is
+    /* note: do not remove the local candidate that is
      *       currently part of the 'selected pair', see ICE
      *       9.1.1.1. "ICE Restarts" (ID-19) */
     if (candidate == cmp->selected_pair.remote) {
@@ -306,8 +355,6 @@ component_restart (Component *cmp)
   cmp->incoming_checks = NULL;
 
   /* note: component state managed by agent */
-
-  return TRUE;
 }
 
 /*
@@ -431,36 +478,29 @@ _find_socket_source (gconstpointer a, gconstpointer b)
 /* This takes ownership of the socket.
  * It creates and attaches a source to the component’s context. */
 void
-component_attach_socket (Component *component, NiceSocket *socket)
+component_attach_socket (Component *component, NiceSocket *nicesock)
 {
   GSList *l;
   SocketSource *socket_source;
 
   g_assert (component != NULL);
-  g_assert (socket != NULL);
+  g_assert (nicesock != NULL);
 
   g_assert (component->ctx != NULL);
 
   /* Find an existing SocketSource in the component which contains @socket, or
    * create a new one.
    *
-   * In order for socket_sources_age to work properly, socket_sources must only
-   * grow monotonically, or be entirely cleared. i.e. New SocketSources must be
-   * prepended to socket_sources, and all other existing SocketSource must be
-   * left untouched; *or* the whole of socket_sources must be cleared. If
-   * socket_sources is cleared, age is reset to 0 and *must not* be incremented
-   * again or the new sockets will not be picked up by ComponentSocket. This is
-   * guaranteed by the fact that socket_sources is only cleared on disconnection
-   * or discovery failure, which are both unrecoverable states.
-   *
-   * An empty socket_sources corresponds to age 0. */
-  l = g_slist_find_custom (component->socket_sources, socket,
+   * Whenever a source is added or remove to socket_sources, socket_sources_age
+   * must be incremented.
+   */
+  l = g_slist_find_custom (component->socket_sources, nicesock,
           _find_socket_source);
   if (l != NULL) {
     socket_source = l->data;
   } else {
     socket_source = g_slice_new0 (SocketSource);
-    socket_source->socket = socket;
+    socket_source->socket = nicesock;
     socket_source->component = component;
     component->socket_sources =
         g_slist_prepend (component->socket_sources, socket_source);
@@ -495,28 +535,32 @@ component_reattach_all_sockets (Component *component)
  * @component: a #Component
  * @socket: the socket to detach the source for
  *
- * Detach the #GSource for the single specified @socket. Leave the socket itself
- * untouched.
+ * Detach the #GSource for the single specified @socket. It also closes it
+ * and frees it!
  *
  * If the @socket doesn’t exist in this @component, do nothing.
  */
 void
-component_detach_socket (Component *component, NiceSocket *socket)
+component_detach_socket (Component *component, NiceSocket *nicesock)
 {
   GSList *l;
   SocketSource *socket_source;
 
-  nice_debug ("Detach socket %p.", socket);
+  nice_debug ("Detach socket %p.", nicesock);
 
   /* Find the SocketSource for the socket. */
-  l = g_slist_find_custom (component->socket_sources, socket,
+  l = g_slist_find_custom (component->socket_sources, nicesock,
           _find_socket_source);
   if (l == NULL)
     return;
 
   /* Detach the source. */
   socket_source = l->data;
+  component->socket_sources = g_slist_delete_link (component->socket_sources, l);
+  component->socket_sources_age++;
+
   socket_source_detach (socket_source);
+  socket_source_free (socket_source);
 }
 
 /*
@@ -547,7 +591,7 @@ component_free_socket_sources (Component *component)
   g_slist_free_full (component->socket_sources,
       (GDestroyNotify) socket_source_free);
   component->socket_sources = NULL;
-  component->socket_sources_age = 0;
+  component->socket_sources_age++;
 }
 
 GMainContext *
@@ -823,7 +867,6 @@ component_deschedule_io_callback (Component *component)
   component->io_callback_id = 0;
 }
 
-
 /**
  * ComponentSource:
  *
@@ -854,15 +897,20 @@ typedef struct {
   guint stream_id;
   guint component_id;
   guint component_socket_sources_age;
+
+  /* SocketSource, free with free_child_socket_source() */
+  GSList *socket_sources;
+
+  GIOCondition condition;
 } ComponentSource;
 
 static gboolean
 component_source_prepare (GSource *source, gint *timeout_)
 {
   ComponentSource *component_source = (ComponentSource *) source;
-  gint age_diff;
   NiceAgent *agent;
   Component *component;
+  GSList *parentl, *childl;
 
   agent = g_weak_ref_get (&component_source->agent_ref);
   if (!agent)
@@ -877,43 +925,66 @@ component_source_prepare (GSource *source, gint *timeout_)
     goto done;
 
 
-  age_diff =
-      component->socket_sources_age -
-      component_source->component_socket_sources_age;
+  if (component->socket_sources_age ==
+      component_source->component_socket_sources_age)
+    goto done;
 
-  /* If the age has changed, either:
-   *  • a new socket has been *prepended* to component->socket_sources (and
-   *    age_diff > 0); or
-   *  • component->socket_sources has been emptied (and age_diff < 0).
-   * We can’t remove any child sources without destroying them, so must
-   * monotonically add new ones, or remove everything.
-   *
-   * Removing everything only happens on shutdown or failure, in which case
-   * the ComponentSource itself can be destroyed, automatically destroying all
-   * the child sources. */
-  if (age_diff < 0) {
-    g_source_destroy (source);
-  } else if (age_diff > 0) {
-    /* Add the new child sources. The difference between the two ages gives
-     * the number of new child sources. */
-    guint i;
-    GSList *l;
+  /* If the age has changed, either
+   *  - one or more new socket has been prepended
+   *  - old sockets have been removed
+   */
 
-    for (i = 0, l = component->socket_sources;
-         i < (guint) age_diff && l != NULL;
-         i++, l = l->next) {
-      GSource *child_source;
-      SocketSource *socket_source;
+  /* Add the new child sources. */
 
-      socket_source = l->data;
+  for (parentl = component->socket_sources; parentl; parentl = parentl->next) {
+    SocketSource *parent_socket_source = parentl->data;
+    SocketSource *child_socket_source;
 
-      child_source = g_socket_create_source (socket_source->socket->fileno,
-          G_IO_IN, NULL);
-      g_source_set_dummy_callback (child_source);
-      g_source_add_child_source (source, child_source);
-      g_source_unref (child_source);
-    }
+    /* Iterating the list of socket sources every time isn't a big problem
+     * because the number of pairs is limited ~100 normally, so there will
+     * rarely be more than 10.
+     */
+    childl = g_slist_find_custom (component_source->socket_sources,
+        parent_socket_source->socket, _find_socket_source);
+
+    /* If we have reached this state, then all sources new sources have been
+     * added, because they are always prepended.
+     */
+    if (childl)
+      break;
+
+    child_socket_source = g_slice_new0 (SocketSource);
+    child_socket_source->socket = parent_socket_source->socket;
+    child_socket_source->source =
+        g_socket_create_source (child_socket_source->socket->fileno, G_IO_IN,
+            NULL);
+    g_source_set_dummy_callback (child_socket_source->source);
+    g_source_add_child_source (source, child_socket_source->source);
+    g_source_unref (child_socket_source->source);
+    component_source->socket_sources =
+        g_slist_prepend (component_source->socket_sources, child_socket_source);
   }
+
+
+  for (childl = component_source->socket_sources;
+       childl;) {
+    SocketSource *child_socket_source = childl->data;
+    GSList *next = childl->next;
+
+    parentl = g_slist_find_custom (component->socket_sources,
+      child_socket_source->socket, _find_socket_source);
+
+    /* If this is not a currently used socket, remove the relevant source */
+    if (!parentl) {
+      g_source_remove_child_source (source, child_socket_source->source);
+      g_slice_free (SocketSource, child_socket_source);
+      component_source->socket_sources =
+          g_slist_delete_link (component_source->socket_sources, childl);
+    }
+
+    childl = next;
+  }
+
 
   /* Update the age. */
   component_source->component_socket_sources_age = component->socket_sources_age;
@@ -938,9 +1009,17 @@ component_source_dispatch (GSource *source, GSourceFunc callback,
 }
 
 static void
+free_child_socket_source (gpointer data)
+{
+  g_slice_free (SocketSource, data);
+}
+
+static void
 component_source_finalize (GSource *source)
 {
   ComponentSource *component_source = (ComponentSource *) source;
+
+  g_slist_free_full (component_source->socket_sources, free_child_socket_source);
 
   g_weak_ref_clear (&component_source->agent_ref);
   g_object_unref (component_source->pollable_stream);
@@ -1030,4 +1109,47 @@ component_input_source_new (NiceAgent *agent, guint stream_id,
   }
 
   return (GSource *) component_source;
+}
+
+
+TurnServer *
+turn_server_new (const gchar *server_ip, guint server_port,
+    const gchar *username, const gchar *password, NiceRelayType type)
+{
+  TurnServer *turn = g_slice_new (TurnServer);
+
+  nice_address_init (&turn->server);
+
+  turn->ref_count = 1;
+  if (nice_address_set_from_string (&turn->server, server_ip)) {
+    nice_address_set_port (&turn->server, server_port);
+  } else {
+    g_slice_free (TurnServer, turn);
+    return NULL;
+  }
+  turn->username = g_strdup (username);
+  turn->password = g_strdup (password);
+  turn->type = type;
+
+  return turn;
+}
+
+TurnServer *
+turn_server_ref (TurnServer *turn)
+{
+  turn->ref_count++;
+
+  return turn;
+}
+
+void
+turn_server_unref (TurnServer *turn)
+{
+  turn->ref_count--;
+
+  if (turn->ref_count == 0) {
+    g_free (turn->username);
+    g_free (turn->password);
+    g_slice_free (TurnServer, turn);
+  }
 }

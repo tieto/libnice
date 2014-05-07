@@ -61,7 +61,7 @@ enum                <a class="link" href="libnice-ICE.html#StunUsageIceReturn" t
                                                          <em class="parameter"><code>const <span class="type">char</span> *candidate_identifier</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-ICE.html#StunUsageIceCompatibility" title="enum StunUsageIceCompatibility"><span class="type">StunUsageIceCompatibility</span></a> compatibility</code></em>);
 <a class="link" href="libnice-ICE.html#StunUsageIceReturn" title="enum StunUsageIceReturn"><span class="returnvalue">StunUsageIceReturn</span></a>  <a class="link" href="libnice-ICE.html#stun-usage-ice-conncheck-process" title="stun_usage_ice_conncheck_process ()">stun_usage_ice_conncheck_process</a>    (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
-                                                         <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
+                                                         <em class="parameter"><code><span class="type">struct sockaddr_storage</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-ICE.html#StunUsageIceCompatibility" title="enum StunUsageIceCompatibility"><span class="type">StunUsageIceCompatibility</span></a> compatibility</code></em>);
 <a class="link" href="libnice-ICE.html#StunUsageIceReturn" title="enum StunUsageIceReturn"><span class="returnvalue">StunUsageIceReturn</span></a>  <a class="link" href="libnice-ICE.html#stun-usage-ice-conncheck-create-reply" title="stun_usage_ice_conncheck_create_reply ()">stun_usage_ice_conncheck_create_reply</a>
@@ -70,7 +70,7 @@ enum                <a class="link" href="libnice-ICE.html#StunUsageIceReturn" t
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *buf</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> *plen</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">struct sockaddr</span> *src</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">struct sockaddr_storage</span> *src</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> srclen</code></em>,
                                                          <em class="parameter"><code><span class="type">bool</span> *control</code></em>,
                                                          <em class="parameter"><code><span class="type">uint64_t</span> tie</code></em>,
@@ -296,12 +296,12 @@ If the compatibility is not <a class="link" href="libnice-ICE.html#STUN-USAGE-IC
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>cand_use</code></em> :</span></p></td>
-<td>Set to <code class="literal">TRUE</code> to append the USE-CANDIDATE flag to the request</td>
+<td>Set to <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> to append the USE-CANDIDATE flag to the request</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>controlling</code></em> :</span></p></td>
-<td>Set to <code class="literal">TRUE</code> if you are the controlling agent or set to
-<code class="literal">FALSE</code> if you are the controlled agent.</td>
+<td>Set to <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if you are the controlling agent or set to
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if you are the controlled agent.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>priority</code></em> :</span></p></td>
@@ -333,7 +333,7 @@ request</td>
 <div class="refsect2">
 <a name="stun-usage-ice-conncheck-process"></a><h3>stun_usage_ice_conncheck_process ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-ICE.html#StunUsageIceReturn" title="enum StunUsageIceReturn"><span class="returnvalue">StunUsageIceReturn</span></a>  stun_usage_ice_conncheck_process    (<em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
-                                                         <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
+                                                         <em class="parameter"><code><span class="type">struct sockaddr_storage</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libnice-ICE.html#StunUsageIceCompatibility" title="enum StunUsageIceCompatibility"><span class="type">StunUsageIceCompatibility</span></a> compatibility</code></em>);</pre>
 <p>
@@ -385,7 +385,7 @@ response</td>
                                                          <em class="parameter"><code><a class="link" href="libnice-StunMessage.html#StunMessage" title="struct StunMessage"><span class="type">StunMessage</span></a> *msg</code></em>,
                                                          <em class="parameter"><code><span class="type">uint8_t</span> *buf</code></em>,
                                                          <em class="parameter"><code><span class="type">size_t</span> *plen</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">struct sockaddr</span> *src</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">struct sockaddr_storage</span> *src</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> srclen</code></em>,
                                                          <em class="parameter"><code><span class="type">bool</span> *control</code></em>,
                                                          <em class="parameter"><code><span class="type">uint64_t</span> tie</code></em>,
@@ -445,8 +445,8 @@ response</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>control</code></em> :</span></p></td>
-<td>Set to <code class="literal">TRUE</code> if you are the controlling agent or set to
-<code class="literal">FALSE</code> if you are the controlled agent.</td>
+<td>Set to <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if you are the controlling agent or set to
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if you are the controlled agent.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>tie</code></em> :</span></p></td>
@@ -510,7 +510,7 @@ Extracts the USE-CANDIDATE attribute flag from a STUN message.
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>
-<code class="literal">TRUE</code> if the flag is set, <code class="literal">FALSE</code> if not.</td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> if the flag is set, <a href="http://library.gnome.org/devel/glib/unstable/glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> if not.</td>
 </tr>
 </tbody>
 </table></div>
