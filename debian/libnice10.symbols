@@ -18,6 +18,7 @@ libnice.so.10 libnice10 #MINVER#
  nice_agent_add_local_address@Base 0.1.0
  nice_agent_add_stream@Base 0.1.0
  nice_agent_attach_recv@Base 0.1.0
+ nice_agent_forget_relays@Base 0.1.7
  nice_agent_gather_candidates@Base 0.1.0
  nice_agent_generate_local_candidate_sdp@Base 0.1.4
  nice_agent_generate_local_sdp@Base 0.1.4
@@ -42,6 +43,7 @@ libnice.so.10 libnice10 #MINVER#
  nice_agent_recv_nonblocking@Base 0.1.5
  nice_agent_remove_stream@Base 0.1.0
  nice_agent_restart@Base 0.1.0
+ nice_agent_restart_stream@Base 0.1.7
  nice_agent_send@Base 0.1.0
  nice_agent_send_messages_nonblocking@Base 0.1.5
  nice_agent_set_port_range@Base 0.1.4
@@ -56,6 +58,7 @@ libnice.so.10 libnice10 #MINVER#
  nice_candidate_copy@Base 0.1.0
  nice_candidate_free@Base 0.1.0
  nice_candidate_new@Base 0.1.0
+ nice_component_state_to_string@Base 0.1.7
  nice_debug_disable@Base 0.1.0
  nice_debug_enable@Base 0.1.0
  nice_input_stream_new@Base 0.1.5

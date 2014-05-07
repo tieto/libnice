@@ -3,6 +3,7 @@ libnice (0.1.7-1) unstable; urgency=low
   * New upstream release 0.1.6, 0.1.7
     - fixes various compiler warnings that were mistakenly fatal in 0.1.5
       (Closes: #743232, #743233)
+    - update symbols file for new API
   * Explicitly disable -Werror, even if we package a non-release in future
   * Don't run tests during the build. We were ignoring failures already,
     and they sometimes hang until the buildd terminates them.
