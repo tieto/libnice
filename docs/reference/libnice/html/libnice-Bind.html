@@ -60,7 +60,7 @@ enum                <a class="link" href="libnice-Bind.html#StunUsageBindReturn"
                                                          <em class="parameter"><code><span class="type">size_t</span> len</code></em>);
 <a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a> <a class="link" href="libnice-Bind.html#stun-usage-bind-run" title="stun_usage_bind_run ()">stun_usage_bind_run</a>                 (<em class="parameter"><code>const <span class="type">struct sockaddr</span> *srv</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> srvlen</code></em>,
-                                                         <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
+                                                         <em class="parameter"><code><span class="type">struct sockaddr_storage</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>);
 </pre>
 </div>
@@ -268,7 +268,7 @@ and it can only be used as a keepalive message.
 <a name="stun-usage-bind-run"></a><h3>stun_usage_bind_run ()</h3>
 <pre class="programlisting"><a class="link" href="libnice-Bind.html#StunUsageBindReturn" title="enum StunUsageBindReturn"><span class="returnvalue">StunUsageBindReturn</span></a> stun_usage_bind_run                 (<em class="parameter"><code>const <span class="type">struct sockaddr</span> *srv</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> srvlen</code></em>,
-                                                         <em class="parameter"><code><span class="type">struct sockaddr</span> *addr</code></em>,
+                                                         <em class="parameter"><code><span class="type">struct sockaddr_storage</span> *addr</code></em>,
                                                          <em class="parameter"><code><span class="type">socklen_t</span> *addrlen</code></em>);</pre>
 <p>
 This is a convenience function that will do a synchronous Binding request to

@@ -55,7 +55,6 @@
 
 #include "agent.h"
 #include "agent-priv.h"
-#include "agent-signals-marshal.h"
 #include "component.h"
 #include "discovery.h"
 #include "stun/usages/bind.h"
@@ -71,14 +70,13 @@ static inline int priv_timer_expired (GTimeVal *timer, GTimeVal *now)
 
 /*
  * Frees the CandidateDiscovery structure pointed to
- * by 'user data'. Compatible with g_slist_foreach().
+ * by 'user data'. Compatible with g_slist_free_full().
  */
-void discovery_free_item (gpointer data, gpointer user_data)
+static void discovery_free_item (CandidateDiscovery *cand)
 {
-  CandidateDiscovery *cand = data;
-  g_assert (user_data == NULL);
-  g_free (cand->msn_turn_username);
-  g_free (cand->msn_turn_password);
+  if (cand->turn)
+    turn_server_unref (cand->turn);
+
   g_slice_free (CandidateDiscovery, cand);
 }
 
@@ -87,9 +85,8 @@ void discovery_free_item (gpointer data, gpointer user_data)
  */
 void discovery_free (NiceAgent *agent)
 {
-
-  g_slist_foreach (agent->discovery_list, discovery_free_item, NULL);
-  g_slist_free (agent->discovery_list);
+  g_slist_free_full (agent->discovery_list,
+      (GDestroyNotify) discovery_free_item);
   agent->discovery_list = NULL;
   agent->discovery_unsched_items = 0;
 
@@ -116,7 +113,7 @@ void discovery_prune_stream (NiceAgent *agent, guint stream_id)
 
     if (cand->stream->id == stream_id) {
       agent->discovery_list = g_slist_remove (agent->discovery_list, cand);
-      discovery_free_item (cand, NULL);
+      discovery_free_item (cand);
     }
     i = next;
   }
@@ -130,20 +127,17 @@ void discovery_prune_stream (NiceAgent *agent, guint stream_id)
 
 /*
  * Frees the CandidateDiscovery structure pointed to
- * by 'user data'. Compatible with g_slist_foreach().
+ * by 'user data'. Compatible with g_slist_free_full().
  */
-void refresh_free_item (gpointer data, gpointer user_data)
+static void refresh_free_item (CandidateRefresh *cand)
 {
-  CandidateRefresh *cand = data;
   NiceAgent *agent = cand->agent;
   uint8_t *username;
-  size_t username_len;
+  gsize username_len;
   uint8_t *password;
-  size_t password_len;
+  gsize password_len;
   size_t buffer_len = 0;
   StunUsageTurnCompatibility turn_compat = agent_to_turn_compatibility (agent);
-
-  g_assert (user_data == NULL);
 
   if (cand->timer_source != NULL) {
     g_source_destroy (cand->timer_source);
@@ -156,10 +150,10 @@ void refresh_free_item (gpointer data, gpointer user_data)
     cand->tick_source = NULL;
   }
 
-  username = (uint8_t *)cand->turn->username;
-  username_len = (size_t) strlen (cand->turn->username);
-  password = (uint8_t *)cand->turn->password;
-  password_len = (size_t) strlen (cand->turn->password);
+  username = (uint8_t *)cand->candidate->turn->username;
+  username_len = (size_t) strlen (cand->candidate->turn->username);
+  password = (uint8_t *)cand->candidate->turn->password;
+  password_len = (size_t) strlen (cand->candidate->turn->password);
 
   if (turn_compat == STUN_USAGE_TURN_COMPATIBILITY_MSN ||
       turn_compat == STUN_USAGE_TURN_COMPATIBILITY_OC2007) {
@@ -206,14 +200,13 @@ void refresh_free_item (gpointer data, gpointer user_data)
  */
 void refresh_free (NiceAgent *agent)
 {
-  g_slist_foreach (agent->refresh_list, refresh_free_item, NULL);
-  g_slist_free (agent->refresh_list);
+  g_slist_free_full (agent->refresh_list, (GDestroyNotify) refresh_free_item);
   agent->refresh_list = NULL;
 }
 
 /*
  * Prunes the list of discovery processes for items related
- * to stream 'stream_id'. 
+ * to stream 'stream_id'.
  *
  * @return TRUE on success, FALSE on a fatal error
  */
@@ -225,9 +218,12 @@ void refresh_prune_stream (NiceAgent *agent, guint stream_id)
     CandidateRefresh *cand = i->data;
     GSList *next = i->next;
 
+    /* Don't free the candidate refresh to the currently selected local candidate
+     * unless the whole pair is being destroyed.
+     */
     if (cand->stream->id == stream_id) {
-      agent->refresh_list = g_slist_remove (agent->refresh_list, cand);
-      refresh_free_item (cand, NULL);
+      agent->refresh_list = g_slist_delete_link (agent->refresh_list, i);
+      refresh_free_item (cand);
     }
 
     i = next;
@@ -235,12 +231,30 @@ void refresh_prune_stream (NiceAgent *agent, guint stream_id)
 
 }
 
+void refresh_prune_candidate (NiceAgent *agent, NiceCandidate *candidate)
+{
+  GSList *i;
+
+  for (i = agent->refresh_list; i;) {
+    GSList *next = i->next;
+    CandidateRefresh *refresh = i->data;
+
+    if (refresh->candidate == candidate) {
+      agent->refresh_list = g_slist_delete_link (agent->refresh_list, i);
+      refresh_free_item (refresh);
+    }
+
+    i = next;
+  }
+}
+
 void refresh_cancel (CandidateRefresh *refresh)
 {
   refresh->agent->refresh_list = g_slist_remove (refresh->agent->refresh_list,
       refresh);
-  refresh_free_item (refresh, NULL);
+  refresh_free_item (refresh);
 }
+
 
 /*
  * Adds a new local candidate. Implements the candidate pruning
@@ -594,7 +608,7 @@ discovery_add_relay_candidate (
   candidate->stream_id = stream_id;
   candidate->component_id = component_id;
   candidate->addr = *address;
-  candidate->turn = turn;
+  candidate->turn = turn_server_ref (turn);
 
   /* step: link to the base candidate+socket */
   relay_socket = nice_turn_socket_new (agent->main_context, address,
@@ -866,9 +880,9 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
               &cand->stun_message, cand->stun_buffer, sizeof(cand->stun_buffer));
         } else if (cand->type == NICE_CANDIDATE_TYPE_RELAYED) {
           uint8_t *username = (uint8_t *)cand->turn->username;
-          size_t username_len = (size_t) strlen (cand->turn->username);
+          gsize username_len = strlen (cand->turn->username);
           uint8_t *password = (uint8_t *)cand->turn->password;
-          size_t password_len = (size_t) strlen (cand->turn->password);
+          gsize password_len = strlen (cand->turn->password);
           StunUsageTurnCompatibility turn_compat =
               agent_to_turn_compatibility (agent);
 
@@ -889,10 +903,8 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
 
           if (turn_compat == STUN_USAGE_TURN_COMPATIBILITY_MSN ||
               turn_compat == STUN_USAGE_TURN_COMPATIBILITY_OC2007) {
-            g_free (cand->msn_turn_username);
-            g_free (cand->msn_turn_password);
-            cand->msn_turn_username = username;
-            cand->msn_turn_password = password;
+            g_free (username);
+            g_free (password);
           }
         }
 

@@ -72,6 +72,7 @@ struct _Stream
   gchar remote_ufrag[NICE_STREAM_MAX_UFRAG];
   gchar remote_password[NICE_STREAM_MAX_PWD];
   gboolean gathering;
+  gboolean gathering_started;
   gint tos;
 };
 
@@ -91,8 +92,8 @@ stream_find_component_by_id (const Stream *stream, guint id);
 void
 stream_initialize_credentials (Stream *stream, NiceRNG *rng);
 
-gboolean 
-stream_restart (Stream *stream, NiceRNG *rng);
+void
+stream_restart (NiceAgent *agent, Stream *stream);
 
 G_END_DECLS
 

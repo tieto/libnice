@@ -340,6 +340,17 @@ NiceAgent
 @Returns: 
 
 
+<!-- ##### FUNCTION nice_agent_forget_relays ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@Returns: 
+
+
 <!-- ##### FUNCTION nice_agent_gather_candidates ##### -->
 <para>
 
@@ -576,6 +587,16 @@ NiceAgent
 @Returns: 
 
 
+<!-- ##### FUNCTION nice_agent_restart_stream ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@Returns: 
+
+
 <!-- ##### FUNCTION nice_agent_set_stream_name ##### -->
 <para>
 
@@ -691,6 +712,15 @@ NiceAgent
 @agent: 
 @stream_id: 
 @component_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_component_state_to_string ##### -->
+<para>
+
+</para>
+
+@state: 
 @Returns: 
 
 

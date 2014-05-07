@@ -23,7 +23,6 @@
 # Licensed under MPL 1.1/LGPL 2.1. See file COPYING.
 
 
-
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
 am__make_running_with_option = \
@@ -90,7 +89,7 @@ host_triplet = @host@
 target_triplet = @target@
 DIST_COMMON = $(top_srcdir)/common.mk $(srcdir)/Makefile.in \
 	$(srcdir)/Makefile.am $(top_srcdir)/depcomp \
-	$(dist_noinst_DATA) $(pkginclude_HEADERS)
+	$(pkginclude_HEADERS)
 @WINDOWS_TRUE@am__append_1 = -DWINVER=0x0501 # _WIN32_WINNT_WINXP
 @WINDOWS_TRUE@am__append_2 = -liphlpapi -lws2_32
 subdir = agent
@@ -105,11 +104,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-am__objects_1 = agent-signals-marshal.lo
 am_libagent_la_OBJECTS = address.lo debug.lo candidate.lo component.lo \
 	agent.lo stream.lo conncheck.lo discovery.lo interfaces.lo \
-	pseudotcp.lo iostream.lo inputstream.lo outputstream.lo \
-	$(am__objects_1)
+	pseudotcp.lo iostream.lo inputstream.lo outputstream.lo
 libagent_la_OBJECTS = $(am_libagent_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -156,7 +153,6 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-DATA = $(dist_noinst_DATA)
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -349,17 +345,12 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-CLEANFILES = *.gcno *.gcda $(BUILT_SOURCES)
+CLEANFILES = *.gcno *.gcda
 AM_CFLAGS = -DG_LOG_DOMAIN=\"libnice\" $(LIBNICE_CFLAGS) \
 	$(GLIB_CFLAGS) $(GUPNP_CFLAGS) -I $(top_srcdir) -I \
 	$(top_srcdir)/random -I $(top_srcdir)/socket -I \
 	$(top_srcdir)/stun $(am__append_1)
-dist_noinst_DATA = agent-signals-marshal.list
 noinst_LTLIBRARIES = libagent.la
-BUILT_SOURCES = \
-	agent-signals-marshal.h \
-	agent-signals-marshal.c
-
 libagent_la_SOURCES = \
 	address.h \
 	address.c \
@@ -407,8 +398,7 @@ pkginclude_HEADERS = \
 	pseudotcp.h \
 	$(NULL)
 
-all: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -465,7 +455,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/address.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/agent-signals-marshal.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/agent.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/candidate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/component.Plo@am__quote@
@@ -610,15 +599,13 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) check-am
-all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
+check: check-am
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
 	for dir in "$(DESTDIR)$(pkgincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) install-am
+install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -649,7 +636,6 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
@@ -721,7 +707,7 @@ ps-am:
 
 uninstall-am: uninstall-pkgincludeHEADERS
 
-.MAKE: all check install install-am install-strip
+.MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-noinstLTLIBRARIES cscopelist-am ctags \
@@ -743,14 +729,6 @@ check-valgrind:
 	$(MAKE) TESTS_ENVIRONMENT="sh $$(cd "$(top_srcdir)" && pwd)/scripts/valgrind.sh" check
 
 .PHONY: check-valgrind
-
-agent-signals-marshal.h: agent-signals-marshal.list
-	glib-genmarshal --header --prefix=agent_marshal $? > $@
-
-agent-signals-marshal.c: agent-signals-marshal.list
-	echo '#include "agent-signals-marshal.h"' > $@
-	glib-genmarshal --body --prefix=agent_marshal $? | \
-	sed -e 's/^}$$/(void)return_value;(void)invocation_hint;}/' >> $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -149,7 +149,7 @@ struct _Component
   CandidatePair selected_pair; /**< independent from checklists, 
 				    see ICE 11.1. "Sending Media" (ID-19) */
   NiceCandidate *restart_candidate; /**< for storing active remote candidate during a restart */
-
+  NiceCandidate *turn_candidate; /**< for storing active turn candidate if turn servers have been cleared */
   /* I/O handling. The main context must always be non-NULL, and is used for all
    * socket recv() operations. All io_callback emissions are invoked in this
    * context too.
@@ -190,7 +190,7 @@ struct _Component
 
   PseudoTcpSocket *tcp;
   GSource* tcp_clock;
-  long last_clock_timeout;
+  guint64 last_clock_timeout;
   gboolean tcp_readable;
   GCancellable *tcp_writable_cancellable;
 
@@ -214,7 +214,7 @@ component_free (Component *cmp);
 gboolean
 component_find_pair (Component *cmp, NiceAgent *agent, const gchar *lfoundation, const gchar *rfoundation, CandidatePair *pair);
 
-gboolean
+void
 component_restart (Component *cmp);
 
 void
@@ -228,9 +228,9 @@ component_set_selected_remote_candidate (NiceAgent *agent, Component *component,
     NiceCandidate *candidate);
 
 void
-component_attach_socket (Component *component, NiceSocket *socket);
+component_attach_socket (Component *component, NiceSocket *nsocket);
 void
-component_detach_socket (Component *component, NiceSocket *socket);
+component_detach_socket (Component *component, NiceSocket *nsocket);
 void
 component_detach_all_sockets (Component *component);
 void
@@ -256,6 +256,21 @@ component_emit_io_callback (Component *component,
 
 gboolean
 component_has_io_callback (Component *component);
+
+void
+component_clean_turn_servers (Component *component);
+
+
+TurnServer *
+turn_server_new (const gchar *server_ip, guint server_port,
+    const gchar *username, const gchar *password, NiceRelayType type);
+
+TurnServer *
+turn_server_ref (TurnServer *turn);
+
+void
+turn_server_unref (TurnServer *turn);
+
 
 G_END_DECLS
 

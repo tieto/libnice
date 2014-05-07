@@ -787,6 +787,28 @@ gboolean
 nice_agent_restart (
   NiceAgent *agent);
 
+/**
+ * nice_agent_restart_stream:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ *
+ * Restarts a single stream as defined in RFC 5245. This function
+ * needs to be called both when initiating (ICE spec section 9.1.1.1.
+ * "ICE Restarts"), as well as when reacting (spec section 9.2.1.1.
+ * "Detecting ICE Restart") to a restart.
+ *
+ * Unlike nice_agent_restart(), this applies to a single stream. It also
+ * does not generate a new tie breaker.
+ *
+ * Returns: %TRUE on success %FALSE on error
+ *
+ * Since: 0.1.6
+ **/
+gboolean
+nice_agent_restart_stream (
+    NiceAgent *agent,
+    guint stream_id);
+
 
 /**
  * nice_agent_attach_recv:
@@ -1409,6 +1431,39 @@ nice_agent_parse_remote_candidate_sdp (
 GIOStream *
 nice_agent_get_io_stream (
     NiceAgent *agent,
+    guint stream_id,
+    guint component_id);
+
+/**
+ * nice_component_state_to_string:
+ * @state: a #NiceComponentState
+ *
+ * Returns a string representation of the state, generally to use in debug
+ * messages.
+ *
+ * Returns: (transfer none): a string representation of @state
+ * Since: 0.1.6
+ */
+const gchar *
+nice_component_state_to_string (NiceComponentState state);
+
+/**
+ * nice_agent_forget_relays:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @component_id: The ID of the component
+ *
+ * Forget all the relay servers previously added using
+ * nice_agent_set_relay_info(). Currently connected streams will keep
+ * using the relay as long as they have not been restarted and haven't
+ * succesfully negotiated a different path.
+ *
+ * Returns: %FALSE if the component could not be found, %TRUE otherwise
+ *
+ * Since: 0.1.6
+ */
+gboolean
+nice_agent_forget_relays (NiceAgent *agent,
     guint stream_id,
     guint component_id);
 

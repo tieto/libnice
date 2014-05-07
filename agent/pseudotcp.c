@@ -908,6 +908,12 @@ pseudo_tcp_socket_notify_message (PseudoTcpSocket *self,
 {
   gboolean retval;
 
+  g_assert_cmpuint (message->n_buffers, >, 0);
+
+  if (message->n_buffers == 1)
+    return pseudo_tcp_socket_notify_packet (self, message->buffers[0].buffer,
+        message->buffers[0].size);
+
   g_assert_cmpuint (message->n_buffers, ==, 2);
   g_assert_cmpuint (message->buffers[0].size, ==, HEADER_SIZE);
 
@@ -930,7 +936,7 @@ pseudo_tcp_socket_notify_message (PseudoTcpSocket *self,
 }
 
 gboolean
-pseudo_tcp_socket_get_next_clock(PseudoTcpSocket *self, long *timeout)
+pseudo_tcp_socket_get_next_clock(PseudoTcpSocket *self, guint64 *timeout)
 {
   PseudoTcpSocketPrivate *priv = self->priv;
   guint32 now = get_current_time ();
@@ -974,7 +980,7 @@ gint
 pseudo_tcp_socket_recv(PseudoTcpSocket *self, char * buffer, size_t len)
 {
   PseudoTcpSocketPrivate *priv = self->priv;
-  gsize read;
+  gsize bytesread;
   gsize available_space;
 
   if (priv->state != TCP_ESTABLISHED) {
@@ -985,10 +991,10 @@ pseudo_tcp_socket_recv(PseudoTcpSocket *self, char * buffer, size_t len)
   if (len == 0)
     return 0;
 
-  read = pseudo_tcp_fifo_read (&priv->rbuf, (guint8 *) buffer, len);
+  bytesread = pseudo_tcp_fifo_read (&priv->rbuf, (guint8 *) buffer, len);
 
  // If there's no data in |m_rbuf|.
-  if (read == 0) {
+  if (bytesread == 0) {
     priv->bReadEnable = TRUE;
     priv->error = EWOULDBLOCK;
     return -1;
@@ -1008,7 +1014,7 @@ pseudo_tcp_socket_recv(PseudoTcpSocket *self, char * buffer, size_t len)
     }
   }
 
-  return read;
+  return bytesread;
 }
 
 gint
@@ -1296,7 +1302,8 @@ process(PseudoTcpSocket *self, Segment *seg)
         DEBUG (PSEUDO_TCP_DEBUG_VERBOSE, "rtt: %ld   srtt: %d  rto: %d",
                 rtt, priv->rx_srtt, priv->rx_rto);
       } else {
-        g_assert_not_reached ();
+        DEBUG (PSEUDO_TCP_DEBUG_NORMAL, "Invalid RTT: %ld", rtt);
+        return FALSE;
       }
     }
 
@@ -1317,6 +1324,7 @@ process(PseudoTcpSocket *self, Segment *seg)
 
       if (nFree < data->len) {
         data->len -= nFree;
+        data->seq += nFree;
         nFree = 0;
       } else {
         if (data->len > priv->largest) {
@@ -1540,7 +1548,13 @@ transmit(PseudoTcpSocket *self, SSegment *segment, guint32 now)
   while (TRUE) {
     guint32 seq = segment->seq;
     guint8 flags = (segment->bCtrl ? FLAG_CTL : 0);
-    PseudoTcpWriteResult wres = packet(self, seq, flags,
+    PseudoTcpWriteResult wres;
+
+    /* The packet must not have already been acknowledged. */
+    g_assert_cmpuint (segment->seq, >=, priv->snd_una);
+
+    /* Write out the packet. */
+    wres = packet(self, seq, flags,
         segment->seq - priv->snd_una, nTransmit, now);
 
     if (wres == WR_SUCCESS)
@@ -1776,6 +1790,9 @@ parse_options (PseudoTcpSocket *self, const guint8 *data, guint32 len)
     guint8 kind = TCP_OPT_EOL;
     guint8 opt_len;
 
+    if (len < pos + 1)
+      return;
+
     kind = data[pos];
     pos++;
 
@@ -1787,10 +1804,15 @@ parse_options (PseudoTcpSocket *self, const guint8 *data, guint32 len)
       continue;
     }
 
+    if (len < pos + 1)
+      return;
+
     // Length of this option.
-    g_assert(len);
     opt_len = data[pos];
     pos++;
+
+    if (len < pos + opt_len)
+      return;
 
     // Content of this option.
     if (opt_len <= len - pos) {
@@ -1876,23 +1898,23 @@ pseudo_tcp_socket_get_available_bytes (PseudoTcpSocket *self)
 gboolean
 pseudo_tcp_socket_can_send (PseudoTcpSocket *self)
 {
-  PseudoTcpSocketPrivate *priv = self->priv;
-
-  if (priv->state != TCP_ESTABLISHED) {
-    return FALSE;
-  }
-
-  return (pseudo_tcp_fifo_get_write_remaining (&priv->sbuf) != 0);
+  return (pseudo_tcp_socket_get_available_send_space (self) > 0);
 }
 
 gsize
 pseudo_tcp_socket_get_available_send_space (PseudoTcpSocket *self)
 {
   PseudoTcpSocketPrivate *priv = self->priv;
+  gsize ret;
 
-  if (priv->state != TCP_ESTABLISHED) {
-    return 0;
-  }
 
-  return pseudo_tcp_fifo_get_write_remaining (&priv->sbuf);
+  if (priv->state == TCP_ESTABLISHED)
+    ret = pseudo_tcp_fifo_get_write_remaining (&priv->sbuf);
+  else
+    ret = 0;
+
+  if (ret == 0)
+    priv->bWriteEnable = TRUE;
+
+  return ret;
 }

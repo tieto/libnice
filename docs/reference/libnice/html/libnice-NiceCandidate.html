@@ -118,29 +118,29 @@ A structure to represent an ICE candidate
 <td>The <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> of the base address used by the candidate</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">guint32</span> <em class="structfield"><code><a name="NiceCandidate.priority"></a>priority</code></em>;</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint32"><span class="type">guint32</span></a> <em class="structfield"><code><a name="NiceCandidate.priority"></a>priority</code></em>;</span></p></td>
 <td>The priority of the candidate <span class="emphasis"><em> see note </em></span>
 </td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">guint</span> <em class="structfield"><code><a name="NiceCandidate.stream-id"></a>stream_id</code></em>;</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> <em class="structfield"><code><a name="NiceCandidate.stream-id"></a>stream_id</code></em>;</span></p></td>
 <td>The ID of the stream to which belongs the candidate</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">guint</span> <em class="structfield"><code><a name="NiceCandidate.component-id"></a>component_id</code></em>;</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> <em class="structfield"><code><a name="NiceCandidate.component-id"></a>component_id</code></em>;</span></p></td>
 <td>The ID of the component to which belongs the candidate</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">gchar</span> <em class="structfield"><code><a name="NiceCandidate.foundation"></a>foundation</code></em>[NICE_CANDIDATE_MAX_FOUNDATION];</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> <em class="structfield"><code><a name="NiceCandidate.foundation"></a>foundation</code></em>[NICE_CANDIDATE_MAX_FOUNDATION];</span></p></td>
 <td>The foundation of the candidate</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">gchar</span> *<em class="structfield"><code><a name="NiceCandidate.username"></a>username</code></em>;</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="NiceCandidate.username"></a>username</code></em>;</span></p></td>
 <td>The candidate-specific username to use (overrides the one set
 by <code class="function">nice_agent_set_local_credentials()</code> or <a class="link" href="NiceAgent.html#nice-agent-set-remote-credentials" title="nice_agent_set_remote_credentials ()"><code class="function">nice_agent_set_remote_credentials()</code></a>)</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">gchar</span> *<em class="structfield"><code><a name="NiceCandidate.password"></a>password</code></em>;</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="NiceCandidate.password"></a>password</code></em>;</span></p></td>
 <td>The candidate-specific password to use (overrides the one set
 by <code class="function">nice_agent_set_local_credentials()</code> or <a class="link" href="NiceAgent.html#nice-agent-set-remote-credentials" title="nice_agent_set_remote_credentials ()"><code class="function">nice_agent_set_remote_credentials()</code></a>)</td>
 </tr>
@@ -151,7 +151,7 @@ of type <a class="link" href="libnice-NiceCandidate.html#NICE-CANDIDATE-TYPE-REL
 </td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">gpointer</span> <em class="structfield"><code><a name="NiceCandidate.sockptr"></a>sockptr</code></em>;</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> <em class="structfield"><code><a name="NiceCandidate.sockptr"></a>sockptr</code></em>;</span></p></td>
 <td>The underlying socket</td>
 </tr>
 </tbody>
@@ -225,6 +225,8 @@ An enum representing the type of transport to use
 <div class="refsect2">
 <a name="TurnServer"></a><h3>struct TurnServer</h3>
 <pre class="programlisting">struct TurnServer {
+  gint ref_count;
+
   NiceAddress server;       /**&lt; TURN server address */
   gchar *username;           /**&lt; TURN username */
   gchar *password;           /**&lt; TURN password */
@@ -241,15 +243,19 @@ A structure to store the TURN relay settings
 </colgroup>
 <tbody>
 <tr>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> <em class="structfield"><code><a name="TurnServer.ref-count"></a>ref_count</code></em>;</span></p></td>
+<td></td>
+</tr>
+<tr>
 <td><p><span class="term"><a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> <em class="structfield"><code><a name="TurnServer.server"></a>server</code></em>;</span></p></td>
 <td>The <a class="link" href="libnice-NiceAddress.html#NiceAddress" title="NiceAddress"><span class="type">NiceAddress</span></a> of the TURN server</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">gchar</span> *<em class="structfield"><code><a name="TurnServer.username"></a>username</code></em>;</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="TurnServer.username"></a>username</code></em>;</span></p></td>
 <td>The TURN username</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="type">gchar</span> *<em class="structfield"><code><a name="TurnServer.password"></a>password</code></em>;</span></p></td>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="TurnServer.password"></a>password</code></em>;</span></p></td>
 <td>The TURN password</td>
 </tr>
 <tr>

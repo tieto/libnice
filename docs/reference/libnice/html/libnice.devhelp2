@@ -42,6 +42,7 @@
       <sub name="Index of new symbols in 0.0.11" link="ix08.html"/>
       <sub name="Index of new symbols in 0.1.4" link="ix09.html"/>
       <sub name="Index of new symbols in 0.1.5" link="ix10.html"/>
+      <sub name="Index of new symbols in 0.1.6" link="ix11.html"/>
       <sub name="Annotation Glossary" link="annotation-glossary.html"/>
     </sub>
   </chapters>
@@ -62,6 +63,7 @@
     <keyword type="function" name="nice_agent_add_stream ()" link="NiceAgent.html#nice-agent-add-stream"/>
     <keyword type="function" name="nice_agent_remove_stream ()" link="NiceAgent.html#nice-agent-remove-stream"/>
     <keyword type="function" name="nice_agent_set_relay_info ()" link="NiceAgent.html#nice-agent-set-relay-info"/>
+    <keyword type="function" name="nice_agent_forget_relays ()" link="NiceAgent.html#nice-agent-forget-relays" since="0.1.6"/>
     <keyword type="function" name="nice_agent_gather_candidates ()" link="NiceAgent.html#nice-agent-gather-candidates"/>
     <keyword type="function" name="nice_agent_set_remote_credentials ()" link="NiceAgent.html#nice-agent-set-remote-credentials"/>
     <keyword type="function" name="nice_agent_get_local_credentials ()" link="NiceAgent.html#nice-agent-get-local-credentials"/>
@@ -81,6 +83,7 @@
     <keyword type="function" name="nice_agent_set_stream_tos ()" link="NiceAgent.html#nice-agent-set-stream-tos" since="0.0.9"/>
     <keyword type="function" name="nice_agent_set_software ()" link="NiceAgent.html#nice-agent-set-software" since="0.0.10"/>
     <keyword type="function" name="nice_agent_restart ()" link="NiceAgent.html#nice-agent-restart"/>
+    <keyword type="function" name="nice_agent_restart_stream ()" link="NiceAgent.html#nice-agent-restart-stream" since="0.1.6"/>
     <keyword type="function" name="nice_agent_set_stream_name ()" link="NiceAgent.html#nice-agent-set-stream-name" since="0.1.4"/>
     <keyword type="function" name="nice_agent_get_stream_name ()" link="NiceAgent.html#nice-agent-get-stream-name" since="0.1.4"/>
     <keyword type="function" name="nice_agent_get_default_local_candidate ()" link="NiceAgent.html#nice-agent-get-default-local-candidate"/>
@@ -92,6 +95,7 @@
     <keyword type="function" name="nice_agent_parse_remote_candidate_sdp ()" link="NiceAgent.html#nice-agent-parse-remote-candidate-sdp" since="0.1.4"/>
     <keyword type="function" name="nice_agent_get_io_stream ()" link="NiceAgent.html#nice-agent-get-io-stream" since="0.1.5"/>
     <keyword type="function" name="nice_agent_get_selected_socket ()" link="NiceAgent.html#nice-agent-get-selected-socket" since="0.1.5"/>
+    <keyword type="function" name="nice_component_state_to_string ()" link="NiceAgent.html#nice-component-state-to-string" since="0.1.6"/>
     <keyword type="property" name="The &quot;compatibility&quot; property" link="NiceAgent.html#NiceAgent--compatibility"/>
     <keyword type="property" name="The &quot;controlling-mode&quot; property" link="NiceAgent.html#NiceAgent--controlling-mode"/>
     <keyword type="property" name="The &quot;full-mode&quot; property" link="NiceAgent.html#NiceAgent--full-mode"/>
