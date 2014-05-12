@@ -14,7 +14,9 @@ Build-Depends: autotools-dev,
                gtk-doc-tools,
                libgirepository1.0-dev (>= 1.30.0),
                libglib2.0-dev (>= 2.30),
-               libgstreamer1.0-dev,
+               libgstreamer0.10-dev,
+               libgstreamer-plugins-base0.10-dev,
+               libgstreamer1.4-dev,
                libgupnp-igd-1.0-dev
 Standards-Version: 3.9.6
 Homepage: http://nice.freedesktop.org/
