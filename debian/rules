@@ -27,3 +27,7 @@ DEB_CONFIGURE_EXTRA_FLAGS := --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
 	$(NULL)
 
 include $(CURDIR)/debian/update-patches.mk
+
+install/gstreamer1.0-nice::
+	dh_install -pgstreamer1.0-nice debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstnice.so \
+		/opt/gstreamer1.4/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0
