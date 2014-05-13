@@ -62,7 +62,26 @@ Description: ICE library (development files)
  .
  This package provides development files for nice.
 
-Package: gstreamer1.0-nice
+Package: gstreamer0.10-nice
+Section: net
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Breaks: libgstfarsight0.10-0 (<< 0.0.23)
+Multi-Arch: same
+Description: ICE library (GStreamer 0.10 plugin)
+ Nice is an implementation of the IETF's draft Interactive Connectivity
+ Establishment standard (ICE).  ICE is useful for applications that want to
+ establish peer-to-peer UDP data streams. It automates the process of
+ traversing NATs and provides security against some attacks.
+ .
+ Existing standards that use ICE include the Session Initiation Protocol (SIP)
+ and the Jingle XMPP extension for audio/video calls.
+ .
+ Nice includes integration with GStreamer 0.10.
+ .
+ This package provides a GStreamer 0.10 plugin for nice.
+
+Package: gstreamer1.4-nice
 Section: net
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}

@@ -15,7 +15,7 @@ export PKG_CONFIG_PATH=/opt/gstreamer1.4/lib/$(DEB_HOST_MULTIARCH)/pkgconfig
 DEB_SHLIBDEPS_INCLUDE += /opt/gstreamer1.4/lib/$(DEB_HOST_MULTIARCH)
 
 DEB_DBG_PACKAGE_libnice10 := libnice-dbg
-DEB_DBG_PACKAGE_gstreamer1.0-nice := libnice-dbg
+DEB_DBG_PACKAGE_gstreamer1.4-nice := libnice-dbg
 DEB_DBG_PACKAGE_gstreamer0.10-nice := libnice-dbg
 
 DEB_CONFIGURE_EXTRA_FLAGS := --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
@@ -28,6 +28,6 @@ DEB_CONFIGURE_EXTRA_FLAGS := --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
 
 include $(CURDIR)/debian/update-patches.mk
 
-install/gstreamer1.0-nice::
-	dh_install -pgstreamer1.0-nice debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstnice.so \
+install/gstreamer1.4-nice::
+	dh_install -pgstreamer1.4-nice debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstnice.so \
 		/opt/gstreamer1.4/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0
