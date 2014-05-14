@@ -10,7 +10,7 @@ libnice (0.1.7-1) unstable; urgency=low
     Upstream (Olivier Crête) says they are stable enough to be useful
     for developers, but not for integration testing.
 
- -- Simon McVittie <smcv@debian.org>  Wed, 07 May 2014 09:28:42 +0100
+ -- Simon McVittie <smcv@debian.org>  Wed, 14 May 2014 12:00:13 +0100
 
 libnice (0.1.5-1) unstable; urgency=low
 
