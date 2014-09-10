@@ -84,7 +84,7 @@ Description: ICE library (GStreamer 0.10 plugin)
 Package: gstreamer1.4-nice
 Section: net
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, libnice10 (= ${binary:Version})
 Multi-Arch: same
 Description: ICE library (GStreamer plugin)
  Nice is an implementation of the IETF's draft Interactive Connectivity
