@@ -15,7 +15,7 @@ Build-Depends: autotools-dev,
                libgirepository1.0-dev (>= 1.30.0),
                libglib2.0-dev (>= 2.30),
                libgstreamer1.0-dev,
-               libgupnp-igd-1.0-dev (>= 0.2.4)
+               libgupnp-igd-1.0-dev
 Standards-Version: 3.9.6
 Homepage: http://nice.freedesktop.org/
 Vcs-Git: git://anonscm.debian.org/pkg-telepathy/libnice.git
@@ -43,7 +43,7 @@ Package: libnice-dev
 Section: libdevel
 Architecture: any
 Depends: libglib2.0-dev (>= 2.30),
-         libgupnp-igd-1.0-dev (>= 0.2.4),
+         libgupnp-igd-1.0-dev,
          libnice10 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends}

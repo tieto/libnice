@@ -1,0 +1,111 @@
+From 3727447b26904ef8bbbc64fe73954e2af565acf1 Mon Sep 17 00:00:00 2001
+From: Jakub Adam <jakub.adam@ktknet.cz>
+Date: Thu, 5 May 2016 12:31:37 +0200
+Subject: [PATCH] Revert "agent: Avoid leaking UPnP mappings between streams"
+
+This reverts commit 375cde8a652f8e367cf875bcb718a6d1abcfb254.
+---
+ agent/agent-priv.h |  3 ---
+ agent/agent.c      | 21 ---------------------
+ agent/component.c  | 11 +++--------
+ configure.ac       |  2 +-
+ 4 files changed, 4 insertions(+), 33 deletions(-)
+
+diff --git a/agent/agent-priv.h b/agent/agent-priv.h
+index 1bbebdc..99dd3f6 100644
+--- a/agent/agent-priv.h
++++ b/agent/agent-priv.h
+@@ -214,9 +214,6 @@ StunUsageIceCompatibility agent_to_ice_compatibility (NiceAgent *agent);
+ StunUsageTurnCompatibility agent_to_turn_compatibility (NiceAgent *agent);
+ NiceTurnSocketCompatibility agent_to_turn_socket_compatibility (NiceAgent *agent);
+ 
+-void agent_remove_local_candidate (NiceAgent *agent,
+-    NiceCandidate *candidate);
+-
+ void nice_agent_init_stun_agent (NiceAgent *agent, StunAgent *stun_agent);
+ 
+ void _priv_set_socket_tos (NiceAgent *agent, NiceSocket *sock, gint tos);
+diff --git a/agent/agent.c b/agent/agent.c
+index 356e652..9baa711 100644
+--- a/agent/agent.c
++++ b/agent/agent.c
+@@ -2897,9 +2897,6 @@ nice_agent_gather_candidates (
+ 
+       for (i = component->local_candidates; i; i = i->next) {
+         NiceCandidate *candidate = i->data;
+-
+-        agent_remove_local_candidate (agent, candidate);
+-
+         nice_candidate_free (candidate);
+       }
+       g_slist_free (component->local_candidates);
+@@ -2913,24 +2910,6 @@ nice_agent_gather_candidates (
+   return ret;
+ }
+ 
+-void agent_remove_local_candidate (NiceAgent *agent, NiceCandidate *candidate)
+-{
+-#ifdef HAVE_GUPNP
+-  gchar local_ip[NICE_ADDRESS_STRING_LEN];
+-
+-  if (agent->upnp == NULL)
+-    return;
+-
+-  if (candidate->type != NICE_CANDIDATE_TYPE_HOST)
+-    return;
+-
+-  nice_address_to_string (&candidate->addr, local_ip);
+-
+-  gupnp_simple_igd_remove_port_local (GUPNP_SIMPLE_IGD (agent->upnp), "UDP",
+-      local_ip, nice_address_get_port (&candidate->addr));
+-#endif
+-}
+-
+ static void priv_stop_upnp (NiceAgent *agent)
+ {
+ #ifdef HAVE_GUPNP
+diff --git a/agent/component.c b/agent/component.c
+index f44b37d..e52dce8 100644
+--- a/agent/component.c
++++ b/agent/component.c
+@@ -198,7 +198,6 @@ nice_component_clean_turn_servers (NiceComponent *cmp)
+       conn_check_prune_socket (cmp->agent, cmp->stream, cmp,
+           candidate->sockptr);
+       nice_component_detach_socket (cmp, candidate->sockptr);
+-      agent_remove_local_candidate (cmp->agent, candidate);
+       nice_candidate_free (candidate);
+     }
+     cmp->local_candidates = g_slist_delete_link (cmp->local_candidates, i);
+@@ -248,13 +247,9 @@ nice_component_close (NiceComponent *cmp)
+     nice_candidate_free (cmp->turn_candidate),
+         cmp->turn_candidate = NULL;
+ 
+-  while (cmp->local_candidates) {
+-    agent_remove_local_candidate (cmp->agent, cmp->local_candidates->data);
+-    nice_candidate_free (cmp->local_candidates->data);
+-    cmp->local_candidates = g_slist_delete_link (cmp->local_candidates,
+-        cmp->local_candidates);
+-  }
+-
++  g_slist_free_full (cmp->local_candidates,
++      (GDestroyNotify) nice_candidate_free);
++  cmp->local_candidates = NULL;
+   g_slist_free_full (cmp->remote_candidates,
+       (GDestroyNotify) nice_candidate_free);
+   cmp->remote_candidates = NULL;
+diff --git a/configure.ac b/configure.ac
+index 6be4010..6a1da72 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -260,7 +260,7 @@ AM_CONDITIONAL(WITH_GSTREAMER, test "$with_gstreamer" = yes)
+ AM_CONDITIONAL(HAVE_GST_CHECK, test "$have_gst_check" = yes)
+ AM_CONDITIONAL(WITH_GSTREAMER010, test "$with_gstreamer010" = yes)
+ 
+-GUPNP_IGD_REQUIRED=0.2.4
++GUPNP_IGD_REQUIRED=0.1.2
+ 
+ AC_ARG_ENABLE([gupnp],
+         AS_HELP_STRING([--disable-gupnp],[Disable GUPnP IGD support]),
+-- 
+2.8.1
+
