@@ -1,6 +1,11 @@
 libnice (0.1.7-2) UNRELEASED; urgency=medium
 
+  [ Simon McVittie ]
   * Remove myself from Uploaders
+
+  [ Emilio Pozuelo Monfort ]
+  * Drop gstreamer0.10-nice package. It has no reverse dependencies
+    anymore and GStreamer 0.10 is going away. Closes: #785849.
 
  -- Simon McVittie <smcv@debian.org>  Fri, 12 Dec 2014 13:35:32 +0000
 
