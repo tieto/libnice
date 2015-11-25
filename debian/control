@@ -10,9 +10,9 @@ Build-Depends: autotools-dev,
                cdbs (>= 0.4.93~),
                debhelper (>= 9),
                dh-autoreconf,
-               libglib2.0-dev (>= 2.13),
+               libglib2.0-dev (>= 2.30),
                libgstreamer1.0-dev,
-               libgupnp-igd-1.0-dev (>= 0.1.2),
+               libgupnp-igd-1.0-dev (>= 0.2.4),
                gtk-doc-tools
 Standards-Version: 3.9.6
 Homepage: http://nice.freedesktop.org/
@@ -40,7 +40,7 @@ Description: ICE library (shared library)
 Package: libnice-dev
 Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnice10 (= ${binary:Version}), libglib2.0-dev (>= 2.10)
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnice10 (= ${binary:Version}), libglib2.0-dev (>= 2.30)
 Description: ICE library (development files)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
