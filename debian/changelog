@@ -1,3 +1,15 @@
+libnice (0.1.13-1) unstable; urgency=medium
+
+  * Imported Upstream version 0.1.13
+  * debian/control: Bump Standards-Version to 3.9.6 (no further changes)
+  * Bump debhelper compatibility to 9
+  * Adjust the {build-}dependencies
+  * debian/libnice-dev.install: Don't install libnice.a, NBFS anymore
+  * Adjust the .symbols file
+  * Start building the GObject introspection package
+
+ -- Laurent Bigonville <bigon@debian.org>  Wed, 25 Nov 2015 18:18:59 +0100
+
 libnice (0.1.7-2) unstable; urgency=medium
 
   [ Simon McVittie ]
