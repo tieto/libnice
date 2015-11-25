@@ -13,7 +13,9 @@ Build-Depends: autotools-dev,
                libglib2.0-dev (>= 2.30),
                libgstreamer1.0-dev,
                libgupnp-igd-1.0-dev (>= 0.2.4),
-               gtk-doc-tools
+               gtk-doc-tools,
+               gobject-introspection (>= 1.30.0),
+               libgirepository1.0-dev (>= 1.30.0)
 Standards-Version: 3.9.6
 Homepage: http://nice.freedesktop.org/
 Vcs-Git: git://anonscm.debian.org/pkg-telepathy/libnice.git
@@ -107,3 +109,21 @@ Description: ICE library (debugging symbols)
  Nice includes integration with GStreamer.
  .
  This package provides debugging symbols for nice.
+
+Package: gir1.2-nice-0.1
+Section: introspection
+Architecture: any
+Depends: ${gir:Depends}, ${misc:Depends}, ${shlibs:Depends}
+Multi-Arch: same
+Description: ICE library (GObject introspection)
+ Nice is an implementation of the IETF's draft Interactive Connectivity
+ Establishment standard (ICE).  ICE is useful for applications that want to
+ establish peer-to-peer UDP data streams. It automates the process of
+ traversing NATs and provides security against some attacks.
+ .
+ Existing standards that use ICE include the Session Initiation Protocol (SIP)
+ and the Jingle XMPP extension for audio/video calls.
+ .
+ Nice includes integration with GStreamer.
+ .
+ This package provides the GObject introspection binding.

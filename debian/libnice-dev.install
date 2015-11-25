@@ -2,3 +2,4 @@ usr/lib/*/libnice.so
 usr/lib/*/pkgconfig/nice.pc
 usr/include/stun
 usr/include/nice
+usr/share/gir-1.0/Nice-0.1.gir

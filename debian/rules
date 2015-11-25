@@ -14,6 +14,7 @@ DEB_CONFIGURE_EXTRA_FLAGS := --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
 	--enable-compile-warnings=yes \
 	--enable-gupnp \
 	--with-gstreamer \
+	--enable-introspection \
 	$(NULL)
 
 include $(CURDIR)/debian/update-patches.mk
