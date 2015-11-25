@@ -141,6 +141,16 @@ NiceAddress
 @Returns: 
 
 
+<!-- ##### FUNCTION nice_address_equal_no_port ##### -->
+<para>
+
+</para>
+
+@a: 
+@b: 
+@Returns: 
+
+
 <!-- ##### FUNCTION nice_address_to_string ##### -->
 <para>
 

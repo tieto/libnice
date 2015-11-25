@@ -44,6 +44,7 @@
 
 #include "tcp-bsd.h"
 #include "agent-priv.h"
+#include "socket-priv.h"
 
 #include <string.h>
 #include <errno.h>
@@ -54,18 +55,15 @@
 #endif
 
 typedef struct {
-  NiceAddress server_addr;
+  NiceAddress remote_addr;
   GQueue send_queue;
   GMainContext *context;
   GSource *io_source;
   gboolean error;
+  gboolean reliable;
+  NiceSocketWritableCb writable_cb;
+  gpointer writable_data;
 } TcpPriv;
-
-struct to_be_sent {
-  guint8 *buf;
-  gsize length;
-  gboolean can_drop;
-};
 
 #define MAX_QUEUE_LENGTH 20
 
@@ -74,37 +72,71 @@ static gint socket_recv_messages (NiceSocket *sock,
     NiceInputMessage *recv_messages, guint n_recv_messages);
 static gint socket_send_messages (NiceSocket *sock, const NiceAddress *to,
     const NiceOutputMessage *messages, guint n_messages);
+static gint socket_send_messages_reliable (NiceSocket *sock,
+    const NiceAddress *to, const NiceOutputMessage *messages, guint n_messages);
 static gboolean socket_is_reliable (NiceSocket *sock);
+static gboolean socket_can_send (NiceSocket *sock, NiceAddress *addr);
+static void socket_set_writable_callback (NiceSocket *sock,
+    NiceSocketWritableCb callback, gpointer user_data);
 
-
-static void add_to_be_sent (NiceSocket *sock, const NiceOutputMessage *message,
-    gsize message_offset, gsize message_len, gboolean head);
-static void free_to_be_sent (struct to_be_sent *tbs);
 static gboolean socket_send_more (GSocket *gsocket, GIOCondition condition,
     gpointer data);
 
 NiceSocket *
-nice_tcp_bsd_socket_new (GMainContext *ctx, NiceAddress *addr)
+nice_tcp_bsd_socket_new_from_gsock (GMainContext *ctx, GSocket *gsock,
+    NiceAddress *local_addr, NiceAddress *remote_addr, gboolean reliable)
+{
+  NiceSocket *sock;
+  TcpPriv *priv;
+
+  g_return_val_if_fail (G_IS_SOCKET (gsock), NULL);
+
+  sock = g_slice_new0 (NiceSocket);
+  sock->priv = priv = g_slice_new0 (TcpPriv);
+
+  if (ctx == NULL)
+    ctx = g_main_context_default ();
+  priv->context = g_main_context_ref (ctx);
+  priv->remote_addr = *remote_addr;
+  priv->error = FALSE;
+  priv->reliable = reliable;
+  priv->writable_cb = NULL;
+  priv->writable_data = NULL;
+
+  sock->type = NICE_SOCKET_TYPE_TCP_BSD;
+  sock->fileno = g_object_ref (gsock);
+  sock->addr = *local_addr;
+  sock->send_messages = socket_send_messages;
+  sock->send_messages_reliable = socket_send_messages_reliable;
+  sock->recv_messages = socket_recv_messages;
+  sock->is_reliable = socket_is_reliable;
+  sock->can_send = socket_can_send;
+  sock->set_writable_callback = socket_set_writable_callback;
+  sock->close = socket_close;
+
+  return sock;
+}
+
+NiceSocket *
+nice_tcp_bsd_socket_new (GMainContext *ctx, NiceAddress *local_addr,
+    NiceAddress *remote_addr, gboolean reliable)
 {
   union {
     struct sockaddr_storage storage;
     struct sockaddr addr;
   } name;
   NiceSocket *sock;
-  TcpPriv *priv;
   GSocket *gsock = NULL;
   GError *gerr = NULL;
   gboolean gret = FALSE;
   GSocketAddress *gaddr;
 
-  if (addr == NULL) {
+  if (remote_addr == NULL) {
     /* We can't connect a tcp socket with no destination address */
     return NULL;
   }
 
-  sock = g_slice_new0 (NiceSocket);
-
-  nice_address_copy_to_sockaddr (addr, &name.addr);
+  nice_address_copy_to_sockaddr (remote_addr, &name.addr);
 
   if (name.storage.ss_family == AF_UNSPEC || name.storage.ss_family == AF_INET) {
     gsock = g_socket_new (G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM,
@@ -124,14 +156,12 @@ nice_tcp_bsd_socket_new (GMainContext *ctx, NiceAddress *addr)
   }
 
   if (gsock == NULL) {
-    g_slice_free (NiceSocket, sock);
     return NULL;
   }
 
   gaddr = g_socket_address_new_from_native (&name.addr, sizeof (name));
   if (gaddr == NULL) {
     g_object_unref (gsock);
-    g_slice_free (NiceSocket, sock);
     return NULL;
   }
 
@@ -146,37 +176,24 @@ nice_tcp_bsd_socket_new (GMainContext *ctx, NiceAddress *addr)
       g_error_free (gerr);
       g_socket_close (gsock, NULL);
       g_object_unref (gsock);
-      g_slice_free (NiceSocket, sock);
       return NULL;
     }
     g_error_free (gerr);
   }
 
-  gaddr = g_socket_get_local_address (gsock, NULL);
-  if (gaddr == NULL ||
-      !g_socket_address_to_native (gaddr, &name.addr, sizeof (name), NULL)) {
-    g_slice_free (NiceSocket, sock);
+  nice_address_copy_to_sockaddr (local_addr, &name.addr);
+  gaddr = g_socket_address_new_from_native (&name.addr, sizeof (name));
+  if (gaddr == NULL) {
     g_socket_close (gsock, NULL);
     g_object_unref (gsock);
     return NULL;
   }
+  g_socket_bind (gsock, gaddr, FALSE, NULL);
   g_object_unref (gaddr);
 
-  nice_address_set_from_sockaddr (&sock->addr, &name.addr);
-
-  sock->priv = priv = g_slice_new0 (TcpPriv);
-
-  if (ctx == NULL)
-    ctx = g_main_context_default ();
-  priv->context = g_main_context_ref (ctx);
-  priv->server_addr = *addr;
-  priv->error = FALSE;
-
-  sock->fileno = gsock;
-  sock->send_messages = socket_send_messages;
-  sock->recv_messages = socket_recv_messages;
-  sock->is_reliable = socket_is_reliable;
-  sock->close = socket_close;
+  sock = nice_tcp_bsd_socket_new_from_gsock (ctx, gsock, local_addr, remote_addr,
+      reliable);
+  g_object_unref (gsock);
 
   return sock;
 }
@@ -196,8 +213,8 @@ socket_close (NiceSocket *sock)
     g_source_destroy (priv->io_source);
     g_source_unref (priv->io_source);
   }
-  g_queue_foreach (&priv->send_queue, (GFunc) free_to_be_sent, NULL);
-  g_queue_clear (&priv->send_queue);
+
+  nice_socket_free_send_queue (&priv->send_queue);
 
   if (priv->context)
     g_main_context_unref (priv->context);
@@ -211,6 +228,10 @@ socket_recv_messages (NiceSocket *sock,
 {
   TcpPriv *priv = sock->priv;
   guint i;
+
+  /* Socket has been closed: */
+  if (sock->priv == NULL)
+    return 0;
 
   /* Don't try to access the socket if it had an error */
   if (priv->error)
@@ -243,10 +264,7 @@ socket_recv_messages (NiceSocket *sock,
     }
 
     if (recv_messages[i].from)
-      *recv_messages[i].from = priv->server_addr;
-
-    if (len <= 0)
-      break;
+      *recv_messages[i].from = priv->remote_addr;
   }
 
   /* Was there an error processing the first message? */
@@ -257,12 +275,17 @@ socket_recv_messages (NiceSocket *sock,
 }
 
 static gssize
-socket_send_message (NiceSocket *sock, const NiceOutputMessage *message)
+socket_send_message (NiceSocket *sock,
+    const NiceOutputMessage *message, gboolean reliable)
 {
   TcpPriv *priv = sock->priv;
   gssize ret;
   GError *gerr = NULL;
   gsize message_len;
+
+  /* Socket has been closed: */
+  if (sock->priv == NULL)
+    return -1;
 
   /* Don't try to access the socket if it had an error, otherwise we risk a
    * crash with SIGPIPE (Broken pipe) */
@@ -281,39 +304,32 @@ socket_send_message (NiceSocket *sock, const NiceOutputMessage *message)
       if (g_error_matches (gerr, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK) ||
           g_error_matches (gerr, G_IO_ERROR, G_IO_ERROR_FAILED)) {
         /* Queue the message and send it later. */
-        add_to_be_sent (sock, message, 0, message_len, FALSE);
+        nice_socket_queue_send_with_callback (&priv->send_queue,
+            message, 0, message_len, FALSE, sock->fileno, &priv->io_source,
+            priv->context, (GSourceFunc) socket_send_more, sock);
         ret = message_len;
       }
 
       g_error_free (gerr);
     } else if ((gsize) ret < message_len) {
       /* Partial send. */
-      add_to_be_sent (sock, message, ret, message_len, TRUE);
+      nice_socket_queue_send_with_callback (&priv->send_queue,
+          message, ret, message_len, TRUE, sock->fileno, &priv->io_source,
+          priv->context, (GSourceFunc) socket_send_more, sock);
       ret = message_len;
     }
   } else {
-    /* FIXME: This dropping will break http/socks5/etc
-     * We probably need a way to the upper layer to control reliability
-     */
-    /* If the queue is too long, drop whatever packets we can. */
-    if (g_queue_get_length (&priv->send_queue) >= MAX_QUEUE_LENGTH) {
-      guint peek_idx = 0;
-      struct to_be_sent *tbs = NULL;
-
-      while ((tbs = g_queue_peek_nth (&priv->send_queue, peek_idx)) != NULL) {
-        if (tbs->can_drop) {
-          tbs = g_queue_pop_nth (&priv->send_queue, peek_idx);
-          free_to_be_sent (tbs);
-          break;
-        } else {
-          peek_idx++;
-        }
-      }
+    /* Only queue if we're sending reliably  */
+    if (reliable) {
+      /* Queue the message and send it later. */
+      nice_socket_queue_send_with_callback (&priv->send_queue,
+          message, 0, message_len, FALSE, sock->fileno, &priv->io_source,
+          priv->context, (GSourceFunc) socket_send_more, sock);
+      ret = message_len;
+    } else {
+      /* non reliable send, so we shouldn't queue the message */
+      ret = 0;
     }
-
-    /* Queue the message and send it later. */
-    add_to_be_sent (sock, message, 0, message_len, FALSE);
-    ret = message_len;
   }
 
   return ret;
@@ -328,14 +344,20 @@ socket_send_messages (NiceSocket *sock, const NiceAddress *to,
 {
   guint i;
 
+  /* Socket has been closed: */
+  if (sock->priv == NULL)
+    return -1;
+
   for (i = 0; i < n_messages; i++) {
     const NiceOutputMessage *message = &messages[i];
     gssize len;
 
-    len = socket_send_message (sock, message);
+    len = socket_send_message (sock, message, FALSE);
 
     if (len < 0) {
       /* Error. */
+      if (i > 0)
+        break;
       return len;
     } else if (len == 0) {
       /* EWOULDBLOCK. */
@@ -346,19 +368,47 @@ socket_send_messages (NiceSocket *sock, const NiceAddress *to,
   return i;
 }
 
+static gint
+socket_send_messages_reliable (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *messages, guint n_messages)
+{
+  guint i;
+
+  for (i = 0; i < n_messages; i++) {
+    if (socket_send_message (sock, &messages[i], TRUE) < 0) {
+      /* Error. */
+      return -1;
+    }
+  }
+
+  return i;
+}
+
 static gboolean
 socket_is_reliable (NiceSocket *sock)
 {
-  return TRUE;
+  TcpPriv *priv = sock->priv;
+
+  return priv->reliable;
 }
 
+static gboolean
+socket_can_send (NiceSocket *sock, NiceAddress *addr)
+{
+  TcpPriv *priv = sock->priv;
 
-/*
- * Returns:
- * -1 = error
- * 0 = have more to send
- * 1 = sent everything
- */
+  return g_queue_is_empty (&priv->send_queue);
+}
+
+static void
+socket_set_writable_callback (NiceSocket *sock,
+    NiceSocketWritableCb callback, gpointer user_data)
+{
+  TcpPriv *priv = sock->priv;
+
+  priv->writable_cb = callback;
+  priv->writable_data = user_data;
+}
 
 static gboolean
 socket_send_more (
@@ -368,8 +418,6 @@ socket_send_more (
 {
   NiceSocket *sock = (NiceSocket *) data;
   TcpPriv *priv = sock->priv;
-  struct to_be_sent *tbs = NULL;
-  GError *gerr = NULL;
 
   agent_lock ();
 
@@ -380,115 +428,22 @@ socket_send_more (
     return FALSE;
   }
 
-  while ((tbs = g_queue_pop_head (&priv->send_queue)) != NULL) {
-    int ret;
-
-    if(condition & G_IO_HUP) {
-      /* connection hangs up */
-      ret = -1;
-    } else {
-      GOutputVector local_bufs = { tbs->buf, tbs->length };
-      ret = g_socket_send_message (sock->fileno, NULL, &local_bufs, 1, NULL, 0,
-          G_SOCKET_MSG_NONE, NULL, &gerr);
-    }
-
-    if (ret < 0) {
-      if (g_error_matches (gerr, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK)) {
-        GOutputVector local_buf = { tbs->buf, tbs->length };
-        NiceOutputMessage local_message = {&local_buf, 1};
-
-        add_to_be_sent (sock, &local_message, 0, local_buf.size, TRUE);
-        free_to_be_sent (tbs);
-        g_error_free (gerr);
-        break;
-      }
-      g_clear_error (&gerr);
-    } else if (ret < (int) tbs->length) {
-      GOutputVector local_buf = { tbs->buf + ret, tbs->length - ret };
-      NiceOutputMessage local_message = {&local_buf, 1};
-
-      add_to_be_sent (sock, &local_message, 0, local_buf.size, TRUE);
-      free_to_be_sent (tbs);
-      break;
-    }
-
-    free_to_be_sent (tbs);
-  }
-
-  if (g_queue_is_empty (&priv->send_queue)) {
+  /* connection hangs up or queue was emptied */
+  if (condition & G_IO_HUP ||
+      nice_socket_flush_send_queue_to_socket (sock->fileno,
+          &priv->send_queue)) {
     g_source_destroy (priv->io_source);
     g_source_unref (priv->io_source);
     priv->io_source = NULL;
 
     agent_unlock ();
+
+    if (priv->writable_cb)
+      priv->writable_cb (sock, priv->writable_data);
+
     return FALSE;
   }
 
   agent_unlock ();
   return TRUE;
 }
-
-
-/* Queue data starting at byte offset @message_offset from @message’s
- * buffers.
- *
- * Returns the message's length */
-static void
-add_to_be_sent (NiceSocket *sock, const NiceOutputMessage *message,
-    gsize message_offset, gsize message_len, gboolean head)
-{
-  TcpPriv *priv = sock->priv;
-  struct to_be_sent *tbs;
-  guint j;
-  gsize offset = 0;
-
-  if (message_offset >= message_len)
-    return;
-
-  tbs = g_slice_new0 (struct to_be_sent);
-  tbs->length = message_len - message_offset;
-  tbs->buf = g_malloc (tbs->length);
-  tbs->can_drop = !head;
-
-  if (head)
-    g_queue_push_head (&priv->send_queue, tbs);
-  else
-    g_queue_push_tail (&priv->send_queue, tbs);
-
-  if (priv->io_source == NULL) {
-    priv->io_source = g_socket_create_source(sock->fileno, G_IO_OUT, NULL);
-    g_source_set_callback (priv->io_source, (GSourceFunc) socket_send_more,
-        sock, NULL);
-    g_source_attach (priv->io_source, priv->context);
-  }
-
-  /* Move the data into the buffer. */
-  for (j = 0;
-       (message->n_buffers >= 0 && j < (guint) message->n_buffers) ||
-       (message->n_buffers < 0 && message->buffers[j].buffer != NULL);
-       j++) {
-    const GOutputVector *buffer = &message->buffers[j];
-    gsize len;
-
-    /* Skip this buffer if it’s within @message_offset. */
-    if (buffer->size <= message_offset) {
-      message_offset -= buffer->size;
-      continue;
-    }
-
-    len = MIN (tbs->length - offset, buffer->size - message_offset);
-    memcpy (tbs->buf + offset, (guint8 *) buffer->buffer + message_offset, len);
-    offset += len;
-    message_offset -= len;
-  }
-}
-
-
-
-static void
-free_to_be_sent (struct to_be_sent *tbs)
-{
-  g_free (tbs->buf);
-  g_slice_free (struct to_be_sent, tbs);
-}
-

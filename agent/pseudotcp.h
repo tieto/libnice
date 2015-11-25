@@ -1,8 +1,8 @@
 /*
  * This file is part of the Nice GLib ICE library.
  *
- * (C) 2010 Collabora Ltd.
- *  Contact: Youness Alaoui
+ * (C) 2010, 2014 Collabora Ltd.
+ *  Contact: Philip Withnall
 
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -22,6 +22,7 @@
  *
  * Contributors:
  *   Youness Alaoui, Collabora Ltd.
+ *   Philip Withnall, Collabora Ltd.
  *
  * Alternatively, the contents of this file may be used under the terms of the
  * the GNU Lesser General Public License Version 2.1 (the "LGPL"), in which
@@ -34,8 +35,8 @@
  * file under either the MPL or the LGPL.
  */
 
-#ifndef _PSEUDOTCP_H
-#define _PSEUDOTCP_H
+#ifndef __LIBNICE_PSEUDOTCP_H__
+#define __LIBNICE_PSEUDOTCP_H__
 
 /**
  * SECTION:pseudotcp
@@ -58,12 +59,14 @@
 
 #include <glib-object.h>
 
+#ifndef __GTK_DOC_IGNORE__
 #ifdef G_OS_WIN32
 #  include <winsock2.h>
 #  define ECONNABORTED WSAECONNABORTED
 #  define ENOTCONN WSAENOTCONN
 #  define EWOULDBLOCK WSAEWOULDBLOCK
 #  define ECONNRESET WSAECONNRESET
+#endif
 #endif
 
 #include "agent.h"
@@ -136,8 +139,21 @@ typedef enum {
  * @TCP_SYN_RECEIVED: The socket has received a connection request (SYN) packet.
  * @TCP_ESTABLISHED: The socket is connected
  * @TCP_CLOSED: The socket has been closed
+ * @TCP_FIN_WAIT_1: The socket has been closed locally but not remotely
+ * (Since: 0.1.8)
+ * @TCP_FIN_WAIT_2: The socket has been closed locally but not remotely
+ * (Since: 0.1.8)
+ * @TCP_CLOSING: The socket has been closed locally and remotely
+ * (Since: 0.1.8)
+ * @TCP_TIME_WAIT: The socket has been closed locally and remotely
+ * (Since: 0.1.8)
+ * @TCP_CLOSE_WAIT: The socket has been closed remotely but not locally
+ * (Since: 0.1.8)
+ * @TCP_LAST_ACK: The socket has been closed locally and remotely
+ * (Since: 0.1.8)
  *
- * An enum representing the state of the #PseudoTcpSocket.
+ * An enum representing the state of the #PseudoTcpSocket. These states
+ * correspond to the TCP states in RFC 793.
  * <para> See also: #PseudoTcpSocket:state </para>
  *
  * Since: 0.0.11
@@ -147,7 +163,13 @@ typedef enum {
   TCP_SYN_SENT,
   TCP_SYN_RECEIVED,
   TCP_ESTABLISHED,
-  TCP_CLOSED
+  TCP_CLOSED,
+  TCP_FIN_WAIT_1,
+  TCP_FIN_WAIT_2,
+  TCP_CLOSING,
+  TCP_TIME_WAIT,
+  TCP_CLOSE_WAIT,
+  TCP_LAST_ACK,
 } PseudoTcpState;
 
 /**
@@ -170,12 +192,30 @@ typedef enum {
 } PseudoTcpWriteResult;
 
 /**
+ * PseudoTcpShutdown:
+ * @PSEUDO_TCP_SHUTDOWN_RD: Shut down the local reader only
+ * @PSEUDO_TCP_SHUTDOWN_WR: Shut down the local writer only
+ * @PSEUDO_TCP_SHUTDOWN_RDWR: Shut down both reading and writing
+ *
+ * Options for which parts of a connection to shut down when calling
+ * pseudo_tcp_socket_shutdown(). These correspond to the values passed to POSIX
+ * shutdown().
+ *
+ * Since: 0.1.8
+ */
+typedef enum {
+  PSEUDO_TCP_SHUTDOWN_RD,
+  PSEUDO_TCP_SHUTDOWN_WR,
+  PSEUDO_TCP_SHUTDOWN_RDWR,
+} PseudoTcpShutdown;
+
+/**
  * PseudoTcpCallbacks:
  * @user_data: A user defined pointer to be passed to the callbacks
  * @PseudoTcpOpened: The #PseudoTcpSocket is now connected
  * @PseudoTcpReadable: The socket is readable
  * @PseudoTcpWritable: The socket is writable
- * @PseudoTcpClosed: The socket was closed
+ * @PseudoTcpClosed: The socket was closed (both sides)
  * @WritePacket: This callback is called when the socket needs to send data.
  *
  * A structure containing callbacks functions that will be called by the
@@ -294,8 +334,16 @@ gint pseudo_tcp_socket_send(PseudoTcpSocket *self, const char * buffer,
  * @self: The #PseudoTcpSocket object.
  * @force: %TRUE to close the socket forcefully, %FALSE to close it gracefully
  *
- * Close the socket. IF @force is set to %FALSE, the socket will finish sending
- * pending data before closing.
+ * Close the socket for sending. If @force is set to %FALSE, the socket will
+ * finish sending pending data before closing. If it is set to %TRUE, the socket
+ * will discard pending data and close the connection immediately (sending a TCP
+ * RST segment).
+ *
+ * The socket will be closed in both directions – sending and receiving – and
+ * any pending received data must be read before calling this function, by
+ * calling pseudo_tcp_socket_recv() until it blocks. If any pending data is in
+ * the receive buffer when pseudo_tcp_socket_close() is called, a TCP RST
+ * segment will be sent to the peer to notify it of the data loss.
  *
  <note>
    <para>
@@ -312,6 +360,24 @@ gint pseudo_tcp_socket_send(PseudoTcpSocket *self, const char * buffer,
  */
 void pseudo_tcp_socket_close(PseudoTcpSocket *self, gboolean force);
 
+/**
+ * pseudo_tcp_socket_shutdown:
+ * @self: The #PseudoTcpSocket object.
+ * @how: The directions of the connection to shut down.
+ *
+ * Shut down sending, receiving, or both on the socket, depending on the value
+ * of @how. The behaviour of pseudo_tcp_socket_send() and
+ * pseudo_tcp_socket_recv() will immediately change after this function returns
+ * (depending on the value of @how), though the socket may continue to process
+ * network traffic in the background even if sending or receiving data is
+ * forbidden.
+ *
+ * This is equivalent to the POSIX shutdown() function. Setting @how to
+ * %PSEUDO_TCP_SHUTDOWN_RDWR is equivalent to calling pseudo_tcp_socket_close().
+ *
+ * Since: 0.1.8
+ */
+void pseudo_tcp_socket_shutdown (PseudoTcpSocket *self, PseudoTcpShutdown how);
 
 /**
  * pseudo_tcp_socket_get_error:
@@ -465,13 +531,60 @@ gboolean pseudo_tcp_socket_can_send (PseudoTcpSocket *self);
  *
  * Gets the number of bytes of space available in the transmission buffer.
  *
- * Returns: The numbero f bytes, or 0 if the connection is not established.
+ * Returns: The number of bytes, or 0 if the connection is not established.
  *
  * Since: 0.1.5
  */
 gsize pseudo_tcp_socket_get_available_send_space (PseudoTcpSocket *self);
 
+/**
+ * pseudo_tcp_socket_set_time:
+ * @self: The #PseudoTcpSocket object.
+ * @current_time: Current monotonic time, in milliseconds; or zero to use the
+ * system monotonic clock.
+ *
+ * Sets the current monotonic time to be used by the TCP socket when calculating
+ * timeouts and expiry times. If this function is not called, or is called with
+ * @current_time as zero, g_get_monotonic_time() will be used. Otherwise, the
+ * specified @current_time will be used until it is updated by calling this
+ * function again.
+ *
+ * This function is intended for testing only, and should not be used in
+ * production code.
+ *
+ * Since: 0.1.8
+ */
+void pseudo_tcp_socket_set_time (PseudoTcpSocket *self, guint32 current_time);
+
+/**
+ * pseudo_tcp_socket_is_closed:
+ * @self: The #PseudoTcpSocket object.
+ *
+ * Gets whether the socket is closed, with the shutdown handshake completed,
+ * and both peers no longer able to read or write data to the connection.
+ *
+ * Returns: %TRUE if the socket is closed in both directions, %FALSE otherwise
+ * Since: 0.1.8
+ */
+gboolean pseudo_tcp_socket_is_closed (PseudoTcpSocket *self);
+
+/**
+ * pseudo_tcp_socket_is_closed_remotely:
+ * @self: The #PseudoTcpSocket object.
+ *
+ * Gets whether the socket has been closed on the remote peer’s side of the
+ * connection (i.e. whether pseudo_tcp_socket_close() has been called there).
+ * This is guaranteed to return %TRUE if pseudo_tcp_socket_is_closed() returns
+ * %TRUE. It will not return %TRUE after pseudo_tcp_socket_close() is called
+ * until a FIN segment is received from the remote peer.
+ *
+ * Returns: %TRUE if the remote peer has closed its side of the connection,
+ * %FALSE otherwise
+ * Since: 0.1.8
+ */
+gboolean pseudo_tcp_socket_is_closed_remotely (PseudoTcpSocket *self);
+
 G_END_DECLS
 
-#endif /* _PSEUDOTCP_H */
+#endif /* __LIBNICE_PSEUDOTCP_H__ */
 

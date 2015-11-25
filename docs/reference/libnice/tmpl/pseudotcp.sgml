@@ -61,6 +61,11 @@ Pseudo TCP Socket
 
 </para>
 
+<!-- ##### ARG PseudoTcpSocket:support-fin-ack ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM PseudoTcpState ##### -->
 <para>
 
@@ -71,6 +76,12 @@ Pseudo TCP Socket
 @TCP_SYN_RECEIVED: 
 @TCP_ESTABLISHED: 
 @TCP_CLOSED: 
+@TCP_FIN_WAIT_1: 
+@TCP_FIN_WAIT_2: 
+@TCP_CLOSING: 
+@TCP_TIME_WAIT: 
+@TCP_CLOSE_WAIT: 
+@TCP_LAST_ACK: 
 
 <!-- ##### ENUM PseudoTcpWriteResult ##### -->
 <para>
@@ -101,6 +112,15 @@ Pseudo TCP Socket
 @PSEUDO_TCP_DEBUG_NONE: 
 @PSEUDO_TCP_DEBUG_NORMAL: 
 @PSEUDO_TCP_DEBUG_VERBOSE: 
+
+<!-- ##### ENUM PseudoTcpShutdown ##### -->
+<para>
+
+</para>
+
+@PSEUDO_TCP_SHUTDOWN_RD: 
+@PSEUDO_TCP_SHUTDOWN_WR: 
+@PSEUDO_TCP_SHUTDOWN_RDWR: 
 
 <!-- ##### FUNCTION pseudo_tcp_socket_new ##### -->
 <para>
@@ -150,6 +170,33 @@ Pseudo TCP Socket
 
 @self: 
 @force: 
+
+
+<!-- ##### FUNCTION pseudo_tcp_socket_shutdown ##### -->
+<para>
+
+</para>
+
+@self: 
+@how: 
+
+
+<!-- ##### FUNCTION pseudo_tcp_socket_is_closed ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
+
+
+<!-- ##### FUNCTION pseudo_tcp_socket_is_closed_remotely ##### -->
+<para>
+
+</para>
+
+@self: 
+@Returns: 
 
 
 <!-- ##### FUNCTION pseudo_tcp_socket_get_error ##### -->
@@ -242,5 +289,14 @@ Pseudo TCP Socket
 @self: 
 @message: 
 @Returns: 
+
+
+<!-- ##### FUNCTION pseudo_tcp_socket_set_time ##### -->
+<para>
+
+</para>
+
+@self: 
+@current_time: 
 
 

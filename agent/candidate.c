@@ -53,6 +53,9 @@
 #include "agent.h"
 #include "component.h"
 
+G_DEFINE_BOXED_TYPE (NiceCandidate, nice_candidate, nice_candidate_copy,
+    nice_candidate_free);
+
 /* (ICE 4.1.1 "Gathering Candidates") ""Every candidate is a transport
  * address. It also has a type and a base. Three types are defined and 
  * gathered by this specification - host candidates, server reflexive 
@@ -133,28 +136,151 @@ nice_candidate_ice_priority_full (
       (0x100 - component_id));
 }
 
+static guint32
+nice_candidate_ice_local_preference_full (guint direction_preference,
+    guint other_preference)
+{
+  return (0x2000 * direction_preference +
+      other_preference);
+}
 
-guint32
-nice_candidate_ice_priority (const NiceCandidate *candidate)
+static guint16
+nice_candidate_ice_local_preference (const NiceCandidate *candidate)
+{
+  guint direction_preference;
+
+  switch (candidate->transport)
+    {
+      case NICE_CANDIDATE_TRANSPORT_TCP_ACTIVE:
+        if (candidate->type == NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE ||
+            candidate->type == NICE_CANDIDATE_TYPE_PREF_NAT_ASSISTED)
+          direction_preference = 4;
+        else
+          direction_preference = 6;
+        break;
+      case NICE_CANDIDATE_TRANSPORT_TCP_PASSIVE:
+        if (candidate->type == NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE ||
+            candidate->type == NICE_CANDIDATE_TYPE_PREF_NAT_ASSISTED)
+          direction_preference = 2;
+        else
+          direction_preference = 4;
+        break;
+      case NICE_CANDIDATE_TRANSPORT_TCP_SO:
+        if (candidate->type == NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE ||
+            candidate->type == NICE_CANDIDATE_TYPE_PREF_NAT_ASSISTED)
+          direction_preference = 6;
+        else
+          direction_preference = 2;
+        break;
+      case NICE_CANDIDATE_TRANSPORT_UDP:
+      default:
+        return 1;
+        break;
+    }
+
+  return nice_candidate_ice_local_preference_full (direction_preference, 1);
+}
+
+static guint32
+nice_candidate_ms_ice_local_preference_full (guint transport_preference,
+    guint direction_preference, guint other_preference)
+{
+  return 0x1000 * transport_preference +
+      0x200 * direction_preference +
+      0x1 * other_preference;
+}
+
+static guint32
+nice_candidate_ms_ice_local_preference (const NiceCandidate *candidate)
+{
+  guint8 transport_preference = 0;
+  guint8 direction_preference = 0;
+
+  switch (candidate->transport)
+    {
+    case NICE_CANDIDATE_TRANSPORT_TCP_SO:
+    case NICE_CANDIDATE_TRANSPORT_TCP_ACTIVE:
+      transport_preference = NICE_CANDIDATE_TRANSPORT_MS_PREF_TCP;
+      direction_preference = NICE_CANDIDATE_DIRECTION_MS_PREF_ACTIVE;
+      break;
+    case NICE_CANDIDATE_TRANSPORT_TCP_PASSIVE:
+      transport_preference = NICE_CANDIDATE_TRANSPORT_MS_PREF_TCP;
+      direction_preference = NICE_CANDIDATE_DIRECTION_MS_PREF_PASSIVE;
+      break;
+    case NICE_CANDIDATE_TRANSPORT_UDP:
+    default:
+      transport_preference = NICE_CANDIDATE_TRANSPORT_MS_PREF_UDP;
+      break;
+    }
+
+  return nice_candidate_ms_ice_local_preference_full(transport_preference,
+      direction_preference, 0);
+}
+
+static guint8
+nice_candidate_ice_type_preference (const NiceCandidate *candidate,
+    gboolean reliable, gboolean nat_assisted)
 {
   guint8 type_preference;
 
   switch (candidate->type)
     {
     case NICE_CANDIDATE_TYPE_HOST:
-      type_preference = NICE_CANDIDATE_TYPE_PREF_HOST; break;
+      type_preference = NICE_CANDIDATE_TYPE_PREF_HOST;
+      break;
     case NICE_CANDIDATE_TYPE_PEER_REFLEXIVE:
-      type_preference = NICE_CANDIDATE_TYPE_PREF_PEER_REFLEXIVE; break;
+      type_preference = NICE_CANDIDATE_TYPE_PREF_PEER_REFLEXIVE;
+      break;
     case NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE:
-      type_preference = NICE_CANDIDATE_TYPE_PREF_SERVER_REFLEXIVE; break;
+      if (nat_assisted)
+        type_preference = NICE_CANDIDATE_TYPE_PREF_NAT_ASSISTED;
+      else
+        type_preference = NICE_CANDIDATE_TYPE_PREF_SERVER_REFLEXIVE;
+      break;
     case NICE_CANDIDATE_TYPE_RELAYED:
-      type_preference = NICE_CANDIDATE_TYPE_PREF_RELAYED; break;
+      type_preference = NICE_CANDIDATE_TYPE_PREF_RELAYED;
+      break;
     default:
-      type_preference = 0; break;
+      type_preference = 0;
+      break;
     }
 
-  /* return _candidate_ice_priority (type_preference, 1, candidate->component_id); */
-  return nice_candidate_ice_priority_full (type_preference, 1, candidate->component_id);
+  if ((reliable && candidate->transport == NICE_CANDIDATE_TRANSPORT_UDP) ||
+      (!reliable && candidate->transport != NICE_CANDIDATE_TRANSPORT_UDP)) {
+    type_preference = type_preference / 2;
+  }
+
+  return type_preference;
+}
+
+guint32
+nice_candidate_ice_priority (const NiceCandidate *candidate,
+    gboolean reliable, gboolean nat_assisted)
+{
+  guint8 type_preference;
+  guint16 local_preference;
+
+  type_preference = nice_candidate_ice_type_preference (candidate, reliable,
+      nat_assisted);
+  local_preference = nice_candidate_ice_local_preference (candidate);
+
+  return nice_candidate_ice_priority_full (type_preference, local_preference,
+      candidate->component_id);
+}
+
+guint32
+nice_candidate_ms_ice_priority (const NiceCandidate *candidate,
+    gboolean reliable, gboolean nat_assisted)
+{
+  guint8 type_preference;
+  guint16 local_preference;
+
+  type_preference = nice_candidate_ice_type_preference (candidate, reliable,
+      nat_assisted);
+  local_preference = nice_candidate_ms_ice_local_preference (candidate);
+
+  return nice_candidate_ice_priority_full (type_preference, local_preference,
+      candidate->component_id);
 }
 
 /*
@@ -179,8 +305,11 @@ nice_candidate_pair_priority (guint32 o_prio, guint32 a_prio)
 NICEAPI_EXPORT NiceCandidate *
 nice_candidate_copy (const NiceCandidate *candidate)
 {
-  NiceCandidate *copy = nice_candidate_new (candidate->type);
+  NiceCandidate *copy;
 
+  g_return_val_if_fail (candidate != NULL, NULL);
+
+  copy = nice_candidate_new (candidate->type);
   memcpy (copy, candidate, sizeof(NiceCandidate));
 
   copy->turn = NULL;

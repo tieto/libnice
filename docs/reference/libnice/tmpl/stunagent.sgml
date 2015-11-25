@@ -91,6 +91,15 @@ StunAgent
 @password: 
 @password_len: 
 
+<!-- ##### USER_FUNCTION StunDebugHandler ##### -->
+<para>
+
+</para>
+
+@format: 
+@ap: 
+
+
 <!-- ##### FUNCTION stun_agent_init ##### -->
 <para>
 
@@ -242,5 +251,13 @@ StunAgent
 </para>
 
 @void: 
+
+
+<!-- ##### FUNCTION stun_set_debug_handler ##### -->
+<para>
+
+</para>
+
+@handler: 
 
 

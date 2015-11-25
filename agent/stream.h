@@ -66,7 +66,7 @@ struct _Stream
   guint n_components;
   gboolean initial_binding_request_received;
   GSList *components; /* list of 'Component' structs */
-  GSList *conncheck_list;         /* list of CandidatePair items */
+  GSList *conncheck_list;         /* list of CandidateCheckPair items */
   gchar local_ufrag[NICE_STREAM_MAX_UFRAG];
   gchar local_password[NICE_STREAM_MAX_PWD];
   gchar remote_ufrag[NICE_STREAM_MAX_UFRAG];
@@ -79,6 +79,9 @@ struct _Stream
 
 Stream *
 stream_new (guint n_components, NiceAgent *agent);
+
+void
+stream_close (Stream *stream);
 
 void
 stream_free (Stream *stream);

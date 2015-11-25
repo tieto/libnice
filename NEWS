@@ -1,3 +1,49 @@
+libnice 0.1.13 (2015-04-28)
+===========================
+Fix build on non-Windows platforms that don't have getifaddrs()
+Fix build regression on Windows
+
+libnice 0.1.12 (2015-04-22)
+===========================
+Fix regression in SDP parser
+Make examples work on Windows
+Bug fixes on nicesrc
+
+libnice 0.1.11 (2015-04-20)
+===========================
+API: nice_agent_set_local_credentials() for WebRTC
+Nicesink: support GstBufferList
+Better warnings on programming errors
+Build fixes for Solaris and Windows
+Bug and documentation fixes
+
+libnice 0.1.10 (2015-01-28)
+===========================
+Fix bug on component change on the sink
+
+libnice 0.1.9 (2015-01-28)
+==========================
+Make it possible to statically build the GStreamer plugins
+Bug fixes, in particular fix compatibility with coTurn servers
+Documentation fixes
+
+libnice 0.1.8 (2014-10-09)
+==========================
+Added FIN-ACK behavior in the PseudoTCP
+ICE-TCP, both standard mode and Microsoft compatible
+Microsoft compatible TURN-TCP
+API: nice_address_equal_no_port() to compare NiceAddresses ignoring the port
+API: nice_agent_get_component_state() to get the current component state
+API: agent:keepalive-conncheck to make the agent use conncheck as keepalives
+  and fail the connection if there is no answer
+API: agent:ice-tcp, agent:udp-tcp to control ICE-UDP vs ICE-TCP behaviours
+API: agent:bytestream-tcp to know if the send/receives in reliable mode create full packets or not
+API: New signals agent::new-selected-pair-full, agent::new-candidate-full,
+  agent::new-remote-candidate-full which include the NiceCandidates directly
+API: Deprecated agent::new-selected-pair and agent::new-candidate and 
+  agent::new-remote-candidate signals
+Now all signals are emitted at the function return time
+
 libnice 0.1.7 (2014-05-05)
 ==========================
 Fix undesired API change that broke Farstream unit testsx

@@ -8,6 +8,9 @@
 
 include $(top_srcdir)/common.mk
 
+TESTS_ENVIRONMENT=\
+	GST_PLUGIN_PATH=${GST_PLUGIN_PATH}:$(top_builddir)/gst
+
 AM_CFLAGS = \
 	$(LIBNICE_CFLAGS) \
 	$(GLIB_CFLAGS) \
@@ -17,11 +20,13 @@ AM_CFLAGS = \
 	-I $(top_srcdir)/random \
 	-I $(top_srcdir)/socket \
 	-I $(top_srcdir)/stun
+AM_CPPFLAGS = -DG_LOG_DOMAIN=\"libnice-tests\"
 
 COMMON_LDADD = $(top_builddir)/agent/libagent.la $(top_builddir)/socket/libsocket.la $(GLIB_LIBS) $(GUPNP_LIBS)
 
 check_PROGRAMS = \
 	test-pseudotcp \
+	test-pseudotcp-fin \
 	test-pseudotcp-fuzzy \
 	test-bsd \
 	test \
@@ -41,17 +46,26 @@ check_PROGRAMS = \
 	test-fallback \
 	test-thread \
 	test-dribble \
-        test-new-dribble
+	test-new-dribble \
+	test-tcp \
+	test-icetcp \
+	test-credentials
 
 dist_check_SCRIPTS = \
 	check-test-fullmode-with-stun.sh \
 	test-pseudotcp-random.sh
+
+if HAVE_GST_CHECK
+check_PROGRAMS += test-gstreamer
+endif
 
 TESTS = $(check_PROGRAMS) $(dist_check_SCRIPTS)
 
 noinst_HEADERS = test-io-stream-common.h
 
 test_pseudotcp_LDADD = $(COMMON_LDADD)
+
+test_pseudotcp_fin_LDADD = $(COMMON_LDADD)
 
 test_pseudotcp_fuzzy_LDADD = $(COMMON_LDADD) -lm
 
@@ -99,6 +113,17 @@ test_dribble_LDADD = $(COMMON_LDADD)
 
 test_new_dribble_LDADD = $(COMMON_LDADD)
 
+test_tcp_LDADD = $(COMMON_LDADD)
+
+test_icetcp_LDADD = $(COMMON_LDADD)
+
+test_credentials_LDADD = $(COMMON_LDADD)
+
+test_gstreamer_CFLAGS = $(AM_CFLAGS) $(GST_CHECK_CFLAGS)
+test_gstreamer_LDADD = -lnice -L$(top_builddir)/nice/.libs $(GLIB_LIBS) $(GUPNP_LIBS) $(GST_CHECK_LIBS) $(GST_LIBS)
+
 all-local:
 	chmod a+x $(srcdir)/check-test-fullmode-with-stun.sh
 	chmod a+x $(srcdir)/test-pseudotcp-random.sh
+
+EXTRA_DIST = libnice.supp

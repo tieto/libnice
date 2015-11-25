@@ -43,6 +43,21 @@
 #include "agent.h"
 #include "agent-priv.h"
 
+/* Waits about 10 seconds for @var to be NULL/FALSE */
+#define WAIT_UNTIL_UNSET(var, context)			\
+  if (var)						\
+    {							\
+      int _i;						\
+							\
+      for (_i = 0; _i < 13 && (var); _i++)		\
+	{						\
+	  g_usleep (1000 * (1 << _i));			\
+	  g_main_context_iteration (context, FALSE);	\
+	}						\
+							\
+      g_assert (!(var));				\
+    }
+
 gint
 main (void)
 {
@@ -69,6 +84,7 @@ main (void)
   nice_address_set_port (&addr_remote, 2345);
 
   agent = nice_agent_new ( NULL, NICE_COMPATIBILITY_RFC5245);
+  g_object_set (G_OBJECT (agent), "ice-tcp", FALSE,  NULL);
 
   g_assert (agent->local_addresses == NULL);
 
@@ -97,7 +113,12 @@ main (void)
   g_slist_free (candidates);
 
   /* clean up */
+  nice_agent_remove_stream (agent, stream_id);
+
+  g_object_add_weak_pointer (G_OBJECT (agent), (gpointer *) &agent);
   g_object_unref (agent);
+  WAIT_UNTIL_UNSET (agent, NULL);
+
 #ifdef G_OS_WIN32
   WSACleanup();
 #endif

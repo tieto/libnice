@@ -44,6 +44,7 @@
 
 #include "socks5.h"
 #include "agent-priv.h"
+#include "socket-priv.h"
 
 #include <string.h>
 
@@ -69,23 +70,17 @@ typedef struct {
 } Socks5Priv;
 
 
-struct to_be_sent {
-  guint8 *buf;  /* owned */
-  gsize length;
-  NiceAddress to;
-};
-
-
 static void socket_close (NiceSocket *sock);
 static gint socket_recv_messages (NiceSocket *sock,
     NiceInputMessage *recv_messages, guint n_recv_messages);
 static gint socket_send_messages (NiceSocket *sock, const NiceAddress *to,
     const NiceOutputMessage *messages, guint n_messages);
+static gint socket_send_messages_reliable (NiceSocket *sock,
+    const NiceAddress *to, const NiceOutputMessage *messages, guint n_messages);
 static gboolean socket_is_reliable (NiceSocket *sock);
-
-static void add_to_be_sent (NiceSocket *sock, const NiceAddress *to,
-    const NiceOutputMessage *messages, guint n_messages);
-static void free_to_be_sent (struct to_be_sent *tbs);
+static gboolean socket_can_send (NiceSocket *sock, NiceAddress *addr);
+static void socket_set_writable_callback (NiceSocket *sock,
+    NiceSocketWritableCb callback, gpointer user_data);
 
 
 NiceSocket *
@@ -104,11 +99,15 @@ nice_socks5_socket_new (NiceSocket *base_socket,
     priv->username = g_strdup (username);
     priv->password = g_strdup (password);
 
+    sock->type = NICE_SOCKET_TYPE_SOCKS5;
     sock->fileno = priv->base_socket->fileno;
     sock->addr = priv->base_socket->addr;
     sock->send_messages = socket_send_messages;
+    sock->send_messages_reliable = socket_send_messages_reliable;
     sock->recv_messages = socket_recv_messages;
     sock->is_reliable = socket_is_reliable;
+    sock->can_send = socket_can_send;
+    sock->set_writable_callback = socket_set_writable_callback;
     sock->close = socket_close;
 
     /* Send SOCKS5 handshake */
@@ -130,7 +129,7 @@ nice_socks5_socket_new (NiceSocket *base_socket,
 
       /* We send 'to' NULL because it will always be to an already connected
        * TCP base socket, which ignores the destination */
-      nice_socket_send (priv->base_socket, NULL, len, msg);
+      nice_socket_send_reliable (priv->base_socket, NULL, len, msg);
       priv->state = SOCKS_STATE_INIT;
     }
   }
@@ -153,10 +152,10 @@ socket_close (NiceSocket *sock)
   if (priv->password)
     g_free (priv->password);
 
-  g_queue_foreach (&priv->send_queue, (GFunc) free_to_be_sent, NULL);
-  g_queue_clear (&priv->send_queue);
+  nice_socket_free_send_queue (&priv->send_queue);
 
   g_slice_free(Socks5Priv, sock->priv);
+  sock->priv = NULL;
 }
 
 
@@ -167,6 +166,10 @@ socket_recv_messages (NiceSocket *sock,
   Socks5Priv *priv = sock->priv;
   guint i;
   gint ret = -1;
+
+  /* Socket has been closed: */
+  if (sock->priv == NULL)
+    return 0;
 
   switch (priv->state) {
     case SOCKS_STATE_CONNECTED:
@@ -238,7 +241,7 @@ socket_recv_messages (NiceSocket *sock,
                   memcpy (msg + len, priv->password, plen); /* Password */
                 len += plen;
 
-                nice_socket_send (priv->base_socket, NULL, len, msg);
+                nice_socket_send_reliable (priv->base_socket, NULL, len, msg);
                 priv->state = SOCKS_STATE_AUTH;
               } else {
                 /* Authentication required but no auth info available */
@@ -305,7 +308,6 @@ socket_recv_messages (NiceSocket *sock,
             switch (data[1]) {
               case 0x00:
                 if (data[2] == 0x00) {
-                  struct to_be_sent *tbs = NULL;
                   switch (data[3]) {
                     case 0x01: /* IPV4 bound address */
                       local_recv_buf.size = 6;
@@ -329,12 +331,8 @@ socket_recv_messages (NiceSocket *sock,
                       /* Unsupported address type */
                       goto error;
                   }
-                  while ((tbs = g_queue_pop_head (&priv->send_queue))) {
-                    nice_socket_send (priv->base_socket, &tbs->to,
-                        tbs->length, (const gchar *) tbs->buf);
-                    g_free (tbs->buf);
-                    g_slice_free (struct to_be_sent, tbs);
-                  }
+                  nice_socket_flush_send_queue (priv->base_socket,
+                      &priv->send_queue);
                   priv->state = SOCKS_STATE_CONNECTED;
                 } else {
                   /* Wrong reserved value */
@@ -404,7 +402,7 @@ socket_recv_messages (NiceSocket *sock,
       len += 2;
     }
 
-    nice_socket_send (priv->base_socket, NULL, len, msg);
+    nice_socket_send_reliable (priv->base_socket, NULL, len, msg);
     priv->state = SOCKS_STATE_CONNECT;
 
     return 0;
@@ -425,71 +423,68 @@ socket_send_messages (NiceSocket *sock, const NiceAddress *to,
 {
   Socks5Priv *priv = sock->priv;
 
+  /* Socket has been closed: */
+  if (sock->priv == NULL)
+    return -1;
+
   if (priv->state == SOCKS_STATE_CONNECTED) {
     /* Fast path: pass through to the base socket once connected. */
     if (priv->base_socket == NULL)
-      return FALSE;
+      return -1;
 
     return nice_socket_send_messages (priv->base_socket, to, messages,
         n_messages);
   } else if (priv->state == SOCKS_STATE_ERROR) {
-    return FALSE;
+    return -1;
   } else {
-    add_to_be_sent (sock, to, messages, n_messages);
+    return 0;
   }
-  return TRUE;
+}
+
+
+static gint
+socket_send_messages_reliable (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *messages, guint n_messages)
+{
+  Socks5Priv *priv = sock->priv;
+
+  if (priv->state == SOCKS_STATE_CONNECTED) {
+    /* Fast path: pass through to the base socket once connected. */
+    if (priv->base_socket == NULL)
+      return -1;
+
+    return nice_socket_send_messages_reliable (priv->base_socket, to, messages,
+        n_messages);
+  } else if (priv->state == SOCKS_STATE_ERROR) {
+    return -1;
+  } else {
+    nice_socket_queue_send (&priv->send_queue, to, messages, n_messages);
+  }
+  return n_messages;
 }
 
 
 static gboolean
 socket_is_reliable (NiceSocket *sock)
 {
-  return TRUE;
+  Socks5Priv *priv = sock->priv;
+
+  return nice_socket_is_reliable (priv->base_socket);
 }
 
-
-static void
-add_to_be_sent (NiceSocket *sock, const NiceAddress *to,
-    const NiceOutputMessage *messages, guint n_messages)
+static gboolean
+socket_can_send (NiceSocket *sock, NiceAddress *addr)
 {
   Socks5Priv *priv = sock->priv;
-  guint i;
 
-  for (i = 0; i < n_messages; i++) {
-    struct to_be_sent *tbs;
-    const NiceOutputMessage *message = &messages[i];
-    guint j;
-    gsize offset = 0;
-
-    tbs = g_slice_new0 (struct to_be_sent);
-
-    /* Compact the buffer. */
-    tbs->length = output_message_get_size (message);
-    tbs->buf = g_malloc (tbs->length);
-    if (to != NULL)
-      tbs->to = *to;
-    g_queue_push_tail (&priv->send_queue, tbs);
-
-    for (j = 0;
-         (message->n_buffers >= 0 && j < (guint) message->n_buffers) ||
-         (message->n_buffers < 0 && message->buffers[j].buffer != NULL);
-         j++) {
-      const GOutputVector *buffer = &message->buffers[j];
-      gsize len;
-
-      len = MIN (tbs->length - offset, buffer->size);
-      memcpy (tbs->buf + offset, buffer->buffer, len);
-      offset += len;
-    }
-
-    g_assert (offset == tbs->length);
-  }
+  return nice_socket_can_send (priv->base_socket, addr);
 }
 
-
 static void
-free_to_be_sent (struct to_be_sent *tbs)
+socket_set_writable_callback (NiceSocket *sock,
+    NiceSocketWritableCb callback, gpointer user_data)
 {
-  g_free (tbs->buf);
-  g_slice_free (struct to_be_sent, tbs);
+  Socks5Priv *priv = sock->priv;
+
+  nice_socket_set_writable_callback (priv->base_socket, callback, user_data);
 }

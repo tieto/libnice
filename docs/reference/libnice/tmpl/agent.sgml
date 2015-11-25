@@ -62,6 +62,14 @@ NiceAgent
 @arg2: 
 @arg3: 
 
+<!-- ##### SIGNAL NiceAgent::new-candidate-full ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL NiceAgent::new-remote-candidate ##### -->
 <para>
 
@@ -71,6 +79,14 @@ NiceAgent
 @arg1: 
 @arg2: 
 @arg3: 
+
+<!-- ##### SIGNAL NiceAgent::new-remote-candidate-full ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL NiceAgent::new-selected-pair ##### -->
 <para>
@@ -82,6 +98,17 @@ NiceAgent
 @arg2: 
 @arg3: 
 @arg4: 
+
+<!-- ##### SIGNAL NiceAgent::new-selected-pair-full ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+@arg2: 
+@Param4: 
+@Param5: 
 
 <!-- ##### SIGNAL NiceAgent::reliable-transport-writable ##### -->
 <para>
@@ -100,6 +127,11 @@ NiceAgent
 @niceagent: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG NiceAgent:bytestream-tcp ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG NiceAgent:compatibility ##### -->
 <para>
 
@@ -111,6 +143,21 @@ NiceAgent
 </para>
 
 <!-- ##### ARG NiceAgent:full-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:ice-tcp ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:ice-udp ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG NiceAgent:keepalive-conncheck ##### -->
 <para>
 
 </para>
@@ -217,12 +264,12 @@ NiceAgent
 </para>
 
 @NICE_COMPATIBILITY_RFC5245: 
+@NICE_COMPATIBILITY_DRAFT19: 
 @NICE_COMPATIBILITY_GOOGLE: 
 @NICE_COMPATIBILITY_MSN: 
 @NICE_COMPATIBILITY_WLM2009: 
 @NICE_COMPATIBILITY_OC2007: 
 @NICE_COMPATIBILITY_OC2007R2: 
-@NICE_COMPATIBILITY_DRAFT19: 
 @NICE_COMPATIBILITY_LAST: 
 
 <!-- ##### USER_FUNCTION NiceAgentRecvFunc ##### -->
@@ -374,6 +421,18 @@ NiceAgent
 
 
 <!-- ##### FUNCTION nice_agent_get_local_credentials ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@ufrag: 
+@pwd: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_set_local_credentials ##### -->
 <para>
 
 </para>
@@ -705,6 +764,17 @@ NiceAgent
 
 
 <!-- ##### FUNCTION nice_agent_get_selected_socket ##### -->
+<para>
+
+</para>
+
+@agent: 
+@stream_id: 
+@component_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION nice_agent_get_component_state ##### -->
 <para>
 
 </para>

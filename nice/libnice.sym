@@ -1,6 +1,7 @@
 nice_address_copy_to_sockaddr
 nice_address_dup
 nice_address_equal
+nice_address_equal_no_port
 nice_address_free
 nice_address_get_port
 nice_address_init
@@ -26,6 +27,7 @@ nice_agent_gather_candidates
 nice_agent_generate_local_candidate_sdp
 nice_agent_generate_local_sdp
 nice_agent_generate_local_stream_sdp
+nice_agent_get_component_state
 nice_agent_get_default_local_candidate
 nice_agent_get_io_stream
 nice_agent_get_local_candidates
@@ -49,6 +51,7 @@ nice_agent_set_port_range
 nice_agent_set_relay_info
 nice_agent_set_remote_candidates
 nice_agent_set_remote_credentials
+nice_agent_set_local_credentials
 nice_agent_set_selected_pair
 nice_agent_set_selected_remote_candidate
 nice_agent_set_software

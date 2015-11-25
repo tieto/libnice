@@ -26,6 +26,23 @@
 STUN Constants
 
 
+<!-- ##### SIGNAL NiceAgent::new-local-candidate ##### -->
+<para>
+
+</para>
+
+@niceagent: the object which received the signal.
+@arg1: 
+
+<!-- ##### FUNCTION nice_address_equal_ip ##### -->
+<para>
+
+</para>
+
+@a: 
+@b: 
+@Returns: 
+
 <!-- ##### FUNCTION stun_message_append_software ##### -->
 <para>
 

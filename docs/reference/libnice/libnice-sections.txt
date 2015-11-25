@@ -21,6 +21,7 @@ nice_agent_forget_relays
 nice_agent_gather_candidates
 nice_agent_set_remote_credentials
 nice_agent_get_local_credentials
+nice_agent_set_local_credentials
 nice_agent_set_remote_candidates
 nice_agent_get_remote_candidates
 nice_agent_get_local_candidates
@@ -49,6 +50,7 @@ nice_agent_parse_remote_stream_sdp
 nice_agent_parse_remote_candidate_sdp
 nice_agent_get_io_stream
 nice_agent_get_selected_socket
+nice_agent_get_component_state
 nice_component_state_to_string
 <SUBSECTION Standard>
 NICE_AGENT
@@ -74,16 +76,20 @@ NICE_CANDIDATE_MAX_FOUNDATION
 nice_candidate_new
 nice_candidate_free
 nice_candidate_copy
+<SUBSECTION Standard>
+NICE_TYPE_CANDIDATE
+nice_candidate_get_type
 <SUBSECTION Private>
 NICE_CANDIDATE_TYPE_PREF_HOST
 NICE_CANDIDATE_TYPE_PREF_PEER_REFLEXIVE
 NICE_CANDIDATE_TYPE_PREF_SERVER_REFLEXIVE
 NICE_CANDIDATE_TYPE_PREF_RELAYED
-nice_candidate_jingle_priority
-nice_candidate_msn_priority
-nice_candidate_ice_priority_full
-nice_candidate_ice_priority
-nice_candidate_pair_priority
+NICE_CANDIDATE_TYPE_PREF_NAT_ASSISTED
+NICE_CANDIDATE_TYPE_PREF_UDP_TUNNELED
+NICE_CANDIDATE_DIRECTION_MS_PREF_ACTIVE
+NICE_CANDIDATE_DIRECTION_MS_PREF_PASSIVE
+NICE_CANDIDATE_TRANSPORT_MS_PREF_TCP
+NICE_CANDIDATE_TRANSPORT_MS_PREF_UDP
 </SECTION>
 
 <SECTION>
@@ -103,6 +109,7 @@ nice_address_set_from_string
 nice_address_set_from_sockaddr
 nice_address_copy_to_sockaddr
 nice_address_equal
+nice_address_equal_no_port
 nice_address_to_string
 nice_address_is_private
 nice_address_is_valid
@@ -134,6 +141,7 @@ StunAgentUsageFlags
 StunValidationStatus
 StunMessageIntegrityValidate
 StunDefaultValidaterData
+StunDebugHandler
 stun_agent_init
 stun_agent_validate
 stun_agent_default_validater
@@ -147,8 +155,12 @@ stun_agent_forget_transaction
 stun_agent_set_software
 stun_debug_enable
 stun_debug_disable
+stun_set_debug_handler
 <SUBSECTION Private>
 StunAgentSavedIds
+stun_debug
+stun_debug_bytes
+stun_agent_t
 </SECTION>
 
 
@@ -261,6 +273,8 @@ stun_timer_start
 stun_timer_start_reliable
 stun_timer_refresh
 stun_timer_remainder
+<SUBSECTION Private>
+stun_timer_s
 </SECTION>
 
 <SECTION>
@@ -281,11 +295,15 @@ PseudoTcpState
 PseudoTcpWriteResult
 PseudoTcpCallbacks
 PseudoTcpDebugLevel
+PseudoTcpShutdown
 pseudo_tcp_socket_new
 pseudo_tcp_socket_connect
 pseudo_tcp_socket_recv
 pseudo_tcp_socket_send
 pseudo_tcp_socket_close
+pseudo_tcp_socket_shutdown
+pseudo_tcp_socket_is_closed
+pseudo_tcp_socket_is_closed_remotely
 pseudo_tcp_socket_get_error
 pseudo_tcp_socket_get_next_clock
 pseudo_tcp_socket_notify_clock
@@ -296,6 +314,7 @@ pseudo_tcp_socket_get_available_bytes
 pseudo_tcp_socket_can_send
 pseudo_tcp_socket_get_available_send_space
 pseudo_tcp_socket_notify_message
+pseudo_tcp_socket_set_time
 <SUBSECTION Standard>
 pseudo_tcp_socket_get_type
 PseudoTcpSocketClass

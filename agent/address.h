@@ -37,8 +37,8 @@
  * file under either the MPL or the LGPL.
  */
 
-#ifndef _ADDRESS_H
-#define _ADDRESS_H
+#ifndef __LIBNICE_ADDRESS_H__
+#define __LIBNICE_ADDRESS_H__
 
 /**
  * SECTION:address
@@ -67,9 +67,6 @@ G_BEGIN_DECLS
 
 /**
  * NiceAddress:
- * @addr: Generic sockaddr address
- * @ip4: IPv4 sockaddr address
- * @ip6: IPv6 sockaddr address
  *
  * The #NiceAddress structure that represents an IPv4 or IPv6 address.
  */
@@ -235,11 +232,28 @@ nice_address_copy_to_sockaddr (const NiceAddress *addr, struct sockaddr *sin);
  * @b: Second #NiceAddress to compare
  *
  * Compares two #NiceAddress structures to see if they contain the same address
+ * and the same port.
  *
  * Returns: %TRUE if @a and @b are the same address, %FALSE if they are different
  */
 gboolean
 nice_address_equal (const NiceAddress *a, const NiceAddress *b);
+
+/**
+ * nice_address_equal_no_port:
+ * @a: First #NiceAddress to compare
+ * @b: Second #NiceAddress to compare
+ *
+ * Compares two #NiceAddress structures to see if they contain the same address,
+ * ignoring the port.
+ *
+ * Returns: %TRUE if @a and @b are the same address, %FALSE if they
+ * are different
+ *
+ * Since: 0.1.8
+ */
+gboolean
+nice_address_equal_no_port (const NiceAddress *a, const NiceAddress *b);
 
 /**
  * nice_address_to_string:
@@ -289,5 +303,5 @@ nice_address_ip_version (const NiceAddress *addr);
 
 G_END_DECLS
 
-#endif /* _ADDRESS_H */
+#endif /* __LIBNICE_ADDRESS_H__ */
 

@@ -37,14 +37,13 @@
  * file under either the MPL or the LGPL.
  */
 
-#ifndef _AGENT_H
-#define _AGENT_H
+#ifndef __LIBNICE_AGENT_H__
+#define __LIBNICE_AGENT_H__
 
 /**
  * SECTION:agent
  * @short_description:  ICE agent API implementation
- * @see_also: #NiceCandidate
- * @see_also: #NiceAddress
+ * @see_also: #NiceCandidate, #NiceAddress
  * @include: agent.h
  * @stability: Stable
  *
@@ -53,9 +52,23 @@
  * It will take care of discovering your local candidates and do
  *  connectivity checks to create a stream of data between you and your peer.
  *
+ * A #NiceAgent must always be used with a #GMainLoop running the #GMainContext
+ * passed into nice_agent_new() (or nice_agent_new_reliable()). Without the
+ * #GMainContext being iterated, the agent’s timers will not fire, etc.
+ *
  * Streams and their components are referenced by integer IDs (with respect to a
  * given #NiceAgent). These IDs are guaranteed to be positive (i.e. non-zero)
  * for valid streams/components.
+ *
+ * To complete the ICE connectivity checks, the user must either register
+ * an I/O callback (with nice_agent_attach_recv()) or call nice_agent_recv_messages()
+ * in a loop on a dedicated thread.
+ * Technically, #NiceAgent does not poll the streams on its own, since
+ * user data could arrive at any time; to receive STUN packets
+ * required for establishing ICE connectivity, it is backpiggying
+ * on the facility chosen by the user. #NiceAgent will handle all STUN
+ * packets internally; they're never actually passed to the I/O callback
+ * or returned from nice_agent_recv_messages() and related functions.
  *
  * Each stream can receive data in one of two ways: using
  * nice_agent_attach_recv() or nice_agent_recv_messages() (and the derived
@@ -69,52 +82,64 @@
  * receive packets. nice_agent_recv_messages() (or #NiceInputStream) is designed
  * to be used in a blocking loop in a separate thread.
  *
- <example>
-   <title>Simple example on how to use libnice</title>
-   <programlisting>
-   guint stream_id;
-   gchar buffer[] = "hello world!";
-   GSList *lcands = NULL;
+ * <example>
+ *   <title>Simple example on how to use libnice</title>
+ *   <programlisting>
+ *   guint stream_id;
+ *   gchar buffer[] = "hello world!";
+ *   gchar *ufrag = NULL, *pwd = NULL;
+ *   gchar *remote_ufrag, *remote_pwd;
+ *   GSList *lcands = NULL;
+ *
+ *   // Create a nice agent, passing in the global default GMainContext.
+ *   NiceAgent *agent = nice_agent_new (NULL, NICE_COMPATIBILITY_RFC5245);
+ *   spawn_thread_to_run_main_loop (g_main_loop_new (NULL, FALSE));
+ *
+ *   // Connect the signals
+ *   g_signal_connect (G_OBJECT (agent), "candidate-gathering-done",
+ *                     G_CALLBACK (cb_candidate_gathering_done), NULL);
+ *   g_signal_connect (G_OBJECT (agent), "component-state-changed",
+ *                     G_CALLBACK (cb_component_state_changed), NULL);
+ *   g_signal_connect (G_OBJECT (agent), "new-selected-pair",
+ *                     G_CALLBACK (cb_new_selected_pair), NULL);
+ *
+ *   // Create a new stream with one component and start gathering candidates
+ *   stream_id = nice_agent_add_stream (agent, 1);
+ *   nice_agent_gather_candidates (agent, stream_id);
+ *
+ *   // Attach I/O callback the component to ensure that:
+ *   // 1) agent gets its STUN packets (not delivered to cb_nice_recv)
+ *   // 2) you get your own data
+ *   nice_agent_attach_recv (agent, stream_id, 1, NULL,
+ *                          cb_nice_recv, NULL);
+ *
+ *   // ... Wait until the signal candidate-gathering-done is fired ...
+ *   lcands = nice_agent_get_local_candidates(agent, stream_id, 1);
 
-   // Create a nice agent
-   NiceAgent *agent = nice_agent_new (NULL, NICE_COMPATIBILITY_RFC5245);
-
-   // Connect the signals
-   g_signal_connect (G_OBJECT (agent), "candidate-gathering-done",
-                     G_CALLBACK (cb_candidate_gathering_done), NULL);
-   g_signal_connect (G_OBJECT (agent), "component-state-changed",
-                     G_CALLBACK (cb_component_state_changed), NULL);
-   g_signal_connect (G_OBJECT (agent), "new-selected-pair",
-                     G_CALLBACK (cb_new_selected_pair), NULL);
-
-   // Create a new stream with one component and start gathering candidates
-   stream_id = nice_agent_add_stream (agent, 1);
-   nice_agent_gather_candidates (agent, stream_id);
-
-   // Attach to the component to receive the data
-   nice_agent_attach_recv (agent, stream_id, 1, NULL,
-                          cb_nice_recv, NULL);
-
-   // ... Wait until the signal candidate-gathering-done is fired ...
-   lcands = nice_agent_get_local_candidates(agent, stream_id, 1);
-
-   // ... Send local candidates to the peer and set the peer's remote candidates
-   nice_agent_set_remote_candidates (agent, stream_id, 1, rcands);
-
-   // ... Wait until the signal new-selected-pair is fired ...
-   // Send our message!
-   nice_agent_send (agent, stream_id, 1, sizeof(buffer), buffer);
-
-   // Anything received will be received through the cb_nice_recv callback
-
-   // Destroy the object
-   g_object_unref(agent);
-
-   </programlisting>
- </example>
+ *   nice_agent_get_local_credentials(agent, stream_id, &ufrag, &pwd);
+ *
+ *   // ... Send local candidates and credentials to the peer
+ *
+ *   // Set the peer's remote credentials and remote candidates
+ *   nice_agent_set_remote_credentials (agent, stream_id, remote_ufrag, remote_pwd);
+ *   nice_agent_set_remote_candidates (agent, stream_id, 1, rcands);
+ *
+ *   // ... Wait until the signal new-selected-pair is fired ...
+ *   // Send our message!
+ *   nice_agent_send (agent, stream_id, 1, sizeof(buffer), buffer);
+ *
+ *   // Anything received will be received through the cb_nice_recv callback.
+ *   // You must be running a GMainLoop on the global default GMainContext in
+ *   // another thread for this to work.
+ *
+ *   // Destroy the object
+ *   g_object_unref(agent);
+ *
+ *   </programlisting>
+ * </example>
  *
  * Refer to the examples in the examples/ subdirectory of the libnice source for
- * complete examples.
+ * more complete examples.
  *
  */
 
@@ -291,7 +316,8 @@ typedef enum
 
 /**
  * NiceCompatibility:
- * @NICE_COMPATIBILITY_RFC5245: Use compatibility with the RFC5245 ICE specs
+ * @NICE_COMPATIBILITY_RFC5245: Use compatibility with the RFC5245 ICE-UDP specs
+ * and RFC6544 ICE-TCP specs
  * @NICE_COMPATIBILITY_GOOGLE: Use compatibility for Google Talk specs
  * @NICE_COMPATIBILITY_MSN: Use compatibility for MSN Messenger specs
  * @NICE_COMPATIBILITY_WLM2009: Use compatibility with Windows Live Messenger
@@ -307,16 +333,26 @@ typedef enum
  * <warning>@NICE_COMPATIBILITY_DRAFT19 is deprecated and should not be used
  * in newly-written code. It is kept for compatibility reasons and
  * represents the same compatibility as @NICE_COMPATIBILITY_RFC5245 </warning>
+ <note>
+   <para>
+   If @NICE_COMPATIBILITY_RFC5245 compatibility mode is used for a non-reliable
+   agent, then ICE-UDP will be used with higher priority and ICE-TCP will also
+   be used when the UDP connectivity fails. If it is used with a reliable agent,
+   then ICE-UDP will be used with the TCP-Over-UDP (#PseudoTcpSocket) if ICE-TCP
+   fails and ICE-UDP succeeds.
+  </para>
+ </note>
+ *
  */
 typedef enum
 {
   NICE_COMPATIBILITY_RFC5245 = 0,
+  NICE_COMPATIBILITY_DRAFT19 = NICE_COMPATIBILITY_RFC5245,
   NICE_COMPATIBILITY_GOOGLE,
   NICE_COMPATIBILITY_MSN,
   NICE_COMPATIBILITY_WLM2009,
   NICE_COMPATIBILITY_OC2007,
   NICE_COMPATIBILITY_OC2007R2,
-  NICE_COMPATIBILITY_DRAFT19 = NICE_COMPATIBILITY_RFC5245,
   NICE_COMPATIBILITY_LAST = NICE_COMPATIBILITY_OC2007R2,
 } NiceCompatibility;
 
@@ -379,8 +415,9 @@ nice_agent_new (GMainContext *ctx, NiceCompatibility compat);
  * @ctx: The Glib Mainloop Context to use for timers
  * @compat: The compatibility mode of the agent
  *
- * Create a new #NiceAgent in reliable mode, which uses #PseudoTcpSocket to
- * assure reliability of the messages.
+ * Create a new #NiceAgent in reliable mode. If the connectivity is established
+ * through ICE-UDP, then a #PseudoTcpSocket will be transparently used to
+ * ensure reliability of the messages.
  * The returned object must be freed with g_object_unref()
  * <para> See also: #NiceAgent::reliable-transport-writable </para>
  *
@@ -431,7 +468,10 @@ nice_agent_add_stream (
  * @agent: The #NiceAgent Object
  * @stream_id: The ID of the stream to remove
  *
- * Remove and free a previously created data stream from @agent
+ * Remove and free a previously created data stream from @agent. If any I/O
+ * streams have been created using nice_agent_get_io_stream(), they should be
+ * closed completely using g_io_stream_close() before this is called, or they
+ * will get broken pipe errors.
  *
  **/
 void
@@ -534,9 +574,9 @@ nice_agent_gather_candidates (
  * nice_agent_set_remote_credentials:
  * @agent: The #NiceAgent Object
  * @stream_id: The ID of the stream
- * @ufrag: NULL-terminated string containing an ICE username fragment
+ * @ufrag: nul-terminated string containing an ICE username fragment
  *    (length must be between 22 and 256 chars)
- * @pwd: NULL-terminated string containing an ICE password
+ * @pwd: nul-terminated string containing an ICE password
  *    (length must be between 4 and 256 chars)
  *
  * Sets the remote credentials for stream @stream_id.
@@ -544,6 +584,13 @@ nice_agent_gather_candidates (
  <note>
    <para>
      Stream credentials do not override per-candidate credentials if set
+   </para>
+   <para>
+     Due to the native of peer-reflexive candidates, any agent using a per-stream
+     credentials (RFC5245, WLM2009, OC2007R2 and DRAFT19) instead of
+     per-candidate credentials (GOOGLE, MSN, OC2007), must
+     use the nice_agent_set_remote_credentials() API instead of setting the
+     username and password on the candidates.
    </para>
  </note>
  *
@@ -555,6 +602,33 @@ nice_agent_set_remote_credentials (
   guint stream_id,
   const gchar *ufrag, const gchar *pwd);
 
+
+/**
+ * nice_agent_set_local_credentials:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @ufrag: nul-terminated string containing an ICE username fragment
+ *    (length must be between 22 and 256 chars)
+ * @pwd: nul-terminated string containing an ICE password
+ *    (length must be between 4 and 256 chars)
+ *
+ * Sets the local credentials for stream @stream_id.
+ *
+ <note>
+   <para>
+     This is only effective before ICE negotiation has started.
+   </para>
+ </note>
+ *
+ * Since 0.1.11
+ * Returns: %TRUE on success, %FALSE on error.
+ */
+gboolean
+nice_agent_set_local_credentials (
+  NiceAgent *agent,
+  guint stream_id,
+  const gchar *ufrag,
+  const gchar *pwd);
 
 
 /**
@@ -585,7 +659,8 @@ nice_agent_get_local_credentials (
  * @agent: The #NiceAgent Object
  * @stream_id: The ID of the stream the candidates are for
  * @component_id: The ID of the component the candidates are for
- * @candidates: a #GSList of #NiceCandidate items describing each candidate to add
+ * @candidates: (element-type NiceCandidate) (transfer none): a #GSList of
+ * #NiceCandidate items describing each candidate to add
  *
  * Sets, adds or updates the remote candidates for a component of a stream.
  *
@@ -721,7 +796,7 @@ nice_agent_send_messages_nonblocking (
  * @stream_id: The ID of the stream
  * @component_id: The ID of the component
  *
- * Retreive from the agent the list of all local candidates
+ * Retrieve from the agent the list of all local candidates
  * for a stream's component
  *
  <note>
@@ -733,8 +808,8 @@ nice_agent_send_messages_nonblocking (
    </para>
  </note>
  *
- * Returns: a #GSList of #NiceCandidate objects representing
- * the local candidates of @agent
+ * Returns: (element-type NiceCandidate) (transfer full): a #GSList of
+ * #NiceCandidate objects representing the local candidates of @agent
  **/
 GSList *
 nice_agent_get_local_candidates (
@@ -763,8 +838,8 @@ nice_agent_get_local_candidates (
    </para>
  </note>
  *
- * Returns: a #GSList of #NiceCandidates objects representing
- * the remote candidates set on the @agent
+ * Returns: (element-type NiceCandidate) (transfer full): a #GSList of
+ * #NiceCandidates objects representing the remote candidates set on the @agent
  **/
 GSList *
 nice_agent_get_remote_candidates (
@@ -811,17 +886,20 @@ nice_agent_restart_stream (
 
 
 /**
- * nice_agent_attach_recv:
+ * nice_agent_attach_recv: (skip)
  * @agent: The #NiceAgent Object
  * @stream_id: The ID of stream
  * @component_id: The ID of the component
  * @ctx: The Glib Mainloop Context to use for listening on the component
  * @func: The callback function to be called when data is received on
- * the stream's component
+ * the stream's component (will not be called for STUN messages that
+ * should be handled by #NiceAgent itself)
  * @data: user data associated with the callback
  *
  * Attaches the stream's component's sockets to the Glib Mainloop Context in
- * order to be notified whenever data becomes available for a component.
+ * order to be notified whenever data becomes available for a component,
+ * and to enable #NiceAgent to receive STUN messages (during the
+ * establishment of ICE connectivity).
  *
  * This must not be used in combination with nice_agent_recv_messages() (or
  * #NiceIOStream or #NiceInputStream) on the same stream/component pair.
@@ -858,7 +936,8 @@ nice_agent_attach_recv (
  * A single-message version of nice_agent_recv_messages().
  *
  * Returns: the number of bytes written to @buf on success (guaranteed to be
- * greater than 0 unless @buf_len is 0), or -1 on error
+ * greater than 0 unless @buf_len is 0), 0 if in reliable mode and the remote
+ * peer closed the stream, or -1 on error
  *
  * Since: 0.1.5
  */
@@ -890,6 +969,11 @@ nice_agent_recv (
  * and written into @messages, the stream is closed by the other end or by
  * calling nice_agent_remove_stream(), or @cancellable is cancelled.
  *
+ * Any STUN packets received will not be added to @messages; instead,
+ * they'll be passed for processing to #NiceAgent itself. Since #NiceAgent
+ * does not poll for messages on its own, it's therefore essential to keep
+ * calling this function for ICE connection establishment to work.
+ *
  * In the non-error case, in reliable mode, this will block until all buffers in
  * all @n_messages have been filled with received data (i.e. @messages is
  * treated as a large, flat array of buffers). In non-reliable mode, it will
@@ -915,7 +999,8 @@ nice_agent_recv (
  * cancelled. %G_IO_ERROR_FAILED will be returned for other errors.
  *
  * Returns: the number of valid messages written to @messages on success
- * (guaranteed to be greater than 0 unless @n_messages is 0), or -1 on error
+ * (guaranteed to be greater than 0 unless @n_messages is 0), 0 if the remote
+ * peer closed the stream, or -1 on error
  *
  * Since: 0.1.5
  */
@@ -944,7 +1029,8 @@ nice_agent_recv_messages (
  * A single-message version of nice_agent_recv_messages_nonblocking().
  *
  * Returns: the number of bytes received into @buf on success (guaranteed to be
- * greater than 0 unless @buf_len is 0), or -1 on error
+ * greater than 0 unless @buf_len is 0), 0 if in reliable mode and the remote
+ * peer closed the stream, or -1 on error
  *
  * Since: 0.1.5
  */
@@ -984,6 +1070,11 @@ nice_agent_recv_nonblocking (
  * into @messages until it would block; in non-reliable mode, it will receive
  * messages until it would block.
  *
+ * Any STUN packets received will not be added to @messages; instead,
+ * they'll be passed for processing to #NiceAgent itself. Since #NiceAgent
+ * does not poll for messages on its own, it's therefore essential to keep
+ * calling this function for ICE connection establishment to work.
+ *
  * As this function is non-blocking, @cancellable is included only for parity
  * with nice_agent_recv_messages(). If @cancellable is cancelled before this
  * function is called, a %G_IO_ERROR_CANCELLED error will be returned
@@ -993,7 +1084,8 @@ nice_agent_recv_nonblocking (
  * same stream/component pair.
  *
  * Returns: the number of valid messages written to @messages on success
- * (guaranteed to be greater than 0 unless @n_messages is 0), or -1 on error
+ * (guaranteed to be greater than 0 unless @n_messages is 0), 0 if in reliable
+ * mode and the remote peer closed the stream, or -1 on error
  *
  * Since: 0.1.5
  */
@@ -1071,8 +1163,9 @@ nice_agent_get_selected_pair (
  * of proxy, as in this case, the socket will not be available to the
  * application because the packets are encapsulated.
  *
- * Returns: (transfer full) pointer to the #GSocket, or NULL if there is no
- * selected candidate or if the selected candidate is a relayed candidate.
+ * Returns: (transfer full) (nullable): pointer to the #GSocket, or %NULL if
+ * there is no selected candidate or if the selected candidate is a relayed
+ * candidate.
  *
  * Since: 0.1.5
  */
@@ -1160,8 +1253,12 @@ void nice_agent_set_software (
  * @stream_id: The ID of the stream to change
  * @name: The new name of the stream or %NULL
  *
- * This function will assign a unique name to a stream.
- * This is only useful when parsing and generating an SDP of the candidates.
+ * This function will assign a media type to a stream. The only values
+ * that can be used to produce a valid SDP are: "audio", "video",
+ * "text", "application", "image" and "message".
+ *
+ * This is only useful when parsing and generating an SDP of the
+ * candidates.
  *
  * <para>See also: nice_agent_generate_local_sdp()</para>
  * <para>See also: nice_agent_parse_remote_sdp()</para>
@@ -1373,8 +1470,8 @@ nice_agent_parse_remote_sdp (
  * <para>See also: nice_agent_parse_remote_sdp() </para>
  * <para>See also: nice_agent_parse_remote_candidate_sdp() </para>
  *
- * Returns: A #GSList of candidates parsed from the SDP, or %NULL in case of
- * errors
+ * Returns: (element-type NiceCandidate) (transfer full): A #GSList of
+ * candidates parsed from the SDP, or %NULL in case of errors
  *
  * Since: 0.1.4
  **/
@@ -1467,7 +1564,24 @@ nice_agent_forget_relays (NiceAgent *agent,
     guint stream_id,
     guint component_id);
 
+/**
+ * nice_agent_get_component_state:
+ * @agent: The #NiceAgent Object
+ * @stream_id: The ID of the stream
+ * @component_id: The ID of the component
+ *
+ * Retrieves the current state of a component.
+ *
+ * Returns: the #NiceComponentState of the component and
+ * %NICE_COMPONENT_STATE_FAILED if the component was invalid.
+ *
+ * Since: 0.1.8
+ */
+NiceComponentState
+nice_agent_get_component_state (NiceAgent *agent,
+    guint stream_id,
+    guint component_id);
+
 G_END_DECLS
 
-#endif /* _AGENT_H */
-
+#endif /* __LIBNICE_AGENT_H__ */
