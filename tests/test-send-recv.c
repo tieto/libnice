@@ -488,8 +488,6 @@ validate_received_messages (TestIOStreamThreadData *data, gsize buffer_offset,
         message_len_remaining -= valid_len;
       }
       test_data->received_bytes += valid_len;
-
-      g_free (buffer->buffer);
     }
 
     g_assert_cmpuint (message->length, <=, total_buf_len);
@@ -505,6 +503,18 @@ validate_received_messages (TestIOStreamThreadData *data, gsize buffer_offset,
       g_assert_cmpuint (message->length, ==, total_buf_len);
 
     g_assert (message->from == NULL);
+  }
+
+  /* Free all messages. */
+  for (i = 0; i < (guint) n_messages; i++) {
+    NiceInputMessage *message = &messages[i];
+    guint j;
+
+    for (j = 0; j < (guint) message->n_buffers; j++) {
+      GInputVector *buffer = &message->buffers[j];
+
+      g_free (buffer->buffer);
+    }
 
     g_free (message->buffers);
   }
@@ -904,8 +914,9 @@ read_stream_cb (GObject *pollable_stream, gpointer _user_data)
 
   if (len == -1) {
     g_assert_error (error, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK);
+    g_error_free (error);
     g_free (buf);
-    return TRUE;
+    return G_SOURCE_CONTINUE;
   }
 
   g_assert_no_error (error);
@@ -917,10 +928,10 @@ read_stream_cb (GObject *pollable_stream, gpointer _user_data)
   /* Termination time? */
   if (test_data->received_bytes == test_data->n_bytes) {
     g_main_loop_quit (gsource_data->main_loop);
-    return FALSE;
+    return G_SOURCE_REMOVE;
   }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -983,7 +994,7 @@ write_stream_cb (GObject *pollable_stream, gpointer _user_data)
   if (len == -1) {
     g_assert_error (error, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK);
     g_free (buf);
-    return TRUE;
+    return G_SOURCE_CONTINUE;
   }
 
   g_assert_no_error (error);
@@ -995,10 +1006,10 @@ write_stream_cb (GObject *pollable_stream, gpointer _user_data)
   /* Termination time? */
   if (test_data->transmitted_bytes == test_data->n_bytes) {
     g_main_loop_quit (gsource_data->main_loop);
-    return FALSE;
+    return G_SOURCE_REMOVE;
   }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -1175,6 +1186,7 @@ main (int argc, char *argv[])
   if (!g_option_context_parse (context, &argc, &argv, &error)) {
     g_printerr ("Option parsing failed: %s\n", error->message);
     g_error_free (error);
+    g_option_context_free (context);
     exit (1);
   }
 
@@ -1307,6 +1319,8 @@ main (int argc, char *argv[])
   }
 
 done:
+  g_option_context_free (context);
+
 #ifdef G_OS_WIN32
   WSACleanup ();
 #endif

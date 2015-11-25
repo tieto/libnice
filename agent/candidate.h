@@ -37,8 +37,11 @@
  * file under either the MPL or the LGPL.
  */
 
-#ifndef _CANDIDATE_H
-#define _CANDIDATE_H
+#ifndef __LIBNICE_CANDIDATE_H__
+#define __LIBNICE_CANDIDATE_H__
+
+#include <glib.h>
+#include <glib-object.h>
 
 
 /**
@@ -56,11 +59,19 @@
 
 G_BEGIN_DECLS
 
-
+/* Constants for determining candidate priorities */
 #define NICE_CANDIDATE_TYPE_PREF_HOST                 120
 #define NICE_CANDIDATE_TYPE_PREF_PEER_REFLEXIVE       110
+#define NICE_CANDIDATE_TYPE_PREF_NAT_ASSISTED         105
 #define NICE_CANDIDATE_TYPE_PREF_SERVER_REFLEXIVE     100
-#define NICE_CANDIDATE_TYPE_PREF_RELAYED               60
+#define NICE_CANDIDATE_TYPE_PREF_UDP_TUNNELED          75
+#define NICE_CANDIDATE_TYPE_PREF_RELAYED               10
+
+/* Priority preference constants for MS-ICE compatibility */
+#define NICE_CANDIDATE_TRANSPORT_MS_PREF_UDP           15
+#define NICE_CANDIDATE_TRANSPORT_MS_PREF_TCP            6
+#define NICE_CANDIDATE_DIRECTION_MS_PREF_PASSIVE        2
+#define NICE_CANDIDATE_DIRECTION_MS_PREF_ACTIVE         5
 
 /* Max foundation size '1*32ice-char' plus terminating NULL, ICE ID-19  */
 /**
@@ -91,12 +102,18 @@ typedef enum
 /**
  * NiceCandidateTransport:
  * @NICE_CANDIDATE_TRANSPORT_UDP: UDP transport
+ * @NICE_CANDIDATE_TRANSPORT_TCP_ACTIVE: TCP Active transport
+ * @NICE_CANDIDATE_TRANSPORT_TCP_PASSIVE: TCP Passive transport
+ * @NICE_CANDIDATE_TRANSPORT_TCP_SO: TCP Simultaneous-Open transport
  *
  * An enum representing the type of transport to use
  */
 typedef enum
 {
   NICE_CANDIDATE_TRANSPORT_UDP,
+  NICE_CANDIDATE_TRANSPORT_TCP_ACTIVE,
+  NICE_CANDIDATE_TRANSPORT_TCP_PASSIVE,
+  NICE_CANDIDATE_TRANSPORT_TCP_SO,
 } NiceCandidateTransport;
 
 /**
@@ -120,6 +137,7 @@ typedef struct _TurnServer TurnServer;
 
 /**
  * TurnServer:
+ * @ref_count: Reference count for the structure.
  * @server: The #NiceAddress of the TURN server
  * @username: The TURN username
  * @password: The TURN password
@@ -131,10 +149,10 @@ struct _TurnServer
 {
   gint ref_count;
 
-  NiceAddress server;       /**< TURN server address */
-  gchar *username;           /**< TURN username */
-  gchar *password;           /**< TURN password */
-  NiceRelayType type;             /**< TURN type */
+  NiceAddress server;
+  gchar *username;
+  gchar *password;
+  NiceRelayType type;
 };
 
 /**
@@ -175,8 +193,8 @@ struct _NiceCandidate
   guint stream_id;
   guint component_id;
   gchar foundation[NICE_CANDIDATE_MAX_FOUNDATION];
-  gchar *username;        /* pointer to a NULL-terminated username string */
-  gchar *password;        /* pointer to a NULL-terminated password string */
+  gchar *username;        /* pointer to a nul-terminated username string */
+  gchar *password;        /* pointer to a nul-terminated password string */
   TurnServer *turn;
   gpointer sockptr;
 };
@@ -212,25 +230,16 @@ nice_candidate_free (NiceCandidate *candidate);
 NiceCandidate *
 nice_candidate_copy (const NiceCandidate *candidate);
 
+GType nice_candidate_get_type (void);
 
-guint32
-nice_candidate_jingle_priority (NiceCandidate *candidate);
-
-guint32
-nice_candidate_msn_priority (NiceCandidate *candidate);
-
-guint32
-nice_candidate_ice_priority_full (guint type_pref, guint local_pref,
-    guint component_id);
-
-guint32
-nice_candidate_ice_priority (const NiceCandidate *candidate);
-
-guint64
-nice_candidate_pair_priority (guint32 o_prio, guint32 a_prio);
-
+/**
+ * NICE_TYPE_CANDIDATE:
+ *
+ * A boxed type for a #NiceCandidate.
+ */
+#define NICE_TYPE_CANDIDATE nice_candidate_get_type ()
 
 G_END_DECLS
 
-#endif /* _CANDIDATE_H */
+#endif /* __LIBNICE_CANDIDATE_H__ */
 

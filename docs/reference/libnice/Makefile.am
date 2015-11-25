@@ -7,7 +7,7 @@ AUTOMAKE_OPTIONS = 1.6
 DOC_MODULE=libnice
 
 # The top-level SGML file. You can change this if you want to.
-DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.sgml
+DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
 
 # The directory containing the source code. Relative to $(srcdir).
 # gtk-doc will search all .c & .h files beneath here for inline comments
@@ -24,7 +24,7 @@ SCAN_OPTIONS=--rebuild-types
 
 # Extra options to supply to gtkdoc-mkdb.
 # e.g. MKDB_OPTIONS=--sgml-mode --output-format=xml
-MKDB_OPTIONS=--sgml-mode --output-format=xml
+MKDB_OPTIONS=--xml-mode --output-format=xml --name-space=Nice
 
 # Extra options to supply to gtkdoc-mktmpl
 # e.g. MKTMPL_OPTIONS=--only-section-tmpl
@@ -57,7 +57,8 @@ CFILE_GLOB=$(top_srcdir)/agent/agent.c \
 IGNORE_HFILES= conncheck.h discovery.h stream.h component.h agent-priv.h \
 	iostream.h inputstream.h outputstream.h \
 	gstnice.h gstnicesrc.h gstnicesink.h  \
-	md5.h sha1.h stunhmac.h utils.h rand.h stun5389.h stuncrc32.h
+	md5.h sha1.h stunhmac.h utils.h rand.h stun5389.h stuncrc32.h \
+	stund.h agent-signals-marshal.h win32_common.h
 
 # Images to copy into HTML directory.
 # e.g. HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png
@@ -100,6 +101,7 @@ include $(top_srcdir)/gtk-doc.make
 # for --rebuild-sections in $(SCAN_OPTIONS) e.g. $(DOC_MODULE)-sections.txt
 #DISTCLEANFILES +=
 
-# Comment this out if you want your docs-status tested during 'make check'
-#TESTS = $(GTKDOC_CHECK)
-
+if ENABLE_GTK_DOC
+TESTS_ENVIRONMENT = cd $(builddir) &&
+TESTS = $(GTKDOC_CHECK)
+endif

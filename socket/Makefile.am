@@ -21,20 +21,25 @@ noinst_LTLIBRARIES = libsocket.la
 
 libsocket_la_SOURCES = \
 	socket.h \
+	socket-priv.h \
 	socket.c \
 	udp-bsd.h \
 	udp-bsd.c \
 	tcp-bsd.h \
 	tcp-bsd.c \
+	tcp-active.h \
+	tcp-active.c \
+	tcp-passive.h \
+	tcp-passive.c \
 	pseudossl.h \
 	pseudossl.c \
 	socks5.h \
 	socks5.c \
 	http.h \
 	http.c \
-	turn.h \
-	turn.c \
-	tcp-turn.h \
-	tcp-turn.c
+	udp-turn.h \
+	udp-turn.c \
+	udp-turn-over-tcp.h \
+	udp-turn-over-tcp.c
 
 

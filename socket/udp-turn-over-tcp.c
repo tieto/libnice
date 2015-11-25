@@ -42,7 +42,7 @@
 # include "config.h"
 #endif
 
-#include "tcp-turn.h"
+#include "udp-turn-over-tcp.h"
 #include "agent-priv.h"
 
 #include <string.h>
@@ -64,17 +64,31 @@ typedef struct {
   NiceSocket *base_socket;
 } TurnTcpPriv;
 
+typedef enum {
+  MS_TURN_CONTROL_MESSAGE = 2,
+  MS_TURN_END_TO_END_DATA = 3
+} MsTurnPayloadType;
+
 #define MAX_UDP_MESSAGE_SIZE 65535
+
+#define MAGIC_COOKIE_OFFSET \
+  STUN_MESSAGE_HEADER_LENGTH + STUN_MESSAGE_TYPE_LEN + \
+  STUN_MESSAGE_LENGTH_LEN + sizeof(guint16)
 
 static void socket_close (NiceSocket *sock);
 static gint socket_recv_messages (NiceSocket *sock,
     NiceInputMessage *recv_messages, guint n_recv_messages);
 static gint socket_send_messages (NiceSocket *sock, const NiceAddress *to,
     const NiceOutputMessage *messages, guint n_messages);
+static gint socket_send_messages_reliable (NiceSocket *sock,
+    const NiceAddress *to, const NiceOutputMessage *messages, guint n_messages);
 static gboolean socket_is_reliable (NiceSocket *sock);
+static gboolean socket_can_send (NiceSocket *sock, NiceAddress *addr);
+static void socket_set_writable_callback (NiceSocket *sock,
+    NiceSocketWritableCb callback, gpointer user_data);
 
 NiceSocket *
-nice_tcp_turn_socket_new (NiceSocket *base_socket,
+nice_udp_turn_over_tcp_socket_new (NiceSocket *base_socket,
     NiceTurnSocketCompatibility compatibility)
 {
   TurnTcpPriv *priv;
@@ -84,11 +98,15 @@ nice_tcp_turn_socket_new (NiceSocket *base_socket,
   priv->compatibility = compatibility;
   priv->base_socket = base_socket;
 
+  sock->type = NICE_SOCKET_TYPE_UDP_TURN_OVER_TCP;
   sock->fileno = priv->base_socket->fileno;
   sock->addr = priv->base_socket->addr;
   sock->send_messages = socket_send_messages;
+  sock->send_messages_reliable = socket_send_messages_reliable;
   sock->recv_messages = socket_recv_messages;
   sock->is_reliable = socket_is_reliable;
+  sock->can_send = socket_can_send;
+  sock->set_writable_callback = socket_set_writable_callback;
   sock->close = socket_close;
 
   return sock;
@@ -104,6 +122,7 @@ socket_close (NiceSocket *sock)
     nice_socket_free (priv->base_socket);
 
   g_slice_free(TurnTcpPriv, sock->priv);
+  sock->priv = NULL;
 }
 
 static gssize
@@ -115,11 +134,16 @@ socket_recv_message (NiceSocket *sock, NiceInputMessage *recv_message)
   GInputVector local_recv_buf;
   NiceInputMessage local_recv_message;
 
+  /* Socket has been closed: */
+  if (sock->priv == NULL)
+    return 0;
+
   if (priv->expecting_len == 0) {
     guint headerlen = 0;
 
     if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 ||
-        priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766)
+        priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766 ||
+        priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_OC2007)
       headerlen = 4;
     else if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_GOOGLE)
       headerlen = 2;
@@ -159,6 +183,21 @@ socket_recv_message (NiceSocket *sock, NiceInputMessage *recv_message)
       guint compat_len = ntohs (*priv->recv_buf.u16);
       priv->expecting_len = compat_len;
       priv->recv_buf_len = 0;
+    }
+    else if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_OC2007) {
+      guint8 pt = *priv->recv_buf.u8;
+      guint16 packetlen = ntohs (priv->recv_buf.u16[1]);
+
+      if (pt != MS_TURN_CONTROL_MESSAGE &&
+          pt != MS_TURN_END_TO_END_DATA) {
+        /* Unexpected data, error in stream */
+        return -1;
+      }
+
+      /* Keep the RFC4571 framing for the NiceAgent to unframe */
+      priv->expecting_len = packetlen + sizeof(guint16);
+      priv->recv_buf_len = sizeof(guint16);
+      priv->recv_buf.u16[0] = priv->recv_buf.u16[1];
     }
   }
 
@@ -202,6 +241,10 @@ socket_recv_messages (NiceSocket *nicesock,
   guint i;
   gboolean error = FALSE;
 
+  /* Socket has been closed: */
+  if (nicesock->priv == NULL)
+    return 0;
+
   for (i = 0; i < n_recv_messages; i++) {
     gssize len;
 
@@ -224,7 +267,7 @@ socket_recv_messages (NiceSocket *nicesock,
 
 static gssize
 socket_send_message (NiceSocket *sock, const NiceAddress *to,
-    const NiceOutputMessage *message)
+    const NiceOutputMessage *message, gboolean reliable)
 {
   TurnTcpPriv *priv = sock->priv;
   guint8 padbuf[3] = {0, 0, 0};
@@ -233,8 +276,18 @@ socket_send_message (NiceSocket *sock, const NiceAddress *to,
   guint j;
   gint ret;
   guint n_bufs;
-  guint16 header_buf;
+  union {
+    guint16 google_len;
+    struct {
+      guint8 pt;
+      guint8 zero;
+    } msoc;
+  } header_buf;
   guint offset = 0;
+
+  /* Socket has been closed: */
+  if (sock->priv == NULL)
+    return -1;
 
   /* Count the number of buffers. */
   if (message->n_buffers == -1) {
@@ -253,9 +306,9 @@ socket_send_message (NiceSocket *sock, const NiceAddress *to,
   local_message.n_buffers = n_bufs + 1;
 
   if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_GOOGLE) {
-    header_buf = htons (output_message_get_size (message));
+    header_buf.google_len = htons (output_message_get_size (message));
     local_bufs[0].buffer = &header_buf;
-    local_bufs[0].size = sizeof (header_buf);
+    local_bufs[0].size = sizeof (guint16);
     offset = 1;
   } else if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_DRAFT9 ||
       priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_RFC5766) {
@@ -264,6 +317,46 @@ socket_send_message (NiceSocket *sock, const NiceAddress *to,
 
     local_bufs[n_bufs].buffer = &padbuf;
     local_bufs[n_bufs].size = padlen;
+  } else if (priv->compatibility == NICE_TURN_SOCKET_COMPATIBILITY_OC2007) {
+    union {
+      guint32 u32;
+      guint8 u8[4];
+    } cookie;
+    guint16 len = output_message_get_size (message);
+
+    /* Copy the cookie from possibly split messages */
+    cookie.u32 = 0;
+    if (len > sizeof (TURN_MAGIC_COOKIE) + MAGIC_COOKIE_OFFSET) {
+      guint16 buf_offset = 0;
+      guint i;
+
+      for (i = 0; i < n_bufs; i++) {
+        if (message->buffers[i].size >
+            (gsize) (MAGIC_COOKIE_OFFSET - buf_offset)) {
+          /* If the cookie is split, we assume it's data */
+          if (message->buffers[i].size > sizeof (TURN_MAGIC_COOKIE) +
+              MAGIC_COOKIE_OFFSET - buf_offset) {
+            const guint8 *buf = message->buffers[i].buffer;
+            memcpy (&cookie.u8, buf + MAGIC_COOKIE_OFFSET - buf_offset,
+                sizeof (TURN_MAGIC_COOKIE));
+          }
+          break;
+        } else {
+          buf_offset += message->buffers[i].size;
+        }
+      }
+    }
+
+    cookie.u32 = ntohl(cookie.u32);
+    header_buf.msoc.zero = 0;
+    if (cookie.u32 == TURN_MAGIC_COOKIE)
+      header_buf.msoc.pt = MS_TURN_CONTROL_MESSAGE;
+    else
+      header_buf.msoc.pt = MS_TURN_END_TO_END_DATA;
+
+    local_bufs[0].buffer = &header_buf;
+    local_bufs[0].size = sizeof(header_buf.msoc);
+    offset = 1;
   } else {
     local_message.n_buffers = n_bufs;
   }
@@ -275,7 +368,11 @@ socket_send_message (NiceSocket *sock, const NiceAddress *to,
   }
 
 
-  ret = nice_socket_send_messages (priv->base_socket, to, &local_message, 1);
+  if (reliable)
+    ret = nice_socket_send_messages_reliable (priv->base_socket, to,
+        &local_message, 1);
+  else
+    ret = nice_socket_send_messages (priv->base_socket, to, &local_message, 1);
 
   if (ret == 1)
     ret = output_message_get_size (&local_message);
@@ -291,14 +388,20 @@ socket_send_messages (NiceSocket *sock, const NiceAddress *to,
 {
   guint i;
 
+  /* Socket has been closed: */
+  if (sock->priv == NULL)
+    return -1;
+
   for (i = 0; i < n_messages; i++) {
     const NiceOutputMessage *message = &messages[i];
     gssize len;
 
-    len = socket_send_message (sock, to, message);
+    len = socket_send_message (sock, to, message, FALSE);
 
     if (len < 0) {
       /* Error. */
+      if (i > 0)
+        break;
       return len;
     } else if (len == 0) {
       /* EWOULDBLOCK. */
@@ -309,10 +412,49 @@ socket_send_messages (NiceSocket *sock, const NiceAddress *to,
   return i;
 }
 
+static gint
+socket_send_messages_reliable (NiceSocket *sock, const NiceAddress *to,
+    const NiceOutputMessage *messages, guint n_messages)
+{
+  guint i;
+
+  for (i = 0; i < n_messages; i++) {
+    const NiceOutputMessage *message = &messages[i];
+    gssize len;
+
+    len = socket_send_message (sock, to, message, TRUE);
+
+    if (len < 0) {
+      /* Error. */
+      return len;
+    }
+  }
+
+  return i;
+}
+
 
 static gboolean
 socket_is_reliable (NiceSocket *sock)
 {
-  return TRUE;
+  TurnTcpPriv *priv = sock->priv;
+
+  return nice_socket_is_reliable (priv->base_socket);
 }
 
+static gboolean
+socket_can_send (NiceSocket *sock, NiceAddress *addr)
+{
+  TurnTcpPriv *priv = sock->priv;
+
+  return nice_socket_can_send (priv->base_socket, addr);
+}
+
+static void
+socket_set_writable_callback (NiceSocket *sock,
+    NiceSocketWritableCb callback, gpointer user_data)
+{
+  TurnTcpPriv *priv = sock->priv;
+
+  nice_socket_set_writable_callback (priv->base_socket, callback, user_data);
+}

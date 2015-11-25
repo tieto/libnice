@@ -44,6 +44,10 @@
 
 #include <string.h>
 
+#ifdef HAVE_NETDB_H
+#include <netdb.h>
+#endif
+
 #include "address.h"
 
 #ifdef G_OS_WIN32
@@ -197,18 +201,21 @@ nice_address_get_port (const NiceAddress *addr)
 NICEAPI_EXPORT gboolean
 nice_address_set_from_string (NiceAddress *addr, const gchar *str)
 {
-  union
-  {
-    struct in_addr  ipv4;
-    struct in6_addr ipv6;
-  } a;
+  struct addrinfo hints;
+  struct addrinfo *res;
 
-  if (inet_pton (AF_INET, str, &a.ipv4) > 0)
-      nice_address_set_ipv4 (addr, ntohl (a.ipv4.s_addr));
-  else if (inet_pton (AF_INET6, str, &a.ipv6) > 0)
-      nice_address_set_ipv6 (addr, a.ipv6.s6_addr);
-  else
-    return FALSE; /* Invalid address */
+  memset (&hints, 0, sizeof (hints));
+
+  /* AI_NUMERICHOST prevents getaddrinfo() from doing DNS resolution. */
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_flags = AI_NUMERICHOST;
+
+  if (getaddrinfo (str, NULL, &hints, &res) != 0)
+    return FALSE;  /* invalid address */
+
+  nice_address_set_from_sockaddr (addr, res->ai_addr);
+
+  freeaddrinfo (res);
 
   return TRUE;
 }
@@ -389,5 +396,25 @@ nice_address_ip_version (const NiceAddress *addr)
       return 6;
     default:
       return 0;
+    }
+}
+
+NICEAPI_EXPORT gboolean
+nice_address_equal_no_port (const NiceAddress *a, const NiceAddress *b)
+{
+  if (a->s.addr.sa_family != b->s.addr.sa_family)
+    return FALSE;
+
+  switch (a->s.addr.sa_family)
+    {
+    case AF_INET:
+      return (a->s.ip4.sin_addr.s_addr == b->s.ip4.sin_addr.s_addr);
+
+    case AF_INET6:
+      return IN6_ARE_ADDR_EQUAL (&a->s.ip6.sin6_addr, &b->s.ip6.sin6_addr)
+          && (a->s.ip6.sin6_scope_id == b->s.ip6.sin6_scope_id);
+
+    default:
+      g_return_val_if_reached (FALSE);
     }
 }

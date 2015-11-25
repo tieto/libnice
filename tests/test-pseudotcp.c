@@ -36,6 +36,7 @@
 # include "config.h"
 #endif
 
+#include <locale.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -137,13 +138,15 @@ static void readable (PseudoTcpSocket *sock, gpointer data)
           exit (-1);
         }
       }
+    } else if (len == 0) {
+      pseudo_tcp_socket_close (sock, FALSE);
     }
   } while (len > 0);
 
   if (len == -1 &&
       pseudo_tcp_socket_get_error (sock) != EWOULDBLOCK) {
-    g_debug ("Error reading from socket : %d",
-        pseudo_tcp_socket_get_error (sock));
+    g_debug ("Error reading from socket %p: %s", sock,
+        g_strerror (pseudo_tcp_socket_get_error (sock)));
     exit (-1);
   }
 }
@@ -224,7 +227,7 @@ static void adjust_clock (PseudoTcpSocket *sock)
 
   if (pseudo_tcp_socket_get_next_clock (sock, &timeout)) {
     timeout -= g_get_monotonic_time () / 1000;
-    g_debug ("Socket %p: Adjuting clock to %ld ms", sock, timeout);
+    g_debug ("Socket %p: Adjusting clock to %" G_GUINT64_FORMAT " ms", sock, timeout);
     if (sock == left) {
       if (left_clock != 0)
          g_source_remove (left_clock);
@@ -251,6 +254,8 @@ int main (int argc, char *argv[])
   PseudoTcpCallbacks cbs = {
     NULL, opened, readable, writable, closed, write_packet
   };
+
+  setlocale (LC_ALL, "");
 
   mainloop = g_main_loop_new (NULL, FALSE);
 

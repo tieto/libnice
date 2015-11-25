@@ -41,9 +41,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <unistd.h>
 
 #include <agent.h>
+
+#if GLIB_CHECK_VERSION(2, 36, 0)
+#include <gio/gnetworking.h>
+#endif
 
 static GMainLoop *gloop;
 static gchar *stun_addr = NULL;
@@ -101,9 +104,12 @@ main(int argc, char *argv[])
     g_debug("Using stun server '[%s]:%u'\n", stun_addr, stun_port);
   }
 
-#if !GLIB_CHECK_VERSION(2, 36, 0)
+#if GLIB_CHECK_VERSION(2, 36, 0)
+  g_networking_init();
+#else
   g_type_init();
 #endif
+  g_networking_init();
 
   gloop = g_main_loop_new(NULL, FALSE);
 
@@ -129,7 +135,11 @@ example_thread(void *data)
   gchar *line = NULL;
   int rval;
 
+#ifdef G_OS_WIN32
+  io_stdin = g_io_channel_win32_new_fd(_fileno(stdin));
+#else
   io_stdin = g_io_channel_unix_new(fileno(stdin));
+#endif
   g_io_channel_set_flags (io_stdin, G_IO_FLAG_NONBLOCK, NULL);
 
   // Create the nice agent
@@ -140,17 +150,17 @@ example_thread(void *data)
 
   // Set the STUN settings and controlling mode
   if (stun_addr) {
-    g_object_set(G_OBJECT(agent), "stun-server", stun_addr, NULL);
-    g_object_set(G_OBJECT(agent), "stun-server-port", stun_port, NULL);
+    g_object_set(agent, "stun-server", stun_addr, NULL);
+    g_object_set(agent, "stun-server-port", stun_port, NULL);
   }
-  g_object_set(G_OBJECT(agent), "controlling-mode", controlling, NULL);
+  g_object_set(agent, "controlling-mode", controlling, NULL);
 
   // Connect to the signals
-  g_signal_connect(G_OBJECT(agent), "candidate-gathering-done",
+  g_signal_connect(agent, "candidate-gathering-done",
       G_CALLBACK(cb_candidate_gathering_done), NULL);
-  g_signal_connect(G_OBJECT(agent), "new-selected-pair",
+  g_signal_connect(agent, "new-selected-pair",
       G_CALLBACK(cb_new_selected_pair), NULL);
-  g_signal_connect(G_OBJECT(agent), "component-state-changed",
+  g_signal_connect(agent, "component-state-changed",
       G_CALLBACK(cb_component_state_changed), NULL);
 
   // Create a new stream with one component
@@ -202,7 +212,7 @@ example_thread(void *data)
       }
       g_free (line);
     } else if (s == G_IO_STATUS_AGAIN) {
-      usleep (100000);
+      g_usleep (100000);
     }
   }
 
@@ -238,7 +248,7 @@ example_thread(void *data)
       printf("> ");
       fflush (stdout);
     } else if (s == G_IO_STATUS_AGAIN) {
-      usleep (100000);
+      g_usleep (100000);
     } else {
       // Ctrl-D was pressed.
       nice_agent_send(agent, stream_id, 1, 1, "\0");

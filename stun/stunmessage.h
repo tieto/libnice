@@ -163,6 +163,8 @@ typedef enum
  * TURN draft 09 and 12
  * @STUN_ATTRIBUTE_LIFETIME: The LIFETIME attribute as defined by TURN
  * draft 04, 09 and 12
+ * @STUN_ATTRIBUTE_MS_ALTERNATE_SERVER: The ALTERNATE-SERVER attribute as
+ * defined by [MS-TURN]
  * @STUN_ATTRIBUTE_MAGIC_COOKIE: The MAGIC-COOKIE attribute as defined by
  * the rosenberg-midcom TURN draft 08
  * @STUN_ATTRIBUTE_BANDWIDTH: The BANDWIDTH attribute as defined by TURN draft 04
@@ -211,6 +213,8 @@ typedef enum
  * libjingle
  * @STUN_ATTRIBUTE_MS_VERSION: The MS-VERSION optional attribute as defined
  * by [MS-TURN]
+ * @STUN_ATTRIBUTE_MS_XOR_MAPPED_ADDRESS: The XOR-MAPPED-ADDRESS optional
+ * attribute as defined by [MS-TURN]
  * @STUN_ATTRIBUTE_SOFTWARE: The SOFTWARE optional attribute as defined by RFC5389
  * @STUN_ATTRIBUTE_ALTERNATE_SERVER: The ALTERNATE-SERVER optional attribute as
  * defined by RFC5389
@@ -288,6 +292,7 @@ typedef enum
   /* 0x8000-0x8021 */      /* reserved */
   STUN_ATTRIBUTE_OPTIONS=0x8001, /* libjingle */
   STUN_ATTRIBUTE_MS_VERSION=0x8008,    /* MS-TURN */
+  STUN_ATTRIBUTE_MS_XOR_MAPPED_ADDRESS=0x8020,    /* MS-TURN */
   STUN_ATTRIBUTE_SOFTWARE=0x8022,      /* RFC5389 */
   STUN_ATTRIBUTE_ALTERNATE_SERVER=0x8023,    /* RFC5389 */
   /* 0x8024 */        /* reserved */
@@ -620,7 +625,7 @@ StunMessageReturn stun_message_find64 (const StunMessage *msg,
  *
  <note>
    <para>
-    The string will be NULL-terminated.
+    The string will be nul-terminated.
    </para>
  </note>
  *
@@ -774,7 +779,7 @@ StunMessageReturn stun_message_append64 (StunMessage *msg,
  * @type: The #StunAttribute to append
  * @str: The string to append
  *
- * Adds an attribute from a NULL-terminated string to a STUN message
+ * Adds an attribute from a nul-terminated string to a STUN message
  *
  * Returns: A #StunMessageReturn value.
  */
@@ -901,7 +906,8 @@ typedef struct {
  * stun_message_validate_buffer_length_fast:
  * @buffers: (array length=n_buffers) (in caller-allocated): array of contiguous
  * #StunInputVectors containing already-received message data
- * @n_buffers: number of entries in @buffers
+ * @n_buffers: number of entries in @buffers or if -1 , then buffers is
+ *  terminated by a #StunInputVector with the buffer pointer being %NULL.
  * @total_length: total number of valid bytes stored consecutively in @buffers
  * @has_padding: %TRUE if attributes should be padded to 4-byte boundaries
  *
@@ -923,7 +929,7 @@ typedef struct {
  * Since: 0.1.5
  */
 ssize_t stun_message_validate_buffer_length_fast (StunInputVector *buffers,
-    unsigned int n_buffers, size_t total_length, bool has_padding);
+    int n_buffers, size_t total_length, bool has_padding);
 
 /**
  * stun_message_id:
@@ -995,7 +1001,7 @@ bool stun_optional (uint16_t t);
  *
  * Transforms a STUN error-code into a human readable string
  *
- * Returns: A static pointer to a NULL-terminated error message string.
+ * Returns: A static pointer to a nul-terminated error message string.
  */
 const char *stun_strerror (StunError code);
 

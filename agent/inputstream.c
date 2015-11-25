@@ -50,8 +50,8 @@
  * component triple, and will be closed as soon as that stream is removed from
  * the agent (e.g. if nice_agent_remove_stream() is called from another thread).
  * If g_input_stream_close() is called on a #NiceInputStream, the input stream
- * will be marked as closed, but the underlying #NiceAgent stream will not be
- * removed. Use nice_agent_remove_stream() to do that.
+ * and underlying #NiceAgent stream will be closed, but the underlying stream
+ * will not be removed. Use nice_agent_remove_stream() to do that.
  *
  * Since: 0.1.5
  */
@@ -96,6 +96,8 @@ static void nice_input_stream_set_property (GObject *object, guint prop_id,
     const GValue *value, GParamSpec *pspec);
 static gssize nice_input_stream_read (GInputStream *stream, void *buffer,
     gsize count, GCancellable *cancellable, GError **error);
+static gboolean nice_input_stream_close (GInputStream *stream,
+    GCancellable *cancellable, GError **error);
 static gboolean nice_input_stream_is_readable (GPollableInputStream *stream);
 static gssize nice_input_stream_read_nonblocking (GPollableInputStream *stream,
     void *buffer, gsize count, GError **error);
@@ -115,6 +117,7 @@ nice_input_stream_class_init (NiceInputStreamClass *klass)
   gobject_class->dispose = nice_input_stream_dispose;
 
   stream_class->read_fn = nice_input_stream_read;
+  stream_class->close_fn = nice_input_stream_close;
 
   /***
    * NiceInputStream:agent:
@@ -173,6 +176,11 @@ nice_input_stream_dispose (GObject *object)
 {
   NiceInputStream *self = NICE_INPUT_STREAM (object);
   NiceAgent *agent;
+
+  /* Ensure the stream is closed first, otherwise the agent can’t be found in
+   * the close handler called by the parent implementation. */
+  if (!g_input_stream_is_closed (G_INPUT_STREAM (object)))
+    g_input_stream_close (G_INPUT_STREAM (object), NULL, NULL);
 
   agent = g_weak_ref_get (&self->priv->agent_ref);
   if (agent != NULL) {
@@ -300,9 +308,7 @@ nice_input_stream_read (GInputStream *stream, void *buffer, gsize count,
 
   /* Closed streams are not readable. */
   if (g_input_stream_is_closed (stream)) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_CLOSED,
-        "Stream is closed.");
-    return -1;
+    return 0;
   }
 
   /* Has the agent disappeared? */
@@ -319,6 +325,36 @@ nice_input_stream_read (GInputStream *stream, void *buffer, gsize count,
   g_object_unref (agent);
 
   return len;
+}
+
+static gboolean
+nice_input_stream_close (GInputStream *stream, GCancellable *cancellable,
+    GError **error)
+{
+  NiceInputStreamPrivate *priv = NICE_INPUT_STREAM (stream)->priv;
+  Component *component = NULL;
+  Stream *_stream = NULL;
+  NiceAgent *agent;  /* owned */
+
+  /* Has the agent disappeared? */
+  agent = g_weak_ref_get (&priv->agent_ref);
+  if (agent == NULL)
+    return TRUE;
+
+  agent_lock ();
+
+  /* Shut down the read side of the pseudo-TCP stream, if it still exists. */
+  if (agent_find_component (agent, priv->stream_id, priv->component_id,
+          &_stream, &component) && agent->reliable &&
+      !pseudo_tcp_socket_is_closed (component->tcp)) {
+    pseudo_tcp_socket_shutdown (component->tcp, PSEUDO_TCP_SHUTDOWN_RD);
+  }
+
+  agent_unlock ();
+
+  g_object_unref (agent);
+
+  return TRUE;
 }
 
 static gboolean
@@ -351,7 +387,7 @@ nice_input_stream_is_readable (GPollableInputStream *stream)
 
   /* If it’s a reliable agent, see if there’s any pending data in the pseudo-TCP
    * buffer. */
-  if (component->tcp != NULL &&
+  if (agent->reliable &&
       pseudo_tcp_socket_get_available_bytes (component->tcp) > 0) {
     retval = TRUE;
     goto done;
@@ -386,9 +422,7 @@ nice_input_stream_read_nonblocking (GPollableInputStream *stream, void *buffer,
 
   /* Closed streams are not readable. */
   if (g_input_stream_is_closed (G_INPUT_STREAM (stream))) {
-    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_CLOSED,
-        "Stream is closed.");
-    return -1;
+    return 0;
   }
 
   /* Has the agent disappeared? */

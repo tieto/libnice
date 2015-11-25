@@ -5,21 +5,38 @@
  * Copyright (C) 2007 Collabora, Nokia
  *  Contact: Youness Alaoui
  * Copyright (C) 2008 Haakon Sporsheim <haakon.sporsheim@tandberg.com>
- * @author: Youness Alaoui <kakaroto@kakaroto.homelinux.net>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+ * The Original Code is the Nice GLib ICE library.
+ *
+ * The Initial Developers of the Original Code are Collabora Ltd and Nokia
+ * Corporation. All Rights Reserved.
+ *
+ * Contributors:
+ *   Dafydd Harries, Collabora Ltd.
+ *   Youness Alaoui, Collabora Ltd.
+ *   Kai Vehmanen, Nokia
+ *   Philip Withnall, Collabora Ltd.
+ *   Haakon Sporsheim
+ *
+ * Alternatively, the contents of this file may be used under the terms of the
+ * the GNU Lesser General Public License Version 2.1 (the "LGPL"), in which
+ * case the provisions of LGPL are applicable instead of those above. If you
+ * wish to allow use of your version of this file only under the terms of the
+ * LGPL and not to allow others to use your version of this file under the
+ * MPL, indicate your decision by deleting the provisions above and replace
+ * them with the notice and other provisions required by the LGPL. If you do
+ * not delete the provisions above, a recipient may use your version of this
+ * file under either the MPL or the LGPL.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -41,6 +58,7 @@
 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netdb.h>
 
 #ifdef __sun
 #include <sys/sockio.h>
@@ -52,6 +70,34 @@
 
 #include <net/if.h>
 #include <arpa/inet.h>
+
+#endif /* G_OS_UNIX */
+
+#if (defined(G_OS_UNIX) && defined(HAVE_GETIFADDRS)) || defined(G_OS_WIN32)
+/* Works on both UNIX and Windows. Magic! */
+static gchar *
+sockaddr_to_string (const struct sockaddr *addr)
+{
+  char addr_as_string[INET6_ADDRSTRLEN+1];
+  size_t addr_len;
+
+  switch (addr->sa_family) {
+    case AF_INET: addr_len = sizeof (struct sockaddr_in); break;
+    case AF_INET6: addr_len = sizeof (struct sockaddr_in6); break;
+    default: return NULL;
+  }
+
+  if (getnameinfo (addr, addr_len,
+          addr_as_string, sizeof (addr_as_string), NULL, 0,
+          NI_NUMERICHOST) != 0) {
+    return NULL;
+  }
+
+  return g_strdup (addr_as_string);
+}
+#endif
+
+#ifdef G_OS_UNIX
 
 #ifdef HAVE_GETIFADDRS
 
@@ -172,6 +218,23 @@ nice_interfaces_is_private_ip (const struct sockaddr *_sa)
   return FALSE;
 }
 
+static GList *
+add_ip_to_list (GList *list, gchar *ip, gboolean append)
+{
+  GList *i;
+
+  for (i = list; i; i = i->next) {
+    gchar *addr = (gchar *) i->data;
+
+    if (g_strcmp0 (addr, ip) == 0)
+      return list;
+  }
+  if (append)
+    return g_list_append (list, ip);
+  else
+    return g_list_prepend (list, ip);
+}
+
 #ifdef HAVE_GETIFADDRS
 
 GList *
@@ -187,50 +250,37 @@ nice_interfaces_get_local_ips (gboolean include_loopback)
 
   /* Loop through the interface list and get the IP address of each IF */
   for (ifa = results; ifa; ifa = ifa->ifa_next) {
-    char addr_as_string[INET6_ADDRSTRLEN+1];
-
-    union {
-      struct sockaddr *addr;
-      struct sockaddr_in *in;
-      struct sockaddr_in6 *in6;
-    } sa;
-
-    sa.addr = ifa->ifa_addr;
+    gchar *addr_string;
 
     /* no ip address from interface that is down */
     if ((ifa->ifa_flags & IFF_UP) == 0)
       continue;
 
-    if (ifa->ifa_addr == NULL) {
-      continue;
-    } else if (ifa->ifa_addr->sa_family == AF_INET) {
-      if (inet_ntop (AF_INET, &sa.in->sin_addr, addr_as_string,
-              INET6_ADDRSTRLEN) == NULL)
-        continue;
-    } else if (ifa->ifa_addr->sa_family == AF_INET6) {
-      /* Skip link-local addresses, they require a scope */
-      if (IN6_IS_ADDR_LINKLOCAL (&sa.in6->sin6_addr))
-        continue;
-
-      if (inet_ntop (AF_INET6, &sa.in6->sin6_addr, addr_as_string,
-              INET6_ADDRSTRLEN) == NULL)
-        continue;
-    } else
+    if (ifa->ifa_addr == NULL)
       continue;
 
+    /* Convert to a string. */
+    addr_string = sockaddr_to_string (ifa->ifa_addr);
+    if (addr_string == NULL) {
+      nice_debug ("Failed to convert address to string for interface ‘%s’.",
+          ifa->ifa_name);
+      continue;
+    }
 
     nice_debug ("Interface:  %s", ifa->ifa_name);
-    nice_debug ("IP Address: %s", addr_as_string);
+    nice_debug ("IP Address: %s", addr_string);
     if ((ifa->ifa_flags & IFF_LOOPBACK) == IFF_LOOPBACK) {
-      if (include_loopback)
-        loopbacks = g_list_append (loopbacks, g_strdup (addr_as_string));
-      else
+      if (include_loopback) {
+        loopbacks = add_ip_to_list (loopbacks, addr_string, TRUE);
+      } else {
         nice_debug ("Ignoring loopback interface");
+        g_free (addr_string);
+      }
     } else {
       if (nice_interfaces_is_private_ip (ifa->ifa_addr))
-        ips = g_list_append (ips, g_strdup (addr_as_string));
+        ips = add_ip_to_list (ips, addr_string, TRUE);
       else
-        ips = g_list_prepend (ips, g_strdup (addr_as_string));
+        ips = add_ip_to_list (ips, addr_string, FALSE);
     }
   }
 
@@ -303,10 +353,10 @@ nice_interfaces_get_local_ips (gboolean include_loopback)
       else
         nice_debug ("Ignoring loopback interface");
     } else {
-      if (nice_interfaces_is_private_ip (sa)) {
-        ips = g_list_append (ips, g_strdup (inet_ntoa (sa->sin_addr)));
+      if (nice_interfaces_is_private_ip ((struct sockaddr *) sa)) {
+        ips = add_ip_to_list (ips, g_strdup (inet_ntoa (sa->sin_addr)), TRUE);
       } else {
-        ips = g_list_prepend (ips, g_strdup (inet_ntoa (sa->sin_addr)));
+        ips = add_ip_to_list (ips, g_strdup (inet_ntoa (sa->sin_addr)), FALSE);
       }
     }
   }
@@ -315,7 +365,7 @@ nice_interfaces_get_local_ips (gboolean include_loopback)
   free (ifc.ifc_req);
 
   if (loopback)
-    ips = g_list_append (ips, loopback);
+    ips = add_ip_to_list (ips, loopback, TRUE);
 
   return ips;
 }
@@ -332,6 +382,7 @@ nice_interfaces_get_ip_for_interface (gchar *interface_name)
   } sa;
   gint sockfd;
 
+  g_return_val_if_fail (interface_name != NULL, NULL);
 
   ifr.ifr_addr.sa_family = AF_INET;
   memset (ifr.ifr_name, 0, sizeof (ifr.ifr_name));
@@ -410,7 +461,7 @@ SOCKET nice_interfaces_get_WSA_socket ()
 }
 #endif
 
-GList * nice_interfaces_get_local_interfaces ()
+GList * nice_interfaces_get_local_interfaces (void)
 {
   ULONG size = 0;
   PMIB_IFTABLE if_table;
@@ -437,15 +488,41 @@ GList * nice_interfaces_get_local_interfaces ()
 
 GList * nice_interfaces_get_local_ips (gboolean include_loopback)
 {
-  ULONG size = 0;
+  IP_ADAPTER_ADDRESSES *addresses = NULL, *a;
+  ULONG status;
+  guint iterations;
+  ULONG addresses_size;
   DWORD pref = 0;
-  PMIB_IPADDRTABLE ip_table;
-  GList * ret = NULL;
+  GList *ret = NULL;
 
-  GetIpAddrTable (NULL, &size, TRUE);
+  /* As suggested on
+   * http://msdn.microsoft.com/en-gb/library/windows/desktop/aa365915%28v=vs.85%29.aspx */
+  #define MAX_TRIES 3
+  #define INITIAL_BUFFER_SIZE 15000
 
-  if (!size)
+  addresses_size = INITIAL_BUFFER_SIZE;
+  iterations = 0;
+
+  do {
+    g_free (addresses);
+    addresses = g_malloc0 (addresses_size);
+
+    status = GetAdaptersAddresses (AF_UNSPEC,
+        GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST |
+        GAA_FLAG_SKIP_DNS_SERVER, NULL, addresses, &addresses_size);
+  } while ((status == ERROR_BUFFER_OVERFLOW) && (iterations++ < MAX_TRIES));
+
+  nice_debug ("Queried addresses with status %lu.", status);
+
+  #undef INITIAL_BUFFER_SIZE
+  #undef MAX_TRIES
+
+  /* Error? */
+  if (status != NO_ERROR) {
+    nice_debug ("Error retrieving local addresses (error code %lu).", status);
+    g_free (addresses);
     return NULL;
+  }
 
   /*
    * Get the best interface for transport to 0.0.0.0.
@@ -454,42 +531,49 @@ GList * nice_interfaces_get_local_ips (gboolean include_loopback)
   if (GetBestInterface (0, &pref) != NO_ERROR)
     pref = 0;
 
-  ip_table = (PMIB_IPADDRTABLE)g_malloc0 (size);
+  /* Loop over the adapters. */
+  for (a = addresses; a != NULL; a = a->Next) {
+    IP_ADAPTER_UNICAST_ADDRESS *unicast;
 
-  if (GetIpAddrTable (ip_table, &size, TRUE) == ERROR_SUCCESS) {
-    DWORD i;
-    for (i = 0; i < ip_table->dwNumEntries; i++) {
-      gchar * ipstr;
-      PMIB_IPADDRROW ipaddr = &ip_table->table[i];
+    nice_debug ("Interface ‘%S’:", a->FriendlyName);
 
-      if (!(ipaddr->wType & (MIB_IPADDR_DISCONNECTED | MIB_IPADDR_DELETED)) &&
-          ipaddr->dwAddr) {
-        if (!include_loopback) {
-          DWORD type = 0;
-          PMIB_IFROW ifr = (PMIB_IFROW)g_malloc0 (sizeof (MIB_IFROW));
-          ifr->dwIndex = ipaddr->dwIndex;
-          if (GetIfEntry (ifr) == NO_ERROR)
-            type = ifr->dwType;
-          g_free (ifr);
+    /* Various conditions for ignoring the interface. */
+    if (a->Flags & IP_ADAPTER_RECEIVE_ONLY ||
+        a->OperStatus == IfOperStatusDown ||
+        a->OperStatus == IfOperStatusNotPresent ||
+        a->OperStatus == IfOperStatusLowerLayerDown) {
+      nice_debug ("Rejecting interface due to being down or read-only.");
+      continue;
+    }
 
-          if (type == IF_TYPE_SOFTWARE_LOOPBACK)
-            continue;
-        }
+    if (!include_loopback &&
+        a->IfType == IF_TYPE_SOFTWARE_LOOPBACK) {
+      nice_debug ("Rejecting loopback interface ‘%S’.", a->FriendlyName);
+      continue;
+    }
 
-        ipstr = g_strdup_printf ("%lu.%lu.%lu.%lu",
-            (ipaddr->dwAddr      ) & 0xFF,
-            (ipaddr->dwAddr >>  8) & 0xFF,
-            (ipaddr->dwAddr >> 16) & 0xFF,
-            (ipaddr->dwAddr >> 24) & 0xFF);
-        if (ipaddr->dwIndex == pref)
-          ret = g_list_prepend (ret, ipstr);
-        else
-          ret = g_list_append (ret, ipstr);
+    /* Grab the interface’s unicast addresses. */
+    for (unicast = a->FirstUnicastAddress;
+         unicast != NULL; unicast = unicast->Next) {
+      gchar *addr_string;
+
+      addr_string = sockaddr_to_string (unicast->Address.lpSockaddr);
+      if (addr_string == NULL) {
+        nice_debug ("Failed to convert address to string for interface ‘%S’.",
+            a->FriendlyName);
+        continue;
       }
+
+      nice_debug ("IP address: %s", addr_string);
+
+      if (a->IfIndex == pref || a->Ipv6IfIndex == pref)
+        ret = g_list_prepend (ret, addr_string);
+      else
+        ret = g_list_append (ret, addr_string);
     }
   }
 
-  g_free(ip_table);
+  g_free (addresses);
 
   return ret;
 }

@@ -1,18 +1,18 @@
 
-AC_PREREQ(2.59c)
+AC_PREREQ(2.62)
 
 dnl Always compile with -Wall; if --enable-compile-warnings=error is passed,
 dnl also use -Werror. git and pre-releases default to -Werror
 
 dnl use a three digit version number for releases, and four for cvs/prerelease
-AC_INIT([libnice],[0.1.7])
+AC_INIT([libnice],[0.1.13])
 LIBNICE_RELEASE="yes"
 
 AC_CANONICAL_TARGET
 
 AC_CONFIG_SRCDIR([agent/agent.c])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([-Wall])
+AM_INIT_AUTOMAKE([1.12 -Wall -Wno-portability subdir-objects])
 
 AC_CONFIG_FILES([
 	Makefile
@@ -39,18 +39,15 @@ AC_CONFIG_FILES([
 #      Increment CURRENT and AGE. Set REVISION to 0
 #    If there was an incompatible interface change:
 #      Increment CURRENT. Set AGE and REVISION to 0
-LIBNICE_CURRENT=14
-LIBNICE_REVISION=1
-LIBNICE_AGE=4
+LIBNICE_CURRENT=16
+LIBNICE_REVISION=2
+LIBNICE_AGE=6
 LIBNICE_LIBVERSION=${LIBNICE_CURRENT}:${LIBNICE_REVISION}:${LIBNICE_AGE}
 LIBNICE_LT_LDFLAGS="-version-info ${LIBNICE_LIBVERSION} -no-undefined"
 AC_SUBST(LIBNICE_LT_LDFLAGS)
 
-
-dnl use pretty build output with automake >= 1.11
-m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])],
-  [AM_DEFAULT_VERBOSITY=1
-   AC_SUBST(AM_DEFAULT_VERBOSITY)])
+dnl use pretty build output
+AM_SILENT_RULES([yes])
 
 
 # Checks for programs.
@@ -58,7 +55,8 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])],
 AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC
 AM_PROG_AR
-LT_INIT
+LT_PREREQ([2.2.6])
+LT_INIT([dlopen win32-dll disable-static])
 
 # Check Operating System
 AC_MSG_CHECKING([operating system])
@@ -88,7 +86,7 @@ AH_VERBATIM([_FORTIFY_SOURCE],
 # define _FORTIFY_SOURCE 2
 #endif])
 AC_DEFINE([NICEAPI_EXPORT], [ ], [Public library function implementation])
-AC_CHECK_HEADERS([arpa/inet.h net/in.h])
+AC_CHECK_HEADERS([arpa/inet.h net/in.h netdb.h])
 AC_CHECK_HEADERS([ifaddrs.h], \
 		      [AC_DEFINE(HAVE_GETIFADDRS, [1], \
 		       [Whether getifaddrs() is available on the system])])
@@ -162,6 +160,7 @@ AS_IF([test "$enable_compile_warnings" = "maximum" -o \
 ])
 AS_IF([test "x$enable_compile_warnings" = "xerror"],[
     NICE_ADD_FLAG([-Werror])
+    NICE_ADD_FLAG([-Wno-suggest-attribute=format])
 ])
 
 #
@@ -184,12 +183,15 @@ AC_CHECK_LIB(rt, clock_gettime, [LIBRT="-lrt"], [LIBRT=""])
 AC_CHECK_FUNCS([poll])
 AC_SUBST(LIBRT)
 
-PKG_CHECK_MODULES(GLIB, [dnl
-	glib-2.0 >= $GLIB_REQ dnl
-	gobject-2.0 >= $GLIB_REQ dnl
-	gthread-2.0 >= $GLIB_REQ dnl
-	gio-2.0 >= $GLIB_REQ dnl
-	])
+# Dependencies
+NICE_PACKAGES_PUBLIC="glib-2.0 >= $GLIB_REQ gio-2.0 >= $GLIB_REQ gobject-2.0 >= $GLIB_REQ"
+NICE_PACKAGES_PRIVATE="gthread-2.0"
+NICE_PACKAGES="$NICE_PACKAGES_PUBLIC $NICE_PACKAGES_PRIVATE"
+AC_SUBST([NICE_PACKAGES_PUBLIC])
+AC_SUBST([NICE_PACKAGES_PRIVATE])
+AC_SUBST([NICE_PACKAGES])
+
+PKG_CHECK_MODULES(GLIB, [$NICE_PACKAGES])
 
 AC_ARG_WITH(gstreamer, 
 	AS_HELP_STRING([--with-gstreamer],[build GStreamer plugin]),
@@ -202,7 +204,7 @@ AC_ARG_WITH(gstreamer-0.10,
 	[with_gstreamer010=auto])
 
 AS_IF([test "$with_gstreamer" != no], [
-  
+
 	PKG_CHECK_MODULES(GST, [
 		gstreamer-1.0 >= 0.11.91
 		gstreamer-base-1.0 >= 0.11.91
@@ -219,6 +221,19 @@ AS_IF([test "$with_gstreamer" != no], [
 
 		with_gstreamer=no
 		])
+
+	PKG_CHECK_MODULES(GST_CHECK, [
+		gstreamer-check-1.0 >= 0.11.91
+		],
+		[
+		have_gst_check=yes
+		],
+		[
+		have_gst_check=no
+		])
+
+	AM_CONDITIONAL(HAVE_GST_CHECK, test "$have_gst_check" = yes)
+
 ])
 
 AS_IF([test "$with_gstreamer010" != no], [
@@ -247,7 +262,7 @@ AC_SUBST(gstplugin010dir)
 AM_CONDITIONAL(WITH_GSTREAMER, test "$with_gstreamer" = yes)
 AM_CONDITIONAL(WITH_GSTREAMER010, test "$with_gstreamer010" = yes)
 
-GUPNP_IGD_REQUIRED=0.1.2
+GUPNP_IGD_REQUIRED=0.2.4
 
 AC_ARG_ENABLE([gupnp],
         AS_HELP_STRING([--disable-gupnp],[Disable GUPnP IGD support]),
@@ -258,21 +273,35 @@ AC_ARG_ENABLE([gupnp],
         esac],
         WANT_GUPNP=test)
 
+GUPNP_PACKAGES_PUBLIC=""
+GUPNP_PACKAGES_PRIVATE="gupnp-igd-1.0 >= $GUPNP_IGD_REQUIRED"
+GUPNP_PACKAGES="$GUPNP_PACKAGES_PUBLIC $GUPNP_PACKAGES_PRIVATE"
+
 HAVE_GUPNP=no
 if test "x$WANT_GUPNP" != "xno"; then
-   PKG_CHECK_MODULES(GUPNP, gupnp-igd-1.0 >= $GUPNP_IGD_REQUIRED,
+   PKG_CHECK_MODULES(GUPNP, [$GUPNP_PACKAGES],
     [ HAVE_GUPNP=yes ],
     [ HAVE_GUPNP=no ])
 fi
 if test "x$WANT_GUPNP" = "xyes" && test "x$HAVE_GUPNP" = "xno"; then
-   AC_MSG_ERROR(Requested GUPnP IGD, but it is not available)
+   AC_MSG_ERROR([Requested GUPnP IGD, but it is not available])
 fi
 
 if test "x$HAVE_GUPNP" = "xyes"; then
    AC_DEFINE(HAVE_GUPNP,,[Have the GUPnP IGD library])
+  UPNP_ENABLED="true"
+else
+  GUPNP_PACKAGES_PUBLIC=""
+  GUPNP_PACKAGES_PRIVATE=""
+  GUPNP_PACKAGES=""
 fi
 
+AC_SUBST([GUPNP_PACKAGES_PUBLIC])
+AC_SUBST([GUPNP_PACKAGES_PRIVATE])
+AC_SUBST([GUPNP_PACKAGES])
+
 AC_SUBST(HAVE_GUPNP)
+AC_SUBST([UPNP_ENABLED])
 
 dnl Test coverage
 AC_ARG_ENABLE([coverage],
@@ -286,9 +315,27 @@ AS_IF([test "${enable_coverage}" != "no"], [
 ])
 AC_SUBST(CCACHE_DISABLE)
 
+dnl build static plugins or not
+AC_MSG_CHECKING([whether to build static plugins or not])
+AC_ARG_ENABLE(
+  static-plugins,
+  AC_HELP_STRING(
+    [--enable-static-plugins],
+    [build static plugins @<:@default=no@:>@]),
+  [AS_CASE(
+    [$enableval], [no], [], [yes], [],
+    [AC_MSG_ERROR([bad value "$enableval" for --enable-static-plugins])])],
+  [enable_static_plugins=no])
+AC_MSG_RESULT([$enable_static_plugins])
+if test "x$enable_static_plugins" = xyes; then
+  AC_DEFINE(GST_PLUGIN_BUILD_STATIC, 1,
+    [Define if static plugins should be built])
+fi
+AM_CONDITIONAL(GST_PLUGIN_BUILD_STATIC, test "x$enable_static_plugins" = "xyes")
+
 case $host_os in
   solaris*)
-    LDFLAGS="$LDFLAGS -lsocket -lnls"
+    LDFLAGS="$LDFLAGS -lsocket -lnsl"
     ;;
   *)
     ;;
@@ -296,10 +343,14 @@ esac
 
 # check for gtk-doc
 m4_ifdef([GTK_DOC_CHECK], [
-GTK_DOC_CHECK(1.9)
+GTK_DOC_CHECK([1.9],[--flavour no-tmpl])
 ],[
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])
+
+# GObject introspection
+GOBJECT_INTROSPECTION_CHECK([1.30.0])
+
 AC_CONFIG_MACRO_DIR(m4)
 
 AC_OUTPUT
