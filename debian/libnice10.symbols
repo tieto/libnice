@@ -2,6 +2,7 @@ libnice.so.10 libnice10 #MINVER#
  nice_address_copy_to_sockaddr@Base 0.1.0
  nice_address_dup@Base 0.1.0
  nice_address_equal@Base 0.1.0
+ nice_address_equal_no_port@Base 0.1.13
  nice_address_free@Base 0.1.0
  nice_address_get_port@Base 0.1.0
  nice_address_init@Base 0.1.0
@@ -23,6 +24,7 @@ libnice.so.10 libnice10 #MINVER#
  nice_agent_generate_local_candidate_sdp@Base 0.1.4
  nice_agent_generate_local_sdp@Base 0.1.4
  nice_agent_generate_local_stream_sdp@Base 0.1.4
+ nice_agent_get_component_state@Base 0.1.13
  nice_agent_get_default_local_candidate@Base 0.1.4
  nice_agent_get_io_stream@Base 0.1.5
  nice_agent_get_local_candidates@Base 0.1.0
@@ -46,6 +48,7 @@ libnice.so.10 libnice10 #MINVER#
  nice_agent_restart_stream@Base 0.1.7
  nice_agent_send@Base 0.1.0
  nice_agent_send_messages_nonblocking@Base 0.1.5
+ nice_agent_set_local_credentials@Base 0.1.13
  nice_agent_set_port_range@Base 0.1.4
  nice_agent_set_relay_info@Base 0.1.0
  nice_agent_set_remote_candidates@Base 0.1.0
