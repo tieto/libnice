@@ -1,9 +1,9 @@
-libnice (0.1.13-2) UNRELEASED; urgency=medium
+libnice (0.1.13-2) unstable; urgency=medium
 
   * debian/control: Add libgupnp-igd-1.0-dev to the dependencies of
     the libnice-dev package
 
- -- Laurent Bigonville <bigon@debian.org>  Wed, 09 Dec 2015 17:10:48 +0100
+ -- Laurent Bigonville <bigon@debian.org>  Wed, 09 Dec 2015 17:12:43 +0100
 
 libnice (0.1.13-1) unstable; urgency=medium
 
