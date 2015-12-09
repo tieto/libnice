@@ -10,12 +10,12 @@ Build-Depends: autotools-dev,
                cdbs (>= 0.4.93~),
                debhelper (>= 9),
                dh-autoreconf,
+               gobject-introspection (>= 1.30.0),
+               gtk-doc-tools,
+               libgirepository1.0-dev (>= 1.30.0),
                libglib2.0-dev (>= 2.30),
                libgstreamer1.0-dev,
-               libgupnp-igd-1.0-dev (>= 0.2.4),
-               gtk-doc-tools,
-               gobject-introspection (>= 1.30.0),
-               libgirepository1.0-dev (>= 1.30.0)
+               libgupnp-igd-1.0-dev (>= 0.2.4)
 Standards-Version: 3.9.6
 Homepage: http://nice.freedesktop.org/
 Vcs-Git: git://anonscm.debian.org/pkg-telepathy/libnice.git
@@ -23,7 +23,7 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-telepathy/libnice.git
 
 Package: libnice10
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Pre-Depends: ${misc:Pre-Depends}
 Multi-Arch: same
 Description: ICE library (shared library)
@@ -42,7 +42,11 @@ Description: ICE library (shared library)
 Package: libnice-dev
 Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnice10 (= ${binary:Version}), libglib2.0-dev (>= 2.30), libgupnp-igd-1.0-dev (>= 0.2.4)
+Depends: libglib2.0-dev (>= 2.30),
+         libgupnp-igd-1.0-dev (>= 0.2.4),
+         libnice10 (= ${binary:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: ICE library (development files)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
@@ -59,7 +63,7 @@ Description: ICE library (development files)
 Package: gstreamer1.0-nice
 Section: net
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Multi-Arch: same
 Description: ICE library (GStreamer plugin)
  Nice is an implementation of the IETF's draft Interactive Connectivity
@@ -77,7 +81,7 @@ Description: ICE library (GStreamer plugin)
 Package: libnice-doc
 Section: doc
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: ICE library (documentation)
  Nice is an implementation of the IETF's draft Interactive Connectivity
  Establishment standard (ICE).  ICE is useful for applications that want to
@@ -95,7 +99,7 @@ Package: libnice-dbg
 Section: debug
 Priority: extra
 Architecture: any
-Depends: ${misc:Depends}, libnice10 (= ${binary:Version})
+Depends: libnice10 (= ${binary:Version}), ${misc:Depends}
 Multi-Arch: same
 Description: ICE library (debugging symbols)
  Nice is an implementation of the IETF's draft Interactive Connectivity
