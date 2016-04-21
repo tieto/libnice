@@ -875,8 +875,12 @@ priv_conn_check_tick_stream_nominate (NiceStream *stream, NiceAgent *agent)
       ++s_valid;
 
     if ((p->state == NICE_CHECK_SUCCEEDED || p->state == NICE_CHECK_DISCOVERED)
-        && p->nominated)
+        && p->nominated) {
       ++s_nominated;
+      if (p->local->transport != NICE_CANDIDATE_TRANSPORT_UDP) {
+        s_nominated = stream->n_components;
+      }
+    }
     else if ((p->state == NICE_CHECK_SUCCEEDED ||
             p->state == NICE_CHECK_DISCOVERED) && !p->nominated)
       ++s_waiting_for_nomination;
@@ -2154,6 +2158,10 @@ static CandidateCheckPair *priv_add_new_check_pair (NiceAgent *agent,
 
   g_assert (local != NULL);
   g_assert (remote != NULL);
+
+  if (local->transport != NICE_CANDIDATE_TRANSPORT_UDP && component->id != 1) {
+    return NULL;
+  }
 
   stream = agent_find_stream (agent, stream_id);
   pair = g_slice_new0 (CandidateCheckPair);

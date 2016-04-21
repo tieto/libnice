@@ -2512,6 +2512,12 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
       return;
     }
 
+    if (turn_tcp && component->id > 1) {
+      /* TCP multiplexes all components over one connection. */
+      g_slice_free (CandidateDiscovery, cdisco);
+      return;
+    }
+
     cdisco->local = nicesock->addr;
     nice_address_set_port (&cdisco->local, 0);
   }
