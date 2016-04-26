@@ -2168,13 +2168,9 @@ int conn_check_send (NiceAgent *agent, CandidateCheckPair *pair)
     }
 
     if (buffer_len > 0) {
-      if (nice_socket_is_reliable(pair->sockptr)) {
-        stun_timer_start_reliable(&pair->timer, STUN_TIMER_DEFAULT_RELIABLE_TIMEOUT);
-      } else {
-        stun_timer_start (&pair->timer,
-            priv_compute_conncheck_timer (agent),
-            STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS);
-      }
+      stun_timer_start (&pair->timer,
+          priv_compute_conncheck_timer (agent),
+          STUN_TIMER_DEFAULT_MAX_RETRANSMISSIONS);
 
       /* TCP-ACTIVE candidate must create a new socket before sending
        * by connecting to the peer. The new socket is stored in the candidate
