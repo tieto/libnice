@@ -2444,10 +2444,9 @@ priv_add_new_candidate_discovery_stun (NiceAgent *agent,
 static void
 priv_add_new_candidate_discovery_turn (NiceAgent *agent,
     NiceSocket *nicesock, TurnServer *turn,
-    NiceStream *stream, guint component_id, gboolean turn_tcp)
+    NiceComponent *component, gboolean turn_tcp)
 {
   CandidateDiscovery *cdisco;
-  NiceComponent *component = nice_stream_find_component_by_id (stream, component_id);
   NiceAddress local_address;
 
   /* note: no need to check for redundant candidates, as this is
@@ -2468,7 +2467,7 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
 
       new_socket = nice_udp_bsd_socket_new (&addr);
       if (new_socket) {
-        _priv_set_socket_tos (agent, new_socket, stream->tos);
+        _priv_set_socket_tos (agent, new_socket, component->stream->tos);
         nice_component_attach_socket (component, new_socket);
         nicesock = new_socket;
       }
@@ -2521,7 +2520,7 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
           &proxy_server, reliable_tcp);
 
       if (nicesock) {
-        _priv_set_socket_tos (agent, nicesock, stream->tos);
+        _priv_set_socket_tos (agent, nicesock, component->stream->tos);
         if (agent->proxy_type == NICE_PROXY_TYPE_SOCKS5) {
           nicesock = nice_socks5_socket_new (nicesock, &turn->server,
               agent->proxy_username, agent->proxy_password);
@@ -2540,7 +2539,7 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
           &turn->server, reliable_tcp);
 
       if (nicesock)
-        _priv_set_socket_tos (agent, nicesock, stream->tos);
+        _priv_set_socket_tos (agent, nicesock, component->stream->tos);
     }
 
     /* The TURN server may be invalid or not listening */
@@ -2569,8 +2568,8 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
   cdisco->turn = turn_server_ref (turn);
   cdisco->server = turn->server;
 
-  cdisco->stream = stream;
-  cdisco->component = nice_stream_find_component_by_id (stream, component_id);
+  cdisco->stream = component->stream;
+  cdisco->component = component;
   cdisco->agent = agent;
 
   if (agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
@@ -2698,7 +2697,7 @@ nice_agent_set_relay_info(NiceAgent *agent,
           nice_address_ip_version (&candidate->addr) ==
           nice_address_ip_version (&turn->server))
         priv_add_new_candidate_discovery_turn (agent,
-            candidate->sockptr, turn, stream, component_id,
+            candidate->sockptr, turn, component,
             candidate->transport != NICE_CANDIDATE_TRANSPORT_UDP);
     }
 
@@ -3085,8 +3084,7 @@ nice_agent_gather_candidates (
             priv_add_new_candidate_discovery_turn (agent,
                 host_candidate->sockptr,
                 turn,
-                stream,
-                cid,
+                component,
                 host_candidate->transport != NICE_CANDIDATE_TRANSPORT_UDP);
           }
         }
