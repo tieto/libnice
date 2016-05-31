@@ -280,7 +280,7 @@ nice_component_close (NiceComponent *cmp)
    * A long-term fix is needed in the form of making nice_component_close() (and
    * all its callers) async, so we can properly block on closure. */
   if (cmp->tcp) {
-    pseudo_tcp_socket_close (cmp->tcp, TRUE);
+    //pseudo_tcp_socket_close (cmp->tcp, TRUE);
   }
 
   if (cmp->restart_candidate)
