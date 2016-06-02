@@ -1,15 +1,14 @@
-From 6f1bb05daeca5d73007514e423235bb0f48ed840 Mon Sep 17 00:00:00 2001
+From 703d0b8de717185b057a1947039b0829810a6670 Mon Sep 17 00:00:00 2001
 From: Jakub Adam <jakub.adam@ktknet.cz>
-Date: Tue, 31 May 2016 15:03:19 +0200
+Date: Thu, 2 Jun 2016 15:07:40 +0200
 Subject: [PATCH] Remove agent_remove_local_candidate() usage
 
-Requires UPnP 0.2.4.
 ---
  agent/component.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/agent/component.c b/agent/component.c
-index 5a533f8..f7b12a0 100644
+index 1b978fa..aecc41f 100644
 --- a/agent/component.c
 +++ b/agent/component.c
 @@ -183,7 +183,7 @@ nice_component_remove_socket (NiceComponent *cmp, NiceSocket *nsocket)
@@ -18,9 +17,9 @@ index 5a533f8..f7b12a0 100644
      }
 -    agent_remove_local_candidate (cmp->agent, candidate);
 +    //agent_remove_local_candidate (cmp->agent, candidate);
-     nice_candidate_free (candidate);
  
      cmp->local_candidates = g_slist_delete_link (cmp->local_candidates, i);
+     cmp->failed_candidates = g_slist_append(cmp->failed_candidates, candidate);
 -- 
 2.8.1
 
