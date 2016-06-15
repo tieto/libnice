@@ -1,3 +1,9 @@
+libnice (0.1.13-3) UNRELEASED; urgency=medium
+
+  * Remove myself from Uploaders.
+
+ -- Jonny Lamb <jonny@debian.org>  Wed, 15 Jun 2016 12:17:22 +0100
+
 libnice (0.1.13-2) unstable; urgency=medium
 
   * debian/control: Add libgupnp-igd-1.0-dev to the dependencies of

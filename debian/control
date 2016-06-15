@@ -4,8 +4,7 @@ Priority: optional
 Maintainer: Debian Telepathy maintainers <pkg-telepathy-maintainers@lists.alioth.debian.org>
 Uploaders: Dafydd Harries <daf@debian.org>,
            Sjoerd Simons <sjoerd@debian.org>,
-           Laurent Bigonville <bigon@debian.org>,
-           Jonny Lamb <jonny@debian.org>
+           Laurent Bigonville <bigon@debian.org>
 Build-Depends: autotools-dev,
                cdbs (>= 0.4.93~),
                debhelper (>= 9),
