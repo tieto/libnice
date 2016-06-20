@@ -1,6 +1,6 @@
-From 703d0b8de717185b057a1947039b0829810a6670 Mon Sep 17 00:00:00 2001
+From 6701f7a780e9904dd7e901a92266b9c6bcf54ec4 Mon Sep 17 00:00:00 2001
 From: Jakub Adam <jakub.adam@ktknet.cz>
-Date: Thu, 2 Jun 2016 15:07:40 +0200
+Date: Mon, 20 Jun 2016 13:53:27 +0200
 Subject: [PATCH] Remove agent_remove_local_candidate() usage
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH] Remove agent_remove_local_candidate() usage
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/agent/component.c b/agent/component.c
-index 1b978fa..aecc41f 100644
+index 9dd2d2c..bfa2408 100644
 --- a/agent/component.c
 +++ b/agent/component.c
 @@ -183,7 +183,7 @@ nice_component_remove_socket (NiceComponent *cmp, NiceSocket *nsocket)
@@ -17,9 +17,9 @@ index 1b978fa..aecc41f 100644
      }
 -    agent_remove_local_candidate (cmp->agent, candidate);
 +    //agent_remove_local_candidate (cmp->agent, candidate);
+     nice_candidate_free (candidate);
  
      cmp->local_candidates = g_slist_delete_link (cmp->local_candidates, i);
-     cmp->failed_candidates = g_slist_append(cmp->failed_candidates, candidate);
 -- 
 2.8.1
 
