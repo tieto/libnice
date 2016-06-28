@@ -3085,6 +3085,24 @@ static gboolean priv_map_reply_to_relay_request (NiceAgent *agent, StunMessage *
 
             /* In case a new candidate has been added */
             conn_check_schedule_next (agent);
+
+            if (d->nicesock->type == NICE_SOCKET_TYPE_UDP_TURN_OVER_TCP) {
+              /* We have a connection to this TCP TURN, cancel all pending
+               * attempts with this server. */
+              GSList *j;
+              for (j = agent->discovery_list; j; j = j->next) {
+                CandidateDiscovery *disco = j->data;
+
+                if (!disco->done &&
+                    disco->type == NICE_CANDIDATE_TYPE_RELAYED &&
+                    disco->component == d->component &&
+                    disco->turn == d->turn) {
+                  disco->stun_message.buffer = NULL;
+                  disco->stun_message.buffer_len = 0;
+                  disco->done = TRUE;
+                }
+              }
+            }
           }
 
           d->stun_message.buffer = NULL;
