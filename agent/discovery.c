@@ -988,6 +988,72 @@ NiceCandidate *discovery_learn_remote_peer_reflexive_candidate (
   return candidate;
 }
 
+static void
+discovery_turn_connect (CandidateDiscovery *cdisco)
+{
+  NiceAgent *agent = cdisco->agent;
+  NiceAddress proxy_server;
+  NiceSocket *nicesock = NULL;
+
+  // TODO: investigate this value
+  gboolean reliable_tcp = TRUE;
+
+  /* TODO: add support for turn-tcp RFC 6062 */
+  if (agent->proxy_type != NICE_PROXY_TYPE_NONE &&
+      agent->proxy_ip != NULL &&
+      nice_address_set_from_string (&proxy_server, agent->proxy_ip)) {
+    nice_address_set_port (&proxy_server, agent->proxy_port);
+    nicesock = nice_tcp_bsd_socket_new (agent->main_context, &cdisco->local,
+        &proxy_server, reliable_tcp);
+
+    if (nicesock) {
+      _priv_set_socket_tos (agent, nicesock, cdisco->component->stream->tos);
+      if (agent->proxy_type == NICE_PROXY_TYPE_SOCKS5) {
+        nicesock = nice_socks5_socket_new (nicesock, &cdisco->server,
+            agent->proxy_username, agent->proxy_password);
+      } else if (agent->proxy_type == NICE_PROXY_TYPE_HTTP) {
+        nicesock = nice_http_socket_new (nicesock, &cdisco->server,
+            agent->proxy_username, agent->proxy_password);
+      } else {
+        nice_socket_free (nicesock);
+        nicesock = NULL;
+      }
+    }
+  }
+
+  if (nicesock == NULL) {
+    nicesock = nice_tcp_bsd_socket_new (agent->main_context, &cdisco->local,
+        &cdisco->server, reliable_tcp);
+
+    if (nicesock)
+      _priv_set_socket_tos (agent, nicesock, cdisco->component->stream->tos);
+  }
+
+  /* The TURN server may be invalid or not listening */
+  if (nicesock == NULL) {
+    cdisco->done = TRUE;
+    return;
+  }
+
+  if (agent->reliable) // TODO: this is TCP agent->reliable play make no role
+    nice_socket_set_writable_callback (nicesock, _tcp_sock_is_writable,
+        cdisco->component);
+  if (cdisco->turn->type ==  NICE_RELAY_TYPE_TURN_TLS &&
+      agent->compatibility == NICE_COMPATIBILITY_GOOGLE) {
+    nicesock = nice_pseudossl_socket_new (nicesock,
+        NICE_PSEUDOSSL_SOCKET_COMPATIBILITY_GOOGLE);
+  } else if (cdisco->turn->type == NICE_RELAY_TYPE_TURN_TLS &&
+             (agent->compatibility == NICE_COMPATIBILITY_OC2007 ||
+              agent->compatibility == NICE_COMPATIBILITY_OC2007R2)) {
+    nicesock = nice_pseudossl_socket_new (nicesock,
+        NICE_PSEUDOSSL_SOCKET_COMPATIBILITY_MSOC);
+  }
+  cdisco->nicesock = nice_udp_turn_over_tcp_socket_new (nicesock,
+      agent_to_turn_socket_compatibility (agent));
+
+  nice_component_attach_socket (cdisco->component, cdisco->nicesock);
+}
+
 /* 
  * Timer callback that handles scheduling new candidate discovery
  * processes (paced by the Ta timer), and handles running of the 
@@ -1004,6 +1070,7 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
   GSList *i;
   int not_done = 0; /* note: track whether to continue timer */
   size_t buffer_len = 0;
+  gboolean turn_connect_in_progress = FALSE;
 
   {
     static int tick_counter = 0;
@@ -1013,6 +1080,22 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
 
   for (i = agent->discovery_list; i ; i = i->next) {
     cand = i->data;
+
+    if (turn_connect_in_progress == FALSE &&
+        cand->done == FALSE &&
+        cand->nicesock &&
+        cand->nicesock->type == NICE_SOCKET_TYPE_UDP_TURN_OVER_TCP) {
+      turn_connect_in_progress = TRUE;
+    }
+
+    if (cand->nicesock == NULL) {
+      if (turn_connect_in_progress == FALSE && !cand->done) {
+        discovery_turn_connect(cand);
+        turn_connect_in_progress = TRUE;
+      } else {
+        continue;
+      }
+    }
 
     if (cand->pending != TRUE) {
       cand->pending = TRUE;
