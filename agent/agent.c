@@ -2248,6 +2248,13 @@ priv_add_new_candidate_discovery_turn (NiceAgent *agent,
   /* note: no need to check for redundant candidates, as this is
    *       done later on in the process */
 
+  /* Create TURN discovery only for host candidate and server of the same
+   * address family. */
+  if (nice_address_ip_version(&nicesock->addr) !=
+      nice_address_ip_version(&turn->server)) {
+    return;
+  }
+
   cdisco = g_slice_new0 (CandidateDiscovery);
   cdisco->type = NICE_CANDIDATE_TYPE_RELAYED;
 
