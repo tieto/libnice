@@ -1,3 +1,9 @@
+libnice (0.1.14-0~sipe) UNRELEASED; urgency=medium
+
+  * New upstream release + extra Sipe patches.
+
+ -- Jakub Adam <jakub.adam@ktknet.cz>  Tue, 04 Apr 2017 09:37:51 +0200
+
 libnice (0.1.13-2) unstable; urgency=medium
 
   * debian/control: Add libgupnp-igd-1.0-dev to the dependencies of
