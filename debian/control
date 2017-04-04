@@ -15,7 +15,8 @@ Build-Depends: autotools-dev,
                libgirepository1.0-dev (>= 1.30.0),
                libglib2.0-dev (>= 2.30),
                libgstreamer1.0-dev,
-               libgupnp-igd-1.0-dev (>= 0.2.4)
+               libgupnp-igd-1.0-dev (>= 0.2.4),
+               libgnutls28-dev
 Standards-Version: 3.9.6
 Homepage: http://nice.freedesktop.org/
 Vcs-Git: git://anonscm.debian.org/pkg-telepathy/libnice.git
@@ -45,6 +46,7 @@ Architecture: any
 Depends: libglib2.0-dev (>= 2.30),
          libgupnp-igd-1.0-dev (>= 0.2.4),
          libnice10 (= ${binary:Version}),
+         libgnutls28-dev,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: ICE library (development files)
