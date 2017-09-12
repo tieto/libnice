@@ -42,7 +42,8 @@ Description: ICE library (shared library)
 Package: libnice-dev
 Section: libdevel
 Architecture: any
-Depends: libglib2.0-dev (>= 2.44),
+Depends: gir1.2-nice-0.1 (= ${binary:Version}),
+         libglib2.0-dev (>= 2.44),
          libgnutls28-dev (>= 2.12.0),
          libgupnp-igd-1.0-dev (>= 0.2.4),
          libnice10 (= ${binary:Version}),
