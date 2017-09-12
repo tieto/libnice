@@ -104,7 +104,8 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/as-compiler-flag.m4 \
 	$(top_srcdir)/m4/gtk-doc.m4 $(top_srcdir)/m4/introspection.m4 \
 	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
 	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(libstun_la_include_HEADERS) \
@@ -115,12 +116,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-libstun_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
+libstun_la_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libstun_la_OBJECTS = stunagent.lo stunmessage.lo stun5389.lo \
-	stuncrc32.lo sha1.lo md5.lo rand.lo stunhmac.lo utils.lo \
-	debug.lo usages/ice.lo usages/bind.lo usages/turn.lo \
-	usages/timer.lo
+	stuncrc32.lo rand.lo stunhmac.lo utils.lo debug.lo \
+	usages/ice.lo usages/bind.lo usages/turn.lo usages/timer.lo
 libstun_la_OBJECTS = $(am_libstun_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -292,6 +292,8 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GLIB_CFLAGS = @GLIB_CFLAGS@
 GLIB_LIBS = @GLIB_LIBS@
+GNUTLS_CFLAGS = @GNUTLS_CFLAGS@
+GNUTLS_LIBS = @GNUTLS_LIBS@
 GREP = @GREP@
 GST010_CFLAGS = @GST010_CFLAGS@
 GST010_LIBS = @GST010_LIBS@
@@ -336,10 +338,10 @@ LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
-NICE_PACKAGES = @NICE_PACKAGES@
 NICE_PACKAGES_PRIVATE = @NICE_PACKAGES_PRIVATE@
 NICE_PACKAGES_PUBLIC = @NICE_PACKAGES_PUBLIC@
 NM = @NM@
@@ -427,7 +429,7 @@ top_srcdir = @top_srcdir@
 SUBDIRS = . tools tests
 CLEANFILES = *.gcno *.gcda
 AM_CFLAGS = -std=gnu99 -DG_LOG_DOMAIN=\"libnice-stun\" \
-	$(LIBNICE_CFLAGS) $(am__append_1)
+	$(LIBNICE_CFLAGS) $(GNUTLS_CFLAGS) $(NULL) $(am__append_1)
 AM_CPPFLAGS = -I$(top_srcdir)
 noinst_LTLIBRARIES = libstun.la
 libstun_la_SOURCES = constants.h \
@@ -435,8 +437,6 @@ libstun_la_SOURCES = constants.h \
 	stunmessage.c stunmessage.h \
 	stun5389.c stun5389.h \
 	stuncrc32.c stuncrc32.h \
-	sha1.c sha1.h \
-	md5.c md5.h \
 	rand.c rand.h \
 	stunhmac.c stunhmac.h \
 	utils.c  utils.h \
@@ -446,7 +446,7 @@ libstun_la_SOURCES = constants.h \
 	usages/turn.c usages/turn.h \
 	usages/timer.c usages/timer.h
 
-libstun_la_LIBADD = $(LIBRT)
+libstun_la_LIBADD = $(LIBRT) $(GNUTLS_LIBS)
 EXTRA_DIST = win32_common.h
 libstun_la_includedir = $(includedir)/stun
 libstun_la_include_HEADERS = stunagent.h stunmessage.h win32_common.h debug.h constants.h
@@ -523,9 +523,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/md5.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rand.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sha1.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stun5389.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stunagent.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stuncrc32.Plo@am__quote@
