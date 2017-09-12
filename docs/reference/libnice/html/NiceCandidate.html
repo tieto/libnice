@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>libnice Reference Manual: NiceCandidate</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<title>NiceCandidate: libnice Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="index.html" title="libnice Reference Manual">
 <link rel="up" href="ch01.html" title="">
 <link rel="prev" href="libnice-NiceAddress.html" title="NiceAddress">
 <link rel="next" href="ch02.html" title="Libnice helper functions">
-<meta name="generator" content="GTK-Doc V1.21 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -44,16 +44,12 @@ justifications.
 </div>
 <div class="refsect1">
 <a name="NiceCandidate.functions"></a><h2>Functions</h2>
-<div class="informaltable"><table width="100%" border="0">
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="150px" class="functions_return">
 <col class="functions_name">
 </colgroup>
 <tbody>
-<tr>
-<td class="define_keyword">#define</td>
-<td class="function_name"><a class="link" href="NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS" title="NICE_CANDIDATE_MAX_FOUNDATION">NICE_CANDIDATE_MAX_FOUNDATION</a></td>
-</tr>
 <tr>
 <td class="function_type">
 <a class="link" href="NiceCandidate.html" title="NiceCandidate"><span class="returnvalue">NiceCandidate</span></a> *
@@ -83,7 +79,7 @@ justifications.
 </div>
 <div class="refsect1">
 <a name="NiceCandidate.other"></a><h2>Types and Values</h2>
-<div class="informaltable"><table width="100%" border="0">
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="150px" class="name">
 <col class="description">
@@ -109,6 +105,10 @@ justifications.
 <td class="datatype_keyword">enum</td>
 <td class="function_name"><a class="link" href="NiceCandidate.html#NiceRelayType" title="enum NiceRelayType">NiceRelayType</a></td>
 </tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS" title="NICE_CANDIDATE_MAX_FOUNDATION">NICE_CANDIDATE_MAX_FOUNDATION</a></td>
+</tr>
 </tbody>
 </table></div>
 </div>
@@ -127,20 +127,13 @@ understand correctly the concept of ICE candidates.</p>
 <div class="refsect1">
 <a name="NiceCandidate.functions_details"></a><h2>Functions</h2>
 <div class="refsect2">
-<a name="NICE-CANDIDATE-MAX-FOUNDATION:CAPS"></a><h3>NICE_CANDIDATE_MAX_FOUNDATION</h3>
-<pre class="programlisting">#define NICE_CANDIDATE_MAX_FOUNDATION                (32+1)
-</pre>
-<p>The maximum size a candidate foundation can have.</p>
-</div>
-<hr>
-<div class="refsect2">
 <a name="nice-candidate-new"></a><h3>nice_candidate_new ()</h3>
 <pre class="programlisting"><a class="link" href="NiceCandidate.html" title="NiceCandidate"><span class="returnvalue">NiceCandidate</span></a> *
 nice_candidate_new (<em class="parameter"><code><a class="link" href="NiceCandidate.html#NiceCandidateType" title="enum NiceCandidateType"><span class="type">NiceCandidateType</span></a> type</code></em>);</pre>
 <p>Creates a new candidate. Must be freed with <a class="link" href="NiceCandidate.html#nice-candidate-free" title="nice_candidate_free ()"><code class="function">nice_candidate_free()</code></a></p>
 <div class="refsect3">
-<a name="id-1.2.2.3.8.3.5"></a><h4>Parameters</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="nice-candidate-new.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
 <col class="parameters_description">
@@ -154,9 +147,8 @@ nice_candidate_new (<em class="parameter"><code><a class="link" href="NiceCandid
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.2.3.8.3.6"></a><h4>Returns</h4>
+<a name="nice-candidate-new.returns"></a><h4>Returns</h4>
 <p> A new <a class="link" href="NiceCandidate.html" title="NiceCandidate"><span class="type">NiceCandidate</span></a></p>
-<p></p>
 </div>
 </div>
 <hr>
@@ -166,8 +158,8 @@ nice_candidate_new (<em class="parameter"><code><a class="link" href="NiceCandid
 nice_candidate_free (<em class="parameter"><code><a class="link" href="NiceCandidate.html" title="NiceCandidate"><span class="type">NiceCandidate</span></a> *candidate</code></em>);</pre>
 <p>Frees a <a class="link" href="NiceCandidate.html" title="NiceCandidate"><span class="type">NiceCandidate</span></a></p>
 <div class="refsect3">
-<a name="id-1.2.2.3.8.4.5"></a><h4>Parameters</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="nice-candidate-free.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
 <col class="parameters_description">
@@ -188,8 +180,8 @@ nice_candidate_free (<em class="parameter"><code><a class="link" href="NiceCandi
 nice_candidate_copy (<em class="parameter"><code>const <a class="link" href="NiceCandidate.html" title="NiceCandidate"><span class="type">NiceCandidate</span></a> *candidate</code></em>);</pre>
 <p>Makes a copy of a <a class="link" href="NiceCandidate.html" title="NiceCandidate"><span class="type">NiceCandidate</span></a></p>
 <div class="refsect3">
-<a name="id-1.2.2.3.8.5.5"></a><h4>Parameters</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="nice-candidate-copy.parameters"></a><h4>Parameters</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
 <col class="parameters_description">
@@ -203,10 +195,9 @@ nice_candidate_copy (<em class="parameter"><code>const <a class="link" href="Nic
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.2.2.3.8.5.6"></a><h4>Returns</h4>
+<a name="nice-candidate-copy.returns"></a><h4>Returns</h4>
 <p> A new <a class="link" href="NiceCandidate.html" title="NiceCandidate"><span class="type">NiceCandidate</span></a>, a copy of <em class="parameter"><code>candidate</code></em>
 </p>
-<p></p>
 </div>
 </div>
 </div>
@@ -237,8 +228,8 @@ nice_candidate_copy (<em class="parameter"><code>const <a class="link" href="Nic
    value will represent the qvalue multiplied by 1000.
    </p></div>
 <div class="refsect3">
-<a name="id-1.2.2.3.9.2.6"></a><h4>Members</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="NiceCandidate.members"></a><h4>Members</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="300px" class="struct_members_name">
 <col class="struct_members_description">
@@ -266,33 +257,33 @@ nice_candidate_copy (<em class="parameter"><code>const <a class="link" href="Nic
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#guint32"><span class="type">guint32</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.priority"></a>priority</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#guint32"><span class="type">guint32</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.priority"></a>priority</code></em>;</p></td>
 <td class="struct_member_description"><p>The priority of the candidate <span class="emphasis"><em> see note </em></span></p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.stream-id"></a>stream_id</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#guint"><span class="type">guint</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.stream-id"></a>stream_id</code></em>;</p></td>
 <td class="struct_member_description"><p>The ID of the stream to which belongs the candidate</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.component-id"></a>component_id</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#guint"><span class="type">guint</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.component-id"></a>component_id</code></em>;</p></td>
 <td class="struct_member_description"><p>The ID of the component to which belongs the candidate</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.foundation"></a>foundation</code></em>[NICE_CANDIDATE_MAX_FOUNDATION];</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gchar"><span class="type">gchar</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.foundation"></a>foundation</code></em>[NICE_CANDIDATE_MAX_FOUNDATION];</p></td>
 <td class="struct_member_description"><p>The foundation of the candidate</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="NiceCandidate-struct.username"></a>username</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="NiceCandidate-struct.username"></a>username</code></em>;</p></td>
 <td class="struct_member_description"><p>The candidate-specific username to use (overrides the one set
 by <a class="link" href="NiceAgent.html#nice-agent-set-local-credentials" title="nice_agent_set_local_credentials ()"><code class="function">nice_agent_set_local_credentials()</code></a> or <a class="link" href="NiceAgent.html#nice-agent-set-remote-credentials" title="nice_agent_set_remote_credentials ()"><code class="function">nice_agent_set_remote_credentials()</code></a>)</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="NiceCandidate-struct.password"></a>password</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="NiceCandidate-struct.password"></a>password</code></em>;</p></td>
 <td class="struct_member_description"><p>The candidate-specific password to use (overrides the one set
 by <a class="link" href="NiceAgent.html#nice-agent-set-local-credentials" title="nice_agent_set_local_credentials ()"><code class="function">nice_agent_set_local_credentials()</code></a> or <a class="link" href="NiceAgent.html#nice-agent-set-remote-credentials" title="nice_agent_set_remote_credentials ()"><code class="function">nice_agent_set_remote_credentials()</code></a>)</p></td>
 <td class="struct_member_annotations"> </td>
@@ -304,7 +295,7 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.sockptr"></a>sockptr</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> <em class="structfield"><code><a name="NiceCandidate-struct.sockptr"></a>sockptr</code></em>;</p></td>
 <td class="struct_member_description"><p>The underlying socket</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
@@ -317,8 +308,8 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 <a name="NiceCandidateType"></a><h3>enum NiceCandidateType</h3>
 <p>An enum represneting the type of a candidate</p>
 <div class="refsect3">
-<a name="id-1.2.2.3.9.3.4"></a><h4>Members</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="NiceCandidateType.members"></a><h4>Members</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="300px" class="enum_members_name">
 <col class="enum_members_description">
@@ -362,8 +353,8 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 <a name="NiceCandidateTransport"></a><h3>enum NiceCandidateTransport</h3>
 <p>An enum representing the type of transport to use</p>
 <div class="refsect3">
-<a name="id-1.2.2.3.9.4.4"></a><h4>Members</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="NiceCandidateTransport.members"></a><h4>Members</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="300px" class="enum_members_name">
 <col class="enum_members_description">
@@ -416,8 +407,8 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 </pre>
 <p>A structure to store the TURN relay settings</p>
 <div class="refsect3">
-<a name="id-1.2.2.3.9.5.5"></a><h4>Members</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="TurnServer.members"></a><h4>Members</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="300px" class="struct_members_name">
 <col class="struct_members_description">
@@ -425,7 +416,7 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 </colgroup>
 <tbody>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> <em class="structfield"><code><a name="TurnServer.ref-count"></a>ref_count</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gint"><span class="type">gint</span></a> <em class="structfield"><code><a name="TurnServer.ref-count"></a>ref_count</code></em>;</p></td>
 <td class="struct_member_description"><p>Reference count for the structure.</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
@@ -435,12 +426,12 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="TurnServer.username"></a>username</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="TurnServer.username"></a>username</code></em>;</p></td>
 <td class="struct_member_description"><p>The TURN username</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
-<td class="struct_member_name"><p><a href="https://developer.gnome.org/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="TurnServer.password"></a>password</code></em>;</p></td>
+<td class="struct_member_name"><p><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *<em class="structfield"><code><a name="TurnServer.password"></a>password</code></em>;</p></td>
 <td class="struct_member_description"><p>The TURN password</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
@@ -458,8 +449,8 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 <a name="NiceRelayType"></a><h3>enum NiceRelayType</h3>
 <p>An enum representing the type of relay to use</p>
 <div class="refsect3">
-<a name="id-1.2.2.3.9.6.4"></a><h4>Members</h4>
-<div class="informaltable"><table width="100%" border="0">
+<a name="NiceRelayType.members"></a><h4>Members</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
 <col width="300px" class="enum_members_name">
 <col class="enum_members_description">
@@ -491,6 +482,13 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 </table></div>
 </div>
 </div>
+<hr>
+<div class="refsect2">
+<a name="NICE-CANDIDATE-MAX-FOUNDATION:CAPS"></a><h3>NICE_CANDIDATE_MAX_FOUNDATION</h3>
+<pre class="programlisting">#define NICE_CANDIDATE_MAX_FOUNDATION                (32+1)
+</pre>
+<p>The maximum size a candidate foundation can have.</p>
+</div>
 </div>
 <div class="refsect1">
 <a name="NiceCandidate.see-also"></a><h2>See Also</h2>
@@ -498,7 +496,6 @@ of type <a class="link" href="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAP
 </div>
 </div>
 <div class="footer">
-<hr>
-          Generated by GTK-Doc V1.21</div>
+<hr>Generated by GTK-Doc V1.25</div>
 </body>
 </html>

@@ -5,7 +5,7 @@ dnl Always compile with -Wall; if --enable-compile-warnings=error is passed,
 dnl also use -Werror. git and pre-releases default to -Werror
 
 dnl use a three digit version number for releases, and four for cvs/prerelease
-AC_INIT([libnice],[0.1.13])
+AC_INIT([libnice],[0.1.14])
 LIBNICE_RELEASE="yes"
 
 AC_CANONICAL_TARGET
@@ -39,9 +39,9 @@ AC_CONFIG_FILES([
 #      Increment CURRENT and AGE. Set REVISION to 0
 #    If there was an incompatible interface change:
 #      Increment CURRENT. Set AGE and REVISION to 0
-LIBNICE_CURRENT=16
-LIBNICE_REVISION=2
-LIBNICE_AGE=6
+LIBNICE_CURRENT=17
+LIBNICE_REVISION=0
+LIBNICE_AGE=7
 LIBNICE_LIBVERSION=${LIBNICE_CURRENT}:${LIBNICE_REVISION}:${LIBNICE_AGE}
 LIBNICE_LT_LDFLAGS="-version-info ${LIBNICE_LIBVERSION} -no-undefined"
 AC_SUBST(LIBNICE_LT_LDFLAGS)
@@ -93,9 +93,9 @@ AC_CHECK_HEADERS([ifaddrs.h], \
 AC_CHECK_TYPES([size_t, ssize_t])
 
 # Also put matching version in LIBNICE_CFLAGS
-GLIB_REQ=2.30
+GLIB_REQ=2.44
 
-LIBNICE_CFLAGS="-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_30 -DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_36"
+LIBNICE_CFLAGS="-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_44 -DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_44"
 
 dnl Support different levels of compiler error reporting.
 dnl This configure flag is designed to mimic one from gnome-common,
@@ -108,7 +108,7 @@ AC_ARG_ENABLE(compile-warnings,
                   [enable_compile_warnings="error"])])
 
 AC_DEFUN([NICE_ADD_FLAG],
-  AS_COMPILER_FLAG([$1], LIBNICE_CFLAGS="$LIBNICE_CFLAGS $1", [])
+  AS_COMPILER_FLAG([-Werror $1], LIBNICE_CFLAGS="$LIBNICE_CFLAGS $1", [])
 )
 
 NICE_ADD_FLAG([-fno-strict-aliasing])
@@ -145,7 +145,6 @@ AS_IF([test "$enable_compile_warnings" = "yes" -o \
     NICE_ADD_FLAG([-Winline])
     NICE_ADD_FLAG([-Wpacked])
     NICE_ADD_FLAG([-Wmissing-format-attribute])
-    NICE_ADD_FLAG([-Wmissing-noreturn])
     NICE_ADD_FLAG([-Winit-self])
     NICE_ADD_FLAG([-Wredundant-decls])
     NICE_ADD_FLAG([-Wmissing-include-dirs])
@@ -184,14 +183,20 @@ AC_CHECK_FUNCS([poll])
 AC_SUBST(LIBRT)
 
 # Dependencies
+
+GNUTLS_PACKAGES_PRIVATE="gnutls >= 2.12.0"
+PKG_CHECK_MODULES(GNUTLS, [$GNUTLS_PACKAGES_PRIVATE])
+
 NICE_PACKAGES_PUBLIC="glib-2.0 >= $GLIB_REQ gio-2.0 >= $GLIB_REQ gobject-2.0 >= $GLIB_REQ"
 NICE_PACKAGES_PRIVATE="gthread-2.0"
-NICE_PACKAGES="$NICE_PACKAGES_PUBLIC $NICE_PACKAGES_PRIVATE"
+
+PKG_CHECK_MODULES(GLIB, [$NICE_PACKAGES_PUBLIC $NICE_PACKAGES_PRIVATE])
+
+NICE_PACKAGES_PRIVATE="$NICE_PACKAGES_PRIVATE $GNUTLS_PACKAGES_PRIVATE"
+
 AC_SUBST([NICE_PACKAGES_PUBLIC])
 AC_SUBST([NICE_PACKAGES_PRIVATE])
-AC_SUBST([NICE_PACKAGES])
 
-PKG_CHECK_MODULES(GLIB, [$NICE_PACKAGES])
 
 AC_ARG_WITH(gstreamer, 
 	AS_HELP_STRING([--with-gstreamer],[build GStreamer plugin]),
@@ -231,9 +236,6 @@ AS_IF([test "$with_gstreamer" != no], [
 		[
 		have_gst_check=no
 		])
-
-	AM_CONDITIONAL(HAVE_GST_CHECK, test "$have_gst_check" = yes)
-
 ])
 
 AS_IF([test "$with_gstreamer010" != no], [
@@ -260,6 +262,7 @@ AC_SUBST(gstplugindir)
 AC_SUBST(gstplugin010dir)
 
 AM_CONDITIONAL(WITH_GSTREAMER, test "$with_gstreamer" = yes)
+AM_CONDITIONAL(HAVE_GST_CHECK, test "$have_gst_check" = yes)
 AM_CONDITIONAL(WITH_GSTREAMER010, test "$with_gstreamer010" = yes)
 
 GUPNP_IGD_REQUIRED=0.2.4
@@ -343,7 +346,7 @@ esac
 
 # check for gtk-doc
 m4_ifdef([GTK_DOC_CHECK], [
-GTK_DOC_CHECK([1.9],[--flavour no-tmpl])
+GTK_DOC_CHECK([1.10],[--flavour no-tmpl])
 ],[
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])

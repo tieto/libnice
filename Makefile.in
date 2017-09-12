@@ -101,7 +101,8 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/as-compiler-flag.m4 \
 	$(top_srcdir)/m4/gtk-doc.m4 $(top_srcdir)/m4/introspection.m4 \
 	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
 	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
@@ -245,6 +246,8 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GLIB_CFLAGS = @GLIB_CFLAGS@
 GLIB_LIBS = @GLIB_LIBS@
+GNUTLS_CFLAGS = @GNUTLS_CFLAGS@
+GNUTLS_LIBS = @GNUTLS_LIBS@
 GREP = @GREP@
 GST010_CFLAGS = @GST010_CFLAGS@
 GST010_LIBS = @GST010_LIBS@
@@ -289,10 +292,10 @@ LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
-NICE_PACKAGES = @NICE_PACKAGES@
 NICE_PACKAGES_PRIVATE = @NICE_PACKAGES_PRIVATE@
 NICE_PACKAGES_PUBLIC = @NICE_PACKAGES_PUBLIC@
 NM = @NM@
@@ -377,7 +380,7 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-CLEANFILES = *.gcno *.gcda
+CLEANFILES = *.gcno *.gcda win32/vs9/libnice.def
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 SUBDIRS = \
 	stun \
@@ -386,8 +389,8 @@ SUBDIRS = \
 	agent \
 	nice \
 	gst \
-	docs \
 	tests \
+	docs \
 	examples
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-assert -enable-gtk-doc --enable-introspection
@@ -401,6 +404,7 @@ EXTRA_DIST = \
 	scripts/lcov.sh \
 	scripts/valgrind.sh \
 	win32 \
+	win32/vs9/libnice.def \
 	m4/introspection.m4
 
 MAINTAINERCLEANFILES = ar-lib
@@ -642,7 +646,7 @@ distdir: $(DISTFILES)
 	  ! -type d ! -perm -444 -exec $(install_sh) -c -m a+r {} {} \; \
 	|| chmod -R a+r "$(distdir)"
 dist-gzip: distdir
-	tardir=$(distdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).tar.gz
+	tardir=$(distdir) && $(am__tar) | eval GZIP= gzip $(GZIP_ENV) -c >$(distdir).tar.gz
 	$(am__post_remove_distdir)
 
 dist-bzip2: distdir
@@ -668,7 +672,7 @@ dist-shar: distdir
 	@echo WARNING: "Support for shar distribution archives is" \
 	               "deprecated." >&2
 	@echo WARNING: "It will be removed altogether in Automake 2.0" >&2
-	shar $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).shar.gz
+	shar $(distdir) | eval GZIP= gzip $(GZIP_ENV) -c >$(distdir).shar.gz
 	$(am__post_remove_distdir)
 
 dist-zip: distdir
@@ -686,7 +690,7 @@ dist dist-all:
 distcheck: dist
 	case '$(DIST_ARCHIVES)' in \
 	*.tar.gz*) \
-	  GZIP=$(GZIP_ENV) gzip -dc $(distdir).tar.gz | $(am__untar) ;;\
+	  eval GZIP= gzip $(GZIP_ENV) -dc $(distdir).tar.gz | $(am__untar) ;;\
 	*.tar.bz2*) \
 	  bzip2 -dc $(distdir).tar.bz2 | $(am__untar) ;;\
 	*.tar.lz*) \
@@ -696,7 +700,7 @@ distcheck: dist
 	*.tar.Z*) \
 	  uncompress -c $(distdir).tar.Z | $(am__untar) ;;\
 	*.shar.gz*) \
-	  GZIP=$(GZIP_ENV) gzip -dc $(distdir).shar.gz | unshar ;;\
+	  eval GZIP= gzip $(GZIP_ENV) -dc $(distdir).shar.gz | unshar ;;\
 	*.zip*) \
 	  unzip $(distdir).zip ;;\
 	esac
@@ -899,6 +903,21 @@ check-valgrind:
 	$(MAKE) TESTS_ENVIRONMENT="sh $$(cd "$(top_srcdir)" && pwd)/scripts/valgrind.sh" check
 
 .PHONY: check-valgrind
+
+# Generate the win32 DLL symbol export file.
+# The stun_*() symbols at the end have historically been exported on Windows
+# but not Linux, for no particular reason. They can’t be removed without
+# breaking ABI. FIXME: Remove them when we next break ABI.
+win32/vs9/libnice.def: nice/libnice.sym
+	$(MKDIR_P) $(dir $@)
+	$(AM_V_GEN)(echo "LIBRARY libnice"; \
+	            echo ""; \
+	            echo "EXPORTS"; \
+	            echo ""; \
+	            cat $<; \
+	            echo "stun_debug"; \
+	            echo "stun_debug_bytes"; \
+	            echo "stun_hash_creds") > $@
 
 lcov:
 	find -name '*.gcda' -delete
