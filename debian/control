@@ -17,9 +17,9 @@ Build-Depends: autotools-dev,
                libgstreamer1.0-dev,
                libgupnp-igd-1.0-dev (>= 0.2.4)
 Standards-Version: 4.1.0
-Homepage: http://nice.freedesktop.org/
-Vcs-Git: git://anonscm.debian.org/pkg-telepathy/libnice.git
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-telepathy/libnice.git
+Homepage: https://nice.freedesktop.org/
+Vcs-Git: https://anonscm.debian.org/git/pkg-telepathy/libnice.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-telepathy/libnice.git/
 
 Package: libnice10
 Architecture: any
