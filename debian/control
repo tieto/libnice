@@ -5,10 +5,7 @@ Maintainer: Debian Telepathy maintainers <pkg-telepathy-maintainers@lists.alioth
 Uploaders: Dafydd Harries <daf@debian.org>,
            Sjoerd Simons <sjoerd@debian.org>,
            Laurent Bigonville <bigon@debian.org>
-Build-Depends: autotools-dev,
-               cdbs (>= 0.4.93~),
-               debhelper (>= 9),
-               dh-autoreconf,
+Build-Depends: debhelper (>= 10),
                gobject-introspection (>= 1.30.0),
                gtk-doc-tools,
                libgirepository1.0-dev (>= 1.30.0),
