@@ -12,7 +12,8 @@ Build-Depends: autotools-dev,
                gobject-introspection (>= 1.30.0),
                gtk-doc-tools,
                libgirepository1.0-dev (>= 1.30.0),
-               libglib2.0-dev (>= 2.30),
+               libglib2.0-dev (>= 2.44),
+               libgnutls28-dev (>= 2.12.0),
                libgstreamer1.0-dev,
                libgupnp-igd-1.0-dev (>= 0.2.4)
 Standards-Version: 4.1.0
@@ -41,7 +42,8 @@ Description: ICE library (shared library)
 Package: libnice-dev
 Section: libdevel
 Architecture: any
-Depends: libglib2.0-dev (>= 2.30),
+Depends: libglib2.0-dev (>= 2.44),
+         libgnutls28-dev (>= 2.12.0),
          libgupnp-igd-1.0-dev (>= 0.2.4),
          libnice10 (= ${binary:Version}),
          ${misc:Depends},
