@@ -1,4 +1,4 @@
-libnice (0.1.14-0~sipe) UNRELEASED; urgency=medium
+libnice (0.1.14-1+sipe) UNRELEASED; urgency=medium
 
   * New upstream release + extra Sipe patches.
 
