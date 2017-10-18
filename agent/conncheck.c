@@ -2745,13 +2745,8 @@ int conn_check_send (NiceAgent *agent, CandidateCheckPair *pair)
     return -1;
   }
 
-  if (nice_socket_is_reliable(pair->sockptr)) {
-    timeout = agent->stun_reliable_timeout;
-    stun_timer_start_reliable(&stun->timer, timeout);
-  } else {
-    timeout = priv_compute_conncheck_timer (agent, stream);
-    stun_timer_start (&stun->timer, timeout, agent->stun_max_retransmissions);
-  }
+  timeout = priv_compute_conncheck_timer (agent, stream);
+  stun_timer_start (&stun->timer, timeout, agent->stun_max_retransmissions);
 
   g_get_current_time (&stun->next_tick);
   g_time_val_add (&stun->next_tick, timeout * 1000);
