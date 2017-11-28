@@ -1713,6 +1713,8 @@ static void priv_preprocess_conn_check_pending_data (NiceAgent *agent, NiceStrea
     if (nice_address_equal (&icheck->from, &pair->remote->addr) &&
 	icheck->local_socket == pair->sockptr) {
       nice_debug ("Agent %p : Updating check %p with stored early-icheck %p, %p/%u/%u (agent/stream/component).", agent, pair, icheck, agent, stream->id, component->id);
+      /* Make sure the in-progress pair gets trigerred by setting the retransmit flag. */
+      pair->retransmit = TRUE;
       priv_schedule_triggered_check (agent, stream, component,
           icheck->local_socket, pair->remote);
       if (icheck->use_candidate)
@@ -3614,8 +3616,8 @@ static void priv_handle_turn_alternate_server (NiceAgent *agent,
         d->turn->type == disco->turn->type &&
         nice_address_equal (&d->server, &server)) {
       gchar ip[INET6_ADDRSTRLEN];
-      // Cancel the pending request to avoid a race condition with another
-      // component responding with another altenrate-server
+      /* Cancel the pending request to avoid a race condition with another
+         component responding with another altenrate-server */
       d->stun_message.buffer = NULL;
       d->stun_message.buffer_len = 0;
 
