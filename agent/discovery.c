@@ -1091,6 +1091,9 @@ static gboolean priv_discovery_tick_unlocked (gpointer pointer)
     if (cand->nicesock == NULL) {
       if (turn_connect_in_progress == FALSE && !cand->done) {
         discovery_turn_connect(cand);
+        /* If the connect failed, then don't proceed */
+        if (cand->done)
+          continue;
         turn_connect_in_progress = TRUE;
       } else {
         continue;
