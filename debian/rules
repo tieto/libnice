@@ -8,7 +8,8 @@ override_dh_auto_configure:
 	                     --enable-compile-warnings=yes \
 	                     --enable-gupnp \
 	                     --with-gstreamer \
-	                     --enable-introspection
+	                     --enable-introspection \
+	                     --enable-gtk-doc
 
 override_dh_install:
 	dh_install --list-missing
