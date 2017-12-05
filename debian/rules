@@ -1,24 +1,22 @@
 #!/usr/bin/make -f
 
-post-patches::
-	ln -sf /usr/share/gtk-doc/data/gtk-doc.make .
+%:
+	dh $@ --with gir
 
-include /usr/share/cdbs/1/rules/autoreconf.mk
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/autotools.mk
+override_dh_auto_configure:
+	dh_auto_configure -- --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
+	                     --enable-compile-warnings=yes \
+	                     --enable-gupnp \
+	                     --with-gstreamer \
+	                     --enable-introspection
 
-# List any files which are not installed
-include /usr/share/cdbs/1/rules/utils.mk
-common-binary-post-install-arch:: list-missing
+override_dh_install:
+	dh_install --list-missing
 
-DEB_DBG_PACKAGE_libnice10 := libnice-dbg
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
 
-DEB_CONFIGURE_EXTRA_FLAGS := --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
-	--enable-compile-warnings=yes \
-	--enable-gupnp \
-	--with-gstreamer \
-	--enable-introspection \
-	--enable-gtk-doc \
-	$(NULL)
+override_dh_strip:
+	dh_strip --dbgsym-migration='libnice-dbg (<< 0.1.14)'
 
-include $(CURDIR)/debian/update-patches.mk
+override_dh_auto_test:
