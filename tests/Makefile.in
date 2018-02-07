@@ -104,12 +104,13 @@ check_PROGRAMS = test-pseudotcp$(EXEEXT) test-pseudotcp-fin$(EXEEXT) \
 	test-io-stream-closing-read$(EXEEXT) \
 	test-io-stream-cancelling$(EXEEXT) \
 	test-io-stream-pollable$(EXEEXT) test-send-recv$(EXEEXT) \
-	test-priority$(EXEEXT) test-mainloop$(EXEEXT) \
-	test-fullmode$(EXEEXT) test-restart$(EXEEXT) \
-	test-fallback$(EXEEXT) test-thread$(EXEEXT) \
-	test-dribble$(EXEEXT) test-new-dribble$(EXEEXT) \
-	test-tcp$(EXEEXT) test-icetcp$(EXEEXT) \
-	test-credentials$(EXEEXT) $(am__EXEEXT_1)
+	test-socket-is-based-on$(EXEEXT) test-priority$(EXEEXT) \
+	test-mainloop$(EXEEXT) test-fullmode$(EXEEXT) \
+	test-restart$(EXEEXT) test-fallback$(EXEEXT) \
+	test-thread$(EXEEXT) test-dribble$(EXEEXT) \
+	test-new-dribble$(EXEEXT) test-tcp$(EXEEXT) \
+	test-icetcp$(EXEEXT) test-credentials$(EXEEXT) \
+	test-turn$(EXEEXT) $(am__EXEEXT_1)
 @HAVE_GST_CHECK_TRUE@am__append_1 = test-gstreamer
 subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -117,7 +118,8 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/as-compiler-flag.m4 \
 	$(top_srcdir)/m4/gtk-doc.m4 $(top_srcdir)/m4/introspection.m4 \
 	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
 	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/pkg.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(dist_check_SCRIPTS) \
@@ -227,12 +229,18 @@ am_test_send_recv_OBJECTS = test-send-recv.$(OBJEXT) \
 	test-io-stream-common.$(OBJEXT)
 test_send_recv_OBJECTS = $(am_test_send_recv_OBJECTS)
 test_send_recv_DEPENDENCIES = $(am__DEPENDENCIES_2)
+test_socket_is_based_on_SOURCES = test-socket-is-based-on.c
+test_socket_is_based_on_OBJECTS = test-socket-is-based-on.$(OBJEXT)
+test_socket_is_based_on_DEPENDENCIES = $(am__DEPENDENCIES_2)
 test_tcp_SOURCES = test-tcp.c
 test_tcp_OBJECTS = test-tcp.$(OBJEXT)
 test_tcp_DEPENDENCIES = $(am__DEPENDENCIES_2)
 test_thread_SOURCES = test-thread.c
 test_thread_OBJECTS = test-thread.$(OBJEXT)
 test_thread_DEPENDENCIES = $(am__DEPENDENCIES_2)
+test_turn_SOURCES = test-turn.c
+test_turn_OBJECTS = test-turn.$(OBJEXT)
+test_turn_DEPENDENCIES = $(am__DEPENDENCIES_2)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -277,7 +285,8 @@ SOURCES = test.c test-add-remove-stream.c test-address.c test-bsd.c \
 	$(test_io_stream_thread_SOURCES) test-mainloop.c \
 	test-new-dribble.c test-priority.c test-pseudotcp.c \
 	test-pseudotcp-fin.c test-pseudotcp-fuzzy.c test-restart.c \
-	$(test_send_recv_SOURCES) test-tcp.c test-thread.c
+	$(test_send_recv_SOURCES) test-socket-is-based-on.c test-tcp.c \
+	test-thread.c test-turn.c
 DIST_SOURCES = test.c test-add-remove-stream.c test-address.c \
 	test-bsd.c test-build-io-stream.c test-credentials.c \
 	test-dribble.c test-fallback.c test-fullmode.c \
@@ -289,7 +298,8 @@ DIST_SOURCES = test.c test-add-remove-stream.c test-address.c \
 	$(test_io_stream_thread_SOURCES) test-mainloop.c \
 	test-new-dribble.c test-priority.c test-pseudotcp.c \
 	test-pseudotcp-fin.c test-pseudotcp-fuzzy.c test-restart.c \
-	$(test_send_recv_SOURCES) test-tcp.c test-thread.c
+	$(test_send_recv_SOURCES) test-socket-is-based-on.c test-tcp.c \
+	test-thread.c test-turn.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -552,6 +562,8 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GLIB_CFLAGS = @GLIB_CFLAGS@
 GLIB_LIBS = @GLIB_LIBS@
+GNUTLS_CFLAGS = @GNUTLS_CFLAGS@
+GNUTLS_LIBS = @GNUTLS_LIBS@
 GREP = @GREP@
 GST010_CFLAGS = @GST010_CFLAGS@
 GST010_LIBS = @GST010_LIBS@
@@ -596,10 +608,10 @@ LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
-NICE_PACKAGES = @NICE_PACKAGES@
 NICE_PACKAGES_PRIVATE = @NICE_PACKAGES_PRIVATE@
 NICE_PACKAGES_PUBLIC = @NICE_PACKAGES_PUBLIC@
 NM = @NM@
@@ -699,6 +711,10 @@ AM_CFLAGS = \
 	-I $(top_srcdir)/stun
 
 AM_CPPFLAGS = -DG_LOG_DOMAIN=\"libnice-tests\"
+AM_TESTS_ENVIRONMENT = \
+	G_MESSAGES_DEBUG=all \
+	NICE_DEBUG=all;
+
 COMMON_LDADD = $(top_builddir)/agent/libagent.la $(top_builddir)/socket/libsocket.la $(GLIB_LIBS) $(GUPNP_LIBS)
 dist_check_SCRIPTS = \
 	check-test-fullmode-with-stun.sh \
@@ -727,6 +743,7 @@ test_io_stream_pollable_SOURCES = test-io-stream-pollable.c test-io-stream-commo
 test_io_stream_pollable_LDADD = $(COMMON_LDADD)
 test_send_recv_SOURCES = test-send-recv.c test-io-stream-common.c
 test_send_recv_LDADD = $(COMMON_LDADD)
+test_socket_is_based_on_LDADD = $(COMMON_LDADD)
 test_priority_LDADD = $(COMMON_LDADD)
 test_mainloop_LDADD = $(COMMON_LDADD)
 test_fullmode_LDADD = $(COMMON_LDADD)
@@ -737,6 +754,7 @@ test_new_dribble_LDADD = $(COMMON_LDADD)
 test_tcp_LDADD = $(COMMON_LDADD)
 test_icetcp_LDADD = $(COMMON_LDADD)
 test_credentials_LDADD = $(COMMON_LDADD)
+test_turn_LDADD = $(COMMON_LDADD)
 test_gstreamer_CFLAGS = $(AM_CFLAGS) $(GST_CHECK_CFLAGS)
 test_gstreamer_LDADD = -lnice -L$(top_builddir)/nice/.libs $(GLIB_LIBS) $(GUPNP_LIBS) $(GST_CHECK_LIBS) $(GST_LIBS)
 EXTRA_DIST = libnice.supp
@@ -880,6 +898,10 @@ test-send-recv$(EXEEXT): $(test_send_recv_OBJECTS) $(test_send_recv_DEPENDENCIES
 	@rm -f test-send-recv$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_send_recv_OBJECTS) $(test_send_recv_LDADD) $(LIBS)
 
+test-socket-is-based-on$(EXEEXT): $(test_socket_is_based_on_OBJECTS) $(test_socket_is_based_on_DEPENDENCIES) $(EXTRA_test_socket_is_based_on_DEPENDENCIES) 
+	@rm -f test-socket-is-based-on$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_socket_is_based_on_OBJECTS) $(test_socket_is_based_on_LDADD) $(LIBS)
+
 test-tcp$(EXEEXT): $(test_tcp_OBJECTS) $(test_tcp_DEPENDENCIES) $(EXTRA_test_tcp_DEPENDENCIES) 
 	@rm -f test-tcp$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_tcp_OBJECTS) $(test_tcp_LDADD) $(LIBS)
@@ -887,6 +909,10 @@ test-tcp$(EXEEXT): $(test_tcp_OBJECTS) $(test_tcp_DEPENDENCIES) $(EXTRA_test_tcp
 test-thread$(EXEEXT): $(test_thread_OBJECTS) $(test_thread_DEPENDENCIES) $(EXTRA_test_thread_DEPENDENCIES) 
 	@rm -f test-thread$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_thread_OBJECTS) $(test_thread_LDADD) $(LIBS)
+
+test-turn$(EXEEXT): $(test_turn_OBJECTS) $(test_turn_DEPENDENCIES) $(EXTRA_test_turn_DEPENDENCIES) 
+	@rm -f test-turn$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_turn_OBJECTS) $(test_turn_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -917,8 +943,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pseudotcp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-restart.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-send-recv.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-socket-is-based-on.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-tcp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-thread.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-turn.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_gstreamer-test-gstreamer.Po@am__quote@
 
@@ -1257,6 +1285,13 @@ test-send-recv.log: test-send-recv$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-socket-is-based-on.log: test-socket-is-based-on$(EXEEXT)
+	@p='test-socket-is-based-on$(EXEEXT)'; \
+	b='test-socket-is-based-on'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 test-priority.log: test-priority$(EXEEXT)
 	@p='test-priority$(EXEEXT)'; \
 	b='test-priority'; \
@@ -1330,6 +1365,13 @@ test-icetcp.log: test-icetcp$(EXEEXT)
 test-credentials.log: test-credentials$(EXEEXT)
 	@p='test-credentials$(EXEEXT)'; \
 	b='test-credentials'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-turn.log: test-turn$(EXEEXT)
+	@p='test-turn$(EXEEXT)'; \
+	b='test-turn'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

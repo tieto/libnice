@@ -62,10 +62,22 @@
 #ifndef __GTK_DOC_IGNORE__
 #ifdef G_OS_WIN32
 #  include <winsock2.h>
+
+#ifndef ECONNABORTED
 #  define ECONNABORTED WSAECONNABORTED
+#endif
+
+#ifndef ENOTCONN
 #  define ENOTCONN WSAENOTCONN
+#endif
+
+#ifndef EWOULDBLOCK
 #  define EWOULDBLOCK WSAEWOULDBLOCK
+#endif
+
+#ifndef ECONNRESET
 #  define ECONNRESET WSAECONNRESET
+#endif
 #endif
 #endif
 
@@ -102,17 +114,6 @@ GType pseudo_tcp_socket_get_type (void);
 #define PSEUDOTCP_SOCKET_GET_CLASS(obj) \
   (G_TYPE_INSTANCE_GET_CLASS ((obj), PSEUDO_TCP_SOCKET_TYPE, \
                               PseudoTcpSocketClass))
-
-struct _PseudoTcpSocketClass {
-    GObjectClass parent_class;
-};
-
-typedef struct _PseudoTcpSocketPrivate PseudoTcpSocketPrivate;
-
-struct _PseudoTcpSocket {
-    GObject parent;
-    PseudoTcpSocketPrivate *priv;
-};
 
 /**
  * PseudoTcpDebugLevel:

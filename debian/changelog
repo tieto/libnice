@@ -1,3 +1,28 @@
+libnice (0.1.14-1+sipe) UNRELEASED; urgency=medium
+
+  * New upstream release + extra Sipe patches.
+
+ -- Jakub Adam <jakub.adam@ktknet.cz>  Tue, 04 Apr 2017 09:37:51 +0200
+
+libnice (0.1.14-1) unstable; urgency=medium
+
+  [ Jonny Lamb ]
+  * Remove myself from Uploaders.
+
+  [ Laurent Bigonville ]
+  * New upstream version 0.1.14
+  * debian/control: Bump Standards-Version to 4.1.0
+  * debian/control: Adjust the build-dependencies
+  * debian/libnice10.symbols: Add the newly exported symbols
+  * debian/control: Make the -dev package depend against the gir1.2- one
+  * debian/control: Use https for the Vcs- and Homepage fields
+  * debian/watch: Verify the signature of the upstream tarball
+  * Switch to dh sequences and bump debhelper compat to 10
+  * Drop -dbg package and rely on the dbgsyms ones
+  * debian/rules: Install the NEWS file as the upstream changelog
+
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 12 Sep 2017 17:06:13 +0200
+
 libnice (0.1.13-2) unstable; urgency=medium
 
   * debian/control: Add libgupnp-igd-1.0-dev to the dependencies of

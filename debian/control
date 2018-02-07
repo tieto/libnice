@@ -4,22 +4,21 @@ Priority: optional
 Maintainer: Debian Telepathy maintainers <pkg-telepathy-maintainers@lists.alioth.debian.org>
 Uploaders: Dafydd Harries <daf@debian.org>,
            Sjoerd Simons <sjoerd@debian.org>,
-           Laurent Bigonville <bigon@debian.org>,
-           Jonny Lamb <jonny@debian.org>
-Build-Depends: autotools-dev,
+           Laurent Bigonville <bigon@debian.org>
+Build-Depends: debhelper (>= 9),
                cdbs (>= 0.4.93~),
-               debhelper (>= 9),
                dh-autoreconf,
                gobject-introspection (>= 1.30.0),
                gtk-doc-tools,
                libgirepository1.0-dev (>= 1.30.0),
-               libglib2.0-dev (>= 2.30),
+               libglib2.0-dev (>= 2.44),
+               libgnutls28-dev (>= 2.12.0),
                libgstreamer1.0-dev,
                libgupnp-igd-1.0-dev (>= 0.2.4)
-Standards-Version: 3.9.6
-Homepage: http://nice.freedesktop.org/
-Vcs-Git: git://anonscm.debian.org/pkg-telepathy/libnice.git
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-telepathy/libnice.git
+Standards-Version: 4.1.0
+Homepage: https://nice.freedesktop.org/
+Vcs-Git: https://anonscm.debian.org/git/pkg-telepathy/libnice.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-telepathy/libnice.git/
 
 Package: libnice10
 Architecture: any
@@ -42,7 +41,9 @@ Description: ICE library (shared library)
 Package: libnice-dev
 Section: libdevel
 Architecture: any
-Depends: libglib2.0-dev (>= 2.30),
+Depends: gir1.2-nice-0.1 (= ${binary:Version}),
+         libglib2.0-dev (>= 2.44),
+         libgnutls28-dev (>= 2.12.0),
          libgupnp-igd-1.0-dev (>= 0.2.4),
          libnice10 (= ${binary:Version}),
          ${misc:Depends},
@@ -94,25 +95,6 @@ Description: ICE library (documentation)
  Nice includes integration with GStreamer.
  .
  This package contains documentation for libnice.
-
-Package: libnice-dbg
-Section: debug
-Priority: extra
-Architecture: any
-Depends: libnice10 (= ${binary:Version}), ${misc:Depends}
-Multi-Arch: same
-Description: ICE library (debugging symbols)
- Nice is an implementation of the IETF's draft Interactive Connectivity
- Establishment standard (ICE).  ICE is useful for applications that want to
- establish peer-to-peer UDP data streams. It automates the process of
- traversing NATs and provides security against some attacks.
- .
- Existing standards that use ICE include the Session Initiation Protocol (SIP)
- and the Jingle XMPP extension for audio/video calls.
- .
- Nice includes integration with GStreamer.
- .
- This package provides debugging symbols for nice.
 
 Package: gir1.2-nice-0.1
 Section: introspection

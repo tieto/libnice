@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
-<book xmlns="http://www.devhelp.net/book" title="libnice Reference Manual" link="index.html" author="" name="libnice" version="2" language="c">
+<book xmlns="http://www.devhelp.net/book" title="libnice Reference Manual" link="index.html" author="" name="libnice" version="2" language="c" online="http://nice.freedesktop.org/libnice/index.html">
   <chapters>
     <sub name="ICE Library" link="pt01.html">
       <sub name="" link="ch01.html">
@@ -44,6 +43,7 @@
       <sub name="Index of new symbols in 0.1.5" link="ix10.html"/>
       <sub name="Index of new symbols in 0.1.6" link="ix11.html"/>
       <sub name="Index of new symbols in 0.1.8" link="ix12.html"/>
+      <sub name="Index of new symbols in 0.1.14" link="ix13.html"/>
       <sub name="Annotation Glossary" link="annotation-glossary.html"/>
     </sub>
   </chapters>
@@ -102,6 +102,7 @@
     <keyword type="property" name="The “bytestream-tcp” property" link="NiceAgent.html#NiceAgent--bytestream-tcp"/>
     <keyword type="property" name="The “compatibility” property" link="NiceAgent.html#NiceAgent--compatibility"/>
     <keyword type="property" name="The “controlling-mode” property" link="NiceAgent.html#NiceAgent--controlling-mode"/>
+    <keyword type="property" name="The “force-relay” property" link="NiceAgent.html#NiceAgent--force-relay"/>
     <keyword type="property" name="The “full-mode” property" link="NiceAgent.html#NiceAgent--full-mode"/>
     <keyword type="property" name="The “ice-tcp” property" link="NiceAgent.html#NiceAgent--ice-tcp"/>
     <keyword type="property" name="The “ice-udp” property" link="NiceAgent.html#NiceAgent--ice-udp"/>
@@ -149,7 +150,6 @@
     <keyword type="function" name="nice_address_ip_version ()" link="libnice-NiceAddress.html#nice-address-ip-version"/>
     <keyword type="struct" name="NiceAddress" link="libnice-NiceAddress.html#NiceAddress"/>
     <keyword type="macro" name="NICE_ADDRESS_STRING_LEN" link="libnice-NiceAddress.html#NICE-ADDRESS-STRING-LEN:CAPS"/>
-    <keyword type="macro" name="NICE_CANDIDATE_MAX_FOUNDATION" link="NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS"/>
     <keyword type="function" name="nice_candidate_new ()" link="NiceCandidate.html#nice-candidate-new"/>
     <keyword type="function" name="nice_candidate_free ()" link="NiceCandidate.html#nice-candidate-free"/>
     <keyword type="function" name="nice_candidate_copy ()" link="NiceCandidate.html#nice-candidate-copy"/>
@@ -158,6 +158,7 @@
     <keyword type="enum" name="enum NiceCandidateTransport" link="NiceCandidate.html#NiceCandidateTransport"/>
     <keyword type="struct" name="struct TurnServer" link="NiceCandidate.html#TurnServer"/>
     <keyword type="enum" name="enum NiceRelayType" link="NiceCandidate.html#NiceRelayType"/>
+    <keyword type="macro" name="NICE_CANDIDATE_MAX_FOUNDATION" link="NiceCandidate.html#NICE-CANDIDATE-MAX-FOUNDATION:CAPS"/>
     <keyword type="function" name="nice_debug_enable ()" link="libnice-Debug-messages.html#nice-debug-enable"/>
     <keyword type="function" name="nice_debug_disable ()" link="libnice-Debug-messages.html#nice-debug-disable"/>
     <keyword type="function" name="nice_interfaces_get_ip_for_interface ()" link="libnice-Network-interfaces-discovery.html#nice-interfaces-get-ip-for-interface"/>
@@ -294,7 +295,7 @@
     <keyword type="function" name="pseudo_tcp_socket_get_available_send_space ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-get-available-send-space" since="0.1.5"/>
     <keyword type="function" name="pseudo_tcp_socket_notify_message ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-notify-message" since="0.1.5"/>
     <keyword type="function" name="pseudo_tcp_socket_set_time ()" link="libnice-Pseudo-TCP-Socket.html#pseudo-tcp-socket-set-time" since="0.1.8"/>
-    <keyword type="struct" name="struct PseudoTcpSocket" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket-struct"/>
+    <keyword type="struct" name="PseudoTcpSocket" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket-struct"/>
     <keyword type="enum" name="enum PseudoTcpState" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpState" since="0.0.11"/>
     <keyword type="enum" name="enum PseudoTcpWriteResult" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpWriteResult" since="0.0.11"/>
     <keyword type="struct" name="PseudoTcpCallbacks" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpCallbacks" since="0.0.11"/>
@@ -308,5 +309,250 @@
     <keyword type="property" name="The “snd-buf” property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--snd-buf"/>
     <keyword type="property" name="The “state” property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--state"/>
     <keyword type="property" name="The “support-fin-ack” property" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpSocket--support-fin-ack"/>
+    <keyword type="constant" name="NICE_COMPONENT_STATE_DISCONNECTED" link="NiceAgent.html#NICE-COMPONENT-STATE-DISCONNECTED:CAPS"/>
+    <keyword type="constant" name="NICE_COMPONENT_STATE_GATHERING" link="NiceAgent.html#NICE-COMPONENT-STATE-GATHERING:CAPS"/>
+    <keyword type="constant" name="NICE_COMPONENT_STATE_CONNECTING" link="NiceAgent.html#NICE-COMPONENT-STATE-CONNECTING:CAPS"/>
+    <keyword type="constant" name="NICE_COMPONENT_STATE_CONNECTED" link="NiceAgent.html#NICE-COMPONENT-STATE-CONNECTED:CAPS"/>
+    <keyword type="constant" name="NICE_COMPONENT_STATE_READY" link="NiceAgent.html#NICE-COMPONENT-STATE-READY:CAPS"/>
+    <keyword type="constant" name="NICE_COMPONENT_STATE_FAILED" link="NiceAgent.html#NICE-COMPONENT-STATE-FAILED:CAPS"/>
+    <keyword type="constant" name="NICE_COMPONENT_STATE_LAST" link="NiceAgent.html#NICE-COMPONENT-STATE-LAST:CAPS"/>
+    <keyword type="constant" name="NICE_COMPONENT_TYPE_RTP" link="NiceAgent.html#NICE-COMPONENT-TYPE-RTP:CAPS"/>
+    <keyword type="constant" name="NICE_COMPONENT_TYPE_RTCP" link="NiceAgent.html#NICE-COMPONENT-TYPE-RTCP:CAPS"/>
+    <keyword type="constant" name="NICE_PROXY_TYPE_NONE" link="NiceAgent.html#NICE-PROXY-TYPE-NONE:CAPS"/>
+    <keyword type="constant" name="NICE_PROXY_TYPE_SOCKS5" link="NiceAgent.html#NICE-PROXY-TYPE-SOCKS5:CAPS"/>
+    <keyword type="constant" name="NICE_PROXY_TYPE_HTTP" link="NiceAgent.html#NICE-PROXY-TYPE-HTTP:CAPS"/>
+    <keyword type="constant" name="NICE_PROXY_TYPE_LAST" link="NiceAgent.html#NICE-PROXY-TYPE-LAST:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_RFC5245" link="NiceAgent.html#NICE-COMPATIBILITY-RFC5245:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_DRAFT19" link="NiceAgent.html#NICE-COMPATIBILITY-DRAFT19:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_GOOGLE" link="NiceAgent.html#NICE-COMPATIBILITY-GOOGLE:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_MSN" link="NiceAgent.html#NICE-COMPATIBILITY-MSN:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_WLM2009" link="NiceAgent.html#NICE-COMPATIBILITY-WLM2009:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_OC2007" link="NiceAgent.html#NICE-COMPATIBILITY-OC2007:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_OC2007R2" link="NiceAgent.html#NICE-COMPATIBILITY-OC2007R2:CAPS"/>
+    <keyword type="constant" name="NICE_COMPATIBILITY_LAST" link="NiceAgent.html#NICE-COMPATIBILITY-LAST:CAPS"/>
+    <keyword type="constant" name="NICE_CANDIDATE_TYPE_HOST" link="NiceCandidate.html#NICE-CANDIDATE-TYPE-HOST:CAPS"/>
+    <keyword type="constant" name="NICE_CANDIDATE_TYPE_SERVER_REFLEXIVE" link="NiceCandidate.html#NICE-CANDIDATE-TYPE-SERVER-REFLEXIVE:CAPS"/>
+    <keyword type="constant" name="NICE_CANDIDATE_TYPE_PEER_REFLEXIVE" link="NiceCandidate.html#NICE-CANDIDATE-TYPE-PEER-REFLEXIVE:CAPS"/>
+    <keyword type="constant" name="NICE_CANDIDATE_TYPE_RELAYED" link="NiceCandidate.html#NICE-CANDIDATE-TYPE-RELAYED:CAPS"/>
+    <keyword type="constant" name="NICE_CANDIDATE_TRANSPORT_UDP" link="NiceCandidate.html#NICE-CANDIDATE-TRANSPORT-UDP:CAPS"/>
+    <keyword type="constant" name="NICE_CANDIDATE_TRANSPORT_TCP_ACTIVE" link="NiceCandidate.html#NICE-CANDIDATE-TRANSPORT-TCP-ACTIVE:CAPS"/>
+    <keyword type="constant" name="NICE_CANDIDATE_TRANSPORT_TCP_PASSIVE" link="NiceCandidate.html#NICE-CANDIDATE-TRANSPORT-TCP-PASSIVE:CAPS"/>
+    <keyword type="constant" name="NICE_CANDIDATE_TRANSPORT_TCP_SO" link="NiceCandidate.html#NICE-CANDIDATE-TRANSPORT-TCP-SO:CAPS"/>
+    <keyword type="constant" name="NICE_RELAY_TYPE_TURN_UDP" link="NiceCandidate.html#NICE-RELAY-TYPE-TURN-UDP:CAPS"/>
+    <keyword type="constant" name="NICE_RELAY_TYPE_TURN_TCP" link="NiceCandidate.html#NICE-RELAY-TYPE-TURN-TCP:CAPS"/>
+    <keyword type="constant" name="NICE_RELAY_TYPE_TURN_TLS" link="NiceCandidate.html#NICE-RELAY-TYPE-TURN-TLS:CAPS"/>
+    <keyword type="constant" name="STUN_COMPATIBILITY_RFC3489" link="libnice-StunAgent.html#STUN-COMPATIBILITY-RFC3489:CAPS"/>
+    <keyword type="constant" name="STUN_COMPATIBILITY_RFC5389" link="libnice-StunAgent.html#STUN-COMPATIBILITY-RFC5389:CAPS"/>
+    <keyword type="constant" name="STUN_COMPATIBILITY_MSICE2" link="libnice-StunAgent.html#STUN-COMPATIBILITY-MSICE2:CAPS"/>
+    <keyword type="constant" name="STUN_COMPATIBILITY_OC2007" link="libnice-StunAgent.html#STUN-COMPATIBILITY-OC2007:CAPS"/>
+    <keyword type="constant" name="STUN_COMPATIBILITY_WLM2009" link="libnice-StunAgent.html#STUN-COMPATIBILITY-WLM2009:CAPS"/>
+    <keyword type="constant" name="STUN_COMPATIBILITY_LAST" link="libnice-StunAgent.html#STUN-COMPATIBILITY-LAST:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_SHORT_TERM_CREDENTIALS" link="libnice-StunAgent.html#STUN-AGENT-USAGE-SHORT-TERM-CREDENTIALS:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_LONG_TERM_CREDENTIALS" link="libnice-StunAgent.html#STUN-AGENT-USAGE-LONG-TERM-CREDENTIALS:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_USE_FINGERPRINT" link="libnice-StunAgent.html#STUN-AGENT-USAGE-USE-FINGERPRINT:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_ADD_SOFTWARE" link="libnice-StunAgent.html#STUN-AGENT-USAGE-ADD-SOFTWARE:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_IGNORE_CREDENTIALS" link="libnice-StunAgent.html#STUN-AGENT-USAGE-IGNORE-CREDENTIALS:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_NO_INDICATION_AUTH" link="libnice-StunAgent.html#STUN-AGENT-USAGE-NO-INDICATION-AUTH:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_FORCE_VALIDATER" link="libnice-StunAgent.html#STUN-AGENT-USAGE-FORCE-VALIDATER:CAPS"/>
+    <keyword type="constant" name="STUN_AGENT_USAGE_NO_ALIGNED_ATTRIBUTES" link="libnice-StunAgent.html#STUN-AGENT-USAGE-NO-ALIGNED-ATTRIBUTES:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_SUCCESS" link="libnice-StunAgent.html#STUN-VALIDATION-SUCCESS:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_NOT_STUN" link="libnice-StunAgent.html#STUN-VALIDATION-NOT-STUN:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_INCOMPLETE_STUN" link="libnice-StunAgent.html#STUN-VALIDATION-INCOMPLETE-STUN:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_BAD_REQUEST" link="libnice-StunAgent.html#STUN-VALIDATION-BAD-REQUEST:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_UNAUTHORIZED_BAD_REQUEST" link="libnice-StunAgent.html#STUN-VALIDATION-UNAUTHORIZED-BAD-REQUEST:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_UNAUTHORIZED" link="libnice-StunAgent.html#STUN-VALIDATION-UNAUTHORIZED:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_UNMATCHED_RESPONSE" link="libnice-StunAgent.html#STUN-VALIDATION-UNMATCHED-RESPONSE:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_UNKNOWN_REQUEST_ATTRIBUTE" link="libnice-StunAgent.html#STUN-VALIDATION-UNKNOWN-REQUEST-ATTRIBUTE:CAPS"/>
+    <keyword type="constant" name="STUN_VALIDATION_UNKNOWN_ATTRIBUTE" link="libnice-StunAgent.html#STUN-VALIDATION-UNKNOWN-ATTRIBUTE:CAPS"/>
+    <keyword type="constant" name="STUN_REQUEST" link="libnice-StunMessage.html#STUN-REQUEST:CAPS"/>
+    <keyword type="constant" name="STUN_INDICATION" link="libnice-StunMessage.html#STUN-INDICATION:CAPS"/>
+    <keyword type="constant" name="STUN_RESPONSE" link="libnice-StunMessage.html#STUN-RESPONSE:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR" link="libnice-StunMessage.html#STUN-ERROR:CAPS"/>
+    <keyword type="constant" name="STUN_BINDING" link="libnice-StunMessage.html#STUN-BINDING:CAPS"/>
+    <keyword type="constant" name="STUN_SHARED_SECRET" link="libnice-StunMessage.html#STUN-SHARED-SECRET:CAPS"/>
+    <keyword type="constant" name="STUN_ALLOCATE" link="libnice-StunMessage.html#STUN-ALLOCATE:CAPS"/>
+    <keyword type="constant" name="STUN_SET_ACTIVE_DST" link="libnice-StunMessage.html#STUN-SET-ACTIVE-DST:CAPS"/>
+    <keyword type="constant" name="STUN_REFRESH" link="libnice-StunMessage.html#STUN-REFRESH:CAPS"/>
+    <keyword type="constant" name="STUN_SEND" link="libnice-StunMessage.html#STUN-SEND:CAPS"/>
+    <keyword type="constant" name="STUN_CONNECT" link="libnice-StunMessage.html#STUN-CONNECT:CAPS"/>
+    <keyword type="constant" name="STUN_OLD_SET_ACTIVE_DST" link="libnice-StunMessage.html#STUN-OLD-SET-ACTIVE-DST:CAPS"/>
+    <keyword type="constant" name="STUN_IND_SEND" link="libnice-StunMessage.html#STUN-IND-SEND:CAPS"/>
+    <keyword type="constant" name="STUN_IND_DATA" link="libnice-StunMessage.html#STUN-IND-DATA:CAPS"/>
+    <keyword type="constant" name="STUN_IND_CONNECT_STATUS" link="libnice-StunMessage.html#STUN-IND-CONNECT-STATUS:CAPS"/>
+    <keyword type="constant" name="STUN_CREATEPERMISSION" link="libnice-StunMessage.html#STUN-CREATEPERMISSION:CAPS"/>
+    <keyword type="constant" name="STUN_CHANNELBIND" link="libnice-StunMessage.html#STUN-CHANNELBIND:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MAPPED_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MAPPED-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_RESPONSE_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-RESPONSE-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_CHANGE_REQUEST" link="libnice-StunMessage.html#STUN-ATTRIBUTE-CHANGE-REQUEST:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_SOURCE_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-SOURCE-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_CHANGED_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-CHANGED-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_USERNAME" link="libnice-StunMessage.html#STUN-ATTRIBUTE-USERNAME:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_PASSWORD" link="libnice-StunMessage.html#STUN-ATTRIBUTE-PASSWORD:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MESSAGE_INTEGRITY" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MESSAGE-INTEGRITY:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_ERROR_CODE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-ERROR-CODE:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_UNKNOWN_ATTRIBUTES" link="libnice-StunMessage.html#STUN-ATTRIBUTE-UNKNOWN-ATTRIBUTES:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_REFLECTED_FROM" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REFLECTED-FROM:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_CHANNEL_NUMBER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-CHANNEL-NUMBER:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_LIFETIME" link="libnice-StunMessage.html#STUN-ATTRIBUTE-LIFETIME:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MS_ALTERNATE_SERVER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MS-ALTERNATE-SERVER:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MAGIC_COOKIE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MAGIC-COOKIE:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_BANDWIDTH" link="libnice-StunMessage.html#STUN-ATTRIBUTE-BANDWIDTH:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_DESTINATION_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-DESTINATION-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_REMOTE_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REMOTE-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_PEER_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-PEER-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_XOR_PEER_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-XOR-PEER-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_DATA" link="libnice-StunMessage.html#STUN-ATTRIBUTE-DATA:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_REALM" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REALM:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_NONCE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-NONCE:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_RELAY_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-RELAY-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_RELAYED_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-RELAYED-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_XOR_RELAYED_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-XOR-RELAYED-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_REQUESTED_ADDRESS_TYPE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REQUESTED-ADDRESS-TYPE:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_REQUESTED_PORT_PROPS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REQUESTED-PORT-PROPS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_REQUESTED_PROPS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REQUESTED-PROPS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_EVEN_PORT" link="libnice-StunMessage.html#STUN-ATTRIBUTE-EVEN-PORT:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_REQUESTED_TRANSPORT" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REQUESTED-TRANSPORT:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_DONT_FRAGMENT" link="libnice-StunMessage.html#STUN-ATTRIBUTE-DONT-FRAGMENT:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_XOR_MAPPED_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-XOR-MAPPED-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_TIMER_VAL" link="libnice-StunMessage.html#STUN-ATTRIBUTE-TIMER-VAL:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_REQUESTED_IP" link="libnice-StunMessage.html#STUN-ATTRIBUTE-REQUESTED-IP:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_RESERVATION_TOKEN" link="libnice-StunMessage.html#STUN-ATTRIBUTE-RESERVATION-TOKEN:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_CONNECT_STAT" link="libnice-StunMessage.html#STUN-ATTRIBUTE-CONNECT-STAT:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_PRIORITY" link="libnice-StunMessage.html#STUN-ATTRIBUTE-PRIORITY:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_USE_CANDIDATE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-USE-CANDIDATE:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_OPTIONS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-OPTIONS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MS_VERSION" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MS-VERSION:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MS_XOR_MAPPED_ADDRESS" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MS-XOR-MAPPED-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_SOFTWARE" link="libnice-StunMessage.html#STUN-ATTRIBUTE-SOFTWARE:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_ALTERNATE_SERVER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-ALTERNATE-SERVER:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_FINGERPRINT" link="libnice-StunMessage.html#STUN-ATTRIBUTE-FINGERPRINT:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_ICE_CONTROLLED" link="libnice-StunMessage.html#STUN-ATTRIBUTE-ICE-CONTROLLED:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_ICE_CONTROLLING" link="libnice-StunMessage.html#STUN-ATTRIBUTE-ICE-CONTROLLING:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MS_SEQUENCE_NUMBER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MS-SEQUENCE-NUMBER:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_CANDIDATE_IDENTIFIER" link="libnice-StunMessage.html#STUN-ATTRIBUTE-CANDIDATE-IDENTIFIER:CAPS"/>
+    <keyword type="constant" name="STUN_ATTRIBUTE_MS_IMPLEMENTATION_VERSION" link="libnice-StunMessage.html#STUN-ATTRIBUTE-MS-IMPLEMENTATION-VERSION:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_TRY_ALTERNATE" link="libnice-StunMessage.html#STUN-ERROR-TRY-ALTERNATE:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_BAD_REQUEST" link="libnice-StunMessage.html#STUN-ERROR-BAD-REQUEST:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_UNAUTHORIZED" link="libnice-StunMessage.html#STUN-ERROR-UNAUTHORIZED:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_UNKNOWN_ATTRIBUTE" link="libnice-StunMessage.html#STUN-ERROR-UNKNOWN-ATTRIBUTE:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_ALLOCATION_MISMATCH" link="libnice-StunMessage.html#STUN-ERROR-ALLOCATION-MISMATCH:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_STALE_NONCE" link="libnice-StunMessage.html#STUN-ERROR-STALE-NONCE:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_ACT_DST_ALREADY" link="libnice-StunMessage.html#STUN-ERROR-ACT-DST-ALREADY:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_UNSUPPORTED_FAMILY" link="libnice-StunMessage.html#STUN-ERROR-UNSUPPORTED-FAMILY:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_WRONG_CREDENTIALS" link="libnice-StunMessage.html#STUN-ERROR-WRONG-CREDENTIALS:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_UNSUPPORTED_TRANSPORT" link="libnice-StunMessage.html#STUN-ERROR-UNSUPPORTED-TRANSPORT:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_INVALID_IP" link="libnice-StunMessage.html#STUN-ERROR-INVALID-IP:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_INVALID_PORT" link="libnice-StunMessage.html#STUN-ERROR-INVALID-PORT:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_OP_TCP_ONLY" link="libnice-StunMessage.html#STUN-ERROR-OP-TCP-ONLY:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_CONN_ALREADY" link="libnice-StunMessage.html#STUN-ERROR-CONN-ALREADY:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_ALLOCATION_QUOTA_REACHED" link="libnice-StunMessage.html#STUN-ERROR-ALLOCATION-QUOTA-REACHED:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_ROLE_CONFLICT" link="libnice-StunMessage.html#STUN-ERROR-ROLE-CONFLICT:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_SERVER_ERROR" link="libnice-StunMessage.html#STUN-ERROR-SERVER-ERROR:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_SERVER_CAPACITY" link="libnice-StunMessage.html#STUN-ERROR-SERVER-CAPACITY:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_INSUFFICIENT_CAPACITY" link="libnice-StunMessage.html#STUN-ERROR-INSUFFICIENT-CAPACITY:CAPS"/>
+    <keyword type="constant" name="STUN_ERROR_MAX" link="libnice-StunMessage.html#STUN-ERROR-MAX:CAPS"/>
+    <keyword type="constant" name="STUN_MESSAGE_RETURN_SUCCESS" link="libnice-StunMessage.html#STUN-MESSAGE-RETURN-SUCCESS:CAPS"/>
+    <keyword type="constant" name="STUN_MESSAGE_RETURN_NOT_FOUND" link="libnice-StunMessage.html#STUN-MESSAGE-RETURN-NOT-FOUND:CAPS"/>
+    <keyword type="constant" name="STUN_MESSAGE_RETURN_INVALID" link="libnice-StunMessage.html#STUN-MESSAGE-RETURN-INVALID:CAPS"/>
+    <keyword type="constant" name="STUN_MESSAGE_RETURN_NOT_ENOUGH_SPACE" link="libnice-StunMessage.html#STUN-MESSAGE-RETURN-NOT-ENOUGH-SPACE:CAPS"/>
+    <keyword type="constant" name="STUN_MESSAGE_RETURN_UNSUPPORTED_ADDRESS" link="libnice-StunMessage.html#STUN-MESSAGE-RETURN-UNSUPPORTED-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_BIND_RETURN_SUCCESS" link="libnice-Bind.html#STUN-USAGE-BIND-RETURN-SUCCESS:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_BIND_RETURN_ERROR" link="libnice-Bind.html#STUN-USAGE-BIND-RETURN-ERROR:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_BIND_RETURN_INVALID" link="libnice-Bind.html#STUN-USAGE-BIND-RETURN-INVALID:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_BIND_RETURN_ALTERNATE_SERVER" link="libnice-Bind.html#STUN-USAGE-BIND-RETURN-ALTERNATE-SERVER:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_BIND_RETURN_TIMEOUT" link="libnice-Bind.html#STUN-USAGE-BIND-RETURN-TIMEOUT:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_RFC5245" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-RFC5245:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_GOOGLE" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-GOOGLE:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_MSN" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-MSN:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_MSICE2" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-MSICE2:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_DRAFT19" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-DRAFT19:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_COMPATIBILITY_WLM2009" link="libnice-ICE.html#STUN-USAGE-ICE-COMPATIBILITY-WLM2009:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_SUCCESS" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-SUCCESS:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_ERROR" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-ERROR:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_INVALID" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-INVALID:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_ROLE_CONFLICT" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-ROLE-CONFLICT:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_INVALID_REQUEST" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-INVALID-REQUEST:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_INVALID_METHOD" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-INVALID-METHOD:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_MEMORY_ERROR" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-MEMORY-ERROR:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_INVALID_ADDRESS" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-INVALID-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_ICE_RETURN_NO_MAPPED_ADDRESS" link="libnice-ICE.html#STUN-USAGE-ICE-RETURN-NO-MAPPED-ADDRESS:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_DRAFT9" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-DRAFT9:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_GOOGLE" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-GOOGLE:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_MSN" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-MSN:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_OC2007" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-OC2007:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_COMPATIBILITY_RFC5766" link="libnice-TURN.html#STUN-USAGE-TURN-COMPATIBILITY-RFC5766:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_REQUEST_PORT_NORMAL" link="libnice-TURN.html#STUN-USAGE-TURN-REQUEST-PORT-NORMAL:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_REQUEST_PORT_EVEN" link="libnice-TURN.html#STUN-USAGE-TURN-REQUEST-PORT-EVEN:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_REQUEST_PORT_EVEN_AND_RESERVE" link="libnice-TURN.html#STUN-USAGE-TURN-REQUEST-PORT-EVEN-AND-RESERVE:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_RETURN_RELAY_SUCCESS" link="libnice-TURN.html#STUN-USAGE-TURN-RETURN-RELAY-SUCCESS:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_RETURN_MAPPED_SUCCESS" link="libnice-TURN.html#STUN-USAGE-TURN-RETURN-MAPPED-SUCCESS:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_RETURN_ERROR" link="libnice-TURN.html#STUN-USAGE-TURN-RETURN-ERROR:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_RETURN_INVALID" link="libnice-TURN.html#STUN-USAGE-TURN-RETURN-INVALID:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TURN_RETURN_ALTERNATE_SERVER" link="libnice-TURN.html#STUN-USAGE-TURN-RETURN-ALTERNATE-SERVER:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TIMER_RETURN_SUCCESS" link="libnice-Timer.html#STUN-USAGE-TIMER-RETURN-SUCCESS:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TIMER_RETURN_RETRANSMIT" link="libnice-Timer.html#STUN-USAGE-TIMER-RETURN-RETRANSMIT:CAPS"/>
+    <keyword type="constant" name="STUN_USAGE_TIMER_RETURN_TIMEOUT" link="libnice-Timer.html#STUN-USAGE-TIMER-RETURN-TIMEOUT:CAPS"/>
+    <keyword type="constant" name="TCP_LISTEN" link="libnice-Pseudo-TCP-Socket.html#TCP-LISTEN:CAPS"/>
+    <keyword type="constant" name="TCP_SYN_SENT" link="libnice-Pseudo-TCP-Socket.html#TCP-SYN-SENT:CAPS"/>
+    <keyword type="constant" name="TCP_SYN_RECEIVED" link="libnice-Pseudo-TCP-Socket.html#TCP-SYN-RECEIVED:CAPS"/>
+    <keyword type="constant" name="TCP_ESTABLISHED" link="libnice-Pseudo-TCP-Socket.html#TCP-ESTABLISHED:CAPS"/>
+    <keyword type="constant" name="TCP_CLOSED" link="libnice-Pseudo-TCP-Socket.html#TCP-CLOSED:CAPS"/>
+    <keyword type="constant" name="TCP_FIN_WAIT_1" link="libnice-Pseudo-TCP-Socket.html#TCP-FIN-WAIT-1:CAPS"/>
+    <keyword type="constant" name="TCP_FIN_WAIT_2" link="libnice-Pseudo-TCP-Socket.html#TCP-FIN-WAIT-2:CAPS"/>
+    <keyword type="constant" name="TCP_CLOSING" link="libnice-Pseudo-TCP-Socket.html#TCP-CLOSING:CAPS"/>
+    <keyword type="constant" name="TCP_TIME_WAIT" link="libnice-Pseudo-TCP-Socket.html#TCP-TIME-WAIT:CAPS"/>
+    <keyword type="constant" name="TCP_CLOSE_WAIT" link="libnice-Pseudo-TCP-Socket.html#TCP-CLOSE-WAIT:CAPS"/>
+    <keyword type="constant" name="TCP_LAST_ACK" link="libnice-Pseudo-TCP-Socket.html#TCP-LAST-ACK:CAPS"/>
+    <keyword type="constant" name="WR_SUCCESS" link="libnice-Pseudo-TCP-Socket.html#WR-SUCCESS:CAPS"/>
+    <keyword type="constant" name="WR_TOO_LARGE" link="libnice-Pseudo-TCP-Socket.html#WR-TOO-LARGE:CAPS"/>
+    <keyword type="constant" name="WR_FAIL" link="libnice-Pseudo-TCP-Socket.html#WR-FAIL:CAPS"/>
+    <keyword type="constant" name="PSEUDO_TCP_DEBUG_NONE" link="libnice-Pseudo-TCP-Socket.html#PSEUDO-TCP-DEBUG-NONE:CAPS"/>
+    <keyword type="constant" name="PSEUDO_TCP_DEBUG_NORMAL" link="libnice-Pseudo-TCP-Socket.html#PSEUDO-TCP-DEBUG-NORMAL:CAPS"/>
+    <keyword type="constant" name="PSEUDO_TCP_DEBUG_VERBOSE" link="libnice-Pseudo-TCP-Socket.html#PSEUDO-TCP-DEBUG-VERBOSE:CAPS"/>
+    <keyword type="constant" name="PSEUDO_TCP_SHUTDOWN_RD" link="libnice-Pseudo-TCP-Socket.html#PSEUDO-TCP-SHUTDOWN-RD:CAPS"/>
+    <keyword type="constant" name="PSEUDO_TCP_SHUTDOWN_WR" link="libnice-Pseudo-TCP-Socket.html#PSEUDO-TCP-SHUTDOWN-WR:CAPS"/>
+    <keyword type="constant" name="PSEUDO_TCP_SHUTDOWN_RDWR" link="libnice-Pseudo-TCP-Socket.html#PSEUDO-TCP-SHUTDOWN-RDWR:CAPS"/>
+    <keyword type="member" name="NiceInputMessage.buffers" link="NiceAgent.html#NiceInputMessage.buffers"/>
+    <keyword type="member" name="NiceInputMessage.n-buffers" link="NiceAgent.html#NiceInputMessage.n-buffers"/>
+    <keyword type="member" name="NiceInputMessage.from" link="NiceAgent.html#NiceInputMessage.from"/>
+    <keyword type="member" name="NiceInputMessage.length" link="NiceAgent.html#NiceInputMessage.length"/>
+    <keyword type="member" name="NiceOutputMessage.buffers" link="NiceAgent.html#NiceOutputMessage.buffers"/>
+    <keyword type="member" name="NiceOutputMessage.n-buffers" link="NiceAgent.html#NiceOutputMessage.n-buffers"/>
+    <keyword type="member" name="NiceCandidate-struct.type" link="NiceCandidate.html#NiceCandidate-struct.type"/>
+    <keyword type="member" name="NiceCandidate-struct.transport" link="NiceCandidate.html#NiceCandidate-struct.transport"/>
+    <keyword type="member" name="NiceCandidate-struct.addr" link="NiceCandidate.html#NiceCandidate-struct.addr"/>
+    <keyword type="member" name="NiceCandidate-struct.base-addr" link="NiceCandidate.html#NiceCandidate-struct.base-addr"/>
+    <keyword type="member" name="NiceCandidate-struct.priority" link="NiceCandidate.html#NiceCandidate-struct.priority"/>
+    <keyword type="member" name="NiceCandidate-struct.stream-id" link="NiceCandidate.html#NiceCandidate-struct.stream-id"/>
+    <keyword type="member" name="NiceCandidate-struct.component-id" link="NiceCandidate.html#NiceCandidate-struct.component-id"/>
+    <keyword type="member" name="NiceCandidate-struct.foundation" link="NiceCandidate.html#NiceCandidate-struct.foundation"/>
+    <keyword type="member" name="NiceCandidate-struct.username" link="NiceCandidate.html#NiceCandidate-struct.username"/>
+    <keyword type="member" name="NiceCandidate-struct.password" link="NiceCandidate.html#NiceCandidate-struct.password"/>
+    <keyword type="member" name="NiceCandidate-struct.turn" link="NiceCandidate.html#NiceCandidate-struct.turn"/>
+    <keyword type="member" name="NiceCandidate-struct.sockptr" link="NiceCandidate.html#NiceCandidate-struct.sockptr"/>
+    <keyword type="member" name="TurnServer.ref-count" link="NiceCandidate.html#TurnServer.ref-count"/>
+    <keyword type="member" name="TurnServer.server" link="NiceCandidate.html#TurnServer.server"/>
+    <keyword type="member" name="TurnServer.username" link="NiceCandidate.html#TurnServer.username"/>
+    <keyword type="member" name="TurnServer.password" link="NiceCandidate.html#TurnServer.password"/>
+    <keyword type="member" name="TurnServer.type" link="NiceCandidate.html#TurnServer.type"/>
+    <keyword type="member" name="StunDefaultValidaterData.username" link="libnice-StunAgent.html#StunDefaultValidaterData.username"/>
+    <keyword type="member" name="StunDefaultValidaterData.username-len" link="libnice-StunAgent.html#StunDefaultValidaterData.username-len"/>
+    <keyword type="member" name="StunDefaultValidaterData.password" link="libnice-StunAgent.html#StunDefaultValidaterData.password"/>
+    <keyword type="member" name="StunDefaultValidaterData.password-len" link="libnice-StunAgent.html#StunDefaultValidaterData.password-len"/>
+    <keyword type="member" name="StunMessage.agent" link="libnice-StunMessage.html#StunMessage.agent"/>
+    <keyword type="member" name="StunMessage.buffer" link="libnice-StunMessage.html#StunMessage.buffer"/>
+    <keyword type="member" name="StunMessage.buffer-len" link="libnice-StunMessage.html#StunMessage.buffer-len"/>
+    <keyword type="member" name="StunMessage.key" link="libnice-StunMessage.html#StunMessage.key"/>
+    <keyword type="member" name="StunMessage.key-len" link="libnice-StunMessage.html#StunMessage.key-len"/>
+    <keyword type="member" name="StunMessage.long-term-key" link="libnice-StunMessage.html#StunMessage.long-term-key"/>
+    <keyword type="member" name="StunMessage.long-term-valid" link="libnice-StunMessage.html#StunMessage.long-term-valid"/>
+    <keyword type="member" name="StunInputVector.buffer" link="libnice-StunMessage.html#StunInputVector.buffer"/>
+    <keyword type="member" name="StunInputVector.size" link="libnice-StunMessage.html#StunInputVector.size"/>
+    <keyword type="member" name="PseudoTcpCallbacks.user-data" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpCallbacks.user-data"/>
+    <keyword type="member" name="PseudoTcpCallbacks.PseudoTcpOpened" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpCallbacks.PseudoTcpOpened"/>
+    <keyword type="member" name="PseudoTcpCallbacks.PseudoTcpReadable" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpCallbacks.PseudoTcpReadable"/>
+    <keyword type="member" name="PseudoTcpCallbacks.PseudoTcpWritable" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpCallbacks.PseudoTcpWritable"/>
+    <keyword type="member" name="PseudoTcpCallbacks.PseudoTcpClosed" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpCallbacks.PseudoTcpClosed"/>
+    <keyword type="member" name="PseudoTcpCallbacks.WritePacket" link="libnice-Pseudo-TCP-Socket.html#PseudoTcpCallbacks.WritePacket"/>
   </functions>
 </book>

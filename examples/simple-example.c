@@ -44,9 +44,7 @@
 
 #include <agent.h>
 
-#if GLIB_CHECK_VERSION(2, 36, 0)
 #include <gio/gnetworking.h>
-#endif
 
 static GMainLoop *gloop;
 static GIOChannel* io_stdin;
@@ -105,11 +103,7 @@ main(int argc, char *argv[])
     g_debug("Using stun server '[%s]:%u'\n", stun_addr, stun_port);
   }
 
-#if GLIB_CHECK_VERSION(2, 36, 0)
   g_networking_init();
-#else
-  g_type_init();
-#endif
 
   gloop = g_main_loop_new(NULL, FALSE);
 #ifdef G_OS_WIN32
@@ -226,7 +220,7 @@ cb_component_state_changed(NiceAgent *agent, guint _stream_id,
   g_debug("SIGNAL: state changed %d %d %s[%d]\n",
       _stream_id, component_id, state_name[state], state);
 
-  if (state == NICE_COMPONENT_STATE_READY) {
+  if (state == NICE_COMPONENT_STATE_CONNECTED) {
     NiceCandidate *local, *remote;
 
     // Get current selected candidate pair and print IP address used

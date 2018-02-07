@@ -22,5 +22,3 @@ DEB_CONFIGURE_EXTRA_FLAGS := --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH) \
 	--enable-introspection \
 	--enable-gtk-doc \
 	$(NULL)
-
-include $(CURDIR)/debian/update-patches.mk
