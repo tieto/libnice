@@ -891,7 +891,7 @@ discovery_add_peer_reflexive_candidate (
  *
  * See ICE sect 7.2.1.3 "Learning Peer Reflexive Candidates" (ID-19).
  *
- * @return pointer to the created candidate, or NULL on error
+ * @return pointer to the created candidate
  */
 NiceCandidate *discovery_learn_remote_peer_reflexive_candidate (
   NiceAgent *agent,

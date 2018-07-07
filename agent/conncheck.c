@@ -4187,7 +4187,7 @@ gboolean conn_check_handle_inbound_stun (NiceAgent *agent, NiceStream *stream,
             agent, stream, component, priority, from, nicesock,
             local_candidate,
             remote_candidate2 ? remote_candidate2 : remote_candidate);
-        if(remote_candidate && stream->remote_ufrag[0]) {
+        if(stream->remote_ufrag[0]) {
           if (local_candidate &&
               local_candidate->transport == NICE_CANDIDATE_TRANSPORT_TCP_PASSIVE) {
             CandidateCheckPair *pair;
