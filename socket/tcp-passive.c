@@ -173,6 +173,8 @@ nice_tcp_passive_socket_new (GMainContext *ctx, NiceAddress *addr)
   sock->set_writable_callback = socket_set_writable_callback;
   sock->close = socket_close;
 
+  nice_debug ("passive tcp socket %p created", sock);
+
   return sock;
 }
 
@@ -207,8 +209,13 @@ static gint socket_send_messages (NiceSocket *sock, const NiceAddress *to,
 
   if (to) {
     NiceSocket *peer_socket = g_hash_table_lookup (priv->connections, to);
-    if (peer_socket)
+    if (peer_socket) {
+      nice_debug ("Sending on passive tcp socket %p using real socket %p",
+          sock, peer_socket);
       return nice_socket_send_messages (peer_socket, to, messages, n_messages);
+    } else {
+      nice_debug ("Not sending on passive tcp socket %p because no active socket", sock);
+    }
   }
   return -1;
 }
@@ -311,6 +318,7 @@ nice_tcp_passive_socket_accept (NiceSocket *sock)
     NiceAddress *key = nice_address_dup (&remote_addr);
 
     nice_tcp_bsd_socket_set_passive_parent (new_socket, sock);
+    nice_debug("tcp socket %p parent set to %p", sock, new_socket);
 
     nice_socket_set_writable_callback (new_socket, _child_writable_cb, sock);
     g_hash_table_insert (priv->connections, key, new_socket);

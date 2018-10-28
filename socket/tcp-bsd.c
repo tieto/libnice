@@ -208,6 +208,8 @@ nice_tcp_bsd_socket_new (GMainContext *ctx, NiceAddress *local_addr,
       reliable);
   g_object_unref (gsock);
 
+  nice_debug ("tcp socket %p created", sock);
+
   return sock;
 }
 
@@ -230,7 +232,11 @@ socket_close (NiceSocket *sock)
   }
 
   if (priv->passive_parent) {
+    nice_debug("tcp socket %p has passive parent connection %p, removing", sock,
+        priv->passive_parent);
     nice_tcp_passive_socket_remove_connection (priv->passive_parent, &priv->remote_addr);
+  } else {
+    nice_debug("tcp socket %p has no passive parent", sock);
   }
 
   nice_socket_free_send_queue (&priv->send_queue);
@@ -366,6 +372,8 @@ socket_send_messages (NiceSocket *sock, const NiceAddress *to,
   /* Make sure socket has not been freed: */
   g_assert (sock->priv != NULL);
 
+  nice_debug ("tcp socket %p sending", sock);
+
   for (i = 0; i < n_messages; i++) {
     const NiceOutputMessage *message = &messages[i];
     gssize len;
@@ -472,6 +480,9 @@ nice_tcp_bsd_socket_set_passive_parent (NiceSocket *sock, NiceSocket *passive_pa
   TcpPriv *priv = sock->priv;
 
   g_assert (priv->passive_parent == NULL);
+
+  nice_debug ("tcp socket %p has passive parent %p set",
+      sock, passive_parent);
 
   priv->passive_parent = passive_parent;
 }
